@@ -1,10 +1,14 @@
 1.0.5
+  18 Nov 2006
   * bugfix: fix the about box in firefox 1.0
-  * bugfix: set the toolbar button to the correct state upon insertion into the toolbar (ff >= 1.5 only)
+  * bugfix: set the toolbar button to the correct state upon insertion into 
+            the toolbar (ff >= 1.5 only)
   * bugfix: clarify the wording of the one-liner extension description
   * misc: new icons
   * misc: keyboard shortcut re-assigned to ctrl-2
   * new: previous proxy settings are restored after exiting tor mode
+  * new: if the torbutton proxy settings are changed while torbutton is 
+         enabled, then the active proxy settings are updated to reflect it
 
 1.0.4
   01 Jun 2006
