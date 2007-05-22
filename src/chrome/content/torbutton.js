@@ -347,9 +347,11 @@ function torbutton_save_nontor_settings()
   savprefs.setCharPref('socks_host',   nonprefs.getCharPref('socks'));
   savprefs.setIntPref('socks_port',    nonprefs.getIntPref('socks_port'));
   savprefs.setIntPref('socks_version', nonprefs.getIntPref('socks_version'));
-  savprefs.setBoolPref('share_proxy_settings', nonprefs.getBoolPref('share_proxy_settings'));
+  try { // ff-0.9 doesn't have share_proxy_settings
+    savprefs.setBoolPref('share_proxy_settings', nonprefs.getBoolPref('share_proxy_settings'));
+  } catch(e) {}
   if (torbutton_check_socks_remote_dns())
-    savprefs.setBoolPref('socks_remote_dns',   nonprefs.getBoolPref('socks_remote_dns'));
+    savprefs.setBoolPref('socks_remote_dns',     nonprefs.getBoolPref('socks_remote_dns'));
 }
 
 function torbutton_restore_nontor_settings()
@@ -373,9 +375,11 @@ function torbutton_restore_nontor_settings()
   nonprefs.setCharPref('socks',        savprefs.getCharPref('socks_host'));
   nonprefs.setIntPref('socks_port',    savprefs.getIntPref('socks_port'));
   nonprefs.setIntPref('socks_version', savprefs.getIntPref('socks_version'));
-  nonprefs.setBoolPref('share_proxy_settings', savprefs.getBoolPref('share_proxy_settings'));
+  try { // ff-0.9 doesn't have share_proxy_settings
+    nonprefs.setBoolPref('share_proxy_settings', savprefs.getBoolPref('share_proxy_settings'));
+  } catch(e) {}
   if (torbutton_check_socks_remote_dns())
-    nonprefs.setBoolPref('socks_remote_dns',   savprefs.getBoolPref('socks_remote_dns'));
+    nonprefs.setBoolPref('socks_remote_dns',     savprefs.getBoolPref('socks_remote_dns'));
 }
 
 function torbutton_disable_tor()
