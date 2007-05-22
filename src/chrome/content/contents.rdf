@@ -1,23 +1,26 @@
 <?xml version="1.0"?>
 
-<RDF:RDF xmlns:chrome="http://www.mozilla.org/rdf/chrome#"
-         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
-    <RDF:Seq about="urn:mozilla:package:root">
-        <RDF:li resource="urn:mozilla:package:torbutton"/>
-    </RDF:Seq>
+    <Seq about="urn:mozilla:package:root">
+        <li resource="urn:mozilla:package:torbutton"/>
+    </Seq>
     
-    <RDF:Description about="urn:mozilla:package:torbutton"
-                     chrome:extension="true"
-                     chrome:name="torbutton" />
-    </RDF:Description>
+    <Description about="urn:mozilla:package:torbutton"
+                 chrome:athor="Scott Squires"
+		 chrome:displayName="Torbutton"
+		 chrome:description="Torbutton provides a button to easily enable or disable the tor proxy"
+                 chrome:extension="true"
+                 chrome:name="torbutton">
+    </Description>
 
-    <RDF:Seq about="urn:mozilla:overlays">
-        <RDF:li resource="chrome://browser/content/browser.xul"/>
-    </RDF:Seq>
+    <Seq about="urn:mozilla:overlays">
+        <li resource="chrome://browser/content/browser.xul"/>
+    </Seq>
     
-    <RDF:Seq about="chrome://browser/content/browser.xul">
-        <RDF:li>chrome://torbutton/content/torbutton.xul</RDF:li>
-    </RDF:Seq>
+    <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://torbutton/content/torbutton.xul</li>
+    </Seq>
 
-</RDF:RDF>
+</RDF>

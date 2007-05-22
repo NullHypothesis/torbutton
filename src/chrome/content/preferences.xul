@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://torbutton/locale/torbutton.dtd">
+
+<dialog id="torbutton-prefs"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        title="&torbutton.prefs.title;"
+        buttons="accept,cancel"
+        persist="screenX screenY"
+        onload="torbutton_prefs_init(document)"
+        ondialogaccept="torbutton_prefs_save(document)" >
+
+    <script type="application/x-javascript" src="torbutton.js" />
+    <checkbox id="torbutton_displayStatusPanel" label="&torbutton.prefs.display_panel;" />
+<!--
+    <checkbox id="torbutton_warnUponExcludedSite" label="&torbutton.prefs.prompt_before_visiting_excluded_sites;" />
+    <description>
+        <textnode value="&torbutton.prefs.warning_explanation;"/>
+    </description>
+-->
+</dialog>

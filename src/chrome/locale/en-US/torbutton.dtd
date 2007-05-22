@@ -1,2 +1,7 @@
-<!ENTITY torbuttonButton.label "TorButton">
-<!ENTITY torbuttonTooltip "Turn Tor on/off">
+<!ENTITY torbutton.prefs.title "Torbutton Preferences">
+<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Turn Tor on/off">
+
+<!-- all text below this point is not used yet and does not need to be translated -->
+<!ENTITY torbutton.prefs.prompt_before_visiting_excluded_sites "Prompt user before visiting sites in the proxy exclusion list">

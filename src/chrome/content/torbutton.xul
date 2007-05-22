@@ -19,8 +19,8 @@
         <toolbarbutton 
             id="torbutton-button" 
             class="toolbarbutton-1" 
-            tooltiptext="&torbuttonTooltip;" 
-            label="&torbuttonButton.label;"
+            tooltiptext="&torbutton.button.tooltip;" 
+            label="&torbutton.button.label;"
             oncommand="torbutton_toggle();" />
     </toolbarpalette>
 
