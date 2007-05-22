@@ -3,6 +3,8 @@
 //   torbutton_prefs_init() -- on dialog load
 //   torbutton_prefs_save() -- on dialog save
 
+var tor_enabled = false;
+
 function torbutton_prefs_set_field_attributes(doc)
 {
     torbutton_log(4, "called prefs_set_field_attributes()");
@@ -80,6 +82,9 @@ function torbutton_prefs_init(doc) {
     torbutton_log(4, "called prefs_init()");
     sizeToContent();
 
+    // remember if tor settings were enabled when the window was opened
+    tor_enabled = torbutton_check_status();
+
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
 
     doc.getElementById('torbutton_displayStatusPanel').checked = o_torprefs.getBoolPref('display_panel');
@@ -132,4 +137,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
     o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
     // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
+
+    // if tor settings were initially active, update the active settings to reflect any changes
+    if (tor_enabled) torbutton_activate_tor_settings();
 }

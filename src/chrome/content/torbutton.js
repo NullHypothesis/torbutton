@@ -379,44 +379,48 @@ function torbutton_restore_nontor_settings()
     liveprefs.setBoolPref('share_proxy_settings', savprefs.getBoolPref('share_proxy_settings'));
   } catch(e) {}
   if (torbutton_check_socks_remote_dns())
-    nonprefs.setBoolPref('socks_remote_dns',     savprefs.getBoolPref('socks_remote_dns'));
+    liveprefs.setBoolPref('socks_remote_dns',     savprefs.getBoolPref('socks_remote_dns'));
+}
+
+function torbutton_activate_tor_settings()
+{
+  var liveprefs = false;
+  var torprefs = false;
+
+  liveprefs = torbutton_get_prefbranch('network.proxy.');
+  torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+  if (!liveprefs || !torprefs) return;
+
+  liveprefs.setCharPref('http',         torprefs.getCharPref('http_proxy'));
+  liveprefs.setIntPref('http_port',     torprefs.getIntPref('http_port'));
+  liveprefs.setCharPref('ssl',          torprefs.getCharPref('https_proxy'));
+  liveprefs.setIntPref('ssl_port',      torprefs.getIntPref('https_port'));
+  liveprefs.setCharPref('ftp',          torprefs.getCharPref('ftp_proxy'));
+  liveprefs.setIntPref('ftp_port',      torprefs.getIntPref('ftp_port'));
+  liveprefs.setCharPref('gopher',       torprefs.getCharPref('gopher_proxy'));
+  liveprefs.setIntPref('gopher_port',   torprefs.getIntPref('gopher_port'));
+  liveprefs.setCharPref('socks',        torprefs.getCharPref('socks_host'));
+  liveprefs.setIntPref('socks_port',    torprefs.getIntPref('socks_port'));
+  liveprefs.setIntPref('socks_version', 5);
+  liveprefs.setBoolPref('share_proxy_settings', false);
+  if (torbutton_check_socks_remote_dns()) {
+      liveprefs.setBoolPref('socks_remote_dns', true);
+  }
+  liveprefs.setIntPref('type', 1);
 }
 
 function torbutton_disable_tor()
 {
   torbutton_log(2, 'called disable_tor()');
   torbutton_restore_nontor_settings();
-  // nonprefs.setIntPref("type", 0);
 }
 
 function torbutton_enable_tor()
 {
-  var nonprefs = false;
-  var torprefs = false;
-
-  nonprefs = torbutton_get_prefbranch('network.proxy.');
-  torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-  if (!nonprefs || !torprefs) return;
-
   torbutton_log(2, 'called enable_tor()');
 
   torbutton_save_nontor_settings();
-  nonprefs.setCharPref('http',         torprefs.getCharPref('http_proxy'));
-  nonprefs.setIntPref('http_port',     torprefs.getIntPref('http_port'));
-  nonprefs.setCharPref('ssl',          torprefs.getCharPref('https_proxy'));
-  nonprefs.setIntPref('ssl_port',      torprefs.getIntPref('https_port'));
-  nonprefs.setCharPref('ftp',          torprefs.getCharPref('ftp_proxy'));
-  nonprefs.setIntPref('ftp_port',      torprefs.getIntPref('ftp_port'));
-  nonprefs.setCharPref('gopher',       torprefs.getCharPref('gopher_proxy'));
-  nonprefs.setIntPref('gopher_port',   torprefs.getIntPref('gopher_port'));
-  nonprefs.setCharPref('socks',        torprefs.getCharPref('socks_host'));
-  nonprefs.setIntPref('socks_port',    torprefs.getIntPref('socks_port'));
-  nonprefs.setIntPref('socks_version', 5);
-  nonprefs.setBoolPref('share_proxy_settings', false);
-  if (torbutton_check_socks_remote_dns()) {
-      nonprefs.setBoolPref('socks_remote_dns', true);
-  }
-  nonprefs.setIntPref('type', 1);
+  torbutton_activate_tor_settings();
 }
 
 function torbutton_update_toolbutton(mode)
