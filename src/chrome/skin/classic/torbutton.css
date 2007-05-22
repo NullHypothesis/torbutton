@@ -1,0 +1,18 @@
+#torbutton-button {
+  list-style-image: url("chrome://torbutton/skin/bigbutton.png");
+}
+#torbutton-button[tbstatus="on"] {
+  list-style-image: url("chrome://torbutton/skin/bigbutton_gr.png");
+}
+#torbutton-button[tbstatus="off"] {
+  list-style-image: url("chrome://torbutton/skin/bigbutton.png");
+}
+toolbar[iconsize="small"] #torbutton-button {
+  list-style-image: url("chrome://torbutton/skin/smallbutton.png");
+}
+toolbar[iconsize="small"] #torbutton-button[tbstatus="on"] {
+  list-style-image: url("chrome://torbutton/skin/smallbutton_gr.png");
+}
+toolbar[iconsize="small"] #torbutton-button[tbstatus="off"] {
+  list-style-image: url("chrome://torbutton/skin/smallbutton.png");
+}

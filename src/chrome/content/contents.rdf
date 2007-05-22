@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<RDF:RDF xmlns:chrome="http://www.mozilla.org/rdf/chrome#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <RDF:Seq about="urn:mozilla:package:root">
+        <RDF:li resource="urn:mozilla:package:torbutton"/>
+    </RDF:Seq>
+    
+    <RDF:Description about="urn:mozilla:package:torbutton"
+                     chrome:extension="true"
+                     chrome:name="torbutton" />
+    </RDF:Description>
+
+    <RDF:Seq about="urn:mozilla:overlays">
+        <RDF:li resource="chrome://browser/content/browser.xul"/>
+    </RDF:Seq>
+    
+    <RDF:Seq about="chrome://browser/content/browser.xul">
+        <RDF:li>chrome://torbutton/content/torbutton.xul</RDF:li>
+    </RDF:Seq>
+
+</RDF:RDF>

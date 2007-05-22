@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://torbutton/skin/torbutton.css" type="text/css"?> 
+
+<!DOCTYPE overlay SYSTEM "chrome://torbutton/locale/torbutton.dtd">
+
+<overlay id="torbutton-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/x-javascript" src="chrome://torbutton/content/torbutton.js" />
+    <script language="JavaScript">
+        //onLoad Hander
+        try{window.addEventListener("load", torbutton_init, false);}catch(e){}
+    </script>
+
+    <stringbundleset id="torbutton-stringbundleset">
+        <stringbundle id="torbutton-bundle" src="chrome://torbutton/locale/torbutton.properties"/>
+    </stringbundleset>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton 
+            id="torbutton-button" 
+            class="toolbarbutton-1" 
+            tooltiptext="&torbuttonTooltip;" 
+            label="&torbuttonButton.label;"
+            oncommand="torbutton_toggle();" />
+    </toolbarpalette>
+
+    <statusbar id="status-bar">
+        <statusbarpanel	id="torbutton-panel"
+			label="torbutton"
+			insertbefore="statusbar-updates"
+			onclick="torbutton_toggle()" />
+    </statusbar>
+
+</overlay>

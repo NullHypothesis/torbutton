@@ -1,0 +1,7 @@
+content torbutton chrome/content/
+overlay chrome://browser/content/browser.xul chrome://torbutton/content/torbutton.xul
+
+locale torbutton en-US chrome/locale/en-US/
+
+skin torbutton classic/1.0 chrome/skin/classic/
+style chrome://global/content/customizeToolbar.xul chrome://torbutton/skin/torbutton.css
