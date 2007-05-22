@@ -13,7 +13,7 @@
                    em:name="Torbutton"
                    em:creator="Scott Squires"
                    em:id="{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"
-                   em:version="1.0.3"
+                   em:version="1.0.4"
                    em:homepageURL="http://freehaven.net/~squires/torbutton/"
                    em:updateURL="http://freehaven.net/~squires/torbutton/update.rdf"
                    em:optionsURL="chrome://torbutton/content/preferences.xul"
