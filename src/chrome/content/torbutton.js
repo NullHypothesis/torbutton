@@ -145,7 +145,6 @@ function torbutton_check_socks_remote_dns()
         return true;
     } catch (rErr) {
         // no such preference
-        m_socks_pref_exists = false;
         torbutton_log(3, "socks_remote_dns is unavailable");
         return false;
     }
