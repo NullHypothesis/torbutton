@@ -430,11 +430,10 @@ function geckoVersionCompare(aVersion) {
 }
 
 function torbutton_log(nLevel, sMsg) {
+    var rDate = new Date();
     if (m_tb_logger) {
-        var rDate = new Date();
         m_tb_logger.log(nLevel, rDate.getTime()+': '+sMsg);
     } else if (m_debug) {
-        var rDate = new Date();
         dump("ERROR: m_tb_logger undefined ");
         dump(rDate.getTime()+': '+sMsg+"\n");
     }
