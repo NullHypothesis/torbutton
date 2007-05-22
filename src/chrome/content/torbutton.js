@@ -49,8 +49,8 @@ var torbutton_pref_observer =
                 break;
             case "extensions.torbutton.http_proxy":
             case "extensions.torbutton.http_port":
-            case "extensions.torbutton.ssl_proxy":
-            case "extensions.torbutton.ssl_port":
+            case "extensions.torbutton.https_proxy":
+            case "extensions.torbutton.https_port":
             case "extensions.torbutton.ftp_proxy":
             case "extensions.torbutton.ftp_port":
             case "extensions.torbutton.gopher_proxy":
