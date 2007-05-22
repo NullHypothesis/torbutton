@@ -166,8 +166,10 @@ function torbutton_init() {
     torbutton_set_panel_style();
 
     // listen for our toolbar button being added so we can initialize it
-    document.getElementById('navigator-toolbox')
-            .addEventListener('DOMNodeInserted', torbutton_init_toolbutton, false);
+    if (geckoVersionCompare("1.8") <= 0) {
+        document.getElementById('navigator-toolbox')
+                .addEventListener('DOMNodeInserted', torbutton_init_toolbutton, false);
+    }
 
     if (!m_wasinited) {
         torbutton_log(5, 'registering pref observer');
