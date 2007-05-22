@@ -151,6 +151,12 @@ function torbutton_check_socks_remote_dns()
     }
 }
 
+function torbutton_init_toolbutton(event)
+{
+    if (event.originalTarget && event.originalTarget.getAttribute('id') == 'torbutton-button')
+       torbutton_update_toolbutton(torbutton_check_status());
+}
+
 function torbutton_init() {
     torbutton_log(1, 'called init()');
     
@@ -159,6 +165,10 @@ function torbutton_init() {
 
     // set panel style from preferences
     torbutton_set_panel_style();
+
+    // listen for our toolbar button being added so we can initialize it
+    document.getElementById('navigator-toolbox')
+            .addEventListener('DOMNodeInserted', torbutton_init_toolbutton, false);
 
     if (!m_wasinited) {
         torbutton_log(5, 'registering pref observer');
