@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Torbutton 偏好">
+<!ENTITY torbutton.prefs.display_settings "显示设置">
+<!ENTITY torbutton.prefs.display_panel "在状态栏显示 Tor 代理设置">
+<!ENTITY torbutton.prefs.panel_format "状态栏显示格式：">
+<!ENTITY torbutton.prefs.panel_text_format "文本">
+<!ENTITY torbutton.prefs.panel_icon_format "图标">
+<!ENTITY torbutton.prefs.tor_settings "代理设置">
+<!ENTITY torbutton.prefs.recommended_settings "使用为我的 Firefox 的推荐代理设置">
+<!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">
+<!ENTITY torbutton.prefs.custom_settings "使用自定义代理设置">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP 代理：">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL 代理：">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP 代理：">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher 代理：">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS 代理：">
+<!ENTITY torbutton.prefs.proxy.port "端口：">
+<!ENTITY torbutton.about.title "关于 Torbutton">
+<!ENTITY torbutton.pref_connection.notice "禁用 Torbutton 来改变这些设置。">
+<!ENTITY torbutton.pref_connection.more_info "更多信息">
+<!ENTITY torbutton.pref_connection_more_info.title "帮助">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton 目前使用中。如果您想改变非 Tor 代理设置，请禁用 Torbutton 后回到这里。如果您想改变 Tor 代理设置，请使用 Torbutton 偏好设置。">
+<!ENTITY torbutton.context_menu.toggle "转换 Tor 状态">
+<!ENTITY torbutton.context_menu.toggle.key "T">
+<!ENTITY torbutton.context_menu.preferences "偏好...">
+<!ENTITY torbutton.context_menu.preferences.key "P">
+<!ENTITY torbutton.context_menu.about "关于 Torbutton...">
+<!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "点击初始化 Torbutton">

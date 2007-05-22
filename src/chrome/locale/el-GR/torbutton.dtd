@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Επιλογές του Torbutton">
+<!ENTITY torbutton.prefs.display_settings "Ρυθμίσεις εμφάνισης">
+<!ENTITY torbutton.prefs.display_panel "Εμφάνιση της ρύθμισης του διαμεσολαβητή Tor στην γραμμή κατάστασης">
+<!ENTITY torbutton.prefs.panel_format "Προβολή στη γραμμή κατάστασης με :">
+<!ENTITY torbutton.prefs.panel_text_format "Κείμενο">
+<!ENTITY torbutton.prefs.panel_icon_format "Εικονοδίο">
+<!ENTITY torbutton.prefs.tor_settings "Ρυθμίσεις διαμεσολαβητή">
+<!ENTITY torbutton.prefs.recommended_settings "Χρήση των προτεινόμενων ρυθμίσεων για την τρέχουσα έκδοση του Firefox">
+<!ENTITY torbutton.prefs.use_privoxy "Χρήση του Privoxy">
+<!ENTITY torbutton.prefs.custom_settings "Χρήση προσαρμοσμένων ρυθμίσεων διαμεσολαβητή">
+<!ENTITY torbutton.prefs.proxy.host.http "Διαμεσολαβητής HTTP :">
+<!ENTITY torbutton.prefs.proxy.host.https "Διαμεσολαβητής SSL :">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Διαμεσολαβητής FTP :">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Διαμεσολαβητής Gopher :">
+<!ENTITY torbutton.prefs.proxy.host.socks "Κεντρικός υπολογιστής SOCKS :">
+<!ENTITY torbutton.prefs.proxy.port "Θύρα :">
+<!ENTITY torbutton.about.title "Περί Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Απενεργοποιήστε το Torbutton για να αλλάξετε αυτές τις ρυθμίσεις.">
+<!ENTITY torbutton.pref_connection.more_info "Περισσότερες πληροφορίες">
+<!ENTITY torbutton.pref_connection_more_info.title "Βοήθεια">
+<!ENTITY torbutton.pref_connection_more_info.text "Το Torbutton είναι ενεργοποιημένο.Αν θέλετε να αλλάξετε τις ρυθμίσεις διαμεσολαβητή, εκτός του Tor, απενεργοποιήστε το Torbutton και επιστρέψτε εδώ. Αν θέλετε να αλλάξετε τις ρυθμίσεις για τον διαμεσολαβητή Tor, χρησιμοποιήστε το παράθυρο επιλογών του Torbutton">
+<!ENTITY torbutton.context_menu.toggle "Εναλλαγή κατάστασης λειτουργίας του Tor">
+<!ENTITY torbutton.context_menu.toggle.key "Ε">
+<!ENTITY torbutton.context_menu.preferences "Επιλογές...">
+<!ENTITY torbutton.context_menu.preferences.key "Ε">
+<!ENTITY torbutton.context_menu.about "Περί Torbutton">
+<!ENTITY torbutton.context_menu.about.key "Π">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Κάντε κλικ για να εκκίνηση του Torbutton">

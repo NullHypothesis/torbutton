@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Opzioni di Torbutton">
+<!ENTITY torbutton.prefs.display_settings "Impostazioni di visualizzazione">
+<!ENTITY torbutton.prefs.display_panel "Visualizza le impostazioni del proxy Tor nella barra di stato">
+<!ENTITY torbutton.prefs.panel_format "Formato di visualizzazione nella barra di stato:">
+<!ENTITY torbutton.prefs.panel_text_format "Testo">
+<!ENTITY torbutton.prefs.panel_icon_format "Icona">
+<!ENTITY torbutton.prefs.tor_settings "Configurazione del proxy">
+<!ENTITY torbutton.prefs.recommended_settings "Utilizza le impostazioni proxy consigliate per la versione corrente">
+<!ENTITY torbutton.prefs.use_privoxy "Utilizza Privoxy">
+<!ENTITY torbutton.prefs.custom_settings "Utilizza le impostazioni proxy personalizzate">
+<!ENTITY torbutton.prefs.proxy.host.http "Proxy HTTP:">
+<!ENTITY torbutton.prefs.proxy.host.https "Proxy SSL:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Proxy FTP:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Proxy Gopher:">
+<!ENTITY torbutton.prefs.proxy.host.socks "Host SOCKS:">
+<!ENTITY torbutton.prefs.proxy.port "Porta:">
+<!ENTITY torbutton.about.title "Informazioni su Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
+<!ENTITY torbutton.pref_connection.more_info "More information">
+<!ENTITY torbutton.pref_connection_more_info.title "Help">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
+<!ENTITY torbutton.context_menu.toggle "Cambia stato di Tor">
+<!ENTITY torbutton.context_menu.toggle.key "C">
+<!ENTITY torbutton.context_menu.preferences "Opzioni...">
+<!ENTITY torbutton.context_menu.preferences.key "P">
+<!ENTITY torbutton.context_menu.about "Informazioni su Torbutton...">
+<!ENTITY torbutton.context_menu.about.key "I">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Fare clic per avviare Torbutton">

@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Torbutton - ustawienia">
+<!ENTITY torbutton.prefs.display_settings "Ustawienia wyświetlania">
+<!ENTITY torbutton.prefs.display_panel "Wyświetlaj stan proxy Tor na pasku stanu">
+<!ENTITY torbutton.prefs.panel_format "Format wyświetlania na pasku stanu:">
+<!ENTITY torbutton.prefs.panel_text_format "Tekst">
+<!ENTITY torbutton.prefs.panel_icon_format "Ikona">
+<!ENTITY torbutton.prefs.tor_settings "Ustawienia proxy">
+<!ENTITY torbutton.prefs.recommended_settings "Użyj zalecanych ustawień proxy dla tej wersji Firefoksa">
+<!ENTITY torbutton.prefs.use_privoxy "Użyj Privoxy">
+<!ENTITY torbutton.prefs.custom_settings "Użyj ustawień proxy użytkownika">
+<!ENTITY torbutton.prefs.proxy.host.http "Serwer proxy HTTP:">
+<!ENTITY torbutton.prefs.proxy.host.https "Serwer proxy SSL:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Serwer proxy FTP:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Serwer proxy Gopher:">
+<!ENTITY torbutton.prefs.proxy.host.socks "Host SOCKS:">
+<!ENTITY torbutton.prefs.proxy.port "Port:">
+<!ENTITY torbutton.about.title "O Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Aby zmienić te ustawienia wyłącz Torbutton">
+<!ENTITY torbutton.pref_connection.more_info "Więcej informacji">
+<!ENTITY torbutton.pref_connection_more_info.title "Pomoc">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton jest włączony. Jeśli chcesz zmienić inne ustawienia proxy musisz wyłączyć Torbutton i powrócić tutaj. Jeśli chcesz zmienić ustawienia proxy Tor, zrób to tutaj.">
+<!ENTITY torbutton.context_menu.toggle "Zmień status Tor">
+<!ENTITY torbutton.context_menu.toggle.key "Z">
+<!ENTITY torbutton.context_menu.preferences "Ustawienia">
+<!ENTITY torbutton.context_menu.preferences.key "U">
+<!ENTITY torbutton.context_menu.about "O Torbutton">
+<!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Kliknij tutaj, aby uruchomić Torbutton">

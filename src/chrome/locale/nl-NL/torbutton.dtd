@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Torbutton voorkeuren">
+<!ENTITY torbutton.prefs.display_settings "Weergave-instellingen">
+<!ENTITY torbutton.prefs.display_panel "Tor proxy-instelling weergeven in de statusbalk">
+<!ENTITY torbutton.prefs.panel_format "Weergave in statusbalk:">
+<!ENTITY torbutton.prefs.panel_text_format "Tekst">
+<!ENTITY torbutton.prefs.panel_icon_format "Pictogram">
+<!ENTITY torbutton.prefs.tor_settings "Proxy-instellingen">
+<!ENTITY torbutton.prefs.recommended_settings "De aanbevolen proxy-instellingen voor mijn versie van Firefox gebruiken">
+<!ENTITY torbutton.prefs.use_privoxy "Privoxy gebruiken">
+<!ENTITY torbutton.prefs.custom_settings "Aangepaste proxy-instellingen gebruiken">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP proxy:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL proxy:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP proxy:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher proxy:">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS host:">
+<!ENTITY torbutton.prefs.proxy.port "Poort:">
+<!ENTITY torbutton.about.title "Over Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Torbutton dient uitgeschakeld te worden om deze instellingen te kunnen wijzigen.">
+<!ENTITY torbutton.pref_connection.more_info "Meer informatie">
+<!ENTITY torbutton.pref_connection_more_info.title "Help">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton is momenteel ingeschakeld. Als u uw niet aan Tor gerelateerde proxy-instellingen wilt wijzigen dient u Torbutton uit te schakelen en dan hier terug te komen. Als u uw Tor instellingen wilt wijzigen, gebruik dan het Torbutton Voorkeuren-venster.">
+<!ENTITY torbutton.context_menu.toggle "Tor status wisselen">
+<!ENTITY torbutton.context_menu.toggle.key "W">
+<!ENTITY torbutton.context_menu.preferences "Voorkeuren...">
+<!ENTITY torbutton.context_menu.preferences.key "V">
+<!ENTITY torbutton.context_menu.about "Over Torbutton...">
+<!ENTITY torbutton.context_menu.about.key "O">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">

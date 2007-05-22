@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Preferências Torbutton">
+<!ENTITY torbutton.prefs.display_settings "Mostrar configurações">
+<!ENTITY torbutton.prefs.display_panel "Mostrar configurações do proxy Tor na barra de status">
+<!ENTITY torbutton.prefs.panel_format "Formato de amostra da barra de status">
+<!ENTITY torbutton.prefs.panel_text_format "Texto">
+<!ENTITY torbutton.prefs.panel_icon_format "Ícone">
+<!ENTITY torbutton.prefs.tor_settings "Configurações Proxy">
+<!ENTITY torbutton.prefs.recommended_settings "Usar as cinfigurações recomendadas de proxy para minha versão de Firefox">
+<!ENTITY torbutton.prefs.use_privoxy "Usar Privoxy">
+<!ENTITY torbutton.prefs.custom_settings "Usar configurações padrão de proxy">
+<!ENTITY torbutton.prefs.proxy.host.http "Proxy HTTP:">
+<!ENTITY torbutton.prefs.proxy.host.https "Proxy SSL:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Proxy FTP:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Proxy Gopher:">
+<!ENTITY torbutton.prefs.proxy.host.socks "Host SOCKS:">
+<!ENTITY torbutton.prefs.proxy.port "Porta:">
+<!ENTITY torbutton.about.title "Sobre Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Desabilitar Torbutton para mudar essas configurações">
+<!ENTITY torbutton.pref_connection.more_info "Mais informações">
+<!ENTITY torbutton.pref_connection_more_info.title "Ajuda">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton está habilitado. Se você deseja mudar as configurações de Proxy que não sejam do Tor, por favor desabilite Torbutton e retorne aqui. Se você deseja mudar as configurações do Tor, por favor, use a janela de preferência do Torbutton.">
+<!ENTITY torbutton.context_menu.toggle "Alterar Status Tor">
+<!ENTITY torbutton.context_menu.toggle.key "T">
+<!ENTITY torbutton.context_menu.preferences "Preferências...">
+<!ENTITY torbutton.context_menu.preferences.key "P">
+<!ENTITY torbutton.context_menu.about "Sobre Torbutton...">
+<!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">

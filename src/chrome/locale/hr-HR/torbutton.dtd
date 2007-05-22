@@ -1,0 +1,29 @@
+<!ENTITY torbutton.prefs.title "Torbutton Postavke">
+<!ENTITY torbutton.prefs.display_settings "Prikaži postavke">
+<!ENTITY torbutton.prefs.display_panel "Prikaži Tor proxy postavke u statusnoj traci">
+<!ENTITY torbutton.prefs.panel_format "Oblik prikazivanja u statusnoj traci:">
+<!ENTITY torbutton.prefs.panel_text_format "Tekst">
+<!ENTITY torbutton.prefs.panel_icon_format "Ikona">
+<!ENTITY torbutton.prefs.tor_settings "Proxy Postavke">
+<!ENTITY torbutton.prefs.recommended_settings "Koristi preporučene proxy postavke za moju inačicu Firefoxa">
+<!ENTITY torbutton.prefs.use_privoxy "Koristi Privoxy">
+<!ENTITY torbutton.prefs.custom_settings "Koristi prilagođene proxy postavke">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS domaćin:">
+<!ENTITY torbutton.prefs.proxy.port "Priključak:">
+<!ENTITY torbutton.about.title "O Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Onemogućite Torbutton da biste promijenili ove postavke">
+<!ENTITY torbutton.pref_connection.more_info "Više informacija">
+<!ENTITY torbutton.pref_connection_more_info.title "Pomoć">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton je trenutno omogućen. Ako biste željeli promijeniti Vaše ne-Tor proxy postavke, molimo Vas da onemogućite Torbutton i vratite se ovdje. Ako biste željeli promijeniti Vaše Tor postavke, molimo Vas, koristite prozor Torbutton postavki.">
+<!ENTITY torbutton.context_menu.toggle "Promijeni Tor status">
+<!ENTITY torbutton.context_menu.toggle.key "r">
+<!ENTITY torbutton.context_menu.preferences "Postavke...">
+<!ENTITY torbutton.context_menu.preferences.key "P">
+<!ENTITY torbutton.context_menu.about "O Torbutton...">
+<!ENTITY torbutton.context_menu.about.key "O">
+<!ENTITY torbutton.button.label "Torbutton">
+<!ENTITY torbutton.button.tooltip "Kliknite da biste pokrenuli Torbutton">
