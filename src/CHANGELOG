@@ -9,6 +9,7 @@
   * new: previous proxy settings are restored after exiting tor mode
   * new: if the torbutton proxy settings are changed while torbutton is 
          enabled, then the active proxy settings are updated to reflect it
+  * new: added twelve locales
 
 1.0.4
   01 Jun 2006
