@@ -250,7 +250,7 @@ function torbutton_init_prefs() {
             torprefs.setIntPref('ftp_port', proxy_port);
             torprefs.setIntPref('gopher_port', proxy_port);
         }
-        torprefs.setCharPref('socks', 'localhost');
+        torprefs.setCharPref('socks_host', 'localhost');
         torprefs.setIntPref('socks_port', 9050);
     }
     torbutton_log(1, 'http_port='+torprefs.getIntPref('http_port'));
