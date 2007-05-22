@@ -169,6 +169,7 @@ function torbutton_init() {
 
     if (!m_statuspanel) {
         torbutton_init_statuspanel();
+        torbutton_set_panel_style();
     } else {
         torbutton_log(5, 'skipping statusbar panel element search');
     }

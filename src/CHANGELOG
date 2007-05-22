@@ -1,3 +1,7 @@
+1.0.3
+  31 May 2006
+  * bugfix: statusbar style would reset to text after firefox restart
+
 1.0.2
   23 May 2006
   * bugfix: fixed problem with socks_remote_dns
