@@ -19,6 +19,7 @@
                    em:optionsURL="chrome://torbutton/content/preferences.xul"
                    em:iconURL="chrome://torbutton/skin/tor.png">
     <em:targetApplication RDF:resource="rdf:#$QkNYY"/>
+    <em:targetApplication RDF:resource="rdf:#$YkNYY"/>
     <em:file RDF:resource="urn:mozilla:extension:file:torbutton.jar"/>
     <em:file RDF:resource="rdf:#$ZkNYY"/>
     <em:file RDF:resource="rdf:#$YkNYY"/>
