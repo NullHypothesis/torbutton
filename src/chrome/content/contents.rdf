@@ -17,6 +17,7 @@
     <Seq about="urn:mozilla:overlays">
         <!-- firefox -->
         <li resource="chrome://browser/content/browser.xul"/>
+        <li resource="chrome://browser/content/preferences/connection.xul"/>
         <!-- thunderbird -->
         <li resource="chrome://messenger/content/messenger.xul"/>
         <li resource="chrome://messenger/content/messengercompose/messengercompose.xul"/>
@@ -27,6 +28,9 @@
     <!-- firefox -->
     <Seq about="chrome://browser/content/browser.xul">
         <li>chrome://torbutton/content/torbutton.xul</li>
+    </Seq>
+    <Seq about="chrome://browser/content/preferences/connection.xul"/>
+        <li>chrome://torbutton/content/pref-connection.xul</li>
     </Seq>
 
     <!-- thunderbird -->

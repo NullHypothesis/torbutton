@@ -484,6 +484,34 @@ function geckoVersionCompare(aVersion) {
     return versionComparator.compare(aVersion, geckoVersion);
 }
 
+function torbutton_browser_proxy_prefs_init()
+{
+  var _elementIDs = ["networkProxyType",
+                     "networkProxyFTP", "networkProxyFTP_Port",
+                     "networkProxyGopher", "networkProxyGopher_Port",
+                     "networkProxyHTTP", "networkProxyHTTP_Port",
+                     "networkProxySOCKS", "networkProxySOCKS_Port",
+                     "networkProxySOCKSVersion",
+                     "networkProxySOCKSVersion4", "networkProxySOCKSVersion5",
+                     "networkProxySSL", "networkProxySSL_Port",
+                     "networkProxyNone", "networkProxyAutoconfigURL", "shareAllProxies"];
+
+  torbutton_log(3, 'called torbutton_browser_proxy_prefs_init()');
+  if (!torbutton_check_status())
+  {
+    document.getElementById('torbutton-pref-connection-notice').hidden = true;
+    document.getElementById('torbutton-pref-connection-more-info').hidden = true;
+  }
+  else
+  {
+    document.getElementById('networkProxyType').disabled = true;
+    for (i = 0; i < _elementIDs.length; i++)
+        document.getElementById(_elementIDs[i]).setAttribute( "disabled", "true" );
+  }
+
+  // window.sizeToContent();
+}
+
 function torbutton_log(nLevel, sMsg) {
     var o_log_mgr    = false;
     var o_tb_logger  = false;

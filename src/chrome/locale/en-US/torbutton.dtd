@@ -1,25 +1,29 @@
-<!ENTITY torbutton.prefs.title			"Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings	"Display Settings">
-<!ENTITY torbutton.prefs.display_panel		"Display Tor proxy setting in the status bar">
-<!ENTITY torbutton.prefs.panel_format		"Status bar display format:">
-<!ENTITY torbutton.prefs.panel_text_format	"Text">
-<!ENTITY torbutton.prefs.panel_icon_format	"Icon">
-<!ENTITY torbutton.prefs.tor_settings		"Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings	"Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy		"Use Privoxy">
-<!ENTITY torbutton.prefs.custom_settings	"Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http	"HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https	"SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp		"FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher	"Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks	"SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port		"Port:">
-<!ENTITY torbutton.about.title			"About Torbutton">
-<!ENTITY torbutton.context_menu.toggle		"Toggle Tor status">
-<!ENTITY torbutton.context_menu.toggle.key	"T">
-<!ENTITY torbutton.context_menu.preferences	"Preferences...">
-<!ENTITY torbutton.context_menu.preferences.key	"P">
-<!ENTITY torbutton.context_menu.about		"About Torbutton...">
-<!ENTITY torbutton.context_menu.about.key	"A">
-<!ENTITY torbutton.button.label			"Torbutton">
-<!ENTITY torbutton.button.tooltip		"Click to initialize Torbutton">
+<!ENTITY torbutton.prefs.title                          "Torbutton Preferences">
+<!ENTITY torbutton.prefs.display_settings               "Display Settings">
+<!ENTITY torbutton.prefs.display_panel                  "Display Tor proxy setting in the status bar">
+<!ENTITY torbutton.prefs.panel_format                   "Status bar display format:">
+<!ENTITY torbutton.prefs.panel_text_format              "Text">
+<!ENTITY torbutton.prefs.panel_icon_format              "Icon">
+<!ENTITY torbutton.prefs.tor_settings                   "Proxy Settings">
+<!ENTITY torbutton.prefs.recommended_settings           "Use the recommended proxy settings for my version of Firefox">
+<!ENTITY torbutton.prefs.use_privoxy                    "Use Privoxy">
+<!ENTITY torbutton.prefs.custom_settings                "Use custom proxy settings">
+<!ENTITY torbutton.prefs.proxy.host.http                "HTTP Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.https               "SSL Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.ftp                 "FTP Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.gopher              "Gopher Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.socks               "SOCKS Host:">
+<!ENTITY torbutton.prefs.proxy.port                     "Port:">
+<!ENTITY torbutton.about.title                          "About Torbutton">
+<!ENTITY torbutton.pref_connection.notice               "Disable Torbutton to change these settings.">
+<!ENTITY torbutton.pref_connection.more_info            "More information">
+<!ENTITY torbutton.pref_connection_more_info.title      "Help">
+<!ENTITY torbutton.pref_connection_more_info.text       "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
+<!ENTITY torbutton.context_menu.toggle                  "Toggle Tor status">
+<!ENTITY torbutton.context_menu.toggle.key              "T">
+<!ENTITY torbutton.context_menu.preferences             "Preferences...">
+<!ENTITY torbutton.context_menu.preferences.key         "P">
+<!ENTITY torbutton.context_menu.about                   "About Torbutton...">
+<!ENTITY torbutton.context_menu.about.key               "A">
+<!ENTITY torbutton.button.label                         "Torbutton">
+<!ENTITY torbutton.button.tooltip                       "Click to initialize Torbutton">
