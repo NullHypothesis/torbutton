@@ -308,7 +308,7 @@ function torbutton_check_status() {
     if (torbutton_check_socks_remote_dns())
          remote_dns = nonprefs.getBoolPref("socks_remote_dns");
     else
-         remote_dns = false;
+         remote_dns = true;
 
     return ( (nonprefs.getIntPref("type")           == 1)              &&
              (nonprefs.getCharPref("http")          == torprefs.getCharPref('http_proxy'))   &&
