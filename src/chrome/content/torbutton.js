@@ -278,7 +278,7 @@ function torbutton_get_toolbutton() {
     } else if (document.getElementById("torbutton-button-tb-msg")) {
         o_toolbutton = document.getElementById("torbutton-button-tb-msg");
     } else {
-        torbutton_log(1, 'ERROR (init): failed to find torbutton-button');
+        torbutton_log(1, 'get_toolbutton(): did not find torbutton-button');
     }
 
     return o_toolbutton;
