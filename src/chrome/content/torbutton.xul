@@ -31,7 +31,7 @@
     </commandset>
 
     <keyset id="mainKeyset">
-        <key id="torbutton-toggle-key" modifiers="control shift" key="T"
+        <key id="torbutton-toggle-key" modifiers="control" key="2"
              command="torbutton-toggle-cmd"/>
     </keyset>
 
