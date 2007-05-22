@@ -370,7 +370,23 @@ function torbutton_open_prefs_dialog() {
 }
 
 function torbutton_open_about_dialog() {
-    window.openDialog("chrome://torbutton/content/about.xul","torbutton-about","cneterscreen, chrome");
+    var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"]
+                           .getService(Components.interfaces.nsIExtensionManager);
+    var database = '@mozilla.org/rdf/datasource;1?name=composite-datasource';
+    database = Components.classes[database]
+               .getService(Components.interfaces.nsIRDFCompositeDataSource);
+    database.AddDataSource(extensionManager.datasource);
+
+    window.openDialog("chrome://mozapps/content/extensions/about.xul","","chrome,modal","urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}",database);
+
+// or we could just extract the version the way that about.js and about.xul do it
+// (the below is incomplete)
+/*
+  var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"]
+                       .getService(Components.interfaces.nsIRDFService);
+  var extension = rdfs.GetResource("urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"); 
+  alert(extension.Value);
+*/
 }
 
 function torbutton_log(nLevel, sMsg) {
