@@ -12,7 +12,13 @@ function torbutton_prefs_set_field_attributes(doc)
     doc.getElementById('torbutton_panelStyle').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleText').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleIcon').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
-    doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
+    // Privoxy is always recommended for Firefoxes not support socks_remote_dns
+    if (!torbutton_check_socks_remote_dns())
+    {
+      doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
+    } else {
+      doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
+    }
     var proxy_port;
     var proxy_host;
     if (doc.getElementById('torbutton_usePrivoxy').checked)

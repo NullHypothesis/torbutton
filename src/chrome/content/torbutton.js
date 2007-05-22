@@ -217,6 +217,10 @@ function torbutton_init_prefs() {
     torbutton_log(4, "called init_prefs()");
     torprefs = torbutton_get_prefbranch('extensions.torbutton.');
 
+    // Privoxy is always recommended for Firefoxes not supporting socks_remote_dns
+    if (!torbutton_check_socks_remote_dns())
+        torprefs.setBoolPref('use_privoxy', true);
+
     if (torprefs.getBoolPref('use_privoxy'))
     {
         proxy_host = 'localhost';
