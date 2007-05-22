@@ -1,3 +1,6 @@
+1.0.5
+  * bugfix: fix the about box in firefox 1.0
+
 1.0.4
   01 Jun 2006
   * bugfix: without-privoxy settings were incorrect

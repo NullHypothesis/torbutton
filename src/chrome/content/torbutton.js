@@ -373,20 +373,60 @@ function torbutton_open_about_dialog() {
     var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"]
                            .getService(Components.interfaces.nsIExtensionManager);
     var database = '@mozilla.org/rdf/datasource;1?name=composite-datasource';
+    var extension_id = '';
     database = Components.classes[database]
                .getService(Components.interfaces.nsIRDFCompositeDataSource);
     database.AddDataSource(extensionManager.datasource);
 
-    window.openDialog("chrome://mozapps/content/extensions/about.xul","","chrome,modal","urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}",database);
+    if (geckoVersionCompare("1.8") <= 0)
+    {
+        // Firefox 1.5 -- use built-in about box
+        extension_id = "urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}";
+        window.openDialog("chrome://mozapps/content/extensions/about.xul","","chrome",extension_id,database);
+    } else {
+        // Firefox 1.0 -- home page link is broken in built-in about box, use our own
+        extension_id = "urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}";
+        window.openDialog("chrome://torbutton/content/about.xul","","chrome",extension_id,database);
+    }
+}
 
-// or we could just extract the version the way that about.js and about.xul do it
-// (the below is incomplete)
-/*
-  var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"]
-                       .getService(Components.interfaces.nsIRDFService);
-  var extension = rdfs.GetResource("urn:mozilla:item:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"); 
-  alert(extension.Value);
-*/
+function torbutton_about_init() {
+    var extensionID = window.arguments[0];
+    var extensionDB = window.arguments[1];
+
+    var oBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                            .getService(Components.interfaces.nsIStringBundleService);
+    var extensionsStrings = document.getElementById("extensionsStrings");
+
+    var rdfs = Components.classes["@mozilla.org/rdf/rdf-service;1"]
+                         .getService(Components.interfaces.nsIRDFService);
+    var extension = rdfs.GetResource(extensionID);
+
+    var versionArc = rdfs.GetResource("http://www.mozilla.org/2004/em-rdf#version");
+    var version = extensionDB.GetTarget(extension, versionArc, true);
+    version = version.QueryInterface(Components.interfaces.nsIRDFLiteral).Value;
+
+    var extensionVersion = document.getElementById("torbuttonVersion");
+
+    extensionVersion.setAttribute("value", extensionsStrings.getFormattedString("aboutWindowVersionString", [version]));
+}
+
+function geckoVersionCompare(aVersion) {
+    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                    .getService(Components.interfaces.nsIIOService);
+    var httpProtocolHandler = ioService.getProtocolHandler("http")
+                              .QueryInterface(Components.interfaces.nsIHttpProtocolHandler);
+    var versionComparator = null;
+
+    if ("nsIVersionComparator" in Components.interfaces) {
+        versionComparator = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+                            .getService(Components.interfaces.nsIVersionComparator);
+    } else {
+        versionComparator = Components.classes["@mozilla.org/updates/version-checker;1"]
+                            .getService(Components.interfaces.nsIVersionChecker);
+    }
+    var geckoVersion = httpProtocolHandler.misc.match(/rv:([0-9.]+)/)[1];
+    return versionComparator.compare(aVersion, geckoVersion);
 }
 
 function torbutton_log(nLevel, sMsg) {
