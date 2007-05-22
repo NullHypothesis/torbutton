@@ -16,9 +16,19 @@
         <stringbundle id="torbutton-bundle" src="chrome://torbutton/locale/torbutton.properties"/>
     </stringbundleset>
 
-    <toolbarpalette id="BrowserToolbarPalette">
+    <toolbarpalette id="MailToolbarPalette">
         <toolbarbutton 
-            id="torbutton-button" 
+            id="torbutton-button-tb" 
+            class="toolbarbutton-1" 
+            label="Torbutton"
+            tooltiptext="&torbutton.button.tooltip;" 
+            context="torbutton-context-menu"
+            oncommand="torbutton_toggle();" />
+    </toolbarpalette>
+
+    <toolbarpalette id="MsgComposeToolbarPalette">
+        <toolbarbutton 
+            id="torbutton-button-tb-msg" 
             class="toolbarbutton-1" 
             label="Torbutton"
             tooltiptext="&torbutton.button.tooltip;" 

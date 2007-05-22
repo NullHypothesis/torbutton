@@ -1,3 +1,4 @@
+var m_debug = true;
 var m_toolbutton = false;
 var m_statuspanel = false;
 var m_wasinited = false;
@@ -6,6 +7,16 @@ var m_stringbundle = false;
 var m_tb_logger = false;
 var m_socks_pref_exists = false;
 var m_exclusion_list = "";
+var m_http_proxy = false;
+var m_http_port = false;
+var m_https_proxy = false;
+var m_https_port = false;
+var m_ftp_proxy = false;
+var m_ftp_port = false;
+var m_gopher_proxy = false;
+var m_gopher_port = false;
+var m_socks_host = false;
+var m_socks_port = false;
 
 var torbutton_pref_observer =
 {
@@ -33,6 +44,20 @@ var torbutton_pref_observer =
             case "extensions.torbutton.display_panel":
                 torbutton_set_panel_view();
                 break;
+            case "extensions.torbutton.panel_style":
+                torbutton_set_panel_style();
+                break;
+            case "extensions.torbutton.http_proxy":
+            case "extensions.torbutton.http_port":
+            case "extensions.torbutton.ssl_proxy":
+            case "extensions.torbutton.ssl_port":
+            case "extensions.torbutton.ftp_proxy":
+            case "extensions.torbutton.ftp_port":
+            case "extensions.torbutton.gopher_proxy":
+            case "extensions.torbutton.gopher_port":
+            case "extensions.torbutton.socks_host":
+            case "extensions.torbutton.socks_port":
+                torbutton_init_prefs();
             case "network.proxy.http":
             case "network.proxy.http_port":
             case "network.proxy.ssl":
@@ -57,6 +82,12 @@ function torbutton_set_panel_view() {
     torbutton_log(4, 'setting panel visibility');
     var display_panel = m_prefs.getBoolPref('extensions.torbutton.display_panel');
     document.getElementById('torbutton-panel').setAttribute('collapsed', !display_panel);
+}
+
+function torbutton_set_panel_style() {
+    var panel_style = m_prefs.getCharPref('extensions.torbutton.panel_style');
+    torbutton_log(4, 'setting panel style: ' + panel_style);
+    document.getElementById('torbutton-panel').setAttribute('class','statusbarpanel-'+panel_style);
 }
 
 function torbutton_toggle() {
@@ -86,8 +117,6 @@ function torbutton_set_status() {
 }
 
 function torbutton_init() {
-    torbutton_log(1, 'called init()');
-
     if (!m_tb_logger) {
         try {
             var logMngr = Components.classes["@mozmonkey.com/debuglogger/manager;1"]
@@ -97,6 +126,8 @@ function torbutton_init() {
             m_tb_logger = false;
         }
     }
+
+    torbutton_log(1, 'called init()');
     
     // load localization strings
     if (!m_stringbundle) {
@@ -113,8 +144,22 @@ function torbutton_init() {
     }
 
     if (!m_prefs) {
-    	torbutton_init_pref_objs();
+        torbutton_init_pref_objs();
     }
+
+    // check if this version of Firefox has the socks_remote_dns option
+    m_socks_pref_exists = true;
+    try {
+        m_prefs.getBoolPref('network.proxy.socks_remote_dns');
+        torbutton_log(3, "socks_remote_dns is available");
+    } catch (rErr) {
+        // no such preference
+        m_socks_pref_exists = false;
+        torbutton_log(3, "socks_remote_dns is unavailable");
+    }
+
+    // initialize preferences before we start our prefs observer
+    torbutton_init_prefs();
 
     if (!m_toolbutton) {
         torbutton_init_toolbutton();
@@ -135,15 +180,6 @@ function torbutton_init() {
         torbutton_log(5, 'skipping pref observer init');
     }
     
-    // check if this version of Firefox has the socks_remote_dns option
-    m_socks_pref_exists = true;
-    try {
-        m_prefs.getCharPref("network.proxy.socks_remote_dns");
-    } catch (rErr) {
-        // no such preference
-        m_socks_pref_exists = false;
-    }
-
     torbutton_set_panel_view();
     torbutton_log(2, 'setting torbutton status from proxy prefs');
     torbutton_set_status();
@@ -151,14 +187,70 @@ function torbutton_init() {
 }
 
 function torbutton_init_pref_objs() {
+    torbutton_log(4, "called init_pref_objs()");
     m_prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                              .getService(Components.interfaces.nsIPrefBranch);
+                        .getService(Components.interfaces.nsIPrefBranch);
+}
+
+// this function duplicates a lot of code in preferences.js for deciding our
+// recommended settings.  figure out a way to eliminate the redundancy.
+function torbutton_init_prefs() {
+    var proxy_port;
+    torbutton_log(4, "called init_prefs()");
+    if (!m_prefs) { torbutton_log(1, "ERROR: m_prefs undefined"); }
+    if (m_prefs.getBoolPref('extensions.torbutton.use_privoxy'))
+        proxy_port = 8118;
+    else
+        proxy_port = 9050;
+
+    if (m_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended')
+    {
+        torbutton_log(5, "using recommended settings");
+        if (m_socks_pref_exists)
+        {
+            m_http_proxy = m_https_proxy = 'localhost';
+            m_ftp_proxy = m_gopher_proxy = '';
+            m_http_port = m_https_port   = proxy_port;
+            m_ftp_port = m_gopher_port   = 0;
+        } else {
+            m_http_proxy = m_https_proxy = m_ftp_proxy = m_gopher_proxy = 'localhost';
+            m_http_port = m_https_port = m_ftp_port = m_gopher_port = proxy_port;
+        }
+        m_socks_host = 'localhost';
+        m_socks_port = 9050;
+    } else {
+        m_http_proxy   = m_prefs.getCharPref('extensions.torbutton.http_proxy');
+        m_http_port    = m_prefs.getIntPref('extensions.torbutton.http_port');
+        m_https_proxy  = m_prefs.getCharPref('extensions.torbutton.https_proxy');
+        m_https_port   = m_prefs.getIntPref('extensions.torbutton.https_port');
+        m_ftp_proxy    = m_prefs.getCharPref('extensions.torbutton.ftp_proxy');
+        m_ftp_port     = m_prefs.getIntPref('extensions.torbutton.ftp_port');
+        m_gopher_proxy = m_prefs.getCharPref('extensions.torbutton.gopher_proxy');
+        m_gopher_port  = m_prefs.getIntPref('extensions.torbutton.gopher_port');
+        m_socks_host   = m_prefs.getCharPref('extensions.torbutton.socks_host');
+        m_socks_port   = m_prefs.getIntPref('extensions.torbutton.socks_port');
+    }
+    torbutton_log(1, 'http_port='+m_http_port);
+    // m_prefs.setCharPref('extensions.torbutton.http_proxy',   m_http_proxy);
+    // m_prefs.setIntPref('extensions.torbutton.http_port',     m_http_port);
+    // m_prefs.setCharPref('extensions.torbutton.https_proxy',  m_https_proxy);
+    // m_prefs.setIntPref('extensions.torbutton.https_port',    m_https_port);
+    // m_prefs.setCharPref('extensions.torbutton.ftp_proxy',    m_ftp_proxy);
+    // m_prefs.setIntPref('extensions.torbutton.ftp_port',      m_ftp_port);
+    // m_prefs.setCharPref('extensions.torbutton.gopher_proxy', m_gopher_proxy);
+    // m_prefs.setIntPref('extensions.torbutton.gopher_port',   m_gopher_port);
+    // m_prefs.setCharPref('extensions.torbutton.socks_host',   m_socks_host);
+    // m_prefs.setIntPref('extensions.torbutton.socks_port',    m_socks_port);
 }
 
 function torbutton_init_toolbutton() {
     torbutton_log(4, 'init_toolbutton(): looking for button element');
     if (document.getElementById("torbutton-button")) {
         m_toolbutton = document.getElementById("torbutton-button");
+    } else if (document.getElementById("torbutton-button-tb")) {
+        m_toolbutton = document.getElementById("torbutton-button-tb");
+    } else if (document.getElementById("torbutton-button-tb-msg")) {
+        m_toolbutton = document.getElementById("torbutton-button-tb-msg");
     } else {
         torbutton_log(1, 'ERROR (init): failed to find torbutton-button');
     }
@@ -173,28 +265,6 @@ function torbutton_init_statuspanel() {
     }
 }
 
-// preferences dialog functions
-//   torbutton_prefs_init() -- on dialog load
-//   torbutton_prefs_save() -- on dialog save
-
-function torbutton_prefs_init(doc) {
-    var checkbox_displayStatusPanel = doc.getElementById('torbutton_displayStatusPanel');
-    
-    sizeToContent();
-
-    if (!m_prefs) {
-        torbutton_init_pref_objs();
-    }
-
-    doc.getElementById('torbutton_displayStatusPanel').checked = m_prefs.getBoolPref('extensions.torbutton.display_panel');
-    // doc.getElementById('torbutton_warnUponExcludedSite').checked = m_prefs.getBoolPref('extensions.torbutton.prompt_before_visiting_excluded_sites');
-}
-
-function torbutton_prefs_save(doc) {
-    m_prefs.setBoolPref('extensions.torbutton.display_panel', doc.getElementById('torbutton_displayStatusPanel').checked);
-    // m_prefs.setBoolPref('extensions.torbutton.prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
-}
-
 function torbutton_check_status() {
     // make sure we have the latest proxy exclusion list
     m_exclusion_list = m_prefs.getCharPref("network.proxy.no_proxies_on");
@@ -206,19 +276,19 @@ function torbutton_check_status() {
          remote_dns = true;
     }
 
-    return ( (m_prefs.getIntPref("network.proxy.type")           == 1)           &&
-             (m_prefs.getCharPref("network.proxy.http")          == "localhost") &&
-             (m_prefs.getIntPref("network.proxy.http_port")      == 8118)        &&
-             (m_prefs.getCharPref("network.proxy.ssl")           == "localhost") &&
-             (m_prefs.getIntPref("network.proxy.ssl_port")       == 8118)        &&
-             (m_prefs.getCharPref("network.proxy.ftp")           == "localhost") &&
-             (m_prefs.getIntPref("network.proxy.ftp_port")       == 8118)        &&
-             (m_prefs.getCharPref("network.proxy.gopher")        == "localhost") &&
-             (m_prefs.getIntPref("network.proxy.gopher_port")    == 8118)        &&
-             (m_prefs.getCharPref("network.proxy.socks")         == "localhost") &&
-             (m_prefs.getIntPref("network.proxy.socks_port")     == 9050)        &&
-             (m_prefs.getIntPref("network.proxy.socks_version")  == 5)           &&
-             (m_prefs.getBoolPref("network.proxy.share_proxy_settings") == false) &&
+    return ( (m_prefs.getIntPref("network.proxy.type")           == 1)              &&
+             (m_prefs.getCharPref("network.proxy.http")          == m_http_proxy)   &&
+             (m_prefs.getIntPref("network.proxy.http_port")      == m_http_port)    &&
+             (m_prefs.getCharPref("network.proxy.ssl")           == m_https_proxy)  &&
+             (m_prefs.getIntPref("network.proxy.ssl_port")       == m_https_port)   &&
+             (m_prefs.getCharPref("network.proxy.ftp")           == m_ftp_proxy)    &&
+             (m_prefs.getIntPref("network.proxy.ftp_port")       == m_ftp_port)     &&
+             (m_prefs.getCharPref("network.proxy.gopher")        == m_gopher_proxy) &&
+             (m_prefs.getIntPref("network.proxy.gopher_port")    == m_gopher_port)  &&
+             (m_prefs.getCharPref("network.proxy.socks")         == m_socks_host)   &&
+             (m_prefs.getIntPref("network.proxy.socks_port")     == m_socks_port)   &&
+             (m_prefs.getIntPref("network.proxy.socks_version")  == 5)              &&
+             (m_prefs.getBoolPref("network.proxy.share_proxy_settings") == false)   &&
              (remote_dns == true) );
 }
 
@@ -230,16 +300,16 @@ function torbutton_disable_tor() {
 function torbutton_enable_tor() {
     torbutton_log(2, 'called enable_tor()');
 
-    m_prefs.setCharPref("network.proxy.http", "localhost");
-    m_prefs.setIntPref("network.proxy.http_port", 8118);
-    m_prefs.setCharPref("network.proxy.ssl", "localhost");
-    m_prefs.setIntPref("network.proxy.ssl_port", 8118);
-    m_prefs.setCharPref("network.proxy.ftp", "localhost");
-    m_prefs.setIntPref("network.proxy.ftp_port", 8118);
-    m_prefs.setCharPref("network.proxy.gopher", "localhost");
-    m_prefs.setIntPref("network.proxy.gopher_port", 8118);
-    m_prefs.setCharPref("network.proxy.socks", "localhost");
-    m_prefs.setIntPref("network.proxy.socks_port", 9050);
+    m_prefs.setCharPref("network.proxy.http",         m_http_proxy);
+    m_prefs.setIntPref("network.proxy.http_port",     m_http_port);
+    m_prefs.setCharPref("network.proxy.ssl",          m_https_proxy);
+    m_prefs.setIntPref("network.proxy.ssl_port",      m_https_port);
+    m_prefs.setCharPref("network.proxy.ftp",          m_ftp_proxy);
+    m_prefs.setIntPref("network.proxy.ftp_port",      m_ftp_port);
+    m_prefs.setCharPref("network.proxy.gopher",       m_gopher_proxy);
+    m_prefs.setIntPref("network.proxy.gopher_port",   m_gopher_port);
+    m_prefs.setCharPref("network.proxy.socks",        m_socks_host);
+    m_prefs.setIntPref("network.proxy.socks_port",    m_socks_port);
     m_prefs.setIntPref("network.proxy.socks_version", 5);
     m_prefs.setBoolPref("network.proxy.share_proxy_settings", false);
     if (m_socks_pref_exists) {
@@ -267,6 +337,7 @@ function torbutton_update_status(nMode) {
             m_statuspanel.style.color = "#F00";
             m_statuspanel.setAttribute('label', label);
             m_statuspanel.setAttribute('tooltiptext', tooltip);
+            m_statuspanel.setAttribute('tbstatus', 'off');
         }
     } else {
         if (m_toolbutton) {
@@ -281,13 +352,26 @@ function torbutton_update_status(nMode) {
             m_statuspanel.style.color = "#390";
             m_statuspanel.setAttribute('label', label);
             m_statuspanel.setAttribute('tooltiptext', tooltip);
+            m_statuspanel.setAttribute('tbstatus', 'on');
         }
     }
+}
+
+function torbutton_open_prefs_dialog() {
+    window.openDialog("chrome://torbutton/content/preferences.xul","torbutton-preferences","centerscreen, chrome");
+}
+
+function torbutton_open_about_dialog() {
+    window.openDialog("chrome://torbutton/content/about.xul","torbutton-about","cneterscreen, chrome");
 }
 
 function torbutton_log(nLevel, sMsg) {
     if (m_tb_logger) {
         var rDate = new Date();
         m_tb_logger.log(nLevel, rDate.getTime()+': '+sMsg);
+    } else if (m_debug) {
+        var rDate = new Date();
+        dump("ERROR: m_tb_logger undefined ");
+        dump(rDate.getTime()+': '+sMsg+"\n");
     }
 }

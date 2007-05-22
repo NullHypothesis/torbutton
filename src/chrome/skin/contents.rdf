@@ -16,16 +16,29 @@
     </Description>
 
     <Seq about="urn:mozilla:stylesheets">
-        <li resource="chrome://browser/content/browser.xul"/>
         <li resource="chrome://global/content/customizeToolbar.xul"/>
-    </Seq>
-
-    <!-- FireFox -->  
-    <Seq about="chrome://browser/content/browser.xul">
-        <li>chrome://torbutton/skin/torbutton.css</li>
+        <!-- firefox --> 
+        <li resource="chrome://browser/content/browser.xul"/>
+        <!-- thunderbird -->
+        <li resource="chrome://messenger/content/messenger.xul"/>
+        <li resource="chrome://messenger/content/messengercompose/messengercompose.xul"/>
     </Seq>
 
     <Seq about="chrome://global/content/customizeToolbar.xul">
         <li>chrome://torbutton/skin/torbutton.css</li>
     </Seq>
+
+    <!-- firefox -->  
+    <Seq about="chrome://browser/content/browser.xul">
+        <li>chrome://torbutton/skin/torbutton.css</li>
+    </Seq>
+
+    <!-- thunderbird -->
+    <Seq about="chrome://messenger/content/messenger.xul">
+        <li>chrome://torbutton/skin/torbutton.css</li>
+    </Seq>
+    <Seq about="chrome://messenger/content/messengercompose/messengercompose.xul">
+        <li>chrome://torbutton/skin/torbutton.css</li>
+    </Seq>
+
 </RDF>

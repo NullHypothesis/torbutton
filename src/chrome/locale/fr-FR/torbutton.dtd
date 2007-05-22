@@ -1,0 +1,25 @@
+<!ENTITY torbutton.prefs.title			"Préférences de Tor">
+<!ENTITY torbutton.prefs.display_settings	"Réglages de l'affichage">
+<!ENTITY torbutton.prefs.display_panel		"Afficher le status de Tor dans la barre d'état">
+<!ENTITY torbutton.prefs.panel_format		"Affichage dans la barre de status :">
+<!ENTITY torbutton.prefs.panel_text_format	"Texte">
+<!ENTITY torbutton.prefs.panel_icon_format	"Icône">
+<!ENTITY torbutton.prefs.tor_settings		"Réglages du proxy">
+<!ENTITY torbutton.prefs.recommended_settings	"Utiliser les réglages recommandés pour ma version de Firefox">
+<!ENTITY torbutton.prefs.use_privoxy		"Utiliser Privoxy">
+<!ENTITY torbutton.prefs.custom_settings	"Utiliser des réglages personnalisés pour le proxy">
+<!ENTITY torbutton.prefs.proxy.host.http	"Proxy HTTP :">
+<!ENTITY torbutton.prefs.proxy.host.https	"Proxy SSL :">
+<!ENTITY torbutton.prefs.proxy.host.ftp		"Proxy FTP :">
+<!ENTITY torbutton.prefs.proxy.host.gopher	"Proxy gopher:">
+<!ENTITY torbutton.prefs.proxy.host.socks	"Hôte SOCKS :">
+<!ENTITY torbutton.prefs.proxy.port		"Port :">
+<!ENTITY torbutton.about.title			"À propos de Torbutton">
+<!ENTITY torbutton.context_menu.toggle		"Inverser le status">
+<!ENTITY torbutton.context_menu.toggle.key	"I">
+<!ENTITY torbutton.context_menu.preferences	"Préférences&#8230;">
+<!ENTITY torbutton.context_menu.preferences.key	"P">
+<!ENTITY torbutton.context_menu.about		"À propos de Torbutton&#8230;">
+<!ENTITY torbutton.context_menu.about.key	"O">
+<!ENTITY torbutton.button.label			"Torbutton">
+<!ENTITY torbutton.button.tooltip		"Cliquer pour initialiser Torbutton">

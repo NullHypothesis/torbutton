@@ -1,7 +1,22 @@
+1.0.2
+  23 May 2006
+  * bugfix: fixed problem with socks_remote_dns
+  * new: mozilla thunderbird support
+  * new: user may customize proxy settings for nonstandard configurations
+  * new: option to not use privoxy in the standard configuration
+  * new: slovenian translation
+  * new: french translation
+  * new: keyboard shortcut (control-shift-t, changeable via keyconfig)
+  * new: context menu for toolbar button and statusbar panel
+  * new: attractive tor icons
+  * new: about dialog
+  * new: option to display statusbar as an icon instead of text
+
 1.0.1
   16 Mar 2006
   * bugfix: toolbar button tooltips now display the correct status
   * bugfix: set socks5 proxy to tor port (9050) instead of privoxy (8118)
+  * bugfix: allow user to change proxy exclusion list ("no proxy for")
   * new: use socks_remote_dns on firefox versions that have it
   * new: added update functionality through the extensions manager
   * new: added preference: display statusbar panel (yes/no)

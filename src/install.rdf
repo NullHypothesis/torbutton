@@ -2,27 +2,33 @@
 <RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
          xmlns:NC="http://home.netscape.com/NC-rdf#"
          xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <RDF:Description RDF:about="urn:mozilla:extension:file:torbutton.jar"
-                   em:package="content/"
-                   em:locale="locale/en-US/"
-                   em:skin="skin/" />
+  <RDF:Description RDF:about="urn:mozilla:extension:file:torbutton.jar">
+                   <em:package>content/</em:package>
+                   <em:locale>locale/en-US/</em:locale>
+                   <em:locale>locale/sl-SI/</em:locale>
+                   <em:locale>locale/fr-FR/</em:locale>
+                   <em:skin>skin/</em:skin>
+  </RDF:Description>
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:name="Torbutton"
                    em:creator="Scott Squires"
-                   em:description="Torbutton provides a button to easily enable or disable the tor proxy"
                    em:id="{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"
-                   em:version="1.0.1"
-                   em:homepageURL="http://zargon.hobbesnet.org/~squires/torbutton/"
-                   em:updateURL="http://zargon.hobbesnet.org/~squires/torbutton/update.rdf"
+                   em:version="1.0.2"
+                   em:homepageURL="http://freehaven.net/~squires/torbutton/"
+                   em:updateURL="http://freehaven.net/~squires/torbutton/update.rdf"
                    em:optionsURL="chrome://torbutton/content/preferences.xul"
-                   em:aboutURL="chrome://torbutton/content/about.xul"
-                   em:iconURL="chrome://torbutton/skin/bigbutton_gr.png">
+                   em:iconURL="chrome://torbutton/skin/tor.png">
     <em:targetApplication RDF:resource="rdf:#$QkNYY"/>
     <em:file RDF:resource="urn:mozilla:extension:file:torbutton.jar"/>
     <em:file RDF:resource="rdf:#$ZkNYY"/>
+    <em:file RDF:resource="rdf:#$YkNYY"/>
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$QkNYY"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="0.9"
+                   em:maxVersion="1.5.0.*" />
+  <RDF:Description RDF:about="rdf:#$YkNYY"
+                   em:id="{3550f703-e582-4d05-9a08-453d09bdfdc6}"
+                   em:minVersion="1.0"
                    em:maxVersion="1.5.0.*" />
 </RDF:RDF>

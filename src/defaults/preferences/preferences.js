@@ -1,0 +1,16 @@
+// pref("extensions.torbutton.prompt_before_visiting_excluded_sites",true);
+pref("extensions.torbutton.display_panel",true);
+pref("extensions.torbutton.panel_style",'text');
+pref("extensions.torbutton.settings_method",'recommended');
+pref("extensions.torbutton.use_privoxy",true);
+pref("extensions.torbutton.http_proxy","");
+pref("extensions.torbutton.http_port",0);
+pref("extensions.torbutton.https_proxy","");
+pref("extensions.torbutton.https_port",0);
+pref("extensions.torbutton.ftp_proxy","");
+pref("extensions.torbutton.ftp_port",0);
+pref("extensions.torbutton.gopher_proxy","");
+pref("extensions.torbutton.gopher_port",0);
+pref("extensions.torbutton.socks_host","");
+pref("extensions.torbutton.socks_port",0);
+pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description", "chrome://torbutton/locale/torbutton.properties");

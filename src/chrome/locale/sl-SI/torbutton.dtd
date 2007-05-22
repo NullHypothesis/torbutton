@@ -1,0 +1,25 @@
+<!ENTITY torbutton.prefs.title			"Torbutton nastavitve">
+<!ENTITY torbutton.prefs.display_settings	"Nastavitve prikaza">
+<!ENTITY torbutton.prefs.display_panel		"Prikaži nastavitev anonimizacije v statusni vrstici">
+<!ENTITY torbutton.prefs.panel_format		"Način prikaza v statusni vrstici:">
+<!ENTITY torbutton.prefs.panel_text_format	"besedilo">
+<!ENTITY torbutton.prefs.panel_icon_format	"ikona">
+<!ENTITY torbutton.prefs.tor_settings		"Nastavitve posredniškega (proxy) strežnika">
+<!ENTITY torbutton.prefs.recommended_settings	"Uporabi priporočene nastavitve posredniškega strežnika za mojo različico Firefoxa">
+<!ENTITY torbutton.prefs.use_privoxy		"Uporabi tudi povezavo preko Privoxy-a">
+<!ENTITY torbutton.prefs.custom_settings	"Uporabi nastavitve proxy strežnika po meri">
+<!ENTITY torbutton.prefs.proxy.host.http	"HTTP posredniški strežnik:">
+<!ENTITY torbutton.prefs.proxy.host.https	"SSL posredniški strežnik:">
+<!ENTITY torbutton.prefs.proxy.host.ftp		"FTP posredniški strežnik:">
+<!ENTITY torbutton.prefs.proxy.host.gopher	"Gopher posredniški strežnik:">
+<!ENTITY torbutton.prefs.proxy.host.socks	"SOCKS gostitelj:">
+<!ENTITY torbutton.prefs.proxy.port		"vrata:">
+<!ENTITY torbutton.about.title			"O razširitvi Torbutton">
+<!ENTITY torbutton.context_menu.toggle		"Zamenjaj status anonimizacije">
+<!ENTITY torbutton.context_menu.toggle.key	"T">
+<!ENTITY torbutton.context_menu.preferences	"Nastavitve...">
+<!ENTITY torbutton.context_menu.preferences.key	"P">
+<!ENTITY torbutton.context_menu.about		"O razširitvi Torbutton...">
+<!ENTITY torbutton.context_menu.about.key	"A">
+<!ENTITY torbutton.button.label			"Torbutton">
+<!ENTITY torbutton.button.tooltip		"Klikni za inicializiranje razširitve Torbutton">

@@ -12,8 +12,104 @@
         onload="torbutton_prefs_init(document)"
         ondialogaccept="torbutton_prefs_save(document)" >
 
-    <script type="application/x-javascript" src="torbutton.js" />
-    <checkbox id="torbutton_displayStatusPanel" label="&torbutton.prefs.display_panel;" />
+    <script type="application/x-javascript" src="torbutton.js"/>
+    <script type="application/x-javascript" src="preferences.js"/>
+    <groupbox>
+        <caption label="&torbutton.prefs.display_settings;"/>
+        <checkbox id="torbutton_displayStatusPanel" label="&torbutton.prefs.display_panel;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <label class="indent" control="torbutton_panelStyle" value="&torbutton.prefs.panel_format;"/>
+        <radiogroup class="indent" id="torbutton_panelStyle">
+            <radio value="text" id="torbutton_panelStyleText" label="&torbutton.prefs.panel_text_format;"/>
+            <radio value="iconic" id="torbutton_panelStyleIcon" label="&torbutton.prefs.panel_icon_format;"/>
+        </radiogroup>
+    </groupbox>
+    <groupbox>
+        <caption label="&torbutton.prefs.tor_settings;"/>
+        <radiogroup id="torbutton_settingsMethod">
+            <radio value="recommended" id="torbutton_useRecommendedSettings"
+                   label="&torbutton.prefs.recommended_settings;"
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+                <checkbox class="indent" id="torbutton_usePrivoxy"
+                   label="&torbutton.prefs.use_privoxy;"
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            <radio value="custom" id="torbutton_useCustomSettings"
+                   label="&torbutton.prefs.custom_settings;"
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+<!--
+        <checkbox id="torbutton_useRecommendedSettings" label="&torbutton.prefs.recommended_settings;"
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+-->
+                <grid class="indent" flex="1">
+                    <columns>
+                    <column/>
+                    <column flex="1"/>
+                </columns>
+                <rows>
+                    <row align="center">
+                        <hbox align="center" pack="end">
+                            <label value="&torbutton.prefs.proxy.host.http;" control="torbutton_httpProxy"/>
+                        </hbox>
+                        <hbox align="center">
+                            <textbox id="torbutton_httpProxy" preftype="string" flex="1"/>
+                            <label value="&torbutton.prefs.proxy.port;" control="torbutton_httpPort"/>
+                            <textbox id="torbutton_httpPort" size="5"/>
+                        </hbox>
+                    </row>
+                    <row align="center">
+                        <hbox align="center" pack="end">
+                            <label value="&torbutton.prefs.proxy.host.https;" control="torbutton_httpsProxy"/>
+                        </hbox>
+                        <hbox align="center">
+                            <textbox id="torbutton_httpsProxy" preftype="string" flex="1"/>
+                            <label value="&torbutton.prefs.proxy.port;" control="torbutton_httpsPort"/>
+                            <textbox id="torbutton_httpsPort" size="5"/>
+                        </hbox>
+                    </row>
+                    <row align="center">
+                        <hbox align="center" pack="end">
+                            <label value="&torbutton.prefs.proxy.host.ftp;" control="torbutton_ftpProxy"/>
+                        </hbox>
+                        <hbox align="center">
+                            <textbox id="torbutton_ftpProxy" preftype="string" flex="1"/>
+                            <label value="&torbutton.prefs.proxy.port;" control="torbutton_ftpPort"/>
+                            <textbox id="torbutton_ftpPort" size="5"/>
+                        </hbox>
+                    </row>
+                    <row align="center">
+                        <hbox align="center" pack="end">
+                            <label value="&torbutton.prefs.proxy.host.gopher;" control="torbutton_gopherProxy"/>
+                        </hbox>
+                        <hbox align="center">
+                            <textbox id="torbutton_gopherProxy" preftype="string" flex="1"/>
+                            <label value="&torbutton.prefs.proxy.port;" control="torbutton_gopherPort"/>
+                            <textbox id="torbutton_gopherPort" size="5"/>
+                        </hbox>
+                    </row>
+                    <row align="center">
+                        <hbox align="center" pack="end">
+                            <label value="&torbutton.prefs.proxy.host.socks;" control="torbutton_socksHost"/>
+                        </hbox>
+                        <hbox align="center">
+                            <textbox id="torbutton_socksHost" flex="1"/>
+                            <label value="&torbutton.prefs.proxy.port;" control="torbutton_socksPort"/>
+                            <textbox id="torbutton_socksPort" size="5"/>
+                        </hbox>
+                    </row>
+                </rows>
+            </grid>
+        </radiogroup>
+<!--
+        <label value="&torbutton.prefs.non_socks;" control="nonsocks_proxy"/>
+        <textbox id="nonsocks_proxy"/>
+        <label value="&torbutton.prefs.port;" control="nonsocks_port"/>
+        <textbox id="nonsocks_port"/>
+        <label value="&torbutton.prefs.socks;" control="socks_host"/>
+        <textbox id="socks_host"/>
+        <label value="&torbutton.prefs.port;" control="socks_port"/>
+        <textbox id="socks_port"/>
+-->
+    </groupbox>
 <!--
     <checkbox id="torbutton_warnUponExcludedSite" label="&torbutton.prefs.prompt_before_visiting_excluded_sites;" />
     <description>
