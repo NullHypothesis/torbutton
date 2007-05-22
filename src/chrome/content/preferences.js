@@ -8,6 +8,8 @@ var tor_enabled = false;
 function torbutton_prefs_set_field_attributes(doc)
 {
     torbutton_log(4, "called prefs_set_field_attributes()");
+    var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
 
     doc.getElementById('torbutton_panelStyle').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleText').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
@@ -78,6 +80,16 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_gopherPort').disabled = false;
         doc.getElementById('torbutton_socksHost').disabled = false;
         doc.getElementById('torbutton_socksPort').disabled = false;
+        doc.getElementById('torbutton_httpProxy').value    = o_customprefs.getCharPref('http_proxy');
+        doc.getElementById('torbutton_httpPort').value     = o_customprefs.getIntPref('http_port');
+        doc.getElementById('torbutton_httpsProxy').value   = o_customprefs.getCharPref('https_proxy');
+        doc.getElementById('torbutton_httpsPort').value    = o_customprefs.getIntPref('https_port');
+        doc.getElementById('torbutton_ftpProxy').value     = o_customprefs.getCharPref('ftp_proxy');
+        doc.getElementById('torbutton_ftpPort').value      = o_customprefs.getIntPref('ftp_port');
+        doc.getElementById('torbutton_gopherProxy').value  = o_customprefs.getCharPref('gopher_proxy');
+        doc.getElementById('torbutton_gopherPort').value   = o_customprefs.getIntPref('gopher_port');
+        doc.getElementById('torbutton_socksHost').value    = o_customprefs.getCharPref('socks_host');
+        doc.getElementById('torbutton_socksPort').value    = o_customprefs.getIntPref('socks_port');
     }
 }
 
@@ -127,6 +139,7 @@ function torbutton_prefs_init(doc) {
 function torbutton_prefs_save(doc) {
     torbutton_log(4, "called prefs_save()");
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
 
     o_torprefs.setBoolPref('display_panel',   doc.getElementById('torbutton_displayStatusPanel').checked);
     o_torprefs.setCharPref('panel_style',     doc.getElementById('torbutton_panelStyle').value);
@@ -142,6 +155,20 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setIntPref('gopher_port',      doc.getElementById('torbutton_gopherPort').value);
     o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
     o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
+
+    if (doc.getElementById('torbutton_settingsMethod').value == 'custom')
+    {
+        o_customprefs.setCharPref('http_proxy',      doc.getElementById('torbutton_httpProxy').value);
+        o_customprefs.setIntPref('http_port',        doc.getElementById('torbutton_httpPort').value);
+        o_customprefs.setCharPref('https_proxy',     doc.getElementById('torbutton_httpsProxy').value);
+        o_customprefs.setIntPref('https_port',       doc.getElementById('torbutton_httpsPort').value);
+        o_customprefs.setCharPref('ftp_proxy',       doc.getElementById('torbutton_ftpProxy').value);
+        o_customprefs.setIntPref('ftp_port',         doc.getElementById('torbutton_ftpPort').value);
+        o_customprefs.setCharPref('gopher_proxy',    doc.getElementById('torbutton_gopherProxy').value);
+        o_customprefs.setIntPref('gopher_port',      doc.getElementById('torbutton_gopherPort').value);
+        o_customprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
+        o_customprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
+    }
     // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes

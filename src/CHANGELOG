@@ -5,6 +5,7 @@
             the toolbar (ff >= 1.5 only)
   * bugfix: clarify the wording of the one-liner extension description
   * bugfix: bypassing privoxy with Firefox <= 1.0 is not recommended
+  * bugfix: remember previous "custom" proxy settings
   * misc: new icons
   * misc: keyboard shortcut re-assigned to ctrl-2
   * new: previous proxy settings are restored after exiting tor mode
