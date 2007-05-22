@@ -106,10 +106,10 @@ function torbutton_toggle() {
 function torbutton_set_status() {
     if (torbutton_check_status()) {
         torbutton_log(1,'status: tor is enabled');
-        torbutton_update_status(1);
+        torbutton_update_status(true);
     } else {
         torbutton_log(1,'status: tor is disabled');
-        torbutton_update_status(0);
+        torbutton_update_status(false);
     }
 }
 
@@ -355,7 +355,48 @@ function torbutton_enable_tor() {
     nonprefs.setIntPref("type", 1);
 }
 
-function torbutton_update_status(nMode) {
+function torbutton_update_toolbutton(mode)
+{
+  o_toolbutton = torbutton_get_toolbutton();
+  if (!o_toolbutton) return;
+  o_stringbundle = torbutton_get_stringbundle();
+
+  if (mode)
+  {
+      tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
+      o_toolbutton.setAttribute('tbstatus', 'on');
+      o_toolbutton.setAttribute('tooltiptext', tooltip);
+  } else {
+      tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.disabled");
+      o_toolbutton.setAttribute('tbstatus', 'off');
+      o_toolbutton.setAttribute('tooltiptext', tooltip);
+  }
+}
+
+function torbutton_update_statusbar(mode)
+{
+    o_statuspanel = torbutton_get_statuspanel();
+    if (!window.statusbar.visible) return;
+    o_stringbundle = torbutton_get_stringbundle();
+
+    if (mode) {
+        label   = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
+        tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.enabled");
+        o_statuspanel.style.color = "#390";
+        o_statuspanel.setAttribute('label', label);
+        o_statuspanel.setAttribute('tooltiptext', tooltip);
+        o_statuspanel.setAttribute('tbstatus', 'on');
+    } else {
+        label   = o_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
+        tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.disabled");
+        o_statuspanel.style.color = "#F00";
+        o_statuspanel.setAttribute('label', label);
+        o_statuspanel.setAttribute('tooltiptext', tooltip);
+        o_statuspanel.setAttribute('tbstatus', 'off');
+    }
+}
+
+function torbutton_update_status(mode) {
     var o_toolbutton = false;
     var o_statuspanel = false;
     var o_stringbundle = false;
@@ -363,42 +404,9 @@ function torbutton_update_status(nMode) {
     var label;
     var tooltip;
 
-    o_toolbutton = torbutton_get_toolbutton();
-    o_statuspanel = torbutton_get_statuspanel();
-    o_stringbundle = torbutton_get_stringbundle();
-
-    torbutton_log(2, 'called update_status('+nMode+')');
-    if (nMode == 0) {
-        if (o_toolbutton) {
-            tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.disabled");
-            o_toolbutton.setAttribute('tbstatus', 'off');
-            o_toolbutton.setAttribute('tooltiptext', tooltip);
-        }
-
-        if (window.statusbar.visible) {
-            label   = o_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
-            tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.disabled");
-            o_statuspanel.style.color = "#F00";
-            o_statuspanel.setAttribute('label', label);
-            o_statuspanel.setAttribute('tooltiptext', tooltip);
-            o_statuspanel.setAttribute('tbstatus', 'off');
-        }
-    } else {
-        if (o_toolbutton) {
-            tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
-            o_toolbutton.setAttribute('tbstatus', 'on');
-            o_toolbutton.setAttribute('tooltiptext', tooltip);
-        }
-
-        if (window.statusbar.visible) {
-            label   = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
-            tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.enabled");
-            o_statuspanel.style.color = "#390";
-            o_statuspanel.setAttribute('label', label);
-            o_statuspanel.setAttribute('tooltiptext', tooltip);
-            o_statuspanel.setAttribute('tbstatus', 'on');
-        }
-    }
+    torbutton_log(2, 'called update_status('+mode+')');
+    torbutton_update_toolbutton(mode);
+    torbutton_update_statusbar(mode);
 }
 
 function torbutton_open_prefs_dialog() {
