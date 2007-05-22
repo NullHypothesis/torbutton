@@ -197,24 +197,31 @@ function torbutton_init_pref_objs() {
 // recommended settings.  figure out a way to eliminate the redundancy.
 function torbutton_init_prefs() {
     var proxy_port;
+    var proxy_host;
     torbutton_log(4, "called init_prefs()");
     if (!m_prefs) { torbutton_log(1, "ERROR: m_prefs undefined"); }
     if (m_prefs.getBoolPref('extensions.torbutton.use_privoxy'))
+    {
+        proxy_host = 'localhost';
         proxy_port = 8118;
+    }
     else
-        proxy_port = 9050;
+    {
+        proxy_host = '';
+        proxy_port = 0;
+    }
 
     if (m_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended')
     {
         torbutton_log(5, "using recommended settings");
         if (m_socks_pref_exists)
         {
-            m_http_proxy = m_https_proxy = 'localhost';
+            m_http_proxy = m_https_proxy = proxy_host;
             m_ftp_proxy = m_gopher_proxy = '';
             m_http_port = m_https_port   = proxy_port;
             m_ftp_port = m_gopher_port   = 0;
         } else {
-            m_http_proxy = m_https_proxy = m_ftp_proxy = m_gopher_proxy = 'localhost';
+            m_http_proxy = m_https_proxy = m_ftp_proxy = m_gopher_proxy = proxy_host;
             m_http_port = m_https_port = m_ftp_port = m_gopher_port = proxy_port;
         }
         m_socks_host = 'localhost';

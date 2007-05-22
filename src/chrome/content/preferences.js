@@ -44,28 +44,34 @@ function torbutton_prefs_set_field_attributes(doc)
     doc.getElementById('torbutton_panelStyleIcon').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
     var proxy_port;
+    var proxy_host;
     if (doc.getElementById('torbutton_usePrivoxy').checked)
+    {
+        proxy_host = 'localhost';
         proxy_port = 8118;
+    }
     else
-        proxy_port = 9050;
+    {
+        proxy_host = '';
+        proxy_port = 0;
+    }
     if (doc.getElementById('torbutton_settingsMethod').value == 'recommended') {
         torbutton_log(5, "using recommended settings");
         if (!m_socks_pref_exists)
         {
-            doc.getElementById('torbutton_httpProxy').value = 'localhost';
+            doc.getElementById('torbutton_httpProxy').value = proxy_host;
             doc.getElementById('torbutton_httpPort').value = proxy_port;
-            doc.getElementById('torbutton_httpsProxy').value = 'localhost';
+            doc.getElementById('torbutton_httpsProxy').value = proxy_host;
             doc.getElementById('torbutton_httpsPort').value = proxy_port;
-            doc.getElementById('torbutton_ftpProxy').value = 'localhost';
+            doc.getElementById('torbutton_ftpProxy').value = proxy_host;
             doc.getElementById('torbutton_ftpPort').value = proxy_port;
-            doc.getElementById('torbutton_gopherProxy').value = 'localhost';
+            doc.getElementById('torbutton_gopherProxy').value = proxy_host;
             doc.getElementById('torbutton_gopherPort').value = proxy_port;
         } else {
-            // if we decide to disable privoxy by default, change these four lines
-            doc.getElementById('torbutton_httpProxy').value = 'localhost';	// = ''
-            doc.getElementById('torbutton_httpPort').value = proxy_port;	// = 0
-            doc.getElementById('torbutton_httpsProxy').value = 'localhost';	// = ''
-            doc.getElementById('torbutton_httpsPort').value = proxy_port;	// = 0
+            doc.getElementById('torbutton_httpProxy').value = proxy_host;
+            doc.getElementById('torbutton_httpPort').value = proxy_port;
+            doc.getElementById('torbutton_httpsProxy').value = proxy_host;
+            doc.getElementById('torbutton_httpsPort').value = proxy_port;
 
             doc.getElementById('torbutton_ftpProxy').value = '';
             doc.getElementById('torbutton_ftpPort').value = 0;
