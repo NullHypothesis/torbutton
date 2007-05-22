@@ -237,21 +237,21 @@ function torbutton_init_prefs() {
         torbutton_log(5, "using recommended settings");
         if (torbutton_check_socks_remote_dns())
         {
-            torprefs.setCharPref('http', proxy_host);
-            torprefs.setCharPref('ssl', proxy_host);
-            torprefs.setCharPref('ftp', '');
-            torprefs.setCharPref('gopher', '');
+            torprefs.setCharPref('http_proxy', proxy_host);
+            torprefs.setCharPref('https_proxy', proxy_host);
+            torprefs.setCharPref('ftp_proxy', '');
+            torprefs.setCharPref('gopher_proxy', '');
             torprefs.setIntPref('http_port', proxy_port);
-            torprefs.setIntPref('ssl_port', proxy_port);
+            torprefs.setIntPref('https_port', proxy_port);
             torprefs.setIntPref('ftp_port', 0);
             torprefs.setIntPref('gopher_port', 0);
         } else {
-            torprefs.setCharPref('http', proxy_host);
-            torprefs.setCharPref('ssl', proxy_host);
-            torprefs.setCharPref('ftp', proxy_host);
-            torprefs.setCharPref('gopher', proxy_host);
+            torprefs.setCharPref('http_proxy', proxy_host);
+            torprefs.setCharPref('https_proxy', proxy_host);
+            torprefs.setCharPref('ftp_proxy', proxy_host);
+            torprefs.setCharPref('gopher_proxy', proxy_host);
             torprefs.setIntPref('http_port', proxy_port);
-            torprefs.setIntPref('ssl_port', proxy_port);
+            torprefs.setIntPref('https_port', proxy_port);
             torprefs.setIntPref('ftp_port', proxy_port);
             torprefs.setIntPref('gopher_port', proxy_port);
         }
