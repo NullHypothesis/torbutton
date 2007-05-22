@@ -1,39 +1,7 @@
-// preferences dialog functions
+// PREFERences dialog functions
 //   torbutton_prefs_set_field_attributes() -- initialize dialog fields
 //   torbutton_prefs_init() -- on dialog load
 //   torbutton_prefs_save() -- on dialog save
-
-var m_prefs_inited = false;
-var m_prefs = false;
-var m_socks_pref_exists = false;
-var m_tb_logger = false;
-
-function torbutton_prefs_init_globals() {
-    if (!m_prefs) {
-        m_prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                            .getService(Components.interfaces.nsIPrefBranch);
-    }
-
-    m_socks_pref_exists = true;
-    try {
-        m_prefs.getBoolPref('network.proxy.socks_remote_dns');
-    } catch (rErr) {
-        // no such preference
-        m_socks_pref_exists = false;
-    }
-
-    if (!m_tb_logger) {
-        try {
-            var logMngr = Components.classes["@mozmonkey.com/debuglogger/manager;1"]
-                                    .getService(Components.interfaces.nsIDebugLoggerManager);
-            m_tb_logger = logMngr.registerLogger("torbutton_prefs");
-        } catch (exErr) {
-            m_tb_logger = false;
-        }
-    }
-
-    m_prefs_inited = true;
-}
 
 function torbutton_prefs_set_field_attributes(doc)
 {
@@ -57,7 +25,7 @@ function torbutton_prefs_set_field_attributes(doc)
     }
     if (doc.getElementById('torbutton_settingsMethod').value == 'recommended') {
         torbutton_log(5, "using recommended settings");
-        if (!m_socks_pref_exists)
+        if (!torbutton_check_socks_remote_dns())
         {
             doc.getElementById('torbutton_httpProxy').value = proxy_host;
             doc.getElementById('torbutton_httpPort').value = proxy_port;
@@ -109,58 +77,59 @@ function torbutton_prefs_init(doc) {
     var checkbox_displayStatusPanel = doc.getElementById('torbutton_displayStatusPanel');
 // return; 
 
-    if (!m_prefs_inited) {
-        torbutton_prefs_init_globals();
-    }
     torbutton_log(4, "called prefs_init()");
     sizeToContent();
 
-    doc.getElementById('torbutton_displayStatusPanel').checked = m_prefs.getBoolPref('extensions.torbutton.display_panel');
+    var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+
+    doc.getElementById('torbutton_displayStatusPanel').checked = o_torprefs.getBoolPref('display_panel');
     var panel_style = doc.getElementById('torbutton_panelStyle');
-    var panel_style_pref = m_prefs.getCharPref('extensions.torbutton.panel_style');
+    var panel_style_pref = o_torprefs.getCharPref('panel_style');
     if (panel_style_pref == 'text')
         panel_style.selectedItem = doc.getElementById('torbutton_panelStyleText');
     else if (panel_style_pref == 'iconic')
         panel_style.selectedItem = doc.getElementById('torbutton_panelStyleIcon');
-    // doc.getElementById('torbutton_panelStyle').value = m_prefs.getCharPref('extensions.torbutton.panel_style');
+    // doc.getElementById('torbutton_panelStyle').value = o_torprefs.getCharPref('panel_style');
     var settings_method = doc.getElementById('torbutton_settingsMethod');
-    var settings_method_pref = m_prefs.getCharPref('extensions.torbutton.settings_method');
+    var settings_method_pref = o_torprefs.getCharPref('settings_method');
     if (settings_method_pref == 'recommended')
         settings_method.selectedItem = doc.getElementById('torbutton_useRecommendedSettings');
     else if (settings_method_pref == 'custom')
         settings_method.selectedItem = doc.getElementById('torbutton_useCustomSettings');
-    // doc.getElementById('torbutton_settingsMethod').value = m_prefs.getCharPref('extensions.torbutton.settings_method');
-    doc.getElementById('torbutton_usePrivoxy').checked = m_prefs.getBoolPref('extensions.torbutton.use_privoxy');
-    doc.getElementById('torbutton_httpProxy').value = m_prefs.getCharPref('extensions.torbutton.http_proxy');
-    doc.getElementById('torbutton_httpPort').value = m_prefs.getIntPref('extensions.torbutton.http_port');
-    doc.getElementById('torbutton_httpsProxy').value = m_prefs.getCharPref('extensions.torbutton.https_proxy');
-    doc.getElementById('torbutton_httpsPort').value = m_prefs.getIntPref('extensions.torbutton.https_port');
-    doc.getElementById('torbutton_ftpProxy').value = m_prefs.getCharPref('extensions.torbutton.ftp_proxy');
-    doc.getElementById('torbutton_ftpPort').value = m_prefs.getIntPref('extensions.torbutton.ftp_port');
-    doc.getElementById('torbutton_gopherProxy').value = m_prefs.getCharPref('extensions.torbutton.gopher_proxy');
-    doc.getElementById('torbutton_gopherPort').value = m_prefs.getIntPref('extensions.torbutton.gopher_port');
-    doc.getElementById('torbutton_socksHost').value = m_prefs.getCharPref('extensions.torbutton.socks_host');
-    doc.getElementById('torbutton_socksPort').value = m_prefs.getIntPref('extensions.torbutton.socks_port');
-    // doc.getElementById('torbutton_warnUponExcludedSite').checked = m_prefs.getBoolPref('extensions.torbutton.prompt_before_visiting_excluded_sites');
+    // doc.getElementById('torbutton_settingsMethod').value = o_torprefs.getCharPref('settings_method');
+    doc.getElementById('torbutton_usePrivoxy').checked = o_torprefs.getBoolPref('use_privoxy');
+    doc.getElementById('torbutton_httpProxy').value    = o_torprefs.getCharPref('http_proxy');
+    doc.getElementById('torbutton_httpPort').value     = o_torprefs.getIntPref('http_port');
+    doc.getElementById('torbutton_httpsProxy').value   = o_torprefs.getCharPref('https_proxy');
+    doc.getElementById('torbutton_httpsPort').value    = o_torprefs.getIntPref('https_port');
+    doc.getElementById('torbutton_ftpProxy').value     = o_torprefs.getCharPref('ftp_proxy');
+    doc.getElementById('torbutton_ftpPort').value      = o_torprefs.getIntPref('ftp_port');
+    doc.getElementById('torbutton_gopherProxy').value  = o_torprefs.getCharPref('gopher_proxy');
+    doc.getElementById('torbutton_gopherPort').value   = o_torprefs.getIntPref('gopher_port');
+    doc.getElementById('torbutton_socksHost').value    = o_torprefs.getCharPref('socks_host');
+    doc.getElementById('torbutton_socksPort').value    = o_torprefs.getIntPref('socks_port');
+    // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
     torbutton_prefs_set_field_attributes(doc);
 }
 
 function torbutton_prefs_save(doc) {
     torbutton_log(4, "called prefs_save()");
-    m_prefs.setBoolPref('extensions.torbutton.display_panel', doc.getElementById('torbutton_displayStatusPanel').checked);
-    m_prefs.setCharPref('extensions.torbutton.panel_style', doc.getElementById('torbutton_panelStyle').value);
-    m_prefs.setCharPref('extensions.torbutton.settings_method', doc.getElementById('torbutton_settingsMethod').value);
-    m_prefs.setBoolPref('extensions.torbutton.use_privoxy', doc.getElementById('torbutton_usePrivoxy').checked);
-    m_prefs.setCharPref('extensions.torbutton.http_proxy', doc.getElementById('torbutton_httpProxy').value);
-    m_prefs.setIntPref('extensions.torbutton.http_port', doc.getElementById('torbutton_httpPort').value);
-    m_prefs.setCharPref('extensions.torbutton.https_proxy', doc.getElementById('torbutton_httpsProxy').value);
-    m_prefs.setIntPref('extensions.torbutton.https_port', doc.getElementById('torbutton_httpsPort').value);
-    m_prefs.setCharPref('extensions.torbutton.ftp_proxy', doc.getElementById('torbutton_ftpProxy').value);
-    m_prefs.setIntPref('extensions.torbutton.ftp_port', doc.getElementById('torbutton_ftpPort').value);
-    m_prefs.setCharPref('extensions.torbutton.gopher_proxy', doc.getElementById('torbutton_gopherProxy').value);
-    m_prefs.setIntPref('extensions.torbutton.gopher_port', doc.getElementById('torbutton_gopherPort').value);
-    m_prefs.setCharPref('extensions.torbutton.socks_host', doc.getElementById('torbutton_socksHost').value);
-    m_prefs.setIntPref('extensions.torbutton.socks_port', doc.getElementById('torbutton_socksPort').value);
-    // m_prefs.setBoolPref('extensions.torbutton.prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
+    var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+
+    o_torprefs.setBoolPref('display_panel',   doc.getElementById('torbutton_displayStatusPanel').checked);
+    o_torprefs.setCharPref('panel_style',     doc.getElementById('torbutton_panelStyle').value);
+    o_torprefs.setCharPref('settings_method', doc.getElementById('torbutton_settingsMethod').value);
+    o_torprefs.setBoolPref('use_privoxy',     doc.getElementById('torbutton_usePrivoxy').checked);
+    o_torprefs.setCharPref('http_proxy',      doc.getElementById('torbutton_httpProxy').value);
+    o_torprefs.setIntPref('http_port',        doc.getElementById('torbutton_httpPort').value);
+    o_torprefs.setCharPref('https_proxy',     doc.getElementById('torbutton_httpsProxy').value);
+    o_torprefs.setIntPref('https_port',       doc.getElementById('torbutton_httpsPort').value);
+    o_torprefs.setCharPref('ftp_proxy',       doc.getElementById('torbutton_ftpProxy').value);
+    o_torprefs.setIntPref('ftp_port',         doc.getElementById('torbutton_ftpPort').value);
+    o_torprefs.setCharPref('gopher_proxy',    doc.getElementById('torbutton_gopherProxy').value);
+    o_torprefs.setIntPref('gopher_port',      doc.getElementById('torbutton_gopherPort').value);
+    o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
+    o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
+    // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
 }

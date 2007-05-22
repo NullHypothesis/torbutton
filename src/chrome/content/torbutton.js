@@ -1,22 +1,5 @@
-var m_debug = true;
-var m_toolbutton = false;
-var m_statuspanel = false;
+// status
 var m_wasinited = false;
-var m_prefs = false;
-var m_stringbundle = false;
-var m_tb_logger = false;
-var m_socks_pref_exists = false;
-var m_exclusion_list = "";
-var m_http_proxy = false;
-var m_http_port = false;
-var m_https_proxy = false;
-var m_https_port = false;
-var m_ftp_proxy = false;
-var m_ftp_port = false;
-var m_gopher_proxy = false;
-var m_gopher_port = false;
-var m_socks_host = false;
-var m_socks_port = false;
 
 var torbutton_pref_observer =
 {
@@ -79,24 +62,38 @@ var torbutton_pref_observer =
 }
 
 function torbutton_set_panel_view() {
+    var o_statuspanel = false;
+    var o_prefbranch = false;
+
+    o_statuspanel = torbutton_get_statuspanel();
+    o_prefbranch = torbutton_get_prefbranch('extensions.torbutton.');
+    if (!o_statuspanel || !o_prefbranch) return;
+
+    var display_panel = o_prefbranch.getBoolPref('display_panel');
     torbutton_log(4, 'setting panel visibility');
-    var display_panel = m_prefs.getBoolPref('extensions.torbutton.display_panel');
-    document.getElementById('torbutton-panel').setAttribute('collapsed', !display_panel);
+    o_statuspanel.setAttribute('collapsed', !display_panel);
 }
 
 function torbutton_set_panel_style() {
-    var panel_style = m_prefs.getCharPref('extensions.torbutton.panel_style');
+    var o_statuspanel = false;
+    var o_prefbranch = false;
+
+    o_statuspanel = torbutton_get_statuspanel();
+    o_prefbranch = torbutton_get_prefbranch('extensions.torbutton.');
+    if (!o_statuspanel || !o_prefbranch) return;
+
+    var panel_style = o_prefbranch.getCharPref('panel_style');
     torbutton_log(4, 'setting panel style: ' + panel_style);
-    document.getElementById('torbutton-panel').setAttribute('class','statusbarpanel-'+panel_style);
+    o_statuspanel.setAttribute('class','statusbarpanel-' + panel_style);
 }
 
 function torbutton_toggle() {
+    var o_toolbutton = false;
+    o_toolbutton = torbutton_get_toolbutton();
+
     torbutton_log(1, 'called toggle()');
     if (!m_wasinited) {
         torbutton_init();
-    }
-    if (!m_toolbutton) {
-        torbutton_init_toolbutton();
     }
 
     if (torbutton_check_status()) {
@@ -108,73 +105,63 @@ function torbutton_toggle() {
 
 function torbutton_set_status() {
     if (torbutton_check_status()) {
-        torbutton_log(1,'tor is enabled');
+        torbutton_log(1,'status: tor is enabled');
         torbutton_update_status(1);
     } else {
-        torbutton_log(1,'tor is disabled');
+        torbutton_log(1,'status: tor is disabled');
         torbutton_update_status(0);
     }
 }
 
-function torbutton_init() {
-    if (!m_tb_logger) {
-        try {
-            var logMngr = Components.classes["@mozmonkey.com/debuglogger/manager;1"]
-                                    .getService(Components.interfaces.nsIDebugLoggerManager); 
-            m_tb_logger = logMngr.registerLogger("torbutton");
-        } catch (exErr) {
-            m_tb_logger = false;
-        }
-    }
+// load localization strings
+function torbutton_get_stringbundle()
+{
+    var o_stringbundle = false;
 
-    torbutton_log(1, 'called init()');
-    
-    // load localization strings
-    if (!m_stringbundle) {
-        try {
-            var oBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                                    .getService(Components.interfaces.nsIStringBundleService);
-            m_stringbundle = oBundle.createBundle("chrome://torbutton/locale/torbutton.properties");
-        } catch(err) {
-            m_stringbundle = false;
-        }
-        if (!m_stringbundle) {
-            torbutton_log(1, 'ERROR (init): failed to find torbutton-bundle');
-        }
-    }
-
-    if (!m_prefs) {
-        torbutton_init_pref_objs();
-    }
-
-    // check if this version of Firefox has the socks_remote_dns option
-    m_socks_pref_exists = true;
     try {
-        m_prefs.getBoolPref('network.proxy.socks_remote_dns');
+        var oBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                                .getService(Components.interfaces.nsIStringBundleService);
+        o_stringbundle = oBundle.createBundle("chrome://torbutton/locale/torbutton.properties");
+    } catch(err) {
+        o_stringbundle = false;
+    }
+    if (!o_stringbundle) {
+        torbutton_log(1, 'ERROR (init): failed to find torbutton-bundle');
+    }
+
+    return o_stringbundle;
+}
+
+// check if the socks_remote_dns preference exists
+function torbutton_check_socks_remote_dns()
+{
+    var o_prefbranch = false;
+
+    o_prefbranch = torbutton_get_prefbranch("network.proxy.");
+    // check if this version of Firefox has the socks_remote_dns option
+    try {
+        o_prefbranch.getBoolPref('socks_remote_dns');
         torbutton_log(3, "socks_remote_dns is available");
+        return true;
     } catch (rErr) {
         // no such preference
         m_socks_pref_exists = false;
         torbutton_log(3, "socks_remote_dns is unavailable");
+        return false;
     }
+}
 
+function torbutton_init() {
+    torbutton_log(1, 'called init()');
+    
     // initialize preferences before we start our prefs observer
     torbutton_init_prefs();
 
-    if (!m_toolbutton) {
-        torbutton_init_toolbutton();
-    } else {
-        torbutton_log(5, 'skipping toolbar button element search');
-    }
-
-    if (!m_statuspanel) {
-        torbutton_init_statuspanel();
-        torbutton_set_panel_style();
-    } else {
-        torbutton_log(5, 'skipping statusbar panel element search');
-    }
+    // set panel style from preferences
+    torbutton_set_panel_style();
 
     if (!m_wasinited) {
+        torbutton_log(5, 'registering pref observer');
         torbutton_pref_observer.register();
         m_wasinited = true;
     } else {
@@ -187,20 +174,39 @@ function torbutton_init() {
     torbutton_log(2, 'init completed');
 }
 
-function torbutton_init_pref_objs() {
-    torbutton_log(4, "called init_pref_objs()");
-    m_prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                        .getService(Components.interfaces.nsIPrefBranch);
+// get a preferences branch object
+function torbutton_get_prefbranch(branch_name) {
+    var o_prefs = false;
+    var o_branch = false;
+
+    torbutton_log(4, "called get_prefbranch()");
+    o_prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                        .getService(Components.interfaces.nsIPrefService);
+    if (!o_prefs)
+    {
+        torbutton_log(3, "failed to get preferences-service");
+        return false;
+    }
+    o_branch = o_prefs.getBranch(branch_name);
+    if (!o_branch)
+    {
+        torbutton_log(3, "failed to get prefs branch");
+        return false;
+    }
+
+    return o_branch;
 }
 
 // this function duplicates a lot of code in preferences.js for deciding our
 // recommended settings.  figure out a way to eliminate the redundancy.
 function torbutton_init_prefs() {
+    var torprefs = false;
     var proxy_port;
     var proxy_host;
     torbutton_log(4, "called init_prefs()");
-    if (!m_prefs) { torbutton_log(1, "ERROR: m_prefs undefined"); }
-    if (m_prefs.getBoolPref('extensions.torbutton.use_privoxy'))
+    torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+
+    if (torprefs.getBoolPref('use_privoxy'))
     {
         proxy_host = 'localhost';
         proxy_port = 8118;
@@ -211,34 +217,33 @@ function torbutton_init_prefs() {
         proxy_port = 0;
     }
 
-    if (m_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended')
+    if (torprefs.getCharPref('settings_method') == 'recommended')
     {
         torbutton_log(5, "using recommended settings");
-        if (m_socks_pref_exists)
+        if (torbutton_check_socks_remote_dns())
         {
-            m_http_proxy = m_https_proxy = proxy_host;
-            m_ftp_proxy = m_gopher_proxy = '';
-            m_http_port = m_https_port   = proxy_port;
-            m_ftp_port = m_gopher_port   = 0;
+            torprefs.setCharPref('http', proxy_host);
+            torprefs.setCharPref('ssl', proxy_host);
+            torprefs.setCharPref('ftp', '');
+            torprefs.setCharPref('gopher', '');
+            torprefs.setIntPref('http_port', proxy_port);
+            torprefs.setIntPref('ssl_port', proxy_port);
+            torprefs.setIntPref('ftp_port', 0);
+            torprefs.setIntPref('gopher_port', 0);
         } else {
-            m_http_proxy = m_https_proxy = m_ftp_proxy = m_gopher_proxy = proxy_host;
-            m_http_port = m_https_port = m_ftp_port = m_gopher_port = proxy_port;
+            torprefs.setCharPref('http', proxy_host);
+            torprefs.setCharPref('ssl', proxy_host);
+            torprefs.setCharPref('ftp', proxy_host);
+            torprefs.setCharPref('gopher', proxy_host);
+            torprefs.setIntPref('http_port', proxy_port);
+            torprefs.setIntPref('ssl_port', proxy_port);
+            torprefs.setIntPref('ftp_port', proxy_port);
+            torprefs.setIntPref('gopher_port', proxy_port);
         }
-        m_socks_host = 'localhost';
-        m_socks_port = 9050;
-    } else {
-        m_http_proxy   = m_prefs.getCharPref('extensions.torbutton.http_proxy');
-        m_http_port    = m_prefs.getIntPref('extensions.torbutton.http_port');
-        m_https_proxy  = m_prefs.getCharPref('extensions.torbutton.https_proxy');
-        m_https_port   = m_prefs.getIntPref('extensions.torbutton.https_port');
-        m_ftp_proxy    = m_prefs.getCharPref('extensions.torbutton.ftp_proxy');
-        m_ftp_port     = m_prefs.getIntPref('extensions.torbutton.ftp_port');
-        m_gopher_proxy = m_prefs.getCharPref('extensions.torbutton.gopher_proxy');
-        m_gopher_port  = m_prefs.getIntPref('extensions.torbutton.gopher_port');
-        m_socks_host   = m_prefs.getCharPref('extensions.torbutton.socks_host');
-        m_socks_port   = m_prefs.getIntPref('extensions.torbutton.socks_port');
+        torprefs.setCharPref('socks', 'localhost');
+        torprefs.setIntPref('socks_port', 9050);
     }
-    torbutton_log(1, 'http_port='+m_http_port);
+    torbutton_log(1, 'http_port='+torprefs.getIntPref('http_port'));
     // m_prefs.setCharPref('extensions.torbutton.http_proxy',   m_http_proxy);
     // m_prefs.setIntPref('extensions.torbutton.http_port',     m_http_port);
     // m_prefs.setCharPref('extensions.torbutton.https_proxy',  m_https_proxy);
@@ -251,122 +256,154 @@ function torbutton_init_prefs() {
     // m_prefs.setIntPref('extensions.torbutton.socks_port',    m_socks_port);
 }
 
-function torbutton_init_toolbutton() {
-    torbutton_log(4, 'init_toolbutton(): looking for button element');
+function torbutton_get_toolbutton() {
+    var o_toolbutton = false;
+
+    torbutton_log(4, 'get_toolbutton(): looking for button element');
     if (document.getElementById("torbutton-button")) {
-        m_toolbutton = document.getElementById("torbutton-button");
+        o_toolbutton = document.getElementById("torbutton-button");
     } else if (document.getElementById("torbutton-button-tb")) {
-        m_toolbutton = document.getElementById("torbutton-button-tb");
+        o_toolbutton = document.getElementById("torbutton-button-tb");
     } else if (document.getElementById("torbutton-button-tb-msg")) {
-        m_toolbutton = document.getElementById("torbutton-button-tb-msg");
+        o_toolbutton = document.getElementById("torbutton-button-tb-msg");
     } else {
         torbutton_log(1, 'ERROR (init): failed to find torbutton-button');
     }
+
+    return o_toolbutton;
 }
 
-function torbutton_init_statuspanel() {
+function torbutton_get_statuspanel() {
+    var o_statuspanel = false;
+
     torbutton_log(4, 'init_statuspanel(): looking for statusbar element');
     if (document.getElementById("torbutton-panel")) {
-        m_statuspanel = document.getElementById("torbutton-panel");
+        o_statuspanel = document.getElementById("torbutton-panel");
     } else {
         torbutton_log(1, 'ERROR (init): failed to find torbutton-panel');
     }
+
+    return o_statuspanel;
 }
 
 function torbutton_check_status() {
-    // make sure we have the latest proxy exclusion list
-    m_exclusion_list = m_prefs.getCharPref("network.proxy.no_proxies_on");
+    var nonprefs = false;
+    var torprefs = false;
 
-    var remote_dns = false;
-    if (m_socks_pref_exists) {
-         remote_dns = m_prefs.getBoolPref("network.proxy.socks_remote_dns");
-    } else {
-         remote_dns = true;
-    }
+    nonprefs = torbutton_get_prefbranch('network.proxy.');
+    torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    if (!nonprefs || !torprefs) return;
 
-    return ( (m_prefs.getIntPref("network.proxy.type")           == 1)              &&
-             (m_prefs.getCharPref("network.proxy.http")          == m_http_proxy)   &&
-             (m_prefs.getIntPref("network.proxy.http_port")      == m_http_port)    &&
-             (m_prefs.getCharPref("network.proxy.ssl")           == m_https_proxy)  &&
-             (m_prefs.getIntPref("network.proxy.ssl_port")       == m_https_port)   &&
-             (m_prefs.getCharPref("network.proxy.ftp")           == m_ftp_proxy)    &&
-             (m_prefs.getIntPref("network.proxy.ftp_port")       == m_ftp_port)     &&
-             (m_prefs.getCharPref("network.proxy.gopher")        == m_gopher_proxy) &&
-             (m_prefs.getIntPref("network.proxy.gopher_port")    == m_gopher_port)  &&
-             (m_prefs.getCharPref("network.proxy.socks")         == m_socks_host)   &&
-             (m_prefs.getIntPref("network.proxy.socks_port")     == m_socks_port)   &&
-             (m_prefs.getIntPref("network.proxy.socks_version")  == 5)              &&
-             (m_prefs.getBoolPref("network.proxy.share_proxy_settings") == false)   &&
+    if (torbutton_check_socks_remote_dns())
+         remote_dns = nonprefs.getBoolPref("socks_remote_dns");
+    else
+         remote_dns = false;
+
+    return ( (nonprefs.getIntPref("type")           == 1)              &&
+             (nonprefs.getCharPref("http")          == torprefs.getCharPref('http_proxy'))   &&
+             (nonprefs.getIntPref("http_port")      == torprefs.getIntPref('http_port'))     &&
+             (nonprefs.getCharPref("ssl")           == torprefs.getCharPref('https_proxy'))  &&
+             (nonprefs.getIntPref("ssl_port")       == torprefs.getIntPref('https_port'))    &&
+             (nonprefs.getCharPref("ftp")           == torprefs.getCharPref('ftp_proxy'))    &&
+             (nonprefs.getIntPref("ftp_port")       == torprefs.getIntPref('ftp_port'))      &&
+             (nonprefs.getCharPref("gopher")        == torprefs.getCharPref('gopher_proxy')) &&
+             (nonprefs.getIntPref("gopher_port")    == torprefs.getIntPref('gopher_port'))   &&
+             (nonprefs.getCharPref("socks")         == torprefs.getCharPref('socks_host'))   &&
+             (nonprefs.getIntPref("socks_port")     == torprefs.getIntPref('socks_port'))    &&
+             (nonprefs.getIntPref("socks_version")  == 5)              &&
+             (nonprefs.getBoolPref("share_proxy_settings") == false)   &&
              (remote_dns == true) );
 }
 
 function torbutton_disable_tor() {
+    var nonprefs = false;
+    var torprefs = false;
+
+    nonprefs = torbutton_get_prefbranch('network.proxy.');
+    torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    if (!nonprefs || !torprefs) return;
+
     torbutton_log(2, 'called disable_tor()');
-    m_prefs.setIntPref("network.proxy.type", 0);
+    nonprefs.setIntPref("type", 0);
 }
 
 function torbutton_enable_tor() {
+    var nonprefs = false;
+    var torprefs = false;
+
+    nonprefs = torbutton_get_prefbranch('network.proxy.');
+    torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    if (!nonprefs || !torprefs) return;
+
     torbutton_log(2, 'called enable_tor()');
 
-    m_prefs.setCharPref("network.proxy.http",         m_http_proxy);
-    m_prefs.setIntPref("network.proxy.http_port",     m_http_port);
-    m_prefs.setCharPref("network.proxy.ssl",          m_https_proxy);
-    m_prefs.setIntPref("network.proxy.ssl_port",      m_https_port);
-    m_prefs.setCharPref("network.proxy.ftp",          m_ftp_proxy);
-    m_prefs.setIntPref("network.proxy.ftp_port",      m_ftp_port);
-    m_prefs.setCharPref("network.proxy.gopher",       m_gopher_proxy);
-    m_prefs.setIntPref("network.proxy.gopher_port",   m_gopher_port);
-    m_prefs.setCharPref("network.proxy.socks",        m_socks_host);
-    m_prefs.setIntPref("network.proxy.socks_port",    m_socks_port);
-    m_prefs.setIntPref("network.proxy.socks_version", 5);
-    m_prefs.setBoolPref("network.proxy.share_proxy_settings", false);
-    if (m_socks_pref_exists) {
-        m_prefs.setBoolPref("network.proxy.socks_remote_dns", true);
+    nonprefs.setCharPref("http",         torprefs.getCharPref('http_proxy'));
+    nonprefs.setIntPref("http_port",     torprefs.getIntPref('http_port'));
+    nonprefs.setCharPref("ssl",          torprefs.getCharPref('https_proxy'));
+    nonprefs.setIntPref("ssl_port",      torprefs.getIntPref('https_port'));
+    nonprefs.setCharPref("ftp",          torprefs.getCharPref('ftp_proxy'));
+    nonprefs.setIntPref("ftp_port",      torprefs.getIntPref('ftp_port'));
+    nonprefs.setCharPref("gopher",       torprefs.getCharPref('gopher_proxy'));
+    nonprefs.setIntPref("gopher_port",   torprefs.getIntPref('gopher_port'));
+    nonprefs.setCharPref("socks",        torprefs.getCharPref('socks_host'));
+    nonprefs.setIntPref("socks_port",    torprefs.getIntPref('socks_port'));
+    nonprefs.setIntPref("socks_version", 5);
+    nonprefs.setBoolPref("share_proxy_settings", false);
+    if (torbutton_check_socks_remote_dns()) {
+        nonprefs.setBoolPref("socks_remote_dns", true);
     }
-    m_prefs.setIntPref("network.proxy.type", 1);
+    nonprefs.setIntPref("type", 1);
 }
 
 function torbutton_update_status(nMode) {
+    var o_toolbutton = false;
+    var o_statuspanel = false;
+    var o_stringbundle = false;
     var sPrefix;
     var label;
     var tooltip;
 
+    o_toolbutton = torbutton_get_toolbutton();
+    o_statuspanel = torbutton_get_statuspanel();
+    o_stringbundle = torbutton_get_stringbundle();
+
     torbutton_log(2, 'called update_status('+nMode+')');
     if (nMode == 0) {
-        if (m_toolbutton) {
-            tooltip = m_stringbundle.GetStringFromName("torbutton.button.tooltip.disabled");
-            m_toolbutton.setAttribute('tbstatus', 'off');
-            m_toolbutton.setAttribute('tooltiptext', tooltip);
+        if (o_toolbutton) {
+            tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.disabled");
+            o_toolbutton.setAttribute('tbstatus', 'off');
+            o_toolbutton.setAttribute('tooltiptext', tooltip);
         }
 
         if (window.statusbar.visible) {
-            label   = m_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
-            tooltip = m_stringbundle.GetStringFromName("torbutton.panel.tooltip.disabled");
-            m_statuspanel.style.color = "#F00";
-            m_statuspanel.setAttribute('label', label);
-            m_statuspanel.setAttribute('tooltiptext', tooltip);
-            m_statuspanel.setAttribute('tbstatus', 'off');
+            label   = o_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
+            tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.disabled");
+            o_statuspanel.style.color = "#F00";
+            o_statuspanel.setAttribute('label', label);
+            o_statuspanel.setAttribute('tooltiptext', tooltip);
+            o_statuspanel.setAttribute('tbstatus', 'off');
         }
     } else {
-        if (m_toolbutton) {
-            tooltip = m_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
-            m_toolbutton.setAttribute('tbstatus', 'on');
-            m_toolbutton.setAttribute('tooltiptext', tooltip);
+        if (o_toolbutton) {
+            tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
+            o_toolbutton.setAttribute('tbstatus', 'on');
+            o_toolbutton.setAttribute('tooltiptext', tooltip);
         }
 
         if (window.statusbar.visible) {
-            label   = m_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
-            tooltip = m_stringbundle.GetStringFromName("torbutton.panel.tooltip.enabled");
-            m_statuspanel.style.color = "#390";
-            m_statuspanel.setAttribute('label', label);
-            m_statuspanel.setAttribute('tooltiptext', tooltip);
-            m_statuspanel.setAttribute('tbstatus', 'on');
+            label   = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
+            tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.enabled");
+            o_statuspanel.style.color = "#390";
+            o_statuspanel.setAttribute('label', label);
+            o_statuspanel.setAttribute('tooltiptext', tooltip);
+            o_statuspanel.setAttribute('tbstatus', 'on');
         }
     }
 }
 
 function torbutton_open_prefs_dialog() {
     window.openDialog("chrome://torbutton/content/preferences.xul","torbutton-preferences","centerscreen, chrome");
+    torbutton_log(3, 'opened preferences window');
 }
 
 function torbutton_open_about_dialog() {
@@ -430,11 +467,36 @@ function geckoVersionCompare(aVersion) {
 }
 
 function torbutton_log(nLevel, sMsg) {
-    var rDate = new Date();
-    if (m_tb_logger) {
-        m_tb_logger.log(nLevel, rDate.getTime()+': '+sMsg);
-    } else if (m_debug) {
-        dump("ERROR: m_tb_logger undefined ");
-        dump(rDate.getTime()+': '+sMsg+"\n");
+    var o_log_mgr    = false;
+    var o_tb_logger  = false;
+    var o_prefs      = false;
+    var o_prefbranch = false;
+    var m_debug      = false;
+
+    o_prefbranch = Components.classes["@mozilla.org/preferences-service;1"]
+                             .getService(Components.interfaces.nsIPrefService)
+                             .getBranch('extensions.torbutton.');
+
+    if (!o_prefbranch)
+        return false;
+    m_debug = o_prefbranch.getBoolPref('debug');
+
+    if (m_debug)
+    {
+        try {
+            o_log_mgr   = Components.classes["@mozmonkey.com/debuglogger/manager;1"]
+                                    .getService(Components.interfaces.nsIDebugLoggerManager); 
+            o_tb_logger = o_log_mgr.registerLogger("torbutton");
+        } catch (exErr) {
+            o_tb_logger = false;
+        }
+
+        var rDate = new Date();
+        if (o_tb_logger) {
+            o_tb_logger.log(nLevel, rDate.getTime()+': '+sMsg);
+        } else {
+            dump("ERROR: o_tb_logger undefined ");
+            dump(rDate.getTime()+': '+sMsg+"\n");
+        }
     }
 }
