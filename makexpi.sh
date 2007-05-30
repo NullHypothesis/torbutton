@@ -11,14 +11,14 @@ fi
 # create jar file (we're just storing files here)
 echo ---------- create $APP_NAME.jar file ----------
 cd src/chrome
-zip -r0 ../../$APP_NAME.jar ./
+zip -r0 ../../$APP_NAME.jar ./ -x "*.svn/*"
 cd ../..
 
 # create .xpi
 echo ---------- create $APP_NAME.xpi ----------
 cd src
-echo zip -9r ../pkg/$XPI_NAME ./ -x chrome/\*
-zip -9r ../pkg/$XPI_NAME ./ -x "chrome/*"
+echo zip -9r ../pkg/$XPI_NAME ./ -x "chrome/*" -x "*.svn/*"
+zip -9r ../pkg/$XPI_NAME ./ -x "chrome/*" -x "*.svn/*"
 mv ../$APP_NAME.jar ./chrome
 zip -9m ../pkg/$XPI_NAME chrome/$APP_NAME.jar
 cd ..
