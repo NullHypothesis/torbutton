@@ -12,7 +12,7 @@
         onload="torbutton_prefs_init(document)"
         ondialogaccept="torbutton_prefs_save(document)" >
 
-    <script type="application/x-javascript" src="torbutton.js"/>
+    <script type="application/x-javascript" src="torbutton_util.js"/>
     <script type="application/x-javascript" src="preferences.js"/>
     <groupbox>
         <caption label="&torbutton.prefs.display_settings;"/>
@@ -110,6 +110,19 @@
         <textbox id="socks_port"/>
 -->
     </groupbox>
+    <groupbox>
+        <caption label="&torbutton.prefs.sec_settings;"/>
+        <checkbox id="torbutton_disablePlugins" label="&torbutton.prefs.disable_plugins;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_killBadJS" label="&torbutton.prefs.kill_bad_js;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_clearCookies" label="&torbutton.prefs.clear_cookies;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+    </groupbox>
+
+
 <!--
     <checkbox id="torbutton_warnUponExcludedSite" label="&torbutton.prefs.prompt_before_visiting_excluded_sites;" />
     <description>

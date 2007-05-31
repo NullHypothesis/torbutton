@@ -19,6 +19,8 @@ function torbutton_prefs_set_field_attributes(doc)
     {
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
     } else {
+	  // XXX: This seems broken.. The first time the prefs window is open it 
+      // is still editable.
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
     }
     var proxy_port;
@@ -33,6 +35,7 @@ function torbutton_prefs_set_field_attributes(doc)
         proxy_host = '';
         proxy_port = 0;
     }
+
     if (doc.getElementById('torbutton_settingsMethod').value == 'recommended') {
         torbutton_log(5, "using recommended settings");
         if (!torbutton_check_socks_remote_dns())
@@ -133,6 +136,11 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_socksPort').value    = o_torprefs.getIntPref('socks_port');
     // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
+	// XXX: work this in with recommended settigns stuff?
+    doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
+    doc.getElementById('torbutton_clearHistory').checked = o_torprefs.getBoolPref('clear_history');
+    doc.getElementById('torbutton_clearCookies').checked = o_torprefs.getBoolPref('clear_cookies'); 
+    doc.getElementById('torbutton_killBadJS').checked = o_torprefs.getBoolPref('kill_bad_js');
     torbutton_prefs_set_field_attributes(doc);
 }
 
@@ -170,6 +178,12 @@ function torbutton_prefs_save(doc) {
         o_customprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
     }
     // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
+
+	// XXX: work this in with recommended settigns stuff?
+    o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_disablePlugins').checked);
+    o_torprefs.setBoolPref('clear_history', doc.getElementById('torbutton_clearHistory').checked);
+    o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').checked);
+    o_torprefs.setBoolPref('kill_bad_js', doc.getElementById('torbutton_killBadJS').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();

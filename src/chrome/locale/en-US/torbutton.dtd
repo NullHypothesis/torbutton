@@ -14,6 +14,11 @@
 <!ENTITY torbutton.prefs.proxy.host.gopher              "Gopher Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.socks               "SOCKS Host:">
 <!ENTITY torbutton.prefs.proxy.port                     "Port:">
+<!ENTITY torbutton.prefs.sec_settings		"Security Settings">
+<!ENTITY torbutton.prefs.clear_history		"Clear history on Tor toggle (optional)">
+<!ENTITY torbutton.prefs.clear_cookies		"Clear cookies on Tor toggle (recommended)">
+<!ENTITY torbutton.prefs.disable_plugins	"Disable plugins during Tor usage (recommended)">
+<!ENTITY torbutton.prefs.kill_bad_js	    "Block dangerous javascript (recommended)">
 <!ENTITY torbutton.about.title                          "About Torbutton">
 <!ENTITY torbutton.pref_connection.notice               "Disable Torbutton to change these settings.">
 <!ENTITY torbutton.pref_connection.more_info            "More information">
