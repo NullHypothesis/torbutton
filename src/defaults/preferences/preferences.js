@@ -38,7 +38,7 @@ pref("extensions.torbutton.saved.socks_port",0);
 pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description", "chrome://torbutton/locale/torbutton.properties");
 // XXX: Hrmm, what is the convention for above? do some of these belong in 
 // 'saved'?
-pref("extensions.torbutton.allow_plugins",true);
+pref("extensions.torbutton.tor_enabled",false);
 pref("extensions.torbutton.no_tor_plugins",true);
 pref("extensions.torbutton.clear_cookies",true);
 pref("extensions.torbutton.clear_history",false);

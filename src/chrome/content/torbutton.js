@@ -59,9 +59,6 @@ var torbutton_pref_observer =
             case "network.proxy.type":
                 torbutton_set_status();
                 break;
-            case "extensions.torbutton.allow_plugins":
-                torbutton_set_plugin_status();
-                break;
         }
     }
 }
@@ -177,7 +174,6 @@ function torbutton_init() {
     torbutton_set_panel_view();
     torbutton_log(2, 'setting torbutton status from proxy prefs');
     torbutton_set_status();
-    torbutton_set_plugin_status();
     torbutton_log(2, 'init completed');
 }
 
@@ -401,18 +397,23 @@ function torbutton_update_status(mode) {
     var sPrefix;
     var label;
     var tooltip;
+    
+    var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    torprefs.setBoolPref('tor_enabled', mode);
 
     torbutton_log(2, 'called update_status('+mode+')');
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
+    torbutton_update_plugin_status(!mode);
 
-    // XXX: hrmm..
-    var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     if (torprefs.getBoolPref('clear_history')) {
         ClearHistory();
     }
+
+    // XXX: Offer option of cookie jars vs clearing cookies
+    // Clearing cookies should be the default (Fuck cookies ;)
     if (torprefs.getBoolPref('clear_cookies')) {
-        ClearCookies();
+        ClearCookies(mode);
     }
 }
 
@@ -535,77 +536,82 @@ function ClearHistory() {
     hist.removeAllPages();    
 }
 
-function ClearCookies() {
+function ClearCookies(mode) {
     torbutton_log(2, 'called ClearCookies');
     var cm = Components.classes["@mozilla.org/cookiemanager;1"]
                     .getService(Components.interfaces.nsICookieManager);
-    cm.removeAll();
+    
+    // XXX: Check pref to fully clear or not
+    //cm.removeAll();
+
+    var selector =
+          Components.classes["@stanford.edu/cookie-jar-selector;1"]
+                    .getService(Components.interfaces.nsISupports)
+                    .wrappedJSObject;
+    if(mode) {
+        selector.saveCookies("nontor");
+        selector.clearCookies();
+    } else {
+        // Never save tor cookies
+        selector.clearCookies();
+        selector.loadCookies("nontor", false);
+    }
 }
 
 
-// -------------- PLUGIN HANDLING CODE ---------------------
+// -------------- JS/PLUGIN HANDLING CODE ---------------------
 
-function AllowWindowPlugins(win, onOff) {
-    torbutton_log(1, "AllowWindowPlugs "+onOff);
+function TagDocshellForJS(browser, allowed) {
+    if (typeof(browser.__tb_js_state) == 'undefined') {
+        //@JSD_BREAK
+        torbutton_log(5, "UNTAGGED WINDOW!!!!!!!!!");
+    }
+
+    if(browser.__tb_js_state == allowed) {
+        // States match, js ok 
+        browser.docShell.allowJavascript = 
+            m_prefs.getBoolPref("javascript.enabled");
+    } else {
+        // States differ or undefined, js not ok 
+        browser.docShell.allowJavascript = false;
+    }
+}
+
+function torbutton_allow_win_jsplugins(win, allowed) {
     var browser = win.getBrowser();
-   
-    browser.docShell.allowPlugins = onOff;
+
+    browser.docShell.allowPlugins = allowed;
+    TagDocshellForJS(browser, allowed);
+
     var browsers = browser.browsers;
 
     for (var i = 0; i < browsers.length; ++i) {
-        var b = browser.getBrowserAtIndex(i);
+        var b = browser.browsers[i];
         if (b) {
-            torbutton_log(1, " plugins1: " + b.docShell.allowPlugins);
-            b.docShell.allowPlugins = onOff;
-            torbutton_log(1, " plugins2: " + b.docShell.allowPlugins);
+            b.docShell.allowPlugins = allowed;
+            TagDocshellForJS(b, allowed);
         }
     }
 }
 
-function AllowPlugins(onOff) {
-    torbutton_log(1, "Plugins: "+onOff);
+// This is an ugly beast.. But unfortunately it has to be so..
+// Looping over all tabs twice is not somethign we wanna do..
+function torbutton_allow_jsplugins(allowed) {
+    torbutton_log(1, "Plugins: "+allowed);
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                        .getService(Components.interfaces.nsIWindowMediator);
-    // XXX: Popupwindows? frames/iframes? Hidden iframes? bookmarklets?
+
     var enumerator = wm.getEnumerator("navigator:browser");
-    torbutton_log(1, "Plugins0: ");
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
-        torbutton_log(1, "Plugins1");
-        AllowWindowPlugins(win, onOff);   
+        torbutton_allow_win_jsplugins(win, allowed);   
     }
 }
 
 function torbutton_init_pluginbutton() {
-    if(m_prefs.getBoolPref("extensions.torbutton.no_tor_plugins") 
-        && torbutton_check_status()) {
-        m_prefs.setBoolPref("extensions.torbutton.allow_plugins", false)
-    }
+    torbutton_update_plugin_status(!torbutton_check_status());
 }
 
-function torbutton_toggle_plugins() {
-    torbutton_log(1, 'called toggle_plugins()');
-    if (!m_wasinited) {
-        torbutton_init();
-    }
-
-    var tb = m_prefs.getBoolPref("extensions.torbutton.allow_plugins");
-    m_prefs.setBoolPref("extensions.torbutton.allow_plugins", !tb);
-}
-
-function torbutton_set_plugin_status() {
-    if (!m_wasinited) {
-        torbutton_init();
-    }
-
-    if (m_prefs.getBoolPref("extensions.torbutton.allow_plugins")) {
-        torbutton_log(1,'plugins are enabled');
-        torbutton_update_plugin_status(1);
-    } else {
-        torbutton_log(1,'plugins are disabled');
-        torbutton_update_plugin_status(0);
-    }
-}
 
 function torbutton_update_plugin_status(nMode) {
     torbutton_log(2, 'called update_plugin_status('+nMode+')');
@@ -613,8 +619,10 @@ function torbutton_update_plugin_status(nMode) {
         return;
     torbutton_log(2, 'visible statusbar: ('+nMode+')');
     var o_stringbundle = torbutton_get_stringbundle();
+    var override = !m_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
+    var tooltip;
 
-    var tooltip;    
+    if(override) nMode = true;
 
     if(nMode) {
         tooltip = o_stringbundle.GetStringFromName("torbutton.panel.plugins.enabled");
@@ -622,14 +630,18 @@ function torbutton_update_plugin_status(nMode) {
         tooltip = o_stringbundle.GetStringFromName("torbutton.panel.plugins.disabled");
     }
   
-    // FIXME: hrmm.. consider changing this value
+    // FIXME: hrmm.. consider caching this value
     document.getElementById("plugins-status").setAttribute("status", nMode ?  "1" : "0");
     document.getElementById("plugins-status").setAttribute('tooltiptext', tooltip);
 
+    if(override) return;
+
+    // XXX: Don't set these to true if user had it off to begin with!
     m_prefs.setBoolPref("security.enable_java", nMode);
-    AllowPlugins(nMode);
+    m_prefs.setBoolPref("extensions.update.enabled", nMode);
     
-    torbutton_log(2, 'javascript toggled');
+    // FIXME: Allow option to kill all JS during tor usage. 
+    torbutton_allow_jsplugins(nMode);
 }
 
 // ---------------------- Event handlers -----------------
@@ -641,14 +653,16 @@ function NewTabEvent(event)
 
     // Fucking garbage.. event is delivered to the current tab, not the 
     // newly created one. Need to traverse the current window for it.
-    if(!m_prefs.getBoolPref("extensions.torbutton.allow_plugins")) {
+    if(m_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
+            && m_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
         var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-                   .getService(Components.interfaces.nsIWindowMediator);
+            .getService(Components.interfaces.nsIWindowMediator);
         var browserWindow = wm.getMostRecentWindow("navigator:browser");  
-        AllowWindowPlugins(browserWindow, false);
+        torbutton_allow_win_jsplugins(browserWindow, false);
     }
 }
 
+// XXX: Does this get the first window?
 function NewWindowEvent(event)
 {
     if (!m_wasinited) {
@@ -656,9 +670,15 @@ function NewWindowEvent(event)
     }
     torbutton_log(1, "New window");
 
-    if(!m_prefs.getBoolPref("extensions.torbutton.allow_plugins")) {
-        getBrowser().docShell.allowPlugins = false;
+    if (torbutton_check_status()) {
+        if(m_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+            getBrowser().docShell.allowPlugins = false;
+        }
+        TagDocshellForJS(getBrowser(), false, false);
+    } else {
+        TagDocshellForJS(getBrowser(), true, true);
     }
+
 
     getBrowser().addProgressListener(myListener,
       Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
@@ -698,14 +718,36 @@ function hookDoc(win, doc) {
     if (!m_wasinited) {
         torbutton_init();
     }
-    if(!m_prefs.getBoolPref('extensions.torbutton.kill_bad_js'))
-        return;
+
     if(typeof(win.__tb_did_hook) != 'undefined')
         return; // Ran already
-
+    
     win.__tb_did_hook = true;
+
+    torbutton_log(1, "JS to be set to: " +m_prefs.getBoolPref("javascript.enabled"));
+    var browser = getBrowser();
+    var tor_tag = !m_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    var js_enabled = m_prefs.getBoolPref("javascript.enabled");
+
+    // Find proper browser for this document.. ugh.
+    for (var i = 0; i < browser.browsers.length; ++i) {
+        var b = browser.browsers[i];
+        if (b && b.contentDocument == doc) {
+            b.__tb_js_state = tor_tag;
+            b.docShell.allowJavascript = js_enabled;
+        }
+    }
+
+    torbutton_log(1, "JS set to: " 
+        + m_prefs.getBoolPref("javascript.enabled"));
+
+    // No need to hook js if tor is off, right?
+    if(!m_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
+            || !m_prefs.getBoolPref('extensions.torbutton.kill_bad_js'))
+        return;
+
     var str = "<"+"script>";
-    str += m_jshooks; // XXX: dne
+    str += m_jshooks; 
 //    str +="alert(\"hi\");";
     str += "</"+"script>";
     var d = doc.createElement("div");
@@ -728,7 +770,7 @@ var myListener =
   },
 
   onStateChange: function(aProgress, aRequest, aFlag, aStatus)
-  { torbutton_log(1, 'State change()'); return 0; },
+  { /*torbutton_log(1, 'State change()'); */return 0; },
 
   onLocationChange: function(aProgress, aRequest, aURI)
   {
@@ -749,17 +791,16 @@ var myListener =
   },
 
   onProgressChange: function(webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
-  { torbutton_log(1, 'called progressChange'); return 0; },
+  { /* torbutton_log(1, 'called progressChange'); */ return 0; },
   
   onStatusChange: function() 
-  { torbutton_log(1, 'called statusChange'); return 0; },
+  { /*torbutton_log(1, 'called statusChange'); */ return 0; },
   
   onSecurityChange: function() {return 0;},
   
   onLinkIconAvailable: function() 
-  { torbutton_log(1, 'called linkIcon'); return 0; }
+  { /*torbutton_log(1, 'called linkIcon'); */ return 0; }
 }
-
 
 
 //vim:set ts=4
