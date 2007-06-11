@@ -139,6 +139,7 @@ function torbutton_prefs_init(doc) {
 	// XXX: work this in with recommended settigns stuff?
     doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
     doc.getElementById('torbutton_clearHistory').checked = o_torprefs.getBoolPref('clear_history');
+    doc.getElementById('torbutton_clearCache').checked = o_torprefs.getBoolPref('clear_cache');
     doc.getElementById('torbutton_clearCookies').checked = o_torprefs.getBoolPref('clear_cookies'); 
     doc.getElementById('torbutton_killBadJS').checked = o_torprefs.getBoolPref('kill_bad_js');
     torbutton_prefs_set_field_attributes(doc);
@@ -182,6 +183,7 @@ function torbutton_prefs_save(doc) {
 	// XXX: work this in with recommended settigns stuff?
     o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_disablePlugins').checked);
     o_torprefs.setBoolPref('clear_history', doc.getElementById('torbutton_clearHistory').checked);
+    o_torprefs.setBoolPref('clear_cache', doc.getElementById('torbutton_clearCache').checked);
     o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').checked);
     o_torprefs.setBoolPref('kill_bad_js', doc.getElementById('torbutton_killBadJS').checked);
 

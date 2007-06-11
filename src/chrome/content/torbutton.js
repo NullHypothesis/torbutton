@@ -398,6 +398,7 @@ function torbutton_update_status(mode) {
     var label;
     var tooltip;
     
+
     var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     torprefs.setBoolPref('tor_enabled', mode);
 
@@ -406,6 +407,9 @@ function torbutton_update_status(mode) {
     torbutton_update_statusbar(mode);
     torbutton_update_plugin_status(!mode);
 
+    // TODO: Investigate Firefox privacy clear-data settings.. 
+    // Form data, download history, passwords?
+    // Can these items be excluded from being recorded during tor usage?
     if (torprefs.getBoolPref('clear_history')) {
         ClearHistory();
     }
@@ -414,6 +418,21 @@ function torbutton_update_status(mode) {
     // Clearing cookies should be the default (Fuck cookies ;)
     if (torprefs.getBoolPref('clear_cookies')) {
         ClearCookies(mode);
+    }
+    /* XXX: Offer option for this? Ugh, so many options..
+
+19:09 < coderman> mikeperry : to disable CSS history hacks and such (regarding 
+                  browser cache) i had to set browser.cache.memory.enable off, 
+                  browser.cache.disk.enable off , and network.http.use-cache 
+                  off.  as for clearing at switch, or leaving off, i don't 
+                  know.  depends on what you're doing i suppose...
+
+    */
+
+    if (torprefs.getBoolPref('clear_cache')) {
+        var cache = Components.classes["@mozilla.org/network/cache-service;1"].
+        getService(Components.interfaces.nsICacheService);
+        cache.evictEntries(0);
     }
 }
 
@@ -540,7 +559,8 @@ function ClearCookies(mode) {
     torbutton_log(2, 'called ClearCookies');
     var cm = Components.classes["@mozilla.org/cookiemanager;1"]
                     .getService(Components.interfaces.nsICookieManager);
-    
+   
+ 
     // XXX: Check pref to fully clear or not
     //cm.removeAll();
 
@@ -563,7 +583,6 @@ function ClearCookies(mode) {
 
 function TagDocshellForJS(browser, allowed) {
     if (typeof(browser.__tb_js_state) == 'undefined') {
-        //@JSD_BREAK
         torbutton_log(5, "UNTAGGED WINDOW!!!!!!!!!");
     }
 
@@ -572,6 +591,8 @@ function TagDocshellForJS(browser, allowed) {
         browser.docShell.allowJavascript = 
             m_prefs.getBoolPref("javascript.enabled");
     } else {
+        // XXX: hrmm.. way to check for navigator windows? 
+        // non-navigator windows are not tagged..
         // States differ or undefined, js not ok 
         browser.docShell.allowJavascript = false;
     }
@@ -589,6 +610,7 @@ function torbutton_allow_win_jsplugins(win, allowed) {
         var b = browser.browsers[i];
         if (b) {
             b.docShell.allowPlugins = allowed;
+            b.webNavigation.stop(b.webNavigation.STOP_ALL);
             TagDocshellForJS(b, allowed);
         }
     }
@@ -665,10 +687,10 @@ function NewTabEvent(event)
 // XXX: Does this get the first window?
 function NewWindowEvent(event)
 {
+    torbutton_log(1, "New window");
     if (!m_wasinited) {
         torbutton_init();
     }
-    torbutton_log(1, "New window");
 
     if (torbutton_check_status()) {
         if(m_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
@@ -715,6 +737,9 @@ function getBody(doc) {
 
 function hookDoc(win, doc) {
     torbutton_log(1, "Hooking document");
+    if(doc.doctype) {
+        torbutton_log(1, "Hooking document: "+doc.doctype.name);
+    }
     if (!m_wasinited) {
         torbutton_init();
     }
@@ -728,6 +753,11 @@ function hookDoc(win, doc) {
     var browser = getBrowser();
     var tor_tag = !m_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var js_enabled = m_prefs.getBoolPref("javascript.enabled");
+
+    if (browser.contentDocument == doc) {
+        browser.__tb_js_state = tor_tag;
+        browser.docShell.allowJavascript = js_enabled;
+    } 
 
     // Find proper browser for this document.. ugh.
     for (var i = 0; i < browser.browsers.length; ++i) {
@@ -746,14 +776,28 @@ function hookDoc(win, doc) {
             || !m_prefs.getBoolPref('extensions.torbutton.kill_bad_js'))
         return;
 
+    // Date Hooking:
+
+    /* Q: Do this better with XPCOM?
+     *    http://www.mozilla.org/projects/xpcom/nsIClassInfo.html
+     * A: Negatory.. Date() is not an XPCOM component :(
+     */
+
     var str = "<"+"script>";
     str += m_jshooks; 
-//    str +="alert(\"hi\");";
     str += "</"+"script>";
     var d = doc.createElement("div");
     d.style.visibility = 'hidden';
     d.innerHTML = str;
-    getBody(doc).insertBefore(d, getBody(doc).firstChild);
+    var di = getBody(doc).insertBefore(d, getBody(doc).firstChild);
+    if(di != d) {
+        torbutton_log(5, "Inserted and return not equal");
+    }
+
+    // Remove javascript code for rendering issues/DOM traversals
+    if(!getBody(doc).removeChild(di)) {
+        torbutton_log(5, "Failed to remove js!");
+    } 
 }
 
 const STATE_START = Components.interfaces.nsIWebProgressListener.STATE_START;
@@ -779,8 +823,6 @@ var myListener =
    // or when the user switches tabs
     if(aProgress) {
         torbutton_log(1, "location progress");
-        // XXX: Check mimetype or DOM to not fuck with .txt files and other
-        // formats..
         var doc = aProgress.DOMWindow.document;
         if(doc) hookDoc(aProgress.DOMWindow, doc);        
         else torbutton_log(3, "No DOM at location event!");

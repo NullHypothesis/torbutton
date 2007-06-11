@@ -1,98 +1,46 @@
-dump("Loading torbutton/jshooks.js\n");
+/* dump("Loading torbutton/jshooks.js\n"); */
 
 function __HookObjects() {
-  // TODO: It might be a good idea to hook window sizes also..
-  // But that will almost certainly fuck with rendering
+  /* TODO: It might be a good idea to hook window sizes also..
+     But that will almost certainly fuck with rendering */
 
-  // XXX: Is it possible this breaks plugin install or other weird shit
-  // for non-windows OS's?
+  /* XXX: Is it possible this breaks plugin install or other weird shit
+     for non-windows OS's? */
   navigator.__defineGetter__("platform", 
         function() { return "Windows";});
   
   navigator.__defineGetter__("oscpu", 
         function() { return "Win32 i686";});
 
-  // CSS hack fix for http://gemal.dk/browserspy/css.html
-  // Must be a var, not a function (to avoid hooking via prototype)
-  /*
-  var removeAllAttributes = function(e) {
-    var atts = e.attributes;
-    if(e.nodeName.toLowerCase() == "a") {
-      for(var i = atts.length; i != 0; --i) {
-        if(atts[0].name.toLowerCase() != "href") {
-          e.removeAttribute(atts[0].name);
-        } else if(atts.length > 1){
-          e.removeAttribute(atts[1].name);
-        }
-      }
-      if(e.attributes.length>1) dump("FUCK\n");
-    }
-  }
-
-  var gEID = document.getElementById;
-  document.getElementById = function(id) {
-    var ret = gEID.call(document, id);
-    if (ret) removeAllAttributes(ret);
-    return ret;
-  }
-
-  var gEN = document.getElementsByName;
-  document.getElementsByName = function(name) {
-    var ret = gEN.call(document, name);
-    for(var i=0; i < ret.length; ++i)  removeAllAttributes(ret[i]); 
-    return ret;
-  }
-
-  var gENS = document.getElementsByNameNS;
-  document.getElementsByNameNS = function(name,ns) {
-    var ret = gENS.call(document, name,ns);
-    for(var i=0; i < ret.length; ++i)  removeAllAttributes(ret[i]); 
-    return ret;
-  }
-
-  var gETN = document.getElementsByTagName;
-  document.getElementsByTagName = function(name) {
-    var ret = gETN.call(document, name);
-    for(var i=0; i < ret.length; ++i) removeAllAttributes(ret[i]);
-    return ret;
-  }
-
-  var gETNS = document.getElementsByTagNameNS;
-  document.getElementsByTagNameNS = function(name,ns) {
-    var ret = gETNS.call(document, name, ns);
-    for(var i=0; i < ret.length; ++i)  removeAllAttributes(ret[i]);
-    return ret;
-  }
-  */
-  
-
-  // Timezone fix for http://gemal.dk/browserspy/css.html
+  /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
-    // Rules:
-    //   - If they specify a timezone, it is converted to local
-    //     time. All getter fucntions then convert properly to
-    //     UTC. No mod needed.
-    //   - If they specify UTC timezone, then it is converted
-    //     to local time. All getter functions then convert back.
-    //     No mod needed.
-    //   - If they specify NO timezone, it is local time. 
-    //     The UTC conversion then reveals the offset. Fix.
+    /* Rules:
+     *   - If they specify a timezone, it is converted to local
+     *     time. All getter fucntions then convert properly to
+     *     UTC. No mod needed.
+     *   - If they specify UTC timezone, then it is converted
+     *     to local time. All getter functions then convert back.
+     *     No mod needed.
+     *   - If they specify NO timezone, it is local time. 
+     *     The UTC conversion then reveals the offset. Fix.
+     */
     
-    // Step 1: Remove everything inside ()'s (they are "comments")
+    /* Step 1: Remove everything inside ()'s (they are "comments") */
     var s = str.toLowerCase();
     var re = new RegExp('\\(.*\\)', "gm");
     s = s.replace(re, "");
     dump(s);
-    // Step 2: Look for +/-. If found, do nothing
+    /* Step 2: Look for +/-. If found, do nothing */
     if(s.indexOf("+") == -1 && s.indexOf("-") == -1) {
-      // Step 3: Look for timezone string from
-      // http://lxr.mozilla.org/seamonkey/source/js/src/jsdate.c 
+      /* Step 3: Look for timezone string from
+       * http://lxr.mozilla.org/seamonkey/source/js/src/jsdate.c
+       */
       if(s.indexOf(" gmt") == -1 && s.indexOf(" ut") == -1 &&
          s.indexOf(" est") == -1 && s.indexOf(" edt") == -1 &&
          s.indexOf(" cst") == -1 && s.indexOf(" cdt") == -1 &&
          s.indexOf(" mst") == -1 && s.indexOf(" mdt") == -1 &&
          s.indexOf(" pst") == -1 && s.indexOf(" pdt")) {
-        // No timezone specified. Adjust.
+        /* No timezone specified. Adjust. */
         d.setTime(d.getTime()-(d.getTimezoneOffset()*60000));
       }
     } 
@@ -100,10 +48,10 @@ function __HookObjects() {
 
   var tmp = Date;
   Date = function() {
-    // DO NOT make 'd' a member! EvilCode will use it!
+    /* DO NOT make 'd' a member! EvilCode will use it! */
     var d;
     var a = arguments;
-    // apply doesn't seem to work for constructors :(
+    /* apply doesn't seem to work for constructors :( */
     if(arguments.length == 0) d=new tmp();
     if(arguments.length == 1) d=new tmp(a[0]);
     if(arguments.length == 3) d=new tmp(a[0],a[1],a[2]);
@@ -117,12 +65,12 @@ function __HookObjects() {
       if((arguments.length == 1) && typeof(a[0]) == "string") {
         reparseDate(d,a[0]);
       } else if(arguments.length > 1) { 
-        // Numerical value. No timezone given, adjust.
+        /* Numerical value. No timezone given, adjust. */
         d.setTime(d.getTime()-(d.getTimezoneOffset()*60000));
       }
     }
 
-    Date.prototype.valueOf=Date.prototype.getTime = // UTC already
+    Date.prototype.valueOf=Date.prototype.getTime = /* UTC already */
          function(){return d.getTime();}
     Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
     Date.prototype.getYear=function() {return d.getUTCYear();}
@@ -175,16 +123,17 @@ function __HookObjects() {
     Date.prototype.toString=function(){return d.toUTCString();}
     Date.prototype.toLocaleString=function(){return d.toUTCString();}
     
-    // XXX: Fuck 'em if they can't take a joke:
+    /* Fuck 'em if they can't take a joke: */
     Date.prototype.toLocaleTimeString=function(){return d.toUTCString();}
     Date.prototype.toLocaleDateString=function(){return d.toUTCString();}
     Date.prototype.toDateString=function(){return d.toUTCString();}
     Date.prototype.toTimeString=function(){return d.toUTCString();}
 
-     // Hack to solve the problem of multiple date objects
-    // all sharing the same lexically scoped d every time a new one is
-    // created. This hack creates a fresh new prototype reference for 
-    // the next object to use with a different d binding.
+    /* Hack to solve the problem of multiple date objects
+     * all sharing the same lexically scoped d every time a new one is
+     * created. This hack creates a fresh new prototype reference for 
+     * the next object to use with a different d binding.
+     */
     Date.prototype = new Object.prototype.toSource();
     return d.toUTCString();
   }

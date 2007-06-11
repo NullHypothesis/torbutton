@@ -16,6 +16,7 @@
 <!ENTITY torbutton.prefs.proxy.port                     "Port:">
 <!ENTITY torbutton.prefs.sec_settings		"Security Settings">
 <!ENTITY torbutton.prefs.clear_history		"Clear history on Tor toggle (optional)">
+<!ENTITY torbutton.prefs.clear_cache		"Clear cache on Tor toggle (recommended)">
 <!ENTITY torbutton.prefs.clear_cookies		"Clear cookies on Tor toggle (recommended)">
 <!ENTITY torbutton.prefs.disable_plugins	"Disable plugins during Tor usage (recommended)">
 <!ENTITY torbutton.prefs.kill_bad_js	    "Block dangerous javascript (recommended)">

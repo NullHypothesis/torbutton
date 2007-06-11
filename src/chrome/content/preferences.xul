@@ -118,6 +118,8 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_clearCookies" label="&torbutton.prefs.clear_cookies;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_clearCache" label="&torbutton.prefs.clear_cache;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
     </groupbox>
