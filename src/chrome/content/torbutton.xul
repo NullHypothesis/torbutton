@@ -43,6 +43,6 @@
             onclick="if (event.button == 0) torbutton_toggle()"/>
 
         <popup id="torbutton-context-menu"/>
-        <statusbarpanel context="clipmenu" class="statusbarpanel-iconic" id="plugins-status" tooltip="plugin-tooltip" onclick="torbutton_toggle_plugins();"/>
+<!--        <statusbarpanel context="clipmenu" class="statusbarpanel-iconic" id="plugins-status" tooltip="plugin-tooltip" onclick="torbutton_toggle_plugins();"/> -->
    </statusbar>
 </overlay>

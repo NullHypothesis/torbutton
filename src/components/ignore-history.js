@@ -5,7 +5,7 @@
  * queries and sometimes ignores addURI commands.
  * Designed as a component of FoxTor, http://cups.cs.cmu.edu/foxtor/
  * Copyright 2006, distributed under the same (open source) license as FoxTor
- *   - XXX: ??? Which license is this? Unspecified on website/src! 
+ *   - XXX: ??? Which license is this? Unspecified on website/src 
  *
  * Contributor(s):
  *         Collin Jackson <mozilla@collinjackson.com>
@@ -13,8 +13,6 @@
  *************************************************************************/
 
 // Module specific constants
-const kTORBUTTON_STATUS_PREF = "extensions.torbutton.tor_enabled";
-const kSTATUS_THRESHOLD = 300;  // ignore history if status >= threshold
 const kMODULE_NAME = "Ignore History";
 const kMODULE_CONTRACTID = "@mozilla.org/browser/global-history;2";
 const kMODULE_CID = Components.ID("bc666d45-a9a1-4096-9511-f6db6f686881");
@@ -25,6 +23,9 @@ const kREAL_HISTORY = Components.classesByID[kREAL_HISTORY_CID];
 const kHistoryInterfaces = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
 
 function HistoryWrapper() {
+  this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefService);
+
   this._history = function() {
     var history = kREAL_HISTORY.getService();
     for (var i = 0; i < kHistoryInterfaces.length; i++) {
@@ -50,11 +51,22 @@ HistoryWrapper.prototype =
   /*
    * Determine whether we should hide visited links
    */
-  getIgnoreHistoryPref: function() {
-    return Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefBranch)
-                     .getBoolPref(kTORBUTTON_STATUS_PREF);
+  blockReadHistory: function() {
+    return ((this._prefs.getBoolPref("extensions.torbutton.block_thread") 
+            && this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))
+            || 
+           (this._prefs.getBoolPref("extensions.torbutton.block_nthread") 
+            && !this._prefs.getBoolPref("extensions.torbutton.tor_enabled")));
   },
+
+  blockWriteHistory: function() {
+    return ((this._prefs.getBoolPref("extensions.torbutton.block_thwrite") 
+            && this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))
+            || 
+           (this._prefs.getBoolPref("extensions.torbutton.block_nthwrite") 
+            && !this._prefs.getBoolPref("extensions.torbutton.tor_enabled")));
+  },
+
 
   /* 
    * Copies methods from the true history object we are wrapping
@@ -74,7 +86,7 @@ HistoryWrapper.prototype =
    * Maybe lie about whether link was visited
    */ 
   isVisited: function(aURI) {
-    return (!this.getIgnoreHistoryPref() && 
+    return (!this.blockReadHistory() && 
             this._history().isVisited(aURI));
   },
 
@@ -82,8 +94,7 @@ HistoryWrapper.prototype =
    * Maybe add the URI to the history
    */
   addURI: function(aURI, redirect, toplevel, referrer) { 
-    // XXX: make it possible to make history writeonly.     
-    if(!this.getIgnoreHistoryPref())
+    if(!this.blockWriteHistory())
       this._history().addURI(aURI, redirect, toplevel, referrer);
   },
 
@@ -91,7 +102,7 @@ HistoryWrapper.prototype =
    * Maybe set the title of a URI in the history
    */
   setPageTitle: function(URI, title) {
-    if(!this.getIgnoreHistoryPref())
+    if(!this.blockWriteHistory())
       this._history().setPageTitle(URI, title);
   },
 
@@ -126,7 +137,6 @@ HistoryWrapperFactory.createInstance = function (outer, iid)
 
 var HistoryWrapperModule = new Object();
 
-// XXX: Interesting.. Can we more easily override Date this way?
 HistoryWrapperModule.registerSelf = 
 function (compMgr, fileSpec, location, type){
   var nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;

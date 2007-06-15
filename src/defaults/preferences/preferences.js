@@ -41,7 +41,14 @@ pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description", "chrome://
 pref("extensions.torbutton.tor_enabled",false);
 pref("extensions.torbutton.no_tor_plugins",true);
 pref("extensions.torbutton.clear_cookies",true);
+pref("extensions.torbutton.cookie_jars",false);
 pref("extensions.torbutton.clear_cache",true);
+pref("extensions.torbutton.block_cache",false);
 pref("extensions.torbutton.clear_history",false);
 pref("extensions.torbutton.kill_bad_js",true);
-
+pref("extensions.torbutton.block_thread",true);
+pref("extensions.torbutton.block_thwrite",true);
+pref("extensions.torbutton.block_nthread",true);
+pref("extensions.torbutton.block_nthwrite",false);
+pref("extensions.torbutton.no_updates",true);
+pref("extensions.torbutton.no_search",true);

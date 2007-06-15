@@ -112,18 +112,66 @@
     </groupbox>
     <groupbox>
         <caption label="&torbutton.prefs.sec_settings;"/>
+        <tabbox>
+         <tabs>
+          <tab label="&torbutton.prefs.js_plugins;"/>
+          <tab label="&torbutton.prefs.cookies;"/>
+          <tab label="&torbutton.prefs.cache;"/>
+          <tab label="&torbutton.prefs.history;"/>
+         </tabs>
+         <tabpanels>
+          <tabpanel id="plugins">
+           <vbox>
         <checkbox id="torbutton_disablePlugins" label="&torbutton.prefs.disable_plugins;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_killBadJS" label="&torbutton.prefs.kill_bad_js;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-        <checkbox id="torbutton_clearCookies" label="&torbutton.prefs.clear_cookies;" 
+        <checkbox id="torbutton_noUpdates" label="&torbutton.prefs.no_updates;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-        <checkbox id="torbutton_clearCache" label="&torbutton.prefs.clear_cache;" 
+        <checkbox id="torbutton_noSearch" label="&torbutton.prefs.no_search;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-        <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
+           </vbox>
+          </tabpanel>
+          <tabpanel id="cookies">
+           <vbox>
+            <radiogroup id="torbutton_cookieGroup">
+             <radio id="torbutton_clearCookies"
+                    label="&torbutton.prefs.clear_cookies;" 
+                    oncommand="torbutton_prefs_set_field_attributes(document)"/>             <radio id="torbutton_cookieJars"
+                    label="&torbutton.prefs.cookie_jars;" 
+                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             </radiogroup>
+           </vbox>
+          </tabpanel>
+          <tabpanel id="cache">
+           <vbox>
+            <radiogroup id="torbutton_cacheGroup">
+             <radio id="torbutton_clearCache" 
+                   label="&torbutton.prefs.clear_cache;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             <radio id="torbutton_blockCache" 
+                   label="&torbutton.prefs.block_cache;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            </radiogroup>
+           </vbox>
+          </tabpanel>
+          <tabpanel id="history">
+           <vbox>
+          <checkbox id="torbutton_blockTorHRead" label="&torbutton.prefs.block_thread;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_blockTorHWrite" label="&torbutton.prefs.block_thwrite;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_blockNonTorHRead" label="&torbutton.prefs.block_nthread;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_blockNonTorHWrite" label="&torbutton.prefs.block_nthwrite;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+           </vbox>
+          </tabpanel>
+         </tabpanels>
+        </tabbox>
     </groupbox>
-
 
 <!--
     <checkbox id="torbutton_warnUponExcludedSite" label="&torbutton.prefs.prompt_before_visiting_excluded_sites;" />

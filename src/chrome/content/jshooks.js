@@ -1,16 +1,19 @@
-/* dump("Loading torbutton/jshooks.js\n"); */
-
-function __HookObjects() {
-  /* TODO: It might be a good idea to hook window sizes also..
-     But that will almost certainly fuck with rendering */
-
-  /* XXX: Is it possible this breaks plugin install or other weird shit
-     for non-windows OS's? */
-  navigator.__defineGetter__("platform", 
-        function() { return "Windows";});
+var __HookObjects = function() {
+  /* XXX: Removeme once verified not to run twice */
+  if (typeof(window.__tb_hooks_ran) != 'undefined') {
+      alert("Error, double jshook!");
+      return;
+  }
   
-  navigator.__defineGetter__("oscpu", 
-        function() { return "Win32 i686";});
+  /* TODO: It might be a good idea to hook window sizes also..
+     But that will almost certainly fuck with rendering.. Maybe set
+     user's window to a fixed size? */
+
+  /* Hrmm.. Is it possible this breaks plugin install or other weird shit
+     for non-windows OS's? */
+  /* XXX: navigator.userAgent? navigator.plugins? */
+  navigator.__defineGetter__("platform", function() { return "Windows";});
+  navigator.__defineGetter__("oscpu", function() { return "Win32 i686";});
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
@@ -29,7 +32,7 @@ function __HookObjects() {
     var s = str.toLowerCase();
     var re = new RegExp('\\(.*\\)', "gm");
     s = s.replace(re, "");
-    dump(s);
+
     /* Step 2: Look for +/-. If found, do nothing */
     if(s.indexOf("+") == -1 && s.indexOf("-") == -1) {
       /* Step 3: Look for timezone string from
@@ -148,7 +151,9 @@ function __HookObjects() {
   Date.UTC=function(){return tmp.apply(tmp, arguments); }
 }
 
-if (typeof(window.__tb_hooks_ran) == 'undefined') {
-    window.__tb_hooks_ran = true;
+if (__HookObjects) {
     __HookObjects();
+    __HookObjects = undefined;
+    /* XXX: Removeme */
+    window.__tb_hooks_ran = true;
 }

@@ -136,12 +136,39 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_socksPort').value    = o_torprefs.getIntPref('socks_port');
     // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
-	// XXX: work this in with recommended settigns stuff?
     doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
     doc.getElementById('torbutton_clearHistory').checked = o_torprefs.getBoolPref('clear_history');
-    doc.getElementById('torbutton_clearCache').checked = o_torprefs.getBoolPref('clear_cache');
-    doc.getElementById('torbutton_clearCookies').checked = o_torprefs.getBoolPref('clear_cookies'); 
     doc.getElementById('torbutton_killBadJS').checked = o_torprefs.getBoolPref('kill_bad_js');
+    
+    if(o_torprefs.getBoolPref('clear_cache')) {
+        doc.getElementById('torbutton_cacheGroup').selectedItem =
+            doc.getElementById('torbutton_clearCache');
+        o_torprefs.setBoolPref('block_cache', false);
+    } else {
+        doc.getElementById('torbutton_cacheGroup').selectedItem =
+            doc.getElementById('torbutton_blockCache');
+        o_torprefs.setBoolPref('block_cache', true);
+        o_torprefs.setBoolPref('clear_cache', false);
+    }
+        
+    if(o_torprefs.getBoolPref('clear_cookies')) {
+        doc.getElementById('torbutton_cookieGroup').selectedItem = 
+            doc.getElementById('torbutton_clearCookies');
+        o_torprefs.setBoolPref('cookie_jars', false);
+    } else {
+        doc.getElementById('torbutton_cookieGroup').selectedItem =
+            doc.getElementById('torbutton_cookieJars');
+        o_torprefs.setBoolPref('cookie_jars', true);
+        o_torprefs.setBoolPref('clear_cookies', false); 
+    }
+
+    doc.getElementById('torbutton_blockTorHRead').checked = o_torprefs.getBoolPref('block_thread');
+    doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
+    doc.getElementById('torbutton_blockNonTorHRead').checked = o_torprefs.getBoolPref('block_nthread');
+    doc.getElementById('torbutton_blockNonTorHWrite').checked = o_torprefs.getBoolPref('block_nthwrite');
+    doc.getElementById('torbutton_noSearch').checked = o_torprefs.getBoolPref('no_search');
+    doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
+
     torbutton_prefs_set_field_attributes(doc);
 }
 
@@ -180,12 +207,21 @@ function torbutton_prefs_save(doc) {
     }
     // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
 
-	// XXX: work this in with recommended settigns stuff?
     o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_disablePlugins').checked);
     o_torprefs.setBoolPref('clear_history', doc.getElementById('torbutton_clearHistory').checked);
-    o_torprefs.setBoolPref('clear_cache', doc.getElementById('torbutton_clearCache').checked);
-    o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').checked);
     o_torprefs.setBoolPref('kill_bad_js', doc.getElementById('torbutton_killBadJS').checked);
+
+    o_torprefs.setBoolPref('clear_cache', doc.getElementById('torbutton_clearCache').selected);
+    o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
+    o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').selected);
+    o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
+    
+    o_torprefs.setBoolPref('block_thread', doc.getElementById('torbutton_blockTorHRead').checked);
+    o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);
+    o_torprefs.setBoolPref('block_nthread', doc.getElementById('torbutton_blockNonTorHRead').checked);
+    o_torprefs.setBoolPref('block_nthwrite', doc.getElementById('torbutton_blockNonTorHWrite').checked);
+    o_torprefs.setBoolPref('no_search', doc.getElementById('torbutton_noSearch').checked);
+    o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();

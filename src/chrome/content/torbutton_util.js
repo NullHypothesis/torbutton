@@ -120,12 +120,5 @@ function torbutton_activate_tor_settings()
       liveprefs.setBoolPref('socks_remote_dns', true);
   }
   liveprefs.setIntPref('type', 1);
-
-  // XXX: hrmm.. This seems awfully inefficient
-  var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-
-  if(torprefs.getBoolPref("no_tor_plugins")) {
-    torprefs.setBoolPref("allow_plugins", false);
-  }
 }
 

@@ -14,12 +14,24 @@
 <!ENTITY torbutton.prefs.proxy.host.gopher              "Gopher Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.socks               "SOCKS Host:">
 <!ENTITY torbutton.prefs.proxy.port                     "Port:">
-<!ENTITY torbutton.prefs.sec_settings		"Security Settings">
-<!ENTITY torbutton.prefs.clear_history		"Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache		"Clear cache on Tor toggle (recommended)">
-<!ENTITY torbutton.prefs.clear_cookies		"Clear cookies on Tor toggle (recommended)">
-<!ENTITY torbutton.prefs.disable_plugins	"Disable plugins during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.kill_bad_js	    "Block dangerous javascript (recommended)">
+<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
+<!ENTITY torbutton.prefs.block_thread        "Block history read during Tor (recomended)">
+<!ENTITY torbutton.prefs.block_thwrite       "Block history write during Tor (recomended)">
+<!ENTITY torbutton.prefs.block_nthread       "Block history read during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.block_nthwrite      "Block history write during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
+<!ENTITY torbutton.prefs.clear_cache        "Clear cache on Tor toggle">
+<!ENTITY torbutton.prefs.block_cache        "Block cache during Tor">
+<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
+<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
+<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (recommended)">
+<!ENTITY torbutton.prefs.kill_bad_js        "Block dangerous javascript (recommended)">
+<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
+<!ENTITY torbutton.prefs.js_plugins         "Plugins+javascript">
+<!ENTITY torbutton.prefs.cookies              "Cookies">
+<!ENTITY torbutton.prefs.cache                "Cache">
+<!ENTITY torbutton.prefs.history             "History">
+<!ENTITY torbutton.prefs.no_search           "Disable search suggestions (optional)">
 <!ENTITY torbutton.about.title                          "About Torbutton">
 <!ENTITY torbutton.pref_connection.notice               "Disable Torbutton to change these settings.">
 <!ENTITY torbutton.pref_connection.more_info            "More information">
