@@ -166,8 +166,10 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
     doc.getElementById('torbutton_blockNonTorHRead').checked = o_torprefs.getBoolPref('block_nthread');
     doc.getElementById('torbutton_blockNonTorHWrite').checked = o_torprefs.getBoolPref('block_nthwrite');
+    doc.getElementById('torbutton_isolateContent').checked = o_torprefs.getBoolPref('isolate_content');
     doc.getElementById('torbutton_noSearch').checked = o_torprefs.getBoolPref('no_search');
     doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
+    doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
 
     torbutton_prefs_set_field_attributes(doc);
 }
@@ -210,6 +212,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_disablePlugins').checked);
     o_torprefs.setBoolPref('clear_history', doc.getElementById('torbutton_clearHistory').checked);
     o_torprefs.setBoolPref('kill_bad_js', doc.getElementById('torbutton_killBadJS').checked);
+    o_torprefs.setBoolPref('isolate_content', doc.getElementById('torbutton_isolateContent').checked);
 
     o_torprefs.setBoolPref('clear_cache', doc.getElementById('torbutton_clearCache').selected);
     o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
@@ -222,6 +225,8 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('block_nthwrite', doc.getElementById('torbutton_blockNonTorHWrite').checked);
     o_torprefs.setBoolPref('no_search', doc.getElementById('torbutton_noSearch').checked);
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
+    
+    o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();

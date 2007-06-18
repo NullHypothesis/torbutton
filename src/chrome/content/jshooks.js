@@ -4,16 +4,17 @@ var __HookObjects = function() {
       alert("Error, double jshook!");
       return;
   }
-  
+ 
   /* TODO: It might be a good idea to hook window sizes also..
      But that will almost certainly fuck with rendering.. Maybe set
      user's window to a fixed size? */
 
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
-  /* XXX: navigator.userAgent? navigator.plugins? */
-  navigator.__defineGetter__("platform", function() { return "Windows";});
-  navigator.__defineGetter__("oscpu", function() { return "Win32 i686";});
+  if(__tb_set_uagent) {
+      var tmp_oscpu = __tb_oscpu;
+      navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+  }
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
@@ -154,6 +155,8 @@ var __HookObjects = function() {
 if (__HookObjects) {
     __HookObjects();
     __HookObjects = undefined;
+    __tb_set_uagent = undefined;
+    __tb_oscpu = undefined;
     /* XXX: Removeme */
     window.__tb_hooks_ran = true;
 }

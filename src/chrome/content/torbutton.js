@@ -1,17 +1,4 @@
-// XXX unresolved security issues:
-//  - http://www.w3.org/TR/REC-CSS2/selector.html#dynamic-pseudo-classes
-//    - Create an nsIContentPolicy based on tor tag state.
-//      - can CSS create popups? a cached fetch may not go through content
-//        policy, open an (untagged/safe tagged) window, and fetch some urls
-//        - Clearing cache on tor state change blocks this, but worth 
-//          investigating
-//          - http://meyerweb.com/eric/css/edge/popups/demo.html
-//          - http://meyerweb.com/eric/css/edge/popups/demo2.html
-//          - http://www.tjkdesign.com/articles/css%20pop%20ups/default.asp
-//          - http://www.brunildo.org/test/CPop.html
-//          - http://www.brunildo.org/test/cssPopMenus.html
-//          - http://bucarotechelp.com/design/csseasy/97112700.asp
-//
+// TODO: check for leaks: http://www.mozilla.org/scriptable/avoiding-leaks.html
 
 // status
 var m_wasinited = false;
@@ -175,7 +162,7 @@ function torbutton_init() {
     if (!m_wasinited) { 
         // Runs every time a new window is opened
         m_prefs =  Components.classes["@mozilla.org/preferences-service;1"]
-                        .getService(Components.interfaces.nsIPrefService);
+                        .getService(Components.interfaces.nsIPrefBranch);
 
         torbutton_init_jshooks();
 
@@ -415,9 +402,38 @@ function torbutton_update_status(mode) {
     var changed = (torprefs.getBoolPref('tor_enabled') != mode);
     torprefs.setBoolPref('tor_enabled', mode);
 
-    torbutton_log(2, 'called update_status('+mode+')');
+    torbutton_log(2, 'called update_status: '+mode);
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
+
+    if(torprefs.getBoolPref("set_uagent")) {
+        if(mode) {
+            m_prefs.setCharPref("general.appname.override", 
+                torprefs.getCharPref("appname_override"));
+
+            m_prefs.setCharPref("general.appversion.override",
+                torprefs.getCharPref("appversion_override"));
+
+            m_prefs.setCharPref("general.platform.override",
+                torprefs.getCharPref("platform_override"));
+
+            m_prefs.setCharPref("general.useragent.override",
+                torprefs.getCharPref("useragent_override"));
+
+            m_prefs.setCharPref("general.useragent.vendor",
+                torprefs.getCharPref("useragent_vendor"));
+
+            m_prefs.setCharPref("general.useragent.vendorSub",
+                torprefs.getCharPref("useragent_vendorSub"));
+        } else {
+            m_prefs.clearUserPref("general.appname.override");
+            m_prefs.clearUserPref("general.appversion.override");
+            m_prefs.clearUserPref("general.platform.override");
+            m_prefs.clearUserPref("general.useragent.override");
+            m_prefs.clearUserPref("general.useragent.vendor");
+            m_prefs.clearUserPref("general.useragent.vendorSub");
+        }
+    }
 
     // this function is called every time there is a new window! Alot of this
     // stuff expects to be called on toggle only.. like the cookie jars and
@@ -435,9 +451,15 @@ function torbutton_update_status(mode) {
 
     if (torprefs.getBoolPref('block_cache')) {
         m_prefs.setBoolPref("browser.cache.memory.enable", !mode);
-        m_prefs.setBoolPref("browser.cache.disk.enable", !mode);
         m_prefs.setBoolPref("network.http.use-cache", !mode);
     }
+
+    // Always block disk cache during Tor. We clear it on toggle, 
+    // so no need to keep it around for someone to rifle through.
+    m_prefs.setBoolPref("browser.cache.disk.enable", !mode);
+
+    // Always, always disable remote "safe browsing" lookups.
+    m_prefs.setBoolPref("browser.safebrowsing.remoteLookups", false);
 
     if (torprefs.getBoolPref("no_search")) {
         m_prefs.setBoolPref("browser.search.suggest.enabled", !mode);
@@ -448,7 +470,7 @@ function torbutton_update_status(mode) {
     }
 
     torbutton_toggle_jsplugins(!mode, 
-            torprefs.getBoolPref("kill_bad_js"),
+            torprefs.getBoolPref("isolate_content"),
             torprefs.getBoolPref("no_tor_plugins"));
 
     // TODO: Investigate Firefox privacy clear-data settings.. 
@@ -631,11 +653,11 @@ function CheckDocshellTagForJS(browser, allowed, js_enabled) {
     }
 }
 
-function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, kill_js, 
+function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_js, 
                                         kill_plugins) {
     var browser = win.getBrowser();
 
-    if(kill_js) CheckDocshellTagForJS(browser, allowed, js_enabled);
+    if(isolate_js) CheckDocshellTagForJS(browser, allowed, js_enabled);
     if(kill_plugins) browser.docShell.allowPlugins = allowed;
 
     var browsers = browser.browsers;
@@ -644,7 +666,7 @@ function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, kill_js,
         var b = browser.browsers[i];
         if (b) {
             if(kill_plugins) b.docShell.allowPlugins = allowed;
-            if(kill_js) CheckDocshellTagForJS(b, allowed, js_enabled);
+            if(isolate_js) CheckDocshellTagForJS(b, allowed, js_enabled);
             // kill meta-refresh and existing page loading 
             b.webNavigation.stop(b.webNavigation.STOP_ALL);
         }
@@ -653,16 +675,15 @@ function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, kill_js,
 
 // This is an ugly beast.. But unfortunately it has to be so..
 // Looping over all tabs twice is not somethign we wanna do..
-function torbutton_toggle_jsplugins(allowed, kill_js, kill_plugins) {
+function torbutton_toggle_jsplugins(allowed, isolate_js, kill_plugins) {
     torbutton_log(1, "Plugins: "+allowed);
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                        .getService(Components.interfaces.nsIWindowMediator);
-    var js_enabled = m_prefs.getBoolPref("javascript.enabled");
-
     var enumerator = wm.getEnumerator("navigator:browser");
+    var js_enabled = m_prefs.getBoolPref("javascript.enabled");
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
-        torbutton_toggle_win_jsplugins(win, allowed, js_enabled, kill_js, 
+        torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_js, 
                                        kill_plugins);   
     }
 }
@@ -689,7 +710,7 @@ function NewTabEvent(event)
     var browser = event.currentTarget;
 
     TagNewBrowser(browser, tor_tag, no_plugins);
-    
+
     // Fucking garbage.. event is delivered to the current tab, not the 
     // newly created one. Need to traverse the current window for it.
     for (var i = 0; i < browser.browsers.length; ++i) {
@@ -761,6 +782,7 @@ function hookDoc(doc) {
     var tor_tag = !m_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var js_enabled = m_prefs.getBoolPref("javascript.enabled");
 
+    // TODO: try nsIWindowWatcher.getChromeForWindow()
     if (browser.contentDocument == doc) {
         browser.__tb_js_state = tor_tag;
         browser.docShell.allowJavascript = js_enabled;
@@ -777,7 +799,7 @@ function hookDoc(doc) {
 
     torbutton_log(1, "JS set to: " 
         + m_prefs.getBoolPref("javascript.enabled"));
-
+    
     // No need to hook js if tor is off, right?
     if(!m_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
             || !m_prefs.getBoolPref('extensions.torbutton.kill_bad_js'))
@@ -790,7 +812,9 @@ function hookDoc(doc) {
      * A: Negatory.. Date() is not an XPCOM component :(
      */
 
-    var str = "<"+"script>";
+    var str = "<"+"script>\r\n";
+    str += "var __tb_set_uagent="+m_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
+    str += "var __tb_oscpu=\""+m_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
     str += m_jshooks; 
     str += "</"+"script>";
     var d = doc.createElement("div");

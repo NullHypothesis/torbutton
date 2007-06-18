@@ -114,15 +114,18 @@
         <caption label="&torbutton.prefs.sec_settings;"/>
         <tabbox>
          <tabs>
-          <tab label="&torbutton.prefs.js_plugins;"/>
+          <tab label="&torbutton.prefs.dynamic;"/>
           <tab label="&torbutton.prefs.cookies;"/>
           <tab label="&torbutton.prefs.cache;"/>
           <tab label="&torbutton.prefs.history;"/>
+          <tab label="&torbutton.prefs.uagent;"/>
          </tabs>
          <tabpanels>
           <tabpanel id="plugins">
            <vbox>
         <checkbox id="torbutton_disablePlugins" label="&torbutton.prefs.disable_plugins;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_isolateContent" label="&torbutton.prefs.isolate_content;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_killBadJS" label="&torbutton.prefs.kill_bad_js;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
@@ -169,6 +172,13 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
+          <tabpanel id="uagent">
+           <vbox>
+          <checkbox id="torbutton_setUagent" label="&torbutton.prefs.set_uagent;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+           </vbox>
+          </tabpanel>
+
          </tabpanels>
         </tabbox>
     </groupbox>

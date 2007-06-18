@@ -24,7 +24,7 @@ const kHistoryInterfaces = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
 
 function HistoryWrapper() {
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
-      .getService(Components.interfaces.nsIPrefService);
+      .getService(Components.interfaces.nsIPrefBranch);
 
   this._history = function() {
     var history = kREAL_HISTORY.getService();
