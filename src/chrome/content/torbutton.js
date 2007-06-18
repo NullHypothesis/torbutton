@@ -406,6 +406,7 @@ function torbutton_update_status(mode) {
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
 
+    torbutton_log(2, 'Setting user agent');
     if(torprefs.getBoolPref("set_uagent")) {
         if(mode) {
             m_prefs.setCharPref("general.appname.override", 
@@ -426,14 +427,21 @@ function torbutton_update_status(mode) {
             m_prefs.setCharPref("general.useragent.vendorSub",
                 torprefs.getCharPref("useragent_vendorSub"));
         } else {
-            m_prefs.clearUserPref("general.appname.override");
-            m_prefs.clearUserPref("general.appversion.override");
-            m_prefs.clearUserPref("general.platform.override");
-            m_prefs.clearUserPref("general.useragent.override");
-            m_prefs.clearUserPref("general.useragent.vendor");
-            m_prefs.clearUserPref("general.useragent.vendorSub");
+            try {
+                m_prefs.clearUserPref("general.appname.override");
+                m_prefs.clearUserPref("general.appversion.override");
+                m_prefs.clearUserPref("general.platform.override");
+                m_prefs.clearUserPref("general.useragent.override");
+                m_prefs.clearUserPref("general.useragent.vendor");
+                m_prefs.clearUserPref("general.useragent.vendorSub");
+            } catch (e) {
+                // This happens because we run this from time to time
+                torbutton_log(1, "Prefs already cleared");
+            }
         }
     }
+    
+    torbutton_log(2, 'Done with user agent: '+changed);
 
     // this function is called every time there is a new window! Alot of this
     // stuff expects to be called on toggle only.. like the cookie jars and

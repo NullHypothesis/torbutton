@@ -3,8 +3,9 @@
  * (such as CSS)
  *   - http://www.w3.org/TR/REC-CSS2/selector.html#dynamic-pseudo-classes
  * 
- * Also serves as a safety net to catch content the other
- * mechaanisms somehow fail to block.
+ * Also serves as a safety net to catch content the other mechanisms 
+ * somehow might be tricked into failing to block (this should not happen 
+ * in normal operation though).
  *
  * Based on examples from:
  * - http://adblockplus.org/en/faq_internal
@@ -81,8 +82,6 @@ var localSchemes = {"about" : true, "chrome" : true, "file" : true,
     "mailbox" : true, "data" : true, "javascript" : true};
 
 var policy = {
-	allowOnce: null,
-
 	init: function() {
         dump("init\n");
         this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -104,7 +103,7 @@ var policy = {
     // have to continually query prefs
 	// nsIContentPolicy interface implementation
 	shouldLoad: function(contentType, contentLocation, requestOrigin, insecNode, mimeTypeGuess, extra) {
-        dump("ContentLocation: "+contentLocation.spec + " request "+requestOrigin.spec+"\n");
+        dump("ContentLocation: "+contentLocation.spec+"\n");
        
         /*. Debugging hack. DO NOT UNCOMMENT IN PRODUCTION ENVIRONMENTS
         if(contentLocation.spec.search("venkman") != -1) {
@@ -125,11 +124,6 @@ var policy = {
         var node = wrapNode(insecNode);
         var wind = getWindow(wrapNode(insecNode));
 
-		if (!wind || !wind.top.location || !wind.top.location.href) {
-            dump("Location\n");
-			return ok;
-        }
-
 		if (this.isLocalScheme(unwrapURL(contentLocation.spec))) {
 			return ok;
         } 
@@ -139,6 +133,11 @@ var policy = {
 			node = node.contentWindow;
 			wind = node;
 		}
+
+        if (!wind || !wind.top.location || !wind.top.location.href) {
+            dump("Location\n");
+			return ok;
+        }
 
         var doc = wind.top.document;
         if(!doc) {
@@ -150,6 +149,12 @@ var policy = {
         var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                      .getService(Components.interfaces.nsIWindowMediator);
         var mainWindow = wm.getMostRecentWindow("navigator:browser");
+
+        if(!mainWindow) {
+            // 1st window gets this.
+            return ok;
+        }
+
         var browser = mainWindow.getBrowser(); 
         var torTag = !this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
        
@@ -157,6 +162,9 @@ var policy = {
         // is gonna be SO fucking slow :(
         // TODO: try nsIWindowWatcher.getChromeForWindow()
         if (browser.contentDocument == doc) {
+            if (typeof(browser.__tb_js_state) == 'undefined') {
+                dump("UNTAGGED WINDOW1!!!!!!!!!");
+            }
             if(browser.__tb_js_state == torTag) {
                 return ok;
             } else {
@@ -168,6 +176,10 @@ var policy = {
         for (var i = 0; i < browser.browsers.length; ++i) {
             var b = browser.browsers[i];
             if (b && b.contentDocument == doc) {
+                if (typeof(browser.__tb_js_state) == 'undefined') {
+                    dump("UNTAGGED WINDOW2!!!!!!!!!");
+                }
+
                 if(b.__tb_js_state == torTag) {
                     return ok;
                 } else {
@@ -177,7 +189,7 @@ var policy = {
             }
         }
 
-        // Favicons hit this.. They have no DOM document.
+        // Favicons hit this.. Their document is browser.xml
         return ok;
 	},
 
