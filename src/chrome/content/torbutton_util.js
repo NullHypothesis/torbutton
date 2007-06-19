@@ -1,7 +1,12 @@
 var m_tb_logger = false;
 var m_tb_console = false;
-var m_debug = true; // XXX: use pref
-var m_loglevel = 1;
+var m_tb_debug = Components.classes["@mozilla.org/preferences-service;1"]
+            .getService(Components.interfaces.nsIPrefBranch)
+            .getBoolPref("extensions.torbutton.debug");
+
+var m_tb_loglevel = Components.classes["@mozilla.org/preferences-service;1"]
+            .getService(Components.interfaces.nsIPrefBranch)
+            .getIntPref("extensions.torbutton.loglevel");
 
 try {
     var logMngr = Components.classes["@mozmonkey.com/debuglogger/manager;1"]
@@ -14,17 +19,20 @@ try {
 }
 
 function torbutton_log(nLevel, sMsg) {
+    if(!m_tb_debug) return;
+
     var rDate = new Date();
     if (m_tb_logger) {
         m_tb_logger.log(nLevel, rDate.getTime()+': '+sMsg);
-    } else if (m_debug && m_tb_console && nLevel >= m_loglevel) {
+    } else if (m_tb_console && nLevel >= m_tb_loglevel) {
         m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
-    } else if (m_debug && nLevel >= m_loglevel) {
+    } else if (nLevel >= m_tb_loglevel) {
         dump(rDate.getTime()+': '+sMsg+"\n");
     }
 }
 
 // get a preferences branch object
+// FIXME: this is lame.
 function torbutton_get_prefbranch(branch_name) {
     var o_prefs = false;
     var o_branch = false;

@@ -4,9 +4,9 @@
 
     <Description about="urn:mozilla:install-manifest">
         <em:name>Torbutton</em:name>
-        <em:creator>Scott Squires</em:creator>
+        <em:creator>Scott Squires &amp; Mike Perry</em:creator>
         <em:id>{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}</em:id>
-        <em:version>1.0.4.906</em:version>
+        <em:version>1.1.1-alpha</em:version>
         <em:homepageURL>http://freehaven.net/~squires/torbutton/</em:homepageURL>
         <em:updateURL>http://freehaven.net/~squires/torbutton/update.rdf</em:updateURL>
         <em:optionsURL>chrome://torbutton/content/preferences.xul</em:optionsURL>

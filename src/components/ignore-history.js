@@ -5,7 +5,6 @@
  * queries and sometimes ignores addURI commands.
  * Designed as a component of FoxTor, http://cups.cs.cmu.edu/foxtor/
  * Copyright 2006, distributed under the same (open source) license as FoxTor
- *   - XXX: ??? Which license is this? Unspecified on website/src 
  *
  * Contributor(s):
  *         Collin Jackson <mozilla@collinjackson.com>

@@ -15,31 +15,24 @@ function torbutton_prefs_set_field_attributes(doc)
     doc.getElementById('torbutton_panelStyleText').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleIcon').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     // Privoxy is always recommended for Firefoxes not support socks_remote_dns
-    if (!torbutton_check_socks_remote_dns())
-    {
+    if (!torbutton_check_socks_remote_dns()) {
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
     } else {
-	  // XXX: This seems broken.. The first time the prefs window is open it 
-      // is still editable.
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
     }
     var proxy_port;
     var proxy_host;
-    if (doc.getElementById('torbutton_usePrivoxy').checked)
-    {
+    if (doc.getElementById('torbutton_usePrivoxy').checked) {
         proxy_host = 'localhost';
         proxy_port = 8118;
-    }
-    else
-    {
+    } else {
         proxy_host = '';
         proxy_port = 0;
     }
 
     if (doc.getElementById('torbutton_settingsMethod').value == 'recommended') {
         torbutton_log(5, "using recommended settings");
-        if (!torbutton_check_socks_remote_dns())
-        {
+        if (!torbutton_check_socks_remote_dns()) {
             doc.getElementById('torbutton_httpProxy').value = proxy_host;
             doc.getElementById('torbutton_httpPort').value = proxy_port;
             doc.getElementById('torbutton_httpsProxy').value = proxy_host;
@@ -194,8 +187,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
     o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
 
-    if (doc.getElementById('torbutton_settingsMethod').value == 'custom')
-    {
+    if (doc.getElementById('torbutton_settingsMethod').value == 'custom') {
         o_customprefs.setCharPref('http_proxy',      doc.getElementById('torbutton_httpProxy').value);
         o_customprefs.setIntPref('http_port',        doc.getElementById('torbutton_httpPort').value);
         o_customprefs.setCharPref('https_proxy',     doc.getElementById('torbutton_httpsProxy').value);

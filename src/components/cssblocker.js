@@ -19,6 +19,7 @@
  *
  *************************************************************************/
 
+// This is all local scope
 const CSSB_CONTRACTID = "@freehaven.net/cssblocker;1";
 const CSSB_CID = Components.ID("{23f4d9ba-023a-94ab-eb75-67aed7562a18}");
 
@@ -145,7 +146,7 @@ var policy = {
             return ok;
         }
 
-        // FIXME: Ugly.. But seems to be no better option..
+        // TODO: Ugly.. But seems to be no better option..
         var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                      .getService(Components.interfaces.nsIWindowMediator);
         var mainWindow = wm.getMostRecentWindow("navigator:browser");

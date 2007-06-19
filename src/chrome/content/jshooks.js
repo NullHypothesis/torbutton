@@ -7,13 +7,16 @@ var __HookObjects = function() {
  
   /* TODO: It might be a good idea to hook window sizes also..
      But that will almost certainly fuck with rendering.. Maybe set
-     user's window to a fixed size? */
+     user's window to a fixed size or random size? That seems annoying 
+     though. */
 
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
   if(__tb_set_uagent) {
       var tmp_oscpu = __tb_oscpu;
+      var tmp_platform = __tb_platform;
       navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+      /*navigator.__defineGetter__("platform", function() { return tmp_platform;});*/
   }
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
@@ -157,6 +160,7 @@ if (__HookObjects) {
     __HookObjects = undefined;
     __tb_set_uagent = undefined;
     __tb_oscpu = undefined;
+    __tb_platform = undefined;
     /* XXX: Removeme */
     window.__tb_hooks_ran = true;
 }

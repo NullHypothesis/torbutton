@@ -17,7 +17,7 @@
     </stringbundleset>
     <label value="Torbutton" style="font-weight: bold;"/>
     <label id="torbuttonVersion"/>
-    <label value="Scott Squires"/>
+    <label value="Scott Squires & Mike Perry"/>
     <label value="http://freehaven.net/~squires/torbutton/"
           class="url"
           style="color: blue; text-decoration: underline;"

@@ -3,7 +3,6 @@
  * Enables selection of separate cookie jars for (more) anonymous browsing.
  * Designed as a component of FoxTor, http://cups.cs.cmu.edu/foxtor/
  * Copyright 2006, distributed under the same (open source) license as FoxTor
- *   - XXX: ??? Which license is this? Unspecified on website/src! 
  *
  * Contributor(s):
  *         Collin Jackson <mozilla@collinjackson.com>
@@ -41,7 +40,7 @@ function CookieJarSelector() {
     }
   };
 
-  var moveProfileFile = function(src, dest) { // XXX: Why does this not work?
+  var moveProfileFile = function(src, dest) { // FIXME: Why does this not work?
     var srcfile = getProfileFile(src);    
     var destfile = getProfileFile(dest);
     if (srcfile.exists()) {
@@ -59,6 +58,8 @@ function CookieJarSelector() {
   }
 
   this.saveCookies = function(name) {
+    // FIXME: There seems to be no way to sync cookies.txt before
+    // doing this :(
     copyProfileFile("cookies.txt", "cookies-" + name + ".txt");
   };
 
