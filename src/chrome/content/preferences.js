@@ -148,10 +148,15 @@ function torbutton_prefs_init(doc) {
         doc.getElementById('torbutton_cookieGroup').selectedItem = 
             doc.getElementById('torbutton_clearCookies');
         o_torprefs.setBoolPref('cookie_jars', false);
-    } else {
+    } else if(o_torprefs.getBoolPref('cookie_jars')) {
         doc.getElementById('torbutton_cookieGroup').selectedItem =
             doc.getElementById('torbutton_cookieJars');
         o_torprefs.setBoolPref('cookie_jars', true);
+        o_torprefs.setBoolPref('clear_cookies', false); 
+    } else {
+        doc.getElementById('torbutton_cookieGroup').selectedItem =
+            doc.getElementById('torbutton_mmmCookies');
+        o_torprefs.setBoolPref('cookie_jars', false);
         o_torprefs.setBoolPref('clear_cookies', false); 
     }
 

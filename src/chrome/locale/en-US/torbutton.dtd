@@ -23,6 +23,7 @@
 <!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
 <!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
 <!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
+<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
 <!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
 <!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (recommended)">
 <!ENTITY torbutton.prefs.kill_bad_js        "Block dangerous javascript (recommended)">
