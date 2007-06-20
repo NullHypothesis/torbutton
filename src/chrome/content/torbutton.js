@@ -68,6 +68,7 @@ var torbutton_pref_observer =
             case "extensions.torbutton.set_uagent":
             case "extensions.torbutton.block_nthwrite":
             case "extensions.torbutton.block_thwrite":
+            case "extensions.torbutton.shutdown_method":
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
                         true);
@@ -416,6 +417,11 @@ function torbutton_update_status(mode, force_update) {
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
 
+    // this function is called every time there is a new window! Alot of this
+    // stuff expects to be called on toggle only.. like the cookie jars and
+    // history/cookie clearing
+    if(!changed && !force_update) return;
+
     torbutton_log(2, 'Setting user agent');
     if(torprefs.getBoolPref("set_uagent")) {
         if(mode) {
@@ -457,13 +463,18 @@ function torbutton_update_status(mode, force_update) {
     
     torbutton_log(2, 'Done with user agent: '+changed);
 
-    // this function is called every time there is a new window! Alot of this
-    // stuff expects to be called on toggle only.. like the cookie jars and
-    // history/cookie clearing
-    if(!changed && !force_update) return;
+    if(torprefs.getIntPref("shutdown_method") == 1) {
+        // clear cookies on shutdown only if tor is enabled.
+        m_tb_prefs.setBoolPref("privacy.item.cookies", true);
+        m_tb_prefs.setBoolPref("privacy.sanitize.promptOnSanitize", false);
+        m_tb_prefs.setBoolPref("privacy.sanitize.sanitizeOnShutdown", mode);
+    } else if(torprefs.getIntPref("shutdown_method") == 2) {
+        // clear cookies on shutdown always
+        m_tb_prefs.setBoolPref("privacy.item.cookies", true);
+        m_tb_prefs.setBoolPref("privacy.sanitize.promptOnSanitize", false);
+        m_tb_prefs.setBoolPref("privacy.sanitize.sanitizeOnShutdown", true);
+    }
 
-    // TODO: store user settings for these groups 
-    //      - never enable them if user wants them off.
     if (torprefs.getBoolPref("no_updates")) {
         m_tb_prefs.setBoolPref("extensions.update.enabled", !mode);
         m_tb_prefs.setBoolPref("app.update.enabled", !mode);

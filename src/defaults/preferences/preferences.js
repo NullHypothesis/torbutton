@@ -55,6 +55,7 @@ pref("extensions.torbutton.no_updates",true);
 pref("extensions.torbutton.isolate_content",true);
 pref("extensions.torbutton.no_search",true);
 pref("extensions.torbutton.set_uagent",true);
+pref("extensions.torbutton.shutdown_method",1); // 0=none, 1=tor, 2=all
 
 // Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4
 pref("extensions.torbutton.appname_override","Netscape");

@@ -115,9 +115,10 @@
         <tabbox>
          <tabs>
           <tab label="&torbutton.prefs.dynamic;"/>
-          <tab label="&torbutton.prefs.cookies;"/>
-          <tab label="&torbutton.prefs.cache;"/>
           <tab label="&torbutton.prefs.history;"/>
+          <tab label="&torbutton.prefs.cache;"/>
+          <tab label="&torbutton.prefs.cookies;"/>
+          <tab label="&torbutton.prefs.shutdown;"/>
           <tab label="&torbutton.prefs.uagent;"/>
          </tabs>
          <tabpanels>
@@ -135,32 +136,6 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
-          <tabpanel id="cookies">
-           <vbox>
-            <radiogroup id="torbutton_cookieGroup">
-             <radio id="torbutton_clearCookies"
-                    label="&torbutton.prefs.clear_cookies;" 
-                    oncommand="torbutton_prefs_set_field_attributes(document)"/>             
-			<radio id="torbutton_cookieJars"
-                    label="&torbutton.prefs.cookie_jars;" 
-                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
-   			<radio id="torbutton_mmmCookies"
-                    label="&torbutton.prefs.mmm_cookies;" 
-                    oncommand="torbutton_prefs_set_field_attributes(document)"/>          </radiogroup>
-           </vbox>
-          </tabpanel>
-          <tabpanel id="cache">
-           <vbox>
-            <radiogroup id="torbutton_cacheGroup">
-             <radio id="torbutton_clearCache" 
-                   label="&torbutton.prefs.clear_cache;" 
-                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-             <radio id="torbutton_blockCache" 
-                   label="&torbutton.prefs.block_cache;" 
-                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-            </radiogroup>
-           </vbox>
-          </tabpanel>
           <tabpanel id="history">
            <vbox>
           <checkbox id="torbutton_blockTorHRead" label="&torbutton.prefs.block_thread;" 
@@ -175,13 +150,54 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
+          <tabpanel id="cache">
+           <vbox>
+            <radiogroup id="torbutton_cacheGroup">
+             <radio id="torbutton_clearCache" 
+                   label="&torbutton.prefs.clear_cache;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             <radio id="torbutton_blockCache" 
+                   label="&torbutton.prefs.block_cache;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            </radiogroup>
+           </vbox>
+          </tabpanel>
+          <tabpanel id="cookies">
+           <vbox>
+            <radiogroup id="torbutton_cookieGroup">
+             <radio id="torbutton_clearCookies"
+                    label="&torbutton.prefs.clear_cookies;" 
+                    oncommand="torbutton_prefs_set_field_attributes(document)"/>             
+            <radio id="torbutton_cookieJars"
+                    label="&torbutton.prefs.cookie_jars;" 
+                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            <radio id="torbutton_mmmCookies"
+                    label="&torbutton.prefs.mmm_cookies;" 
+                    oncommand="torbutton_prefs_set_field_attributes(document)"/> 
+            </radiogroup>
+           </vbox>
+          </tabpanel>
+          <tabpanel id="shutdown">
+           <vbox>
+            <radiogroup id="torbutton_shutdownGroup">
+             <radio id="torbutton_noShutdown" 
+                   label="&torbutton.prefs.no_shutdown;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             <radio id="torbutton_torShutdown" 
+                   label="&torbutton.prefs.tor_shutdown;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             <radio id="torbutton_allShutdown" 
+                   label="&torbutton.prefs.all_shutdown;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            </radiogroup>
+           </vbox>
+          </tabpanel>
           <tabpanel id="uagent">
            <vbox>
           <checkbox id="torbutton_setUagent" label="&torbutton.prefs.set_uagent;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
-
          </tabpanels>
         </tabbox>
     </groupbox>

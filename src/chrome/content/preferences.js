@@ -159,6 +159,18 @@ function torbutton_prefs_init(doc) {
         o_torprefs.setBoolPref('cookie_jars', false);
         o_torprefs.setBoolPref('clear_cookies', false); 
     }
+    
+    if(o_torprefs.getIntPref('shutdown_method') == 0) {
+        doc.getElementById('torbutton_shutdownGroup').selectedItem
+            = doc.getElementById('torbutton_noShutdown');
+    } else if(o_torprefs.getIntPref('shutdown_method') == 1) {
+        doc.getElementById('torbutton_shutdownGroup').selectedItem
+            = doc.getElementById('torbutton_torShutdown');
+    } else {
+        o_torprefs.setIntPref('shutdown_method', 2); 
+        doc.getElementById('torbutton_shutdownGroup').selectedItem
+            = doc.getElementById('torbutton_allShutdown');
+    }
 
     doc.getElementById('torbutton_blockTorHRead').checked = o_torprefs.getBoolPref('block_thread');
     doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
@@ -168,6 +180,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_noSearch').checked = o_torprefs.getBoolPref('no_search');
     doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
     doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
+    
 
     torbutton_prefs_set_field_attributes(doc);
 }
@@ -215,7 +228,18 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
     o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').selected);
     o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
-    
+
+
+    if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
+            doc.getElementById('torbutton_noShutdown')) {
+        o_torprefs.setIntPref('shutdown_method', 0); 
+    } else if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
+            doc.getElementById('torbutton_torShutdown')) {
+        o_torprefs.setIntPref('shutdown_method', 1); 
+    } else {
+        o_torprefs.setIntPref('shutdown_method', 2); 
+    }
+
     o_torprefs.setBoolPref('block_thread', doc.getElementById('torbutton_blockTorHRead').checked);
     o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);
     o_torprefs.setBoolPref('block_nthread', doc.getElementById('torbutton_blockNonTorHRead').checked);
