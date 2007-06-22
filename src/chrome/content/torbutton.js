@@ -179,8 +179,9 @@ function torbutton_init() {
         torbutton_init_jshooks();
 
         torbutton_log(5, 'registering pref observer');
-        // FIXME: Hrmm... Do we really need a pref observer for each window?
+        // FIXME: Hrmm... Do we really need observers for each window?
         torbutton_pref_observer.register(); 
+        torbutton_uninstall_observer.register();
         m_tb_wasinited = true;
     } else {
         torbutton_log(5, 'skipping pref observer init');
@@ -521,24 +522,24 @@ function torbutton_update_status(mode, force_update) {
     // http://kb.mozillazine.org/About:config_entries
     if(mode) {
         if(torprefs.getBoolPref('block_thwrite')) {
-            m_tb_prefs.setIntPref("browser.sessionstore.privacy_level", 2);
+            m_tb_prefs.setIntPref("browser.sessionstore.enabled", false);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setIntPref("browser.sessionstore.privacy_level", 1);
+            m_tb_prefs.setIntPref("browser.sessionstore.enabled", true);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
             m_tb_prefs.setBoolPref("browser.formfill.enable", true);
             m_tb_prefs.setBoolPref("signon.rememberSignons", true);
         }
     } else {
         if(torprefs.getBoolPref('block_nthwrite')) {
-            m_tb_prefs.setIntPref("browser.sessionstore.privacy_level", 2);
+            m_tb_prefs.setIntPref("browser.sessionstore.enabled", false);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setIntPref("browser.sessionstore.privacy_level", 1);
+            m_tb_prefs.setIntPref("browser.sessionstore.enabled", true);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
             m_tb_prefs.setBoolPref("browser.formfill.enable", true);
             m_tb_prefs.setBoolPref("signon.rememberSignons", true);
@@ -788,6 +789,52 @@ function torbutton_new_window(event)
       Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 }
 
+// Technique courtesy of:
+// http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
+const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
+var torbutton_uninstall_observer = {
+_uninstall : false,
+observe : function(subject, topic, data) {
+  if (topic == "em-action-requested") {
+    subject.QueryInterface(Components.interfaces.nsIUpdateItem);
+    torbutton_log(1, "Uninstall: "+data+" "+subject.id.toUpperCase());
+
+    if (subject.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
+      torbutton_log(1, "Uninstall: "+data);
+      // XXX: What about disabled??
+      if (data == "item-uninstalled" || data == "item-disabled") {
+        this._uninstall = true;
+      } else if (data == "item-cancel-action") {
+        this._uninstall = false;
+      }
+    }
+  } else if (topic == "quit-application-granted") {
+    if (this._uninstall) {
+        torbutton_disable_tor();
+        // Still called by pref observer:
+        // torbutton_update_status(false, false);
+    }
+    this.unregister();
+  }
+},
+register : function() {
+ var observerService =
+   Components.classes["@mozilla.org/observer-service;1"].
+     getService(Components.interfaces.nsIObserverService);
+
+ observerService.addObserver(this, "em-action-requested", false);
+ observerService.addObserver(this, "quit-application-granted", false);
+},
+unregister : function() {
+  var observerService =
+    Components.classes["@mozilla.org/observer-service;1"].
+      getService(Components.interfaces.nsIObserverService);
+
+  observerService.removeObserver(this,"em-action-requested");
+  observerService.removeObserver(this,"quit-application-granted");
+}
+}
+
 window.addEventListener('load',torbutton_new_window,false);
 getBrowser().addEventListener("TabOpen", torbutton_new_tab, false);
 
@@ -866,9 +913,10 @@ function torbutton_hookdoc(doc) {
      */
 
     var str = "<"+"script>\r\n";
-    str += "var __tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
-    str += "var __tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
-    str += "var __tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
+    str += "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
+    str += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
+    str += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
+    str += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
     str += m_tb_jshooks; 
     str += "</"+"script>";
     var d = doc.createElement("div");

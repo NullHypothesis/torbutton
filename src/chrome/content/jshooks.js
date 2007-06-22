@@ -1,4 +1,4 @@
-var __HookObjects = function() {
+window.__HookObjects = function() {
   /* XXX: Removeme once verified not to run twice */
   if (typeof(window.__tb_hooks_ran) != 'undefined') {
       alert("Error, double jshook!");
@@ -13,9 +13,11 @@ var __HookObjects = function() {
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
   if(__tb_set_uagent) {
-      var tmp_oscpu = __tb_oscpu;
-      var tmp_platform = __tb_platform;
+      var tmp_oscpu = window.__tb_oscpu;
+      var tmp_platform = window.__tb_platform;
+      var tmp_productSub = window.__tb_productSub;
       navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+      navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
       /*navigator.__defineGetter__("platform", function() { return tmp_platform;});*/
   }
 
@@ -155,12 +157,15 @@ var __HookObjects = function() {
   Date.UTC=function(){return tmp.apply(tmp, arguments); }
 }
 
-if (__HookObjects) {
-    __HookObjects();
-    __HookObjects = undefined;
-    __tb_set_uagent = undefined;
-    __tb_oscpu = undefined;
-    __tb_platform = undefined;
+if (window.__HookObjects) {
+    window.__HookObjects();
+
+    delete window['__HookObjects'];
+    delete window['__tb_set_uagent'];
+    delete window['__tb_oscpu'];
+    delete window['__tb_platform'];
+    delete window['__tb_productSub'];
+
     /* XXX: Removeme */
     window.__tb_hooks_ran = true;
 }
