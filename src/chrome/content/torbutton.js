@@ -1,4 +1,8 @@
 // TODO: check for leaks: http://www.mozilla.org/scriptable/avoiding-leaks.html
+// TODO: Double-check there are no strange exploits to defeat:
+//       http://kb.mozillazine.org/Links_to_local_pages_don%27t_work
+// FIXME: Browser accept, locale, currency? (intl.*)
+//    - Need to see which of these actually change and are server-visible
 
 // status
 var m_tb_wasinited = false;
@@ -69,6 +73,7 @@ var torbutton_pref_observer =
             case "extensions.torbutton.block_nthwrite":
             case "extensions.torbutton.block_thwrite":
             case "extensions.torbutton.shutdown_method":
+            case "extensions.torbutton.disable_sessionstore":
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
                         true);
@@ -518,11 +523,18 @@ function torbutton_update_status(mode, force_update) {
         torbutton_clear_history();
     }
 
+    // FIXME:
+    // http://lxr.mozilla.org/seamonkey/source/browser/components/sessionstore/nsISessionStore.idl
+    // or just make a pref to always disable store
+    // http://wiki.mozilla.org/Session_Restore
     // http://kb.mozillazine.org/Browser.sessionstore.privacy_level
     // http://kb.mozillazine.org/About:config_entries
+
+    m_tb_prefs.setBoolPref("browser.sessionstore.enabled", 
+            !torprefs.getBoolPref("disable_sessionstore"));
+
     if(mode) {
         if(torprefs.getBoolPref('block_thwrite')) {
-            m_tb_prefs.setIntPref("browser.sessionstore.enabled", false);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
@@ -534,12 +546,10 @@ function torbutton_update_status(mode, force_update) {
         }
     } else {
         if(torprefs.getBoolPref('block_nthwrite')) {
-            m_tb_prefs.setIntPref("browser.sessionstore.enabled", false);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setIntPref("browser.sessionstore.enabled", true);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
             m_tb_prefs.setBoolPref("browser.formfill.enable", true);
             m_tb_prefs.setBoolPref("signon.rememberSignons", true);

@@ -190,6 +190,8 @@
                    label="&torbutton.prefs.all_shutdown;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
             </radiogroup>
+            <checkbox id="torbutton_noSessionStore" label="&torbutton.prefs.disable_sessionstore;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
           <tabpanel id="uagent">

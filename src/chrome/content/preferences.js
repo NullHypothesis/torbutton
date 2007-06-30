@@ -172,6 +172,7 @@ function torbutton_prefs_init(doc) {
             = doc.getElementById('torbutton_allShutdown');
     }
 
+    doc.getElementById('torbutton_noSessionStore').checked = o_torprefs.getBoolPref('disable_sessionstore');
     doc.getElementById('torbutton_blockTorHRead').checked = o_torprefs.getBoolPref('block_thread');
     doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
     doc.getElementById('torbutton_blockNonTorHRead').checked = o_torprefs.getBoolPref('block_nthread');
@@ -240,6 +241,7 @@ function torbutton_prefs_save(doc) {
         o_torprefs.setIntPref('shutdown_method', 2); 
     }
 
+    o_torprefs.setBoolPref('disable_sessionstore', doc.getElementById('torbutton_noSessionStore').checked);
     o_torprefs.setBoolPref('block_thread', doc.getElementById('torbutton_blockTorHRead').checked);
     o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);
     o_torprefs.setBoolPref('block_nthread', doc.getElementById('torbutton_blockNonTorHRead').checked);

@@ -137,11 +137,15 @@ window.__HookObjects = function() {
     Date.prototype.toLocaleDateString=function(){return d.toUTCString();}
     Date.prototype.toDateString=function(){return d.toUTCString();}
     Date.prototype.toTimeString=function(){return d.toUTCString();}
-
+    
     /* Hack to solve the problem of multiple date objects
      * all sharing the same lexically scoped d every time a new one is
      * created. This hack creates a fresh new prototype reference for 
      * the next object to use with a different d binding.
+     * It doesn't break stuff because at the start of this function, 
+     * the interpreter grabbed a reference to Date.prototype. During 
+     * this function we modified Date.prototype to create the new methods
+     * with the lexically scoped d reference.
      */
     Date.prototype = new Object.prototype.toSource();
     return d.toUTCString();
