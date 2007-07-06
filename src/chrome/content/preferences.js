@@ -181,6 +181,8 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_noSearch').checked = o_torprefs.getBoolPref('no_search');
     doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
     doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
+    doc.getElementById('torbutton_noReferer').checked = o_torprefs.getBoolPref('disable_referer');
+    doc.getElementById('torbutton_spoofEnglish').checked = o_torprefs.getBoolPref('spoof_english');
     
 
     torbutton_prefs_set_field_attributes(doc);
@@ -250,6 +252,8 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
     
     o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
+    o_torprefs.setBoolPref('disable_referer', doc.getElementById('torbutton_noReferer').checked);
+    o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();

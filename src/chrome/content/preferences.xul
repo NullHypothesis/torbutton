@@ -119,7 +119,7 @@
           <tab label="&torbutton.prefs.cache;"/>
           <tab label="&torbutton.prefs.cookies;"/>
           <tab label="&torbutton.prefs.shutdown;"/>
-          <tab label="&torbutton.prefs.uagent;"/>
+          <tab label="&torbutton.prefs.headers;"/>
          </tabs>
          <tabpanels>
           <tabpanel id="plugins">
@@ -194,10 +194,14 @@
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
-          <tabpanel id="uagent">
+          <tabpanel id="headers">
            <vbox>
           <checkbox id="torbutton_setUagent" label="&torbutton.prefs.set_uagent;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_spoofEnglish" label="&torbutton.prefs.spoof_english;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_noReferer" label="&torbutton.prefs.disable_referer;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
          </tabpanels>

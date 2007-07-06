@@ -1,8 +1,6 @@
 // TODO: check for leaks: http://www.mozilla.org/scriptable/avoiding-leaks.html
 // TODO: Double-check there are no strange exploits to defeat:
 //       http://kb.mozillazine.org/Links_to_local_pages_don%27t_work
-// FIXME: Browser accept, locale, currency? (intl.*)
-//    - Need to see which of these actually change and are server-visible
 
 // status
 var m_tb_wasinited = false;
@@ -65,6 +63,11 @@ var torbutton_pref_observer =
             case "network.proxy.type":
                 torbutton_set_status();
                 break;
+            case "extensions.torbutton.disable_referer":
+                if(!m_tb_prefs.getBoolPref("extensions.torbutton.disable_referer")) {
+                    m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", true);
+                    m_tb_prefs.setIntPref("network.http.sendRefererHeader", 2);
+                }
             case "extensions.torbutton.no_tor_plugins":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
@@ -74,6 +77,7 @@ var torbutton_pref_observer =
             case "extensions.torbutton.block_thwrite":
             case "extensions.torbutton.shutdown_method":
             case "extensions.torbutton.disable_sessionstore":
+            case "extensions.torbutton.spoof_english":
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
                         true);
@@ -152,8 +156,6 @@ function torbutton_get_stringbundle()
 
     return o_stringbundle;
 }
-
-
 
 function torbutton_init_toolbutton(event)
 {
@@ -469,6 +471,23 @@ function torbutton_update_status(mode, force_update) {
     
     torbutton_log(2, 'Done with user agent: '+changed);
 
+    // FIXME: This is not ideal, but the refspoof method is not compatible
+    // with FF2.0
+    if(torprefs.getBoolPref("disable_referer")) {
+        m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", !mode);
+        m_tb_prefs.setIntPref("network.http.sendRefererHeader", mode ? 0 : 2);
+    }
+
+    if(torprefs.getBoolPref("spoof_english") && mode) {
+        m_tb_prefs.setCharPref("intl.accept_charsets", 
+                torprefs.getCharPref("spoof_charset"));
+        m_tb_prefs.setCharPref("intl.accept_languages",
+                torprefs.getCharPref("spoof_language"));
+    } else {
+        m_tb_prefs.clearUserPref("intl.accept_charsets");
+        m_tb_prefs.clearUserPref("intl.accept_languages");
+    }
+
     if(torprefs.getIntPref("shutdown_method") == 1) {
         // clear cookies on shutdown only if tor is enabled.
         m_tb_prefs.setBoolPref("privacy.item.cookies", true);
@@ -716,17 +735,25 @@ function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_dyn,
     var browser = win.getBrowser();
 
     if(isolate_dyn) torbutton_check_js_tag(browser, allowed, js_enabled);
-    
-    if(kill_plugins) browser.docShell.allowPlugins = allowed;
-    else browser.docShell.allowPlugins = true;
+   
+    // Only allow plugins if the tab load was from an allowed state 
+    // and the current tor state is off.
+    if(kill_plugins) 
+        browser.docShell.allowPlugins = allowed && browser.__tb_js_state;
+    else 
+        browser.docShell.allowPlugins = true;
 
     var browsers = browser.browsers;
 
     for (var i = 0; i < browsers.length; ++i) {
         var b = browser.browsers[i];
         if (b) {
-            if(kill_plugins) b.docShell.allowPlugins = allowed;
-            else browser.docShell.allowPlugins = true;
+            // Only allow plugins if the tab load was from an allowed state 
+            // and the current tor state is off.
+            if(kill_plugins) 
+                b.docShell.allowPlugins = allowed && b.__tb_js_state;
+            else 
+                browser.docShell.allowPlugins = true;
             
             if(isolate_dyn) {
                 torbutton_check_js_tag(b, allowed, js_enabled);
@@ -811,7 +838,6 @@ observe : function(subject, topic, data) {
 
     if (subject.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
       torbutton_log(1, "Uninstall: "+data);
-      // XXX: What about disabled??
       if (data == "item-uninstalled" || data == "item-disabled") {
         this._uninstall = true;
       } else if (data == "item-cancel-action") {
@@ -873,7 +899,7 @@ function torbutton_getbody(doc) {
     return null;
 }
 
-function torbutton_hookdoc(doc) {
+function torbutton_hookdoc(win, doc) {
     torbutton_log(1, "Hooking document");
     if(doc.doctype) {
         torbutton_log(1, "Hooking document: "+doc.doctype.name);
@@ -882,6 +908,16 @@ function torbutton_hookdoc(doc) {
         torbutton_init();
     }
 
+    // We can't just tag the document here because it is possible
+    // to hit reload at just the right point such that the document
+    // has been cleared but the window remained.
+    if(typeof(win.__tb_did_hook) != 'undefined')
+        return; // Ran already
+    
+    win.__tb_did_hook = true;
+
+    // We also can't just tag the window either, because it gets
+    // cleared on back/fwd(!??)
     if(typeof(doc.__tb_did_hook) != 'undefined')
         return; // Ran already
     
@@ -890,11 +926,13 @@ function torbutton_hookdoc(doc) {
     torbutton_log(1, "JS to be set to: " +m_tb_prefs.getBoolPref("javascript.enabled"));
     var browser = getBrowser();
     var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
 
     // TODO: try nsIWindowWatcher.getChromeForWindow()
     if (browser.contentDocument == doc) {
         browser.__tb_js_state = tor_tag;
+        browser.docShell.allowPlugins = tor_tag || !kill_plugins;
         browser.docShell.allowJavascript = js_enabled;
     } 
 
@@ -903,6 +941,7 @@ function torbutton_hookdoc(doc) {
         var b = browser.browsers[i];
         if (b && b.contentDocument == doc) {
             b.__tb_js_state = tor_tag;
+            b.docShell.allowPlugins = tor_tag || !kill_plugins;
             b.docShell.allowJavascript = js_enabled;
         }
     }
@@ -966,7 +1005,7 @@ var torbutton_weblistener =
     if(aProgress) {
         torbutton_log(1, "location progress");
         var doc = aProgress.DOMWindow.document;
-        if(doc) torbutton_hookdoc(doc);        
+        if(doc) torbutton_hookdoc(aProgress.DOMWindow, doc);        
         else torbutton_log(3, "No DOM at location event!");
     } else {
         torbutton_log(3, "No aProgress for location!");

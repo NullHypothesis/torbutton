@@ -56,6 +56,10 @@ pref("extensions.torbutton.isolate_content",true);
 pref("extensions.torbutton.no_search",true);
 pref("extensions.torbutton.set_uagent",true);
 pref("extensions.torbutton.disable_sessionstore",true);
+pref("extensions.torbutton.spoof_english",true);
+pref("extensions.torbutton.spoof_charset",'iso-8859-1,*,utf-8');
+pref("extensions.torbutton.spoof_language",'en-us, en');
+pref("extensions.torbutton.disable_referer",false);
 pref("extensions.torbutton.shutdown_method",1); // 0=none, 1=tor, 2=all
 
 // Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4

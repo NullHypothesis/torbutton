@@ -27,3 +27,32 @@
 <!ENTITY torbutton.context_menu.about.key "A">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">
+<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
+<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
+<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
+<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (recommended)">
+<!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
+<!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
+<!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
+<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
+<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
+<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
+<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (crucial)">
+<!ENTITY torbutton.prefs.kill_bad_js        "Hook dangerous javascript (crucial)">
+<!ENTITY torbutton.prefs.isolate_content    "Isolate dynamic content to Tor state (crucial)">
+<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
+<!ENTITY torbutton.prefs.set_uagent         "Set user agent for Tor usage (crucial)">
+<!ENTITY torbutton.prefs.dynamic              "Dynamic Content">
+<!ENTITY torbutton.prefs.cookies              "Cookies">
+<!ENTITY torbutton.prefs.cache                "Cache">
+<!ENTITY torbutton.prefs.history             "History">
+<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (optional)">
+<!ENTITY torbutton.prefs.shutdown              "Shutdown">
+<!ENTITY torbutton.prefs.tor_shutdown          "Clear cookies during Tor-enabled browser shutdown">
+<!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
+<!ENTITY torbutton.prefs.no_shutdown           "Let me manage my own Private Data settings">
+<!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
+<!ENTITY torbutton.prefs.headers               "Headers">
+<!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
+<!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
