@@ -425,6 +425,8 @@ function torbutton_update_status(mode, force_update) {
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
 
+    torbutton_log(2, 'Changed: '+changed);
+
     // this function is called every time there is a new window! Alot of this
     // stuff expects to be called on toggle only.. like the cookie jars and
     // history/cookie clearing
@@ -484,8 +486,13 @@ function torbutton_update_status(mode, force_update) {
         m_tb_prefs.setCharPref("intl.accept_languages",
                 torprefs.getCharPref("spoof_language"));
     } else {
-        m_tb_prefs.clearUserPref("intl.accept_charsets");
-        m_tb_prefs.clearUserPref("intl.accept_languages");
+        try {
+            m_tb_prefs.clearUserPref("intl.accept_charsets");
+            m_tb_prefs.clearUserPref("intl.accept_languages");
+        } catch (e) {
+            // Can happen if english browser.
+            torbutton_log(1, "Browser already english");
+        }
     }
 
     if(torprefs.getIntPref("shutdown_method") == 1) {

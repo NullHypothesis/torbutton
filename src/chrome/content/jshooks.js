@@ -12,7 +12,7 @@ window.__HookObjects = function() {
 
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
-  if(__tb_set_uagent) {
+  if(window.__tb_set_uagent) {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
@@ -82,7 +82,7 @@ window.__HookObjects = function() {
     Date.prototype.valueOf=Date.prototype.getTime = /* UTC already */
          function(){return d.getTime();}
     Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
-    Date.prototype.getYear=function() {return d.getUTCYear();}
+    Date.prototype.getYear=function() {return d.getYear();}
     Date.prototype.getMonth=function(){return d.getUTCMonth();}
     Date.prototype.getDate=function() {return d.getUTCDate();}
     Date.prototype.getDay=function() {return d.getUTCDay();}
@@ -95,7 +95,7 @@ window.__HookObjects = function() {
     Date.prototype.setTime = 
        function(x) {return d.setTime(x);}
     Date.prototype.setFullYear=function(x){return d.setUTCFullYear(x);}
-    Date.prototype.setYear=function(x){return d.setUTCYear(x);}
+    Date.prototype.setYear=function(x){return d.setYear(x);}
     Date.prototype.setMonth=function(x){return d.setUTCMonth(x);}
     Date.prototype.setDate=function(x){return d.setUTCDate(x);}
     Date.prototype.setDay=function(x){return d.setUTCDay(x);}
@@ -106,7 +106,6 @@ window.__HookObjects = function() {
        function(x) {return d.setUTCMilliseconds(x);}
  
     Date.prototype.getUTCFullYear=function(){return d.getUTCFullYear();}  
-    Date.prototype.getUTCYear=function() {return d.getUTCYear();}
     Date.prototype.getUTCMonth=function(){return d.getUTCMonth();}
     Date.prototype.getUTCDate=function() {return d.getUTCDate();}
     Date.prototype.getUTCDay=function() {return d.getUTCDay();}
@@ -117,7 +116,6 @@ window.__HookObjects = function() {
        function(){return d.getUTCMilliseconds();}
      
     Date.prototype.setUTCFullYear=function(x){return d.setUTCFullYear(x);}
-    Date.prototype.setUTCYear=function(x){return d.setUTCYear(x);}
     Date.prototype.setUTCMonth=function(x){return d.setUTCMonth(x);}
     Date.prototype.setUTCDate=function(x){return d.setUTCDate(x);}
     Date.prototype.setUTCDay=function(x){return d.setUTCDay(x);}
