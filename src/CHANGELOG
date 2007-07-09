@@ -1,3 +1,54 @@
+1.1.4 - Defcon CD Release
+  6 Jul 2007
+  * bugfix: Make plugin state tied to tab load state also
+  * bugfix: Date hooking bug. getUTCYear is not defined. Must call getYear..
+  * new: Add options to spoof charset and language headers
+  * new: Add option to disable referer header. This can break some sites.
+         Seems to break digg in particular.
+  * new: Copy English strings to all language DTDs so they are at least
+         functional.
+
+1.1.3 - Black Hat CD Release
+  30 Jun 2007
+  * bugfix: Fully disable session store if option is set. Otherwise it 
+            can save Tor tabs and cause them to be reloaded during Tor usage!
+  * new: Differentiate between crucial and recommended settings in preferences
+
+1.1.2
+  22 Jun 2007
+  * bugfix: Make js hooking a bit more invisible
+  * bugfix: Improve navigator.* hooking for user agent spoofing
+  * new: Block session saving during tor usage
+  * new: Add options to clear cookies during Tor/Non-Tor shutdowns
+
+1.1.1
+  20 Jun 2007
+  * bugfix: Remove Date hooks from DOM after inserted. Fixes some sites
+            who expect a fixed DOM structure.
+  * new: Integrated Collin Jackson's history blocking+cookie jar code, adapted
+         it to handle various Tor States+read/write differentiation.
+  * new: Allow users to manually manage cookies
+  * new: Mark tabs as having been fetched via Tor or in the clear
+  * new: Add code to only enable javascript on tabs with the same Tor load 
+         state as the current
+  * new: options to clear the cache, block disk cache, or block all caching
+  * new: Created options tabbox
+  * new: Option to block updates if Tor was enabled
+  * new: Add nsIContentPolicy to block CSS popups from pages with a different
+         load state than current Tor State.
+  * new: Added user agent spoofing code
+  * new: Support FireFox 2.0 only
+  * new: Disable "safe browsing" remote lookups
+  * new: block session saving
+
+
+1.1.0 - Security Development begins (Alpha branch)
+  31 Mar 2007
+  * new: Option to disable all plugins during Tor usage
+  * new: Javascript hooking to mask timezone for Date Object, attempted CSS fix
+  * new: Options to clear history and cookies on Tor toggle
+  * bugfix: Fix logging to use error console if logger extension not present
+
 1.0.5
   18 Nov 2006
   * bugfix: fix the about box in firefox 1.0
