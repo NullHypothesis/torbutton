@@ -43,6 +43,7 @@ pref("extensions.torbutton.tor_enabled",false);
 pref("extensions.torbutton.no_tor_plugins",true);
 pref("extensions.torbutton.clear_cookies",true);
 pref("extensions.torbutton.cookie_jars",false);
+pref("extensions.torbutton.disable_domstorage",true);
 pref("extensions.torbutton.clear_cache",true);
 pref("extensions.torbutton.block_cache",false);
 pref("extensions.torbutton.clear_history",false);

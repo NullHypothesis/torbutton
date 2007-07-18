@@ -480,6 +480,10 @@ function torbutton_update_status(mode, force_update) {
         m_tb_prefs.setIntPref("network.http.sendRefererHeader", mode ? 0 : 2);
     }
 
+    if(torprefs.getBoolPref("disable_domstorage")) {
+        m_tb_prefs.setBoolPref("dom.storage.enabled", !mode);
+    }
+
     if(torprefs.getBoolPref("spoof_english") && mode) {
         m_tb_prefs.setCharPref("intl.accept_charsets", 
                 torprefs.getCharPref("spoof_charset"));
@@ -906,6 +910,18 @@ function torbutton_getbody(doc) {
     return null;
 }
 
+/* This seems to be necessary due to javascript's
+ * nebulous scoping/parsing/evaluations issues. Having this as
+ * a standalone statement seems to cause the flag
+ * to become defined after just parsing, not execution */
+function torbutton_set_flag(obj, flag) {
+    obj[flag] = true;
+}
+
+function torbutton_check_flag(obj, flag) {
+    return (typeof(obj[flag]) != 'undefined');
+}
+
 function torbutton_hookdoc(win, doc) {
     torbutton_log(1, "Hooking document");
     if(doc.doctype) {
@@ -915,24 +931,40 @@ function torbutton_hookdoc(win, doc) {
         torbutton_init();
     }
 
+    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    
     // We can't just tag the document here because it is possible
     // to hit reload at just the right point such that the document
     // has been cleared but the window remained.
-    if(typeof(win.__tb_did_hook) != 'undefined')
+    if(torbutton_check_flag(win, "__tb_did_hook")) {
+        torbutton_log(1, "Did hook " 
+                + torbutton_check_flag(win, "__tb_did_hook"));
+        /* XXX: Remove this once bug #460 is resolved */
+        if(!tor_tag && 
+                !torbutton_check_flag(win.window.wrappedJSObject, 
+                    "__tb_hooks_ran")) {
+            torbutton_log(5, "FALSE WIN HOOKING. Please reprot bug+website!");
+            win.alert("False win hooking. Please report bug+website!");
+        }
         return; // Ran already
-    
-    win.__tb_did_hook = true;
+    }
+    torbutton_set_flag(win, "__tb_did_hook");
 
     // We also can't just tag the window either, because it gets
     // cleared on back/fwd(!??)
-    if(typeof(doc.__tb_did_hook) != 'undefined')
+    if(torbutton_check_flag(doc, "__tb_did_hook")) {
+        /* XXX: Remove this once bug #460 is resolved */
+        if(!tor_tag && 
+                !torbutton_check_flag(win.window.wrappedJSObject, "__tb_hooks_ran")) {
+            torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website!");
+            win.alert("False doc hooking. Please report bug+website!");
+        } 
         return; // Ran already
-    
-    doc.__tb_did_hook = true;
+    }
+    torbutton_set_flag(doc, "__tb_did_hook");
 
     torbutton_log(1, "JS to be set to: " +m_tb_prefs.getBoolPref("javascript.enabled"));
     var browser = getBrowser();
-    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
 

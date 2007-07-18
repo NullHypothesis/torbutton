@@ -1,3 +1,9 @@
+1.1.5
+  17 Jul 2007
+  * bugfix: Reset shutdown option if user wants to manually manage cookies
+  * misc: Add code to detect date hooking failures to zero in on Bug #460
+  * new: Pref to disable "DOM Storage" during Tor usage
+
 1.1.4 - Defcon CD Release
   6 Jul 2007
   * bugfix: Make plugin state tied to tab load state also

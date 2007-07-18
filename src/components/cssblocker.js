@@ -165,8 +165,11 @@ var policy = {
         if (browser.contentDocument == doc) {
             if (typeof(browser.__tb_js_state) == 'undefined') {
                 dump("UNTAGGED WINDOW1!!!!!!!!!");
+                return block;
             }
             if(browser.__tb_js_state == torTag) {
+                // XXX: Verify this doesn't give false postives 
+                // due to browser vs tab property inheritance strangeness
                 return ok;
             } else {
                 dump("block1\n");
@@ -179,6 +182,7 @@ var policy = {
             if (b && b.contentDocument == doc) {
                 if (typeof(browser.__tb_js_state) == 'undefined') {
                     dump("UNTAGGED WINDOW2!!!!!!!!!");
+                    return block;
                 }
 
                 if(b.__tb_js_state == torTag) {
@@ -238,7 +242,7 @@ const module = {
 	registerSelf: function(compMgr, fileSpec, location, type) {
 		compMgr = compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
 		compMgr.registerFactoryLocation(CSSB_CID, 
-										"Adblock content policy",
+										"Torbutton content policy",
 										CSSB_CONTRACTID,
 										fileSpec, location, type);
 

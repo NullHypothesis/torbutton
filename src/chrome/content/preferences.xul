@@ -152,6 +152,7 @@
           </tabpanel>
           <tabpanel id="cache">
            <vbox>
+            <!-- FIXME: maybe add pref to manage cache by yourself... --> 
             <radiogroup id="torbutton_cacheGroup">
              <radio id="torbutton_clearCache" 
                    label="&torbutton.prefs.clear_cache;" 
@@ -175,6 +176,9 @@
                     label="&torbutton.prefs.mmm_cookies;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/> 
             </radiogroup>
+            <checkbox id="torbutton_noDomStorage" 
+                   label="&torbutton.prefs.disable_domstorage;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
           <tabpanel id="shutdown">

@@ -76,6 +76,7 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_gopherPort').disabled = false;
         doc.getElementById('torbutton_socksHost').disabled = false;
         doc.getElementById('torbutton_socksPort').disabled = false;
+        /* Do not reset these on every document update..
         doc.getElementById('torbutton_httpProxy').value    = o_customprefs.getCharPref('http_proxy');
         doc.getElementById('torbutton_httpPort').value     = o_customprefs.getIntPref('http_port');
         doc.getElementById('torbutton_httpsProxy').value   = o_customprefs.getCharPref('https_proxy');
@@ -86,6 +87,7 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_gopherPort').value   = o_customprefs.getIntPref('gopher_port');
         doc.getElementById('torbutton_socksHost').value    = o_customprefs.getCharPref('socks_host');
         doc.getElementById('torbutton_socksPort').value    = o_customprefs.getIntPref('socks_port');
+        */
     }
 }
 
@@ -159,6 +161,8 @@ function torbutton_prefs_init(doc) {
         o_torprefs.setBoolPref('cookie_jars', false);
         o_torprefs.setBoolPref('clear_cookies', false); 
     }
+    doc.getElementById('torbutton_noDomStorage').checked = 
+        o_torprefs.getBoolPref('disable_domstorage');
     
     if(o_torprefs.getIntPref('shutdown_method') == 0) {
         doc.getElementById('torbutton_shutdownGroup').selectedItem
@@ -231,6 +235,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
     o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').selected);
     o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
+    o_torprefs.setBoolPref('disable_domstorage', doc.getElementById('torbutton_noDomStorage').checked);
 
 
     if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
@@ -241,6 +246,14 @@ function torbutton_prefs_save(doc) {
         o_torprefs.setIntPref('shutdown_method', 1); 
     } else {
         o_torprefs.setIntPref('shutdown_method', 2); 
+    }
+
+    /* Reset the shutdown option if the user wants to manage own cookies */
+    if(!o_torprefs.getBoolPref('cookie_jars') 
+            && !o_torprefs.getBoolPref('clear_cookies')) {
+        o_torprefs.setIntPref('shutdown_method', 0); 
+        doc.getElementById('torbutton_shutdownGroup').selectedItem
+            = doc.getElementById('torbutton_noShutdown');
     }
 
     o_torprefs.setBoolPref('disable_sessionstore', doc.getElementById('torbutton_noSessionStore').checked);

@@ -1,6 +1,6 @@
 window.__HookObjects = function() {
-  /* XXX: Removeme once verified not to run twice */
-  if (typeof(window.__tb_hooks_ran) != 'undefined') {
+  /* XXX: Removeme once bug #460 is resolved */
+  if (typeof(window.__tb_hooks_ran) == "boolean") {
       alert("Error, double jshook!");
       return;
   }
@@ -159,10 +159,12 @@ window.__HookObjects = function() {
   Date.UTC=function(){return tmp.apply(tmp, arguments); }
 }
 
-if (window.__HookObjects) {
+if (typeof(window.__HookObjects) != "undefined") {
     window.__HookObjects();
 
+    window.__HookObjects = undefined;
     delete window['__HookObjects'];
+    delete window['__CheckFlag'];
     delete window['__tb_set_uagent'];
     delete window['__tb_oscpu'];
     delete window['__tb_platform'];
