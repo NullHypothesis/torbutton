@@ -162,20 +162,20 @@ var policy = {
         // Find proper browser for this document.. ugh. this
         // is gonna be SO fucking slow :(
         // TODO: try nsIWindowWatcher.getChromeForWindow()
+        /* XXX: Keep an eye on this...
         if (browser.contentDocument == doc) {
             if (typeof(browser.__tb_js_state) == 'undefined') {
                 dump("UNTAGGED WINDOW1!!!!!!!!!");
                 return block;
             }
             if(browser.__tb_js_state == torTag) {
-                // XXX: Verify this doesn't give false postives 
                 // due to browser vs tab property inheritance strangeness
                 return ok;
             } else {
                 dump("block1\n");
                 return block;
             }
-        }
+        } */
 
         for (var i = 0; i < browser.browsers.length; ++i) {
             var b = browser.browsers[i];

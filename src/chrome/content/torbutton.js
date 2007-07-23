@@ -569,7 +569,6 @@ function torbutton_update_status(mode, force_update) {
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setIntPref("browser.sessionstore.enabled", true);
             m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
             m_tb_prefs.setBoolPref("browser.formfill.enable", true);
             m_tb_prefs.setBoolPref("signon.rememberSignons", true);
@@ -745,14 +744,15 @@ function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_dyn,
                                         kill_plugins) {
     var browser = win.getBrowser();
 
-    if(isolate_dyn) torbutton_check_js_tag(browser, allowed, js_enabled);
+    /* XXX: hrmm.. keep an eye on this..
+     * if(isolate_dyn) torbutton_check_js_tag(browser, allowed, js_enabled);
    
     // Only allow plugins if the tab load was from an allowed state 
     // and the current tor state is off.
     if(kill_plugins) 
         browser.docShell.allowPlugins = allowed && browser.__tb_js_state;
     else 
-        browser.docShell.allowPlugins = true;
+        browser.docShell.allowPlugins = true; */
 
     var browsers = browser.browsers;
 
@@ -811,7 +811,8 @@ function torbutton_new_tab(event)
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
     var browser = event.currentTarget;
 
-    torbutton_tag_new_browser(browser, tor_tag, no_plugins);
+    /* XXX: disable. Only tag child tabs
+     * torbutton_tag_new_browser(browser, tor_tag, no_plugins); */
 
     // Fucking garbage.. event is delivered to the current tab, not the 
     // newly created one. Need to traverse the current window for it.
@@ -922,6 +923,28 @@ function torbutton_check_flag(obj, flag) {
     return (typeof(obj[flag]) != 'undefined');
 }
 
+function torbutton_check_load_state(doc, tor_tag) {
+    var browser = getBrowser();
+    /* XXX: Hrmm.. keep an eye on this
+     * if (browser.contentDocument == doc) {
+        torbutton_log(1, "Browser states "+tor_tag+" == "+
+                browser.__tb_js_state + " -> " + 
+                (browser.__tb_js_state == tor_tag)); 
+        return browser.__tb_js_state == tor_tag;
+    }*/
+
+    // Find proper browser for this document.. ugh.
+    for (var i = 0; i < browser.browsers.length; ++i) {
+        var b = browser.browsers[i];
+        if (b && b.contentDocument == doc) {
+            torbutton_log(1, "Tab states "+tor_tag+" == "+
+                    b.__tb_js_state + " -> " + 
+                    (b.__tb_js_state == tor_tag)); 
+            return b.__tb_js_state == tor_tag;
+        }
+    }
+}
+
 function torbutton_hookdoc(win, doc) {
     torbutton_log(1, "Hooking document");
     if(doc.doctype) {
@@ -940,10 +963,13 @@ function torbutton_hookdoc(win, doc) {
         torbutton_log(1, "Did hook " 
                 + torbutton_check_flag(win, "__tb_did_hook"));
         /* XXX: Remove this once bug #460 is resolved */
-        if(!tor_tag && 
+        /* hrmm.. would doc.isSupported("javascript") 
+         * or doc.implementation.hasFeature() work better? */
+        if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
+                torbutton_check_load_state(doc, tor_tag) && 
                 !torbutton_check_flag(win.window.wrappedJSObject, 
                     "__tb_hooks_ran")) {
-            torbutton_log(5, "FALSE WIN HOOKING. Please reprot bug+website!");
+            torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website!");
             win.alert("False win hooking. Please report bug+website!");
         }
         return; // Ran already
@@ -954,7 +980,10 @@ function torbutton_hookdoc(win, doc) {
     // cleared on back/fwd(!??)
     if(torbutton_check_flag(doc, "__tb_did_hook")) {
         /* XXX: Remove this once bug #460 is resolved */
-        if(!tor_tag && 
+        torbutton_log(1, "Check hook: "
+                + torbutton_check_flag(win, "__tb_did_hook"));
+        if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
+                torbutton_check_load_state(doc, tor_tag) && 
                 !torbutton_check_flag(win.window.wrappedJSObject, "__tb_hooks_ran")) {
             torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website!");
             win.alert("False doc hooking. Please report bug+website!");
@@ -969,11 +998,13 @@ function torbutton_hookdoc(win, doc) {
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
 
     // TODO: try nsIWindowWatcher.getChromeForWindow()
+
+    /* XXX: Verify still correct..
     if (browser.contentDocument == doc) {
         browser.__tb_js_state = tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
         browser.docShell.allowJavascript = js_enabled;
-    } 
+    }*/
 
     // Find proper browser for this document.. ugh.
     for (var i = 0; i < browser.browsers.length; ++i) {
