@@ -1,3 +1,11 @@
+1.1.6
+  30 Jul 2007
+  * bugfix: Fix an exception that may have messed up cookie/cache clearing
+    if you allowed Tor to write history URLs (possibly kills bug #457)
+  * bugfix: Use only sub-browsers for tagging. Could fix some Date hooking
+    misses (possibly kills bug #460)
+  * misc: Clean up annoying false positives with date hooking checks
+
 1.1.5
   17 Jul 2007
   * bugfix: Reset shutdown option if user wants to manually manage cookies
