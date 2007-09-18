@@ -84,11 +84,18 @@ var localSchemes = {"about" : true, "chrome" : true, "file" : true,
 
 var policy = {
 	init: function() {
-        dump("init\n");
         this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
             .getService(Components.interfaces.nsIPrefBranch);
-
+        this._loglevel = this._prefs.getIntPref("extensions.torbutton.loglevel");
+        this.log("init done\n");
         return;
+    },
+
+    log: function(str) {
+        // TODO: This could be done better/unified with the main log system..
+        if(this._loglevel <= 2) {
+            dump(str);
+        } 
     },
 
     isLocalScheme: function(loc) {
@@ -104,11 +111,11 @@ var policy = {
     // have to continually query prefs
 	// nsIContentPolicy interface implementation
 	shouldLoad: function(contentType, contentLocation, requestOrigin, insecNode, mimeTypeGuess, extra) {
-        dump("ContentLocation: "+contentLocation.spec+"\n");
+        this.log("ContentLocation: "+contentLocation.spec+"\n");
        
         /*. Debugging hack. DO NOT UNCOMMENT IN PRODUCTION ENVIRONMENTS
         if(contentLocation.spec.search("venkman") != -1) {
-            dump("chrome-venk\n");
+            this.log("chrome-venk\n");
             return ok;
         }*/
 
@@ -118,7 +125,7 @@ var policy = {
         }
 
         if(!this._prefs.getBoolPref("extensions.torbutton.isolate_content")) {
-            dump("disabled\n");
+            this.log("disabled\n");
             return ok;
         }
         
@@ -136,7 +143,7 @@ var policy = {
 		}
 
         if (!wind || !wind.top.location || !wind.top.location.href) {
-            dump("Location\n");
+            this.log("Location\n");
 			return ok;
         }
 
@@ -162,33 +169,18 @@ var policy = {
         // Find proper browser for this document.. ugh. this
         // is gonna be SO fucking slow :(
         // TODO: try nsIWindowWatcher.getChromeForWindow()
-        /* XXX: Keep an eye on this...
-        if (browser.contentDocument == doc) {
-            if (typeof(browser.__tb_js_state) == 'undefined') {
-                dump("UNTAGGED WINDOW1!!!!!!!!!");
-                return block;
-            }
-            if(browser.__tb_js_state == torTag) {
-                // due to browser vs tab property inheritance strangeness
-                return ok;
-            } else {
-                dump("block1\n");
-                return block;
-            }
-        } */
-
         for (var i = 0; i < browser.browsers.length; ++i) {
             var b = browser.browsers[i];
             if (b && b.contentDocument == doc) {
                 if (typeof(browser.__tb_js_state) == 'undefined') {
-                    dump("UNTAGGED WINDOW2!!!!!!!!!");
+                    this.log("UNTAGGED WINDOW2!!!!!!!!!");
                     return block;
                 }
 
                 if(b.__tb_js_state == torTag) {
                     return ok;
                 } else {
-                    dump("block2\n");
+                    this.log("block2\n");
                     return block;
                 }
             }
@@ -227,8 +219,10 @@ const factory = {
 				iid.equals(Components.interfaces.nsIFactory))
 			return this;
 
+        /*
 		if (!iid.equals(Components.interfaces.nsIClassInfo))
 			dump("CSS Blocker: factory.QI to an unknown interface: " + iid + "\n");
+        */
 
 		throw Components.results.NS_ERROR_NO_INTERFACE;
 	}

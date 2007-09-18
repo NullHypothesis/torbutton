@@ -35,6 +35,7 @@ pref("extensions.torbutton.saved.ftp_port",0);
 pref("extensions.torbutton.saved.gopher_proxy","");
 pref("extensions.torbutton.saved.gopher_port",0);
 pref("extensions.torbutton.saved.socks_host","");
+pref("extensions.torbutton.saved.socks_version",0);
 pref("extensions.torbutton.saved.socks_port",0);
 pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description", "chrome://torbutton/locale/torbutton.properties");
 // XXX: Hrmm, what is the convention for above? do some of these belong in 

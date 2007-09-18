@@ -1,7 +1,7 @@
 window.__HookObjects = function() {
   /* XXX: Removeme once bug #460 is resolved */
   if (typeof(window.__tb_hooks_ran) == "boolean") {
-      alert("Error, double jshook!");
+      window.alert("Error, double jshook!");
       return;
   }
  

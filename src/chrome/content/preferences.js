@@ -7,7 +7,7 @@ var tor_enabled = false;
 
 function torbutton_prefs_set_field_attributes(doc)
 {
-    torbutton_log(4, "called prefs_set_field_attributes()");
+    torbutton_log(2, "called prefs_set_field_attributes()");
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
 
@@ -31,7 +31,7 @@ function torbutton_prefs_set_field_attributes(doc)
     }
 
     if (doc.getElementById('torbutton_settingsMethod').value == 'recommended') {
-        torbutton_log(5, "using recommended settings");
+        torbutton_log(2, "using recommended settings");
         if (!torbutton_check_socks_remote_dns()) {
             doc.getElementById('torbutton_httpProxy').value = proxy_host;
             doc.getElementById('torbutton_httpPort').value = proxy_port;
@@ -95,7 +95,7 @@ function torbutton_prefs_init(doc) {
     var checkbox_displayStatusPanel = doc.getElementById('torbutton_displayStatusPanel');
 // return; 
 
-    torbutton_log(4, "called prefs_init()");
+    torbutton_log(2, "called prefs_init()");
     sizeToContent();
 
     // remember if tor settings were enabled when the window was opened
@@ -193,7 +193,7 @@ function torbutton_prefs_init(doc) {
 }
 
 function torbutton_prefs_save(doc) {
-    torbutton_log(4, "called prefs_save()");
+    torbutton_log(2, "called prefs_save()");
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
 

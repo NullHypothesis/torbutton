@@ -37,19 +37,19 @@ function torbutton_get_prefbranch(branch_name) {
     var o_prefs = false;
     var o_branch = false;
 
-    torbutton_log(4, "called get_prefbranch()");
+    torbutton_log(1, "called get_prefbranch()");
     o_prefs = Components.classes["@mozilla.org/preferences-service;1"]
                         .getService(Components.interfaces.nsIPrefService);
     if (!o_prefs)
     {
-        torbutton_log(3, "failed to get preferences-service");
+        torbutton_log(5, "Failed to get preferences-service!");
         return false;
     }
 
     o_branch = o_prefs.getBranch(branch_name);
     if (!o_branch)
     {
-        torbutton_log(3, "failed to get prefs branch");
+        torbutton_log(5, "Failed to get prefs branch!");
         return false;
     }
 
@@ -69,7 +69,7 @@ function torbutton_check_socks_remote_dns()
         return true;
     } catch (rErr) {
         // no such preference
-        torbutton_log(3, "socks_remote_dns is unavailable");
+        torbutton_log(4, "socks_remote_dns is unavailable");
         return false;
     }
 }
