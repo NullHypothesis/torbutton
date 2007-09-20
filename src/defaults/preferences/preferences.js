@@ -1,6 +1,6 @@
 // pref("extensions.torbutton.prompt_before_visiting_excluded_sites",true);
 pref("extensions.torbutton.debug",true);
-pref("extensions.torbutton.loglevel",1);
+pref("extensions.torbutton.loglevel",4);
 pref("extensions.torbutton.display_panel",true);
 pref("extensions.torbutton.panel_style",'text');
 pref("extensions.torbutton.settings_method",'recommended');

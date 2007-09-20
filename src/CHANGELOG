@@ -1,6 +1,6 @@
 1.1.7
   20 Sep 2007
-  * bugfix: bug 497: couple of memory leaks found and fixed by arno
+  * bugfix: bug 495: couple of memory leaks found and fixed by arno
   * bugfix: bug 497: uninstall exception found and fixed by arno
   * bugfix: bug 460: No more alerts should happen. Really, I mean it this time
   * bugfix: bugs 461+489: verbosity+macos logging issues resolved
