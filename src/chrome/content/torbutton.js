@@ -1044,32 +1044,6 @@ function torbutton_hookdoc(win, doc) {
     torbutton_set_flag(doc, "__tb_did_hook");
 
     return;
-
-    // Alternate, deprecated hook injection
-    var str = "<"+"script>\r\n";
-    str += "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
-    str += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
-    str += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
-    str += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
-    str += m_tb_jshooks; 
-    str += "</"+"script>";
-    var d = doc.createElement("div");
-    d.style.visibility = 'hidden';
-    d.innerHTML = str;
-    
-    var di = torbutton_getbody(doc).insertBefore(d, 
-            torbutton_getbody(doc).firstChild);
-    if(di != d) {
-        torbutton_log(5, "Inserted and return not equal");
-    }
-
-    // Remove javascript code for rendering issues/DOM traversals
-    if(!torbutton_getbody(doc).removeChild(di)) {
-        torbutton_log(5, "Failed to remove js!");
-    }
-
-    torbutton_set_flag(win, "__tb_did_hook");
-    torbutton_set_flag(doc, "__tb_did_hook");
 }
 
 var torbutton_weblistener =
