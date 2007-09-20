@@ -61,6 +61,7 @@ var torbutton_pref_observer =
             case "network.proxy.share_proxy_settings":
             case "network.proxy.socks_remote_dns":
             case "network.proxy.type":
+                torbutton_log(1, "Got update message, setting status");
                 torbutton_set_status();
                 break;
             case "extensions.torbutton.disable_referer":
@@ -78,6 +79,7 @@ var torbutton_pref_observer =
             case "extensions.torbutton.shutdown_method":
             case "extensions.torbutton.disable_sessionstore":
             case "extensions.torbutton.spoof_english":
+                torbutton_log(1, "Got update message, updating status");
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
                         true);
@@ -302,14 +304,19 @@ function torbutton_save_nontor_settings()
 
   liveprefs = torbutton_get_prefbranch('network.proxy.');
   savprefs = torbutton_get_prefbranch('extensions.torbutton.saved.');
-  if (!liveprefs || !savprefs) return;
+  if (!liveprefs || !savprefs) {
+      torbutton_log(4, 'Prefbranch error');
+      return;
+  }
 
+  torbutton_log(2, 'saving nontor settings');
   savprefs.setIntPref('type',          liveprefs.getIntPref('type'));
   savprefs.setCharPref('http_proxy',   liveprefs.getCharPref('http'));
   savprefs.setIntPref('http_port',     liveprefs.getIntPref('http_port'));
   savprefs.setCharPref('https_proxy',  liveprefs.getCharPref('ssl'));
   savprefs.setIntPref('https_port',    liveprefs.getIntPref('ssl_port'));
   savprefs.setCharPref('ftp_proxy',    liveprefs.getCharPref('ftp'));
+  torbutton_log(1, 'half-way');
   savprefs.setIntPref('ftp_port',      liveprefs.getIntPref('ftp_port'));
   savprefs.setCharPref('gopher_proxy', liveprefs.getCharPref('gopher'));
   savprefs.setIntPref('gopher_port',   liveprefs.getIntPref('gopher_port'));
@@ -319,8 +326,11 @@ function torbutton_save_nontor_settings()
   try { // ff-0.9 doesn't have share_proxy_settings
     savprefs.setBoolPref('share_proxy_settings', liveprefs.getBoolPref('share_proxy_settings'));
   } catch(e) {}
+  
+  torbutton_log(1, 'almost there');
   if (torbutton_check_socks_remote_dns())
     savprefs.setBoolPref('socks_remote_dns',     liveprefs.getBoolPref('socks_remote_dns'));
+  torbutton_log(2, 'Non-tor settings saved');
 }
 
 function torbutton_restore_nontor_settings()
@@ -330,14 +340,19 @@ function torbutton_restore_nontor_settings()
 
   liveprefs = torbutton_get_prefbranch('network.proxy.');
   savprefs = torbutton_get_prefbranch('extensions.torbutton.saved.');
-  if (!liveprefs || !savprefs) return;
+  if (!liveprefs || !savprefs) {
+      torbutton_log(4, 'Prefbranch error');
+      return;
+  }
 
+  torbutton_log(2, 'restoring nontor settings');
   liveprefs.setIntPref('type',          savprefs.getIntPref('type'));
   liveprefs.setCharPref('http',         savprefs.getCharPref('http_proxy'));
   liveprefs.setIntPref('http_port',     savprefs.getIntPref('http_port'));
   liveprefs.setCharPref('ssl',          savprefs.getCharPref('https_proxy'));
   liveprefs.setIntPref('ssl_port',      savprefs.getIntPref('https_port'));
   liveprefs.setCharPref('ftp',          savprefs.getCharPref('ftp_proxy'));
+  torbutton_log(1, 'half-way there');
   liveprefs.setIntPref('ftp_port',      savprefs.getIntPref('ftp_port'));
   liveprefs.setCharPref('gopher',       savprefs.getCharPref('gopher_proxy'));
   liveprefs.setIntPref('gopher_port',   savprefs.getIntPref('gopher_port'));
@@ -347,12 +362,11 @@ function torbutton_restore_nontor_settings()
   try { // ff-0.9 doesn't have share_proxy_settings
     liveprefs.setBoolPref('share_proxy_settings', savprefs.getBoolPref('share_proxy_settings'));
   } catch(e) {}
+  
+  torbutton_log(1, 'almost there');
   if (torbutton_check_socks_remote_dns())
     liveprefs.setBoolPref('socks_remote_dns',     savprefs.getBoolPref('socks_remote_dns'));
-    
-  // FIXME: hrmm.. this kinda sucks
-  var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-
+  torbutton_log(2, 'settings restored');
 }
 
 function torbutton_disable_tor()

@@ -271,3 +271,26 @@ function torbutton_prefs_save(doc) {
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();
 }
+
+function torbutton_prefs_reset_defaults() {
+    var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    var o_proxyprefs = torbutton_get_prefbranch('network.proxy.');
+    var tmpcnt = new Object();
+    var children;
+    var i;
+
+    children = o_torprefs.getChildList("" , tmpcnt);
+    for(i = 0; i < children.length; i++) {
+        torbutton_log(5, "Preferences reset: "+children[i]);
+        if(o_torprefs.prefHasUserValue(children[i]))
+            o_torprefs.clearUserPref(children[i]);
+    }
+
+    children = o_proxyprefs.getChildList("" , tmpcnt);
+    for(i = 0; i < children.length; i++) {
+        if(o_proxyprefs.prefHasUserValue(children[i]))
+            o_proxyprefs.clearUserPref(children[i]);
+    }
+    torbutton_log(5, "Preferences reset to defaults");
+    torbutton_prefs_init(window.document);
+}

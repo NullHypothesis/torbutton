@@ -19,7 +19,7 @@ try {
 }
 
 function torbutton_log(nLevel, sMsg) {
-    if(!m_tb_debug) return;
+    if(!m_tb_debug) return true;
 
     var rDate = new Date();
     if (m_tb_logger) {
@@ -29,6 +29,10 @@ function torbutton_log(nLevel, sMsg) {
     } else if (nLevel >= m_tb_loglevel) {
         dump(rDate.getTime()+': '+sMsg+"\n");
     }
+
+    // So we can use it in boolean expressions to determine where the 
+    // short-circuit is..
+    return true; 
 }
 
 // get a preferences branch object
@@ -65,7 +69,7 @@ function torbutton_check_socks_remote_dns()
     // check if this version of Firefox has the socks_remote_dns option
     try {
         o_prefbranch.getBoolPref('socks_remote_dns');
-        torbutton_log(3, "socks_remote_dns is available");
+        torbutton_log(2, "socks_remote_dns is available");
         return true;
     } catch (rErr) {
         // no such preference
@@ -77,30 +81,54 @@ function torbutton_check_socks_remote_dns()
 function torbutton_check_status() {
     var liveprefs = false;
     var torprefs = false;
+    torbutton_log(1, "Check status");
 
     liveprefs = torbutton_get_prefbranch('network.proxy.');
     torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-    if (!liveprefs || !torprefs) return;
+
+    if (!torprefs) {
+        torbutton_log(5, "Failed to get torprefs!");
+        return false;
+    }
+
+    if (!liveprefs) {
+        torbutton_log(5, "Failed to get lifeprefs!");
+        return false;
+    }
 
     if (torbutton_check_socks_remote_dns())
          remote_dns = liveprefs.getBoolPref("socks_remote_dns");
     else
          remote_dns = true;
 
-    return ( (liveprefs.getIntPref("type")           == 1)              &&
-             (liveprefs.getCharPref("http")          == torprefs.getCharPref('http_proxy'))   &&
-             (liveprefs.getIntPref("http_port")      == torprefs.getIntPref('http_port'))     &&
-             (liveprefs.getCharPref("ssl")           == torprefs.getCharPref('https_proxy'))  &&
-             (liveprefs.getIntPref("ssl_port")       == torprefs.getIntPref('https_port'))    &&
-             (liveprefs.getCharPref("ftp")           == torprefs.getCharPref('ftp_proxy'))    &&
-             (liveprefs.getIntPref("ftp_port")       == torprefs.getIntPref('ftp_port'))      &&
-             (liveprefs.getCharPref("gopher")        == torprefs.getCharPref('gopher_proxy')) &&
-             (liveprefs.getIntPref("gopher_port")    == torprefs.getIntPref('gopher_port'))   &&
-             (liveprefs.getCharPref("socks")         == torprefs.getCharPref('socks_host'))   &&
-             (liveprefs.getIntPref("socks_port")     == torprefs.getIntPref('socks_port'))    &&
-             (liveprefs.getIntPref("socks_version")  == 5)              &&
-             (liveprefs.getBoolPref("share_proxy_settings") == false)   &&
-             (remote_dns == true) );
+    return ((liveprefs.getIntPref("type")          == 1)              &&
+         torbutton_log(1, "Type is true") &&
+         (liveprefs.getCharPref("http")         == torprefs.getCharPref('http_proxy'))   &&
+         torbutton_log(1, "Http proxy") &&
+         (liveprefs.getIntPref("http_port")     == torprefs.getIntPref('http_port'))     &&
+         torbutton_log(1, "Http port") &&
+         (liveprefs.getCharPref("ssl")          == torprefs.getCharPref('https_proxy'))  &&
+         torbutton_log(1, "ssl proxy") &&
+         (liveprefs.getIntPref("ssl_port")      == torprefs.getIntPref('https_port'))    &&
+         torbutton_log(1, "ssl port") &&
+         (liveprefs.getCharPref("ftp")          == torprefs.getCharPref('ftp_proxy'))    &&
+         torbutton_log(1, "ftp proxy") &&
+         (liveprefs.getIntPref("ftp_port")      == torprefs.getIntPref('ftp_port'))      &&
+         torbutton_log(1, "ftp port") &&
+         (liveprefs.getCharPref("gopher")       == torprefs.getCharPref('gopher_proxy')) &&
+         torbutton_log(1, "gopher proxy") &&
+         (liveprefs.getIntPref("gopher_port")   == torprefs.getIntPref('gopher_port'))   &&
+         torbutton_log(1, "gopher port") &&
+         (liveprefs.getCharPref("socks")        == torprefs.getCharPref('socks_host'))   &&
+         torbutton_log(1, "socks proxy") &&
+         (liveprefs.getIntPref("socks_port")    == torprefs.getIntPref('socks_port'))    &&
+         torbutton_log(1, "socks port") &&
+         (liveprefs.getIntPref("socks_version") == 5)              &&
+         torbutton_log(1, "socks version") &&
+         (liveprefs.getBoolPref("share_proxy_settings") == false)   &&
+         torbutton_log(1, "share proxy settins") &&
+         (remote_dns == true) 
+         && torbutton_log(1, "remote_dns"));
 }
 
 function torbutton_activate_tor_settings()
@@ -110,14 +138,19 @@ function torbutton_activate_tor_settings()
 
   liveprefs = torbutton_get_prefbranch('network.proxy.');
   torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-  if (!liveprefs || !torprefs) return;
+  if (!liveprefs || !torprefs) {
+      torbutton_log(4, 'Prefbranch error');
+      return;
+  }
 
+  torbutton_log(2, 'Activate tor settings');
   liveprefs.setCharPref('http',         torprefs.getCharPref('http_proxy'));
   liveprefs.setIntPref('http_port',     torprefs.getIntPref('http_port'));
   liveprefs.setCharPref('ssl',          torprefs.getCharPref('https_proxy'));
   liveprefs.setIntPref('ssl_port',      torprefs.getIntPref('https_port'));
   liveprefs.setCharPref('ftp',          torprefs.getCharPref('ftp_proxy'));
   liveprefs.setIntPref('ftp_port',      torprefs.getIntPref('ftp_port'));
+  torbutton_log(1, 'Half-way there');
   liveprefs.setCharPref('gopher',       torprefs.getCharPref('gopher_proxy'));
   liveprefs.setIntPref('gopher_port',   torprefs.getIntPref('gopher_port'));
   liveprefs.setCharPref('socks',        torprefs.getCharPref('socks_host'));
@@ -128,5 +161,6 @@ function torbutton_activate_tor_settings()
       liveprefs.setBoolPref('socks_remote_dns', true);
   }
   liveprefs.setIntPref('type', 1);
+  torbutton_log(2, 'Done activating tor settings');
 }
 

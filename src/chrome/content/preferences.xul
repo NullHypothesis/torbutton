@@ -7,7 +7,9 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
         title="&torbutton.prefs.title;"
-        buttons="accept,cancel"
+        buttons="accept,cancel,extra1"
+        buttonlabelextra1="Restore Defaults"
+        ondialogextra1="torbutton_prefs_reset_defaults();"
         persist="screenX screenY"
         onload="torbutton_prefs_init(document)"
         ondialogaccept="torbutton_prefs_save(document)" >
