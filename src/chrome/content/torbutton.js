@@ -965,7 +965,7 @@ function torbutton_hookdoc(win, doc) {
         /* XXX: Remove this once bug #460 is resolved */
         /* hrmm.. would doc.isSupported("javascript") 
          * or doc.implementation.hasFeature() work better? */
-        if(js_enabled && !tor_tag && doc.contentType.indexOf("text/html") != -1 && 
+        if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
                 torbutton_check_load_state(doc, tor_tag) && 
                 !torbutton_check_flag(win.window.wrappedJSObject, 
                     "__tb_hooks_ran")) {
@@ -981,7 +981,7 @@ function torbutton_hookdoc(win, doc) {
         /* XXX: Remove this once bug #460 is resolved */
         torbutton_log(2, "Check hook: "
                 + torbutton_check_flag(win, "__tb_did_hook"));
-        if(js_enabled && !tor_tag && doc.contentType.indexOf("text/html") != -1 && 
+        if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
                 torbutton_check_load_state(doc, tor_tag) && 
                 !torbutton_check_flag(win.window.wrappedJSObject, "__tb_hooks_ran")) {
             torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website!");
@@ -1008,7 +1008,10 @@ function torbutton_hookdoc(win, doc) {
 
     torbutton_log(1, "JS set to: " + js_enabled);
     
-    // No need to hook js if tor is off, right?
+    if(!js_enabled) // XXX: bug #460 hack
+        win.window.wrappedJSObject.__tb_hooks_ran = true; 
+
+    // No need to hook js if tor is off
     if(!js_enabled 
             || !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
             || !m_tb_prefs.getBoolPref('extensions.torbutton.kill_bad_js')) {
