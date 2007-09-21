@@ -23,7 +23,7 @@ function torbutton_log(nLevel, sMsg) {
 
     var rDate = new Date();
     if (m_tb_logger) {
-        m_tb_logger.log(nLevel, rDate.getTime()+': '+sMsg);
+        m_tb_logger.log((6-nLevel), rDate.getTime()+': '+sMsg);
     } else if (m_tb_console && nLevel >= m_tb_loglevel) {
         m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
     } else if (nLevel >= m_tb_loglevel) {

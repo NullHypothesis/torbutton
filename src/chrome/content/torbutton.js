@@ -945,7 +945,7 @@ function torbutton_check_load_state(doc, tor_tag) {
 }
 
 function torbutton_hookdoc(win, doc) {
-    torbutton_log(1, "Hooking document");
+    torbutton_log(1, "Hooking document: "+doc.location);
     if(doc.doctype) {
         torbutton_log(2, "Hooking document: "+doc.doctype.name);
     }
@@ -960,7 +960,7 @@ function torbutton_hookdoc(win, doc) {
     // to hit reload at just the right point such that the document
     // has been cleared but the window remained.
     if(torbutton_check_flag(win, "__tb_did_hook")) {
-        torbutton_log(2, "Did hook " 
+        torbutton_log(2, "Already did hook " 
                 + torbutton_check_flag(win, "__tb_did_hook"));
         /* XXX: Remove this once bug #460 is resolved */
         /* hrmm.. would doc.isSupported("javascript") 
@@ -979,7 +979,7 @@ function torbutton_hookdoc(win, doc) {
     // cleared on back/fwd(!??)
     if(torbutton_check_flag(doc, "__tb_did_hook")) {
         /* XXX: Remove this once bug #460 is resolved */
-        torbutton_log(2, "Check hook: "
+        torbutton_log(4, "Hrmm.. Partial checked hook: "
                 + torbutton_check_flag(win, "__tb_did_hook"));
         if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
                 torbutton_check_load_state(doc, tor_tag) && 
@@ -990,7 +990,6 @@ function torbutton_hookdoc(win, doc) {
         return; // Ran already
     }
 
-    torbutton_log(1, "JS to be set to: " +m_tb_prefs.getBoolPref("javascript.enabled"));
     var browser = getBrowser();
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
@@ -1015,6 +1014,7 @@ function torbutton_hookdoc(win, doc) {
     if(!js_enabled 
             || !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
             || !m_tb_prefs.getBoolPref('extensions.torbutton.kill_bad_js')) {
+        torbutton_log(2, "Finished non-hook of: " + doc.location);
         torbutton_set_flag(win, "__tb_did_hook");
         torbutton_set_flag(doc, "__tb_did_hook");
         return;
@@ -1045,6 +1045,8 @@ function torbutton_hookdoc(win, doc) {
 
     torbutton_set_flag(win, "__tb_did_hook");
     torbutton_set_flag(doc, "__tb_did_hook");
+    
+    torbutton_log(2, "Finished hook: " + doc.location);
 
     return;
 }
@@ -1071,8 +1073,13 @@ var torbutton_weblistener =
     if(aProgress) {
         torbutton_log(1, "location progress");
         var doc = aProgress.DOMWindow.document;
-        if(doc && doc.domain) torbutton_hookdoc(aProgress.DOMWindow, doc);
-        else torbutton_log(2, "No DOM yet at location event");
+        try {
+            if(doc && doc.domain) 
+                torbutton_hookdoc(aProgress.DOMWindow, doc);
+            else torbutton_log(2, "No DOM yet at location event");
+        } catch(e) {
+            torbutton_log(3, "Hit about:plugins? "+doc.location);
+        }        
     } else {
         torbutton_log(3, "No aProgress for location!");
     }
