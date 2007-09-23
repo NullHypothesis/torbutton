@@ -513,18 +513,6 @@ function torbutton_update_status(mode, force_update) {
         }
     }
 
-    if(torprefs.getIntPref("shutdown_method") == 1) {
-        // clear cookies on shutdown only if tor is enabled.
-        m_tb_prefs.setBoolPref("privacy.item.cookies", true);
-        m_tb_prefs.setBoolPref("privacy.sanitize.promptOnSanitize", false);
-        m_tb_prefs.setBoolPref("privacy.sanitize.sanitizeOnShutdown", mode);
-    } else if(torprefs.getIntPref("shutdown_method") == 2) {
-        // clear cookies on shutdown always
-        m_tb_prefs.setBoolPref("privacy.item.cookies", true);
-        m_tb_prefs.setBoolPref("privacy.sanitize.promptOnSanitize", false);
-        m_tb_prefs.setBoolPref("privacy.sanitize.sanitizeOnShutdown", true);
-    }
-
     if (torprefs.getBoolPref("no_updates")) {
         m_tb_prefs.setBoolPref("extensions.update.enabled", !mode);
         m_tb_prefs.setBoolPref("app.update.enabled", !mode);
@@ -830,6 +818,12 @@ observe : function(subject, topic, data) {
         // Still called by pref observer:
         // torbutton_update_status(false, false);
     }
+
+    if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
+        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
+        || m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
+        torbutton_clear_cookies();
+    } 
     this.unregister();
   }
 },
