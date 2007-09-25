@@ -118,6 +118,7 @@
          <tabs>
           <tab label="&torbutton.prefs.dynamic;"/>
           <tab label="&torbutton.prefs.history;"/>
+          <tab label="&torbutton.prefs.forms;"/>
           <tab label="&torbutton.prefs.cache;"/>
           <tab label="&torbutton.prefs.cookies;"/>
           <tab label="&torbutton.prefs.shutdown;"/>
@@ -149,6 +150,14 @@
           <checkbox id="torbutton_blockNonTorHWrite" label="&torbutton.prefs.block_nthwrite;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+           </vbox>
+          </tabpanel>
+          <tabpanel id="forms">
+           <vbox flex="1">
+          <checkbox id="torbutton_blockTorForms" label="&torbutton.prefs.block_tforms;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_blockNonTorForms" label="&torbutton.prefs.block_ntforms;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>

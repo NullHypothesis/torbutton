@@ -57,3 +57,6 @@
 <!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
 <!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.disable_domstorage    "Disable DOM Storage during Tor usage (crucial)">
+<!ENTITY torbutton.prefs.forms            "Forms">
+<!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
+<!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">

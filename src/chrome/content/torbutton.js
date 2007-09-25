@@ -568,20 +568,28 @@ function torbutton_update_status(mode, force_update) {
     if(mode) {
         if(torprefs.getBoolPref('block_thwrite')) {
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
+        } else {
+            m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
+        }
+
+        if(torprefs.getBoolPref('block_tforms')) {
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
             m_tb_prefs.setBoolPref("browser.formfill.enable", true);
             m_tb_prefs.setBoolPref("signon.rememberSignons", true);
         }
     } else {
         if(torprefs.getBoolPref('block_nthwrite')) {
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
+        } else {
+            m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
+        }
+
+        if(torprefs.getBoolPref('block_ntforms')) {
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
             m_tb_prefs.setBoolPref("browser.formfill.enable", true);
             m_tb_prefs.setBoolPref("signon.rememberSignons", true);
         }

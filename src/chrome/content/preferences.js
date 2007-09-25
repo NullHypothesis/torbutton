@@ -181,6 +181,8 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
     doc.getElementById('torbutton_blockNonTorHRead').checked = o_torprefs.getBoolPref('block_nthread');
     doc.getElementById('torbutton_blockNonTorHWrite').checked = o_torprefs.getBoolPref('block_nthwrite');
+    doc.getElementById('torbutton_blockTorForms').checked = o_torprefs.getBoolPref('block_tforms');
+    doc.getElementById('torbutton_blockNonTorForms').checked = o_torprefs.getBoolPref('block_ntforms');
     doc.getElementById('torbutton_isolateContent').checked = o_torprefs.getBoolPref('isolate_content');
     doc.getElementById('torbutton_noSearch').checked = o_torprefs.getBoolPref('no_search');
     doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
@@ -237,7 +239,6 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
     o_torprefs.setBoolPref('disable_domstorage', doc.getElementById('torbutton_noDomStorage').checked);
 
-
     if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
             doc.getElementById('torbutton_noShutdown')) {
         o_torprefs.setIntPref('shutdown_method', 0); 
@@ -261,6 +262,8 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);
     o_torprefs.setBoolPref('block_nthread', doc.getElementById('torbutton_blockNonTorHRead').checked);
     o_torprefs.setBoolPref('block_nthwrite', doc.getElementById('torbutton_blockNonTorHWrite').checked);
+    o_torprefs.setBoolPref('block_tforms', doc.getElementById('torbutton_blockTorForms').checked);
+    o_torprefs.setBoolPref('block_ntforms', doc.getElementById('torbutton_blockNonTorForms').checked);
     o_torprefs.setBoolPref('no_search', doc.getElementById('torbutton_noSearch').checked);
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
     
@@ -278,6 +281,11 @@ function torbutton_prefs_reset_defaults() {
     var tmpcnt = new Object();
     var children;
     var i;
+
+    // XXX: change this to handle people with non-default proxy settings
+    //  1. Clear proxy settings
+    //  2. Restore saved prefs
+    //  3. Clear torbutton settings
 
     children = o_torprefs.getChildList("" , tmpcnt);
     for(i = 0; i < children.length; i++) {

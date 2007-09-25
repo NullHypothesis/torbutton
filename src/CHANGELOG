@@ -1,3 +1,8 @@
+1.1.8
+  XX Sep 2007
+  * bugfix: bug 510: decouple cookie clearing from Clear Private Data settings
+  * bugfix: bug 474: decouple password+form saving from history writing
+
 1.1.7
   20 Sep 2007
   * bugfix: bug 495: couple of memory leaks found and fixed by arno
