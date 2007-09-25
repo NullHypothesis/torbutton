@@ -1,8 +1,8 @@
 /*************************************************************************
  * Session Blocker (JavaScript XPCOM component)
- * Disables reading and writing session state for tor loaded tabs. 
- * This component is implemented as a wrapper around the true sessionsaver 
- * object that sometimes refuses to save state.
+ * Disables reading and writing session state without disabling the 
+ * session store itself by wrapping nsIFileOutputStream and preventing it 
+ * from writing sessionstore.js.
  *
  *************************************************************************/
 
