@@ -14,6 +14,8 @@ const kMODULE_NAME = "Cookie Jar Selector";
 const kMODULE_CONTRACTID = "@stanford.edu/cookie-jar-selector;1";
 const kMODULE_CID = Components.ID("e6204253-b690-4159-bfe8-d4eedab6b3be");
 
+const Cr = Components.results;
+
 function CookieJarSelector() {
   var Cc = Components.classes;
   var Ci = Components.interfaces;
@@ -101,8 +103,10 @@ CookieJarSelector.prototype =
   QueryInterface: function(iid)
   {
     if (!iid.equals(nsIClassInfo) &&
-        !iid.equals(nsISupports))
-      throw Components.results.NS_ERROR_NO_INTERFACE;
+        !iid.equals(nsISupports)) {
+      Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
+      return null;
+    }
     return this;
   },
 
@@ -130,13 +134,15 @@ var CookieJarSelectorFactory = new Object();
 
 CookieJarSelectorFactory.createInstance = function (outer, iid)
 {
-  if (outer != null)
-    throw Components.results.NS_ERROR_NO_AGGREGATION;
-
+  if (outer != null) {
+    Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
+    return null;
+  }
   if (!iid.equals(nsIClassInfo) &&
-      !iid.equals(nsISupports))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-
+      !iid.equals(nsISupports)) {
+    Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
+    return null;
+  }
   return new CookieJarSelector();
 }
 
@@ -156,13 +162,12 @@ function (compMgr, fileSpec, location, type)
 
 CookieJarSelectorModule.getClassObject = function (compMgr, cid, iid)
 {
-  if (!cid.equals(kMODULE_CID))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
+  if (cid.equals(kMODULE_CID))
+    return CookieJarSelectorFactory;
 
-  if (!iid.equals(Components.interfaces.nsIFactory))
-    throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
-    
-  return CookieJarSelectorFactory;
+
+  Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
+  return null;
 }
 
 CookieJarSelectorModule.canUnload = function (compMgr)

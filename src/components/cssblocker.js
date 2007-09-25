@@ -28,6 +28,7 @@ const DWindow = Components.interfaces.nsIDOMWindow;
 const ok = Components.interfaces.nsIContentPolicy.ACCEPT;
 const block = Components.interfaces.nsIContentPolicy.REJECT_REQUEST;
 const CPolicy = Components.interfaces.nsIContentPolicy;
+const Cr = Components.results;
 
 // Retrieves the window object for a node or returns null if it isn't possible
 function getWindow(node) {
@@ -51,7 +52,8 @@ var fakeFactory = {
 				iid.equals(Components.interfaces.nsIFactory))
 			return this;
 
-		throw Components.results.NS_ERROR_NO_INTERFACE;
+       Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
+       return null;
 	}
 };
 var array = Components.classes['@mozilla.org/supports-array;1'].createInstance(Components.interfaces.nsISupportsArray);
@@ -202,12 +204,16 @@ var policy = {
 const factory = {
 	// nsIFactory interface implementation
 	createInstance: function(outer, iid) {
-		if (outer != null)
-			throw Components.results.NS_ERROR_NO_AGGREGATION;
+		if (outer != null) {
+           Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
+           return null;
+       }
 
         if (!iid.equals(Components.interfaces.nsIContentPolicy) &&
-                !iid.equals(Components.interfaces.nsISupports))
-            throw Components.results.NS_ERROR_NO_INTERFACE;
+                !iid.equals(Components.interfaces.nsISupports)) {
+            Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;          
+            return null;
+        }
 
         policy.init();
 		return policy;
@@ -216,6 +222,7 @@ const factory = {
 	// nsISupports interface implementation
 	QueryInterface: function(iid) {
 		if (iid.equals(Components.interfaces.nsISupports) ||
+				iid.equals(Components.interfaces.nsIModule) ||
 				iid.equals(Components.interfaces.nsIFactory))
 			return this;
 
@@ -224,7 +231,8 @@ const factory = {
 			dump("CSS Blocker: factory.QI to an unknown interface: " + iid + "\n");
         */
 
-		throw Components.results.NS_ERROR_NO_INTERFACE;
+        Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;          
+        return null;   
 	}
 };
 
@@ -256,13 +264,11 @@ const module = {
 	},
 
 	getClassObject: function(compMgr, cid, iid) {
-		if (!cid.equals(CSSB_CID))
-			throw Components.results.NS_ERROR_NO_INTERFACE;
+		if (cid.equals(CSSB_CID))
+            return factory;
 
-		if (!iid.equals(Components.interfaces.nsIFactory))
-			throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
-
-		return factory;
+        Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
+        return null;
 	},
 
 	canUnload: function(compMgr) {

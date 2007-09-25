@@ -21,6 +21,8 @@ const kREAL_HISTORY_CID = "{59648a91-5a60-4122-8ff2-54b839c84aed}";
 const kREAL_HISTORY = Components.classesByID[kREAL_HISTORY_CID];
 const kHistoryInterfaces = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
 
+const Cr = Components.results;
+
 function HistoryWrapper() {
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefBranch);
@@ -113,13 +115,18 @@ var HistoryWrapperFactory = new Object();
 
 HistoryWrapperFactory.createInstance = function (outer, iid)
 {
-  if (outer != null)
-    throw Components.results.NS_ERROR_NO_AGGREGATION;
+  if (outer != null) {
+    Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
+    return null;
+  }
 
   if (!iid.equals(Components.interfaces.nsIGlobalHistory2) &&
       !iid.equals(Components.interfaces.nsIBrowserHistory) &&
-      !iid.equals(Components.interfaces.nsISupports))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
+    !iid.equals(Components.interfaces.nsISupports)) {
+
+    Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
+    return null;
+  }
 
   if(!HistoryWrapperSingleton)
     HistoryWrapperSingleton = new HistoryWrapper();
@@ -150,13 +157,11 @@ function (compMgr, fileSpec, location, type){
 
 HistoryWrapperModule.getClassObject = function (compMgr, cid, iid)
 {
-  if (!cid.equals(kMODULE_CID))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
+  if (cid.equals(kMODULE_CID))
+    return HistoryWrapperFactory;
 
-  if (!iid.equals(Components.interfaces.nsIFactory))
-    throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
-    
-  return HistoryWrapperFactory;
+  Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
+  return null;
 };
 
 HistoryWrapperModule.canUnload = function (compMgr)
