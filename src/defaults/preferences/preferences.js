@@ -71,12 +71,11 @@ pref("extensions.torbutton.block_ntforms",false);
 pref("extensions.torbutton.startup",false);
 pref("extensions.torbutton.crashed",false);
 
-// Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4
 pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; en-US)");
 pref("extensions.torbutton.platform_override","Win32");
 pref("extensions.torbutton.oscpu_override", "Windows NT 5.1");
-pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-pref("extensions.torbutton.productsub_override","20070725");
+pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7");
+pref("extensions.torbutton.productsub_override","20070914");
 pref("extensions.torbutton.useragent_vendor", "");
 pref("extensions.torbutton.useragent_vendorSub","");
