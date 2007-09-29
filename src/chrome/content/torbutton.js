@@ -881,8 +881,20 @@ observe : function(subject, topic, data) {
     if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
         || m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
-        torbutton_clear_cookies();
-    } 
+        var selector =
+            Components.classes["@stanford.edu/cookie-jar-selector;1"]
+            .getService(Components.interfaces.nsISupports)
+            .wrappedJSObject;
+        selector.clearCookies();
+        // clear the cookie jar by saving the empty cookies to it.
+        if(m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
+            if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+                selector.saveCookies("tor");
+            selector.saveCookies("nontor");
+        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
+            selector.saveCookies("tor");
+        }
+    }
     this.unregister();
   }
 },

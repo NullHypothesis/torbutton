@@ -264,7 +264,8 @@ function torbutton_prefs_save(doc) {
 
     /* Reset the shutdown option if the user wants to manage own cookies */
     if(!o_torprefs.getBoolPref('cookie_jars') 
-            && !o_torprefs.getBoolPref('clear_cookies')) {
+            && !o_torprefs.getBoolPref('clear_cookies')
+            && !o_torprefs.getBoolPref('dual_cookie_jars')) {
         o_torprefs.setIntPref('shutdown_method', 0); 
         doc.getElementById('torbutton_shutdownGroup').selectedItem
             = doc.getElementById('torbutton_noShutdown');
