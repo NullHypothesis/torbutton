@@ -68,6 +68,7 @@ pref("extensions.torbutton.disable_referer",false);
 pref("extensions.torbutton.shutdown_method",1); // 0=none, 1=tor, 2=all
 pref("extensions.torbutton.block_tforms",true);
 pref("extensions.torbutton.block_ntforms",false);
+pref("extensions.torbutton.startup",false);
 pref("extensions.torbutton.crashed",false);
 
 // Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4

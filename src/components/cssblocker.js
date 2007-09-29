@@ -174,7 +174,7 @@ var policy = {
         for (var i = 0; i < browser.browsers.length; ++i) {
             var b = browser.browsers[i];
             if (b && b.contentDocument == doc) {
-                if (typeof(browser.__tb_js_state) == 'undefined') {
+                if (typeof(b.__tb_js_state) == 'undefined') {
                     this.log("UNTAGGED WINDOW2!!!!!!!!!");
                     return block;
                 }
@@ -182,7 +182,7 @@ var policy = {
                 if(b.__tb_js_state == torTag) {
                     return ok;
                 } else {
-                    this.log("block2\n");
+                    this.log("block2: "+b.__tb_js_state+"\n");
                     return block;
                 }
             }

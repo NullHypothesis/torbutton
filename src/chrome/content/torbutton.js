@@ -191,9 +191,7 @@ function torbutton_init() {
         torbutton_init_jshooks();
 
         torbutton_log(1, 'registering pref observer');
-        // FIXME: Hrmm... Do we really need observers for each window?
         torbutton_pref_observer.register(); 
-        torbutton_uninstall_observer.register();
         m_tb_wasinited = true;
     } else {
         torbutton_log(1, 'skipping pref observer init');
@@ -794,6 +792,7 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
 
     // Only tag new windows
     if (typeof(browser.__tb_js_state) == 'undefined') {
+        torbutton_log(3, "Tagging new window: "+tor_tag);
         browser.__tb_js_state = tor_tag;
     }
 }
@@ -919,6 +918,24 @@ unregister : function() {
 }
 
 
+function torbutton_do_onetime_startup()
+{
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
+        torbutton_log(3, "Torbutton onetime startup");
+        // http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgress.html
+        var progress =
+            Components.classes["@mozilla.org/docloaderservice;1"].
+            getService(Components.interfaces.nsIWebProgress);
+
+        progress.addProgressListener(torbutton_weblistener,
+                Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
+                Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
+
+        torbutton_uninstall_observer.register();
+        m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
+    }
+}
+
 function torbutton_new_tab(event)
 { 
     // listening for new tabs
@@ -942,20 +959,17 @@ function torbutton_new_window(event)
         torbutton_init();
     }
     
+    torbutton_do_onetime_startup();
     torbutton_crash_recover();
 
-    torbutton_tag_new_browser(browser, 
+    torbutton_tag_new_browser(browser.browsers[0], 
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
-    browser.addProgressListener(torbutton_weblistener,
-      Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
-      Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 }
 
 function torbutton_close_window(event) {
     torbutton_pref_observer.unregister();
-    torbutton_uninstall_observer.unregister();
 }
 
 window.addEventListener('load',torbutton_new_window,false);
@@ -1120,7 +1134,7 @@ function torbutton_hookdoc(win, doc) {
             win.alert("Sandbox evaluation failed. Date hooks not applied!");
         }
     } catch (e) {
-        win.alert("Sandbox evaluation failed. Date hooks not applied!");
+        win.alert("Exception in sandbox evaluation. Date hooks not applied!");
     }
 
     torbutton_log(2, "Finished hook: " + doc.location);
@@ -1128,23 +1142,7 @@ function torbutton_hookdoc(win, doc) {
     return;
 }
 
-var torbutton_weblistener =
-{
-  QueryInterface: function(aIID)
-  {
-   if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-       aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-       aIID.equals(Components.interfaces.nsISupports))
-     return this;
-   throw Components.results.NS_NOINTERFACE;
-  },
-
-  onStateChange: function(aProgress, aRequest, aFlag, aStatus)
-  { /*torbutton_log(1, 'State change()'); */return 0; },
-
-  onLocationChange: function(aProgress, aRequest, aURI)
-  {
-    torbutton_log(1, 'onLocationChange');
+function torbutton_check_progress(aProgress) {
     // This fires when the location bar changes i.e load event is confirmed
     // or when the user switches tabs
     if(aProgress) {
@@ -1161,13 +1159,42 @@ var torbutton_weblistener =
         torbutton_log(3, "No aProgress for location!");
     }
     return 0;
+}
+
+var torbutton_weblistener =
+{
+  QueryInterface: function(aIID)
+  {
+   if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+       aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+       aIID.equals(Components.interfaces.nsISupports))
+     return this;
+   throw Components.results.NS_NOINTERFACE;
   },
 
-  onProgressChange: function(webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
-  { /* torbutton_log(1, 'called progressChange'); */ return 0; },
+  onStateChange: function(aProgress, aRequest, aFlag, aStatus)
+  { 
+      torbutton_log(1, 'State change()');
+      return torbutton_check_progress(aProgress);
+  },
+
+  onLocationChange: function(aProgress, aRequest, aURI)
+  {
+      torbutton_log(1, 'onLocationChange');
+      return torbutton_check_progress(aProgress);
+  },
+
+  onProgressChange: function(aProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
+  { 
+      torbutton_log(1, 'called progressChange'); 
+      return torbutton_check_progress(aProgress);
+  },
   
-  onStatusChange: function() 
-  { /*torbutton_log(1, 'called statusChange'); */ return 0; },
+  onStatusChange: function(aProgress, request, stat, message) 
+  { 
+      torbutton_log(1, 'called progressChange'); 
+      return torbutton_check_progress(aProgress);
+  },
   
   onSecurityChange: function() {return 0;},
   

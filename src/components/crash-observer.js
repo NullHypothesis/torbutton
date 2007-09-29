@@ -22,6 +22,16 @@ const kREAL_STORE = Components.classesByID[kREAL_STORE_CID];
 const kStoreInterfaces = ["nsISessionStartup", "nsIObserver", 
                           "nsISupportsWeakReference"];
 
+var StartupObserver = {
+    observe: function(aSubject, aTopic, aData) {
+      if(aTopic == "final-ui-startup") {
+          Components.classes["@mozilla.org/preferences-service;1"]
+              .getService(Components.interfaces.nsIPrefBranch)
+              .setBoolPref("extensions.torbutton.startup", true);
+      } 
+    },
+};
+
 function StoreWrapper() {
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefBranch);
@@ -77,6 +87,10 @@ StoreWrapper.prototype =
   observe: function sss_observe(aSubject, aTopic, aData) {
     if(aTopic == "app-startup") {
       this._startup = true;
+      var observerService = Cc["@mozilla.org/observer-service;1"].
+          getService(Ci.nsIObserverService);
+
+      observerService.addObserver(StartupObserver, "final-ui-startup", false);
     } 
     this._store().observe(aSubject, aTopic, aData);
   },
