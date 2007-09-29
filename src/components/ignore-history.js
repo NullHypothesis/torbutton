@@ -74,9 +74,14 @@ HistoryWrapper.prototype =
    */
   copyMethods: function(history) {
     var mimic = function(obj, method) {
-      obj[method] = function(a, b, c, d, e, f, g) {
-        history[method](a, b, c, d, e, f, g);
-      };
+      if(typeof(history[method]) == "function") {
+          obj[method] = function(a, b, c, d, e, f, g) {
+              return history[method](a, b, c, d, e, f, g);
+          };
+      } else {
+          obj.__defineGetter__(method, function() { return history[method]; });
+          obj.__defineSetter__(method, function(val) { history[method] = val; });
+      }
     };
     for (var method in history) {
       if(typeof(this[method]) == "undefined") mimic(this, method);

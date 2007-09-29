@@ -42,8 +42,9 @@ pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description", "chrome://
 // 'saved'?
 pref("extensions.torbutton.tor_enabled",false);
 pref("extensions.torbutton.no_tor_plugins",true);
-pref("extensions.torbutton.clear_cookies",true);
-pref("extensions.torbutton.cookie_jars",false);
+pref("extensions.torbutton.clear_cookies",false);
+pref("extensions.torbutton.cookie_jars",true);
+pref("extensions.torbutton.dual_cookie_jars",false);
 pref("extensions.torbutton.disable_domstorage",true);
 pref("extensions.torbutton.clear_cache",true);
 pref("extensions.torbutton.block_cache",false);
@@ -51,13 +52,15 @@ pref("extensions.torbutton.clear_history",false);
 pref("extensions.torbutton.kill_bad_js",true);
 pref("extensions.torbutton.block_thread",true);
 pref("extensions.torbutton.block_thwrite",true);
-pref("extensions.torbutton.block_nthread",true);
+pref("extensions.torbutton.block_nthread",false);
 pref("extensions.torbutton.block_nthwrite",false);
 pref("extensions.torbutton.no_updates",true);
 pref("extensions.torbutton.isolate_content",true);
 pref("extensions.torbutton.no_search",true);
 pref("extensions.torbutton.set_uagent",true);
-pref("extensions.torbutton.disable_sessionstore",true);
+pref("extensions.torbutton.notor_sessionstore",true);
+pref("extensions.torbutton.restore_tor",false); 
+pref("extensions.torbutton.reload_crashed_jar",true); 
 pref("extensions.torbutton.spoof_english",true);
 pref("extensions.torbutton.spoof_charset",'iso-8859-1,*,utf-8');
 pref("extensions.torbutton.spoof_language",'en-us, en');
@@ -65,6 +68,7 @@ pref("extensions.torbutton.disable_referer",false);
 pref("extensions.torbutton.shutdown_method",1); // 0=none, 1=tor, 2=all
 pref("extensions.torbutton.block_tforms",true);
 pref("extensions.torbutton.block_ntforms",false);
+pref("extensions.torbutton.crashed",false);
 
 // Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4
 pref("extensions.torbutton.appname_override","Netscape");

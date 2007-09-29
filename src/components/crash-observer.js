@@ -1,8 +1,9 @@
 /*************************************************************************
- * Session Blocker (JavaScript XPCOM component)
- * Disables reading and writing session state without disabling the 
- * session store itself by wrapping nsIFileOutputStream and preventing it 
- * from writing sessionstore.js.
+ * Crash observer (JavaScript XPCOM component)
+ *
+ * Provides the chrome with a notification ("extensions.torbutton.crashed"
+ * pref event) that the browser in fact crashed. Does this by hooking
+ * the sessionstore.
  *
  *************************************************************************/
 
@@ -11,19 +12,15 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 
 // Module specific constants
-const kMODULE_NAME = "Session Blocking File Output Stream";
-const kMODULE_CONTRACTID = "@mozilla.org/network/safe-file-output-stream;1";
-const kMODULE_CID = Components.ID("9215354b-1787-4aef-9946-780f046c75a8");
+const kMODULE_NAME = "Sesstion crash detector";
+const kMODULE_CONTRACTID = "@mozilla.org/browser/sessionstartup;1";
+const kMODULE_CID = Components.ID("9215354b-1787-4aef-9946-780f046c75a9");
 
 /* Mozilla defined interfaces */
-const kREAL_STORE_CID = "{a181af0d-68b8-4308-94db-d4f859058215}";
+const kREAL_STORE_CID = "{ec7a6c20-e081-11da-8ad9-0800200c9a66}";
 const kREAL_STORE = Components.classesByID[kREAL_STORE_CID];
-const kStoreInterfaces = [
-    "nsIFileOutputStream",
-    "nsIOutputStream",
-    "nsISafeOutputStream",
-    "nsISeekableStream",
-    "nsISupports"];
+const kStoreInterfaces = ["nsISessionStartup", "nsIObserver", 
+                          "nsISupportsWeakReference"];
 
 function StoreWrapper() {
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -40,23 +37,21 @@ function StoreWrapper() {
 
 StoreWrapper.prototype =
 {
-  _log: function(str) {
-    // TODO: This could be done better/unified with the main log system..
-    if(this._loglevel <= 2) {
-      dump(str);
-    } 
-  },
-
   QueryInterface: function(iid) {
 
     if (iid.equals(Components.interfaces.nsISupports) ||
-        iid.equals(Components.interfaces.nsISecurityCheckedComponent) ||
         iid.equals(Components.interfaces.nsIClassInfo)) {
       return this.QueryInterface(iid);
     }
 
-    var store = this._store().QueryInterface(iid);
-    if (store) this.copyMethods(store);
+    try {
+        var store = this._store().QueryInterface(iid);
+        if (store) this.copyMethods(store);
+    } catch(e) {
+        dump("Exception on QI for crash detector\n");
+        Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
+        return null;
+    }
     return this;
   },
 
@@ -65,33 +60,36 @@ StoreWrapper.prototype =
    */
   copyMethods: function(store) {
     var mimic = function(obj, method) {
-      obj[method] = function(a, b, c, d, e, f, g) {
-        if(this._passthrough) {
-          return 0;
-        }
-        return store[method](a, b, c, d, e, f, g);
-      };
+      if(typeof(store[method]) == "function") {
+          obj[method] = function(a, b, c, d, e, f, g) {
+              return store[method](a, b, c, d, e, f, g);
+          };
+      } else {
+          obj.__defineGetter__(method, function() { return store[method]; });
+          obj.__defineSetter__(method, function(val) { store[method] = val; });
+      }
     };
     for (var method in store) {
       if(typeof(this[method]) == "undefined") mimic(this, method);
     }
   },
 
-  init: function(file, ioFlags , perm , behaviorFlags ) {
-    this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
-      .getService(Components.interfaces.nsIPrefBranch);
-    this._loglevel = this._prefs.getIntPref("extensions.torbutton.loglevel");
-    try {
-      if(this._prefs.getBoolPref("extensions.torbutton.disable_sessionstore") &&
-          file.leafName == "sessionstore.js" || file.leafName == "sessionstore.bak") {
-        this._passthrough = true;
-        return;
-      }
-    } catch (e) { // permission denied to access filename 
-    }
-    
-    this._passthrough = false;
-    this._store().init(file,ioFlags,perm,behaviorFlags);
+  observe: function sss_observe(aSubject, aTopic, aData) {
+    if(aTopic == "app-startup") {
+      this._startup = true;
+    } 
+    this._store().observe(aSubject, aTopic, aData);
+  },
+
+  doRestore: function sss_doRestore() {
+    var ret = false;
+    // This is so lame. But the exposed API is braindead so it 
+    // must be hacked around
+    if((ret = this._store().doRestore()) && this._startup) {
+        this._prefs.setBoolPref("extensions.torbutton.crashed", true);
+    } 
+    this._startup = false;
+    return ret;
   },
 };
  
@@ -110,8 +108,7 @@ const StoreWrapperFactory = {
   
   QueryInterface: function(aIID) {
     if (!aIID.equals(Ci.nsISupports) && !aIID.equals(Ci.nsIModule) &&
-        !aIID.equals(Ci.nsIFactory)) {
-      dump("Bad QI: "+aIID.toString());
+        !aIID.equals(Ci.nsIFactory) && !aIID.equals(Ci.nsISessionStore)) {
       Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
       return null;
     }
@@ -145,7 +142,7 @@ function (compMgr, fileSpec, location, type){
 StoreWrapperModule.getClassObject = function (compMgr, cid, iid)
 {
   if (cid.equals(kMODULE_CID)) {
-    return StoreWrapperFactory;
+      return StoreWrapperFactory;
   }
   Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
   return null;

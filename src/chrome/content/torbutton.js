@@ -64,6 +64,10 @@ var torbutton_pref_observer =
                 torbutton_log(1, "Got update message, setting status");
                 torbutton_set_status();
                 break;
+            case "extensions.torbutton.crashed":
+                // can we say getto hack, boys and girls?
+                torbutton_crash_recover();
+                break;
             case "extensions.torbutton.disable_referer":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.disable_referer")) {
                     m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", true);
@@ -592,7 +596,8 @@ function torbutton_update_status(mode, force_update) {
 
     if (torprefs.getBoolPref('clear_cookies')) {
         torbutton_clear_cookies();
-    } else if (torprefs.getBoolPref('cookie_jars')) {
+    } else if (torprefs.getBoolPref('cookie_jars') 
+            || torprefs.getBoolPref('dual_cookie_jars')) {
         torbutton_jar_cookies(mode);
     }
 
@@ -715,8 +720,11 @@ function torbutton_jar_cookies(mode) {
     if(mode) {
         selector.saveCookies("nontor");
         selector.clearCookies();
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+            selector.loadCookies("tor", false);
     } else {
-        // Never save tor cookies
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+            selector.saveCookies("tor");
         selector.clearCookies();
         selector.loadCookies("nontor", false);
     }
@@ -727,14 +735,15 @@ function torbutton_jar_cookies(mode) {
 
 function torbutton_check_js_tag(browser, allowed, js_enabled) {
     if (typeof(browser.__tb_js_state) == 'undefined') {
+        // XXX: the error console is still a navigator:browser
+        // and triggers this.
+        // Is there any way to otherwise detect it?
         torbutton_log(5, "UNTAGGED WINDOW!!!!!!!!!");
     }
 
     if(browser.__tb_js_state == allowed) { // States match, js ok 
         browser.docShell.allowJavascript = js_enabled;
     } else { // States differ or undefined, js not ok 
-        // XXX: hrmm.. way to check for navigator windows? 
-        // non-navigator windows are not tagged..
         browser.docShell.allowJavascript = false;
     }
 }
@@ -789,6 +798,59 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 }
 
+function torbutton_conditional_set(state) {
+    if (!m_tb_wasinited) torbutton_init();
+
+    torbutton_log(4, "Restoring tor state");
+    if (torbutton_check_status() == state) return;
+    
+    if(state) torbutton_enable_tor();
+    else  torbutton_disable_tor();
+}
+
+function torbutton_restore_cookies()
+{
+    var selector =
+          Components.classes["@stanford.edu/cookie-jar-selector;1"]
+                    .getService(Components.interfaces.nsISupports)
+                    .wrappedJSObject;
+    torbutton_log(4, "Restoring cookie status");
+    selector.clearCookies();
+    
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
+            torbutton_log(4, "Loading tor jar after crash");
+            selector.loadCookies("tor", false);
+        }
+    } else {
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')
+                || m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars')) {
+            torbutton_log(4, "Loading non-tor jar after crash");
+            selector.loadCookies("nontor", false);
+        }
+    }
+}
+
+function torbutton_crash_recover()
+{
+    if (!m_tb_wasinited) torbutton_init();
+    torbutton_log(3, "Crash recover check");
+
+    // Crash detection code (works w/ components/crash-observer.js)
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
+        torbutton_log(4, "Crash detected, attempting recovery");
+        m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", 
+                torbutton_check_status());
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.reload_crashed_jar"))
+            torbutton_restore_cookies();
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
+            torbutton_conditional_set(true);
+        m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
+    }
+    torbutton_log(3, "End crash recover check");
+}
+
+
 // ---------------------- Event handlers -----------------
 
 // Technique courtesy of:
@@ -828,9 +890,11 @@ register : function() {
  var observerService =
    Components.classes["@mozilla.org/observer-service;1"].
      getService(Components.interfaces.nsIObserverService);
+ torbutton_log(3, "Observer register");
 
  observerService.addObserver(this, "em-action-requested", false);
  observerService.addObserver(this, "quit-application-granted", false);
+ torbutton_log(3, "Observer register");
 },
 unregister : function() {
   var observerService =
@@ -841,6 +905,7 @@ unregister : function() {
   observerService.removeObserver(this,"quit-application-granted");
 }
 }
+
 
 function torbutton_new_tab(event)
 { 
@@ -864,6 +929,8 @@ function torbutton_new_window(event)
     if (!m_tb_wasinited) {
         torbutton_init();
     }
+    
+    torbutton_crash_recover();
 
     torbutton_tag_new_browser(browser, 
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
@@ -956,8 +1023,8 @@ function torbutton_hookdoc(win, doc) {
         /* XXX: Remove this once bug #460 is resolved */
         /* hrmm.. would doc.isSupported("javascript") 
          * or doc.implementation.hasFeature() work better? */
-        if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
-                torbutton_check_load_state(doc, tor_tag) && 
+        if(doc.contentType.indexOf("text/html") != -1 && 
+                torbutton_check_load_state(doc, false) && 
                 !torbutton_check_flag(win.window.wrappedJSObject, 
                     "__tb_hooks_ran")) {
             torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website!");
@@ -972,8 +1039,8 @@ function torbutton_hookdoc(win, doc) {
         /* XXX: Remove this once bug #460 is resolved */
         torbutton_log(4, "Hrmm.. Partial checked hook: "
                 + torbutton_check_flag(win, "__tb_did_hook"));
-        if(!tor_tag && doc.contentType.indexOf("text/html") != -1 && 
-                torbutton_check_load_state(doc, tor_tag) && 
+        if(doc.contentType.indexOf("text/html") != -1 && 
+                torbutton_check_load_state(doc, false) && 
                 !torbutton_check_flag(win.window.wrappedJSObject, "__tb_hooks_ran")) {
             torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website!");
             win.alert("False doc hooking. Please report bug+website!");
@@ -1030,13 +1097,20 @@ function torbutton_hookdoc(win, doc) {
 
     torbutton_log(2, "Document: " + doc.domain);
 
-    var s = new Components.utils.Sandbox(win.window.wrappedJSObject);
-    s.window = win.window.wrappedJSObject;
-    Components.utils.evalInSandbox(str2, s);
+    try {
+        var s = new Components.utils.Sandbox(win.window.wrappedJSObject);
+        s.window = win.window.wrappedJSObject;
+        var result = Components.utils.evalInSandbox(str2, s);
+        if(result == 23) { // secret confirmation result code.
+            torbutton_set_flag(win, "__tb_did_hook");
+            torbutton_set_flag(doc, "__tb_did_hook");
+        } else {
+            win.alert("Sandbox evaluation failed. Date hooks not applied!");
+        }
+    } catch (e) {
+        win.alert("Sandbox evaluation failed. Date hooks not applied!");
+    }
 
-    torbutton_set_flag(win, "__tb_did_hook");
-    torbutton_set_flag(doc, "__tb_did_hook");
-    
     torbutton_log(2, "Finished hook: " + doc.location);
 
     return;

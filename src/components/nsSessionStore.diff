@@ -1,0 +1,48 @@
+--- /usr/lib/firefox-2.0.0.7/components/nsSessionStore.js	2007-09-18 11:08:22.000000000 -0700
++++ nsSessionStore.js	2007-09-28 19:20:52.000000000 -0700
+@@ -777,11 +777,20 @@
+     var browsers = tabbrowser.browsers;
+     var tabs = this._windows[aWindow.__SSi].tabs = [];
+     this._windows[aWindow.__SSi].selected = 0;
++    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
++        .getService(Components.interfaces.nsIPrefBranch);
++    var bypass_tor = prefs.getBoolPref("extensions.torbutton.notor_sessionstore");
+     
+     for (var i = 0; i < browsers.length; i++) {
+       var tabData = { entries: [], index: 0 };
+       
+       var browser = browsers[i];
++      if(bypass_tor && typeof(browser.__tb_js_state) != "undefined" && 
++              !browser.__tb_js_state) {
++          //dump("bypassing tor tab\n");
++          //tabs.push(tabData);
++          continue;
++      }
+       if (!browser || !browser.currentURI) {
+         // can happen when calling this function right after .addTab()
+         tabs.push(tabData);
+@@ -2146,6 +2155,23 @@
+   }
+ };
+ 
++const NoModule = {
++  getClassObject: function(aCompMgr, aCID, aIID) {
++    Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
++    return null;
++  },
++  registerSelf: function(aCompMgr, aFileSpec, aLocation, aType) { return; },
++  unregisterSelf: function(aCompMgr, aLocation, aType) { return; },
++  canUnload: function(aCompMgr) { return true; }
++};
++
++
+ function NSGetModule(aComMgr, aFileSpec) {
+-  return SessionStoreModule;
++  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
++        .getService(Components.interfaces.nsIPrefBranch);
++  if(prefs.getBoolPref("extensions.torbutton.notor_sessionstore")) {
++    return SessionStoreModule;
++  } else {
++    return NoModule;
++  }
+ }

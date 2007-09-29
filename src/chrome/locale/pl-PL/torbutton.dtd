@@ -30,7 +30,7 @@
 <!ENTITY torbutton.prefs.sec_settings        "Security Settings">
 <!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
 <!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (recommended)">
+<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
 <!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
@@ -49,7 +49,7 @@
 <!ENTITY torbutton.prefs.history             "History">
 <!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (optional)">
 <!ENTITY torbutton.prefs.shutdown              "Shutdown">
-<!ENTITY torbutton.prefs.tor_shutdown          "Clear cookies during Tor-enabled browser shutdown">
+<!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
 <!ENTITY torbutton.prefs.no_shutdown           "Do not clear my cookies at shutdown">
 <!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
@@ -60,3 +60,9 @@
 <!ENTITY torbutton.prefs.forms            "Forms">
 <!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
+<!ENTITY torbutton.prefs.tor    "Tor">
+<!ENTITY torbutton.prefs.non_tor    "Non-Tor">
+<!ENTITY torbutton.prefs.restore_tor   "Restore saved session via Tor after Firefox crash (optional)">
+<!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
+<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars">

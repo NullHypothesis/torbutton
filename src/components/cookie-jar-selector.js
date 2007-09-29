@@ -60,8 +60,16 @@ function CookieJarSelector() {
   }
 
   this.saveCookies = function(name) {
-    // FIXME: There seems to be no way to sync cookies.txt before
-    // doing this :(
+    var cookieManager =
+      Cc["@mozilla.org/cookiemanager;1"]
+      .getService(Ci.nsICookieManager);
+    cookieManager.QueryInterface(Ci.nsIObserver);
+
+    // Tell the cookie manager to unload cookies from memory 
+    // and sync to disk.
+    cookieManager.observe(this, "profile-before-change", "");
+    // Tell the cookie manager to reload cookies from disk
+    cookieManager.observe(this, "profile-do-change", "");
     copyProfileFile("cookies.txt", "cookies-" + name + ".txt");
   };
 

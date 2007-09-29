@@ -172,4 +172,5 @@ if (typeof(window.__HookObjects) != "undefined") {
 
     /* XXX: Removeme */
     window.__tb_hooks_ran = true;
+    23; // Secret result code.
 }

@@ -1,9 +1,13 @@
 1.1.8
   XX Sep 2007
-  * bugfix: bug 503: prevent sessionstore from writing to disk without 
-    disabling "Undo Close Tab"
+  * bugfix: bug 503: prevent sessionstore from writing Tor tabs to disk
   * bugfix: bug 510: decouple cookie clearing from Clear Private Data settings
   * bugfix: bug 474: decouple password+form saving from history writing
+  * bugfix: cookies are now properly synced before storing into a jar
+  * misc: tightened up the alerts a bit more for the javascript hooking
+  * misc: changed defaults to be less intrusive to non-tor usage
+  * new: Added options to start in Tor and reload cookies after browser crash 
+  * new: Added ability to have both tor and non-tor jars
 
 1.1.7
   20 Sep 2007
