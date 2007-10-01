@@ -1062,6 +1062,8 @@ function torbutton_hookdoc(win, doc) {
         .getService(Components.interfaces.nsISupports)
         .wrappedJSObject;
 
+    wm.expireOldCache();
+
     var browser = wm.getBrowserForContentWindow(win);
     if(!browser) win.alert("No window found!");
     torbutton_log(2, "Got browser "+browser.contentDocument.location+" for: " 

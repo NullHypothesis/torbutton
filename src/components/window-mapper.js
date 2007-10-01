@@ -16,19 +16,42 @@ const kMODULE_CID = Components.ID("b985e49c-12cb-4f29-9d14-b62603332ec4");
 const Cr = Components.results;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+const EXPIRATION_TIME = 60000; // 60 seconds
 
 function ContentWindowMapper() {
+    this.cache = new Object();
+    this.cache["bah"] = 0;
 
-    var checkCache = function(topContentWindow) {
+    this.checkCache = function(topContentWindow) {
+        if(typeof(this.cache[topContentWindow]) != "undefined") {
+            dump("Found cached element\n");
+            return this.cache[topContentWindow].browser;
+        }
+
         return null;
     };
 
-    var addCache = function(topContentWindow, browser) {
-        return null;
+    this.addCache = function(topContentWindow, browser) {
+        var insertion = new Object();
+        insertion.browser = browser;
+        insertion.time = Date.now();
+        this.cache[topContentWindow] = insertion; 
+        dump("Cached element\n");
+    };
+
+    this.expireOldCache = function() {
+        var now = Date.now();
+
+        for(var elem in this.cache) {
+            if((now - this.cache[elem].time) > EXPIRATION_TIME) {
+                dump("Deleting expired entry\n");
+                delete this.cache[elem];
+            }
+        }
     };
 
     this.getBrowserForContentWindow = function(topContentWindow) {
-        var cached = checkCache(topContentWindow);
+        var cached = this.checkCache(topContentWindow);
         if(cached != null) return cached;
 
         var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
@@ -40,7 +63,7 @@ function ContentWindowMapper() {
             for (var i = 0; i < browser.browsers.length; ++i) {
                 var b = browser.browsers[i];
                 if (b && b.contentWindow == topContentWindow) {
-                    addCache(topContentWindow, browser);
+                    this.addCache(topContentWindow, browser);
                     return browser;
                 }
             }
@@ -98,6 +121,7 @@ ContentWindowMapper.prototype =
 
 }
 
+var ContentWindowMapperInstance = null;
 var ContentWindowMapperFactory = new Object();
 
 ContentWindowMapperFactory.createInstance = function (outer, iid)
@@ -111,7 +135,10 @@ ContentWindowMapperFactory.createInstance = function (outer, iid)
     Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
     return null;
   }
-  return new ContentWindowMapper();
+  if(ContentWindowMapperInstance == null)
+      ContentWindowMapperInstance = new ContentWindowMapper();
+
+  return ContentWindowMapperInstance;
 }
 
 var ContentWindowMapperModule = new Object();
