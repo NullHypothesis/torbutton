@@ -805,6 +805,7 @@ SessionStoreService.prototype = {
       
       if (history && browser.parentNode.__SS_data && browser.parentNode.__SS_data.entries[history.index]) {
         tabData = browser.parentNode.__SS_data;
+        if(!tabData) continue;
         tabData.index = history.index + 1;
       }
       else if (history && history.count > 0) {
@@ -988,7 +989,7 @@ SessionStoreService.prototype = {
     Array.forEach(aWindow.getBrowser().browsers, function(aBrowser, aIx) {
       try {
         var tabData = this._windows[aWindow.__SSi].tabs[aIx];
-        if (tabData.entries.length == 0)
+        if (!tabData || tabData.entries.length == 0)
           return; // ignore incompletely initialized tabs
         
         var text = [];

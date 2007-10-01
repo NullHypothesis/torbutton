@@ -1,5 +1,5 @@
 --- /usr/lib/firefox-2.0.0.7/components/nsSessionStore.js	2007-09-18 11:08:22.000000000 -0700
-+++ nsSessionStore.js	2007-09-28 19:20:52.000000000 -0700
++++ ./nsSessionStore.js	2007-10-01 01:14:40.000000000 -0700
 @@ -777,11 +777,20 @@
      var browsers = tabbrowser.browsers;
      var tabs = this._windows[aWindow.__SSi].tabs = [];
@@ -21,7 +21,24 @@
        if (!browser || !browser.currentURI) {
          // can happen when calling this function right after .addTab()
          tabs.push(tabData);
-@@ -2146,6 +2155,23 @@
+@@ -796,6 +805,7 @@
+       
+       if (history && browser.parentNode.__SS_data && browser.parentNode.__SS_data.entries[history.index]) {
+         tabData = browser.parentNode.__SS_data;
++        if(!tabData) continue;
+         tabData.index = history.index + 1;
+       }
+       else if (history && history.count > 0) {
+@@ -979,7 +989,7 @@
+     Array.forEach(aWindow.getBrowser().browsers, function(aBrowser, aIx) {
+       try {
+         var tabData = this._windows[aWindow.__SSi].tabs[aIx];
+-        if (tabData.entries.length == 0)
++        if (!tabData || tabData.entries.length == 0)
+           return; // ignore incompletely initialized tabs
+         
+         var text = [];
+@@ -2146,6 +2156,23 @@
    }
  };
  

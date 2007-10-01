@@ -69,7 +69,11 @@ function ContentWindowMapper() {
             }
         }
 
-        dump("No browser found!\n");
+        if(topContentWindow && topContentWindow.document && topContentWindow.document.location)
+            dump("No browser found: "+topContentWindow.document.location+"\n");
+        else
+            dump("No browser found!\n");
+
         return null;
     };
 
