@@ -89,6 +89,9 @@ var policy = {
         this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
             .getService(Components.interfaces.nsIPrefBranch);
         this._loglevel = this._prefs.getIntPref("extensions.torbutton.loglevel");
+        this.wm = Components.classes["@torproject.org/content-window-mapper;1"]
+            .getService(Components.interfaces.nsISupports)
+            .wrappedJSObject;
         this.log("init done\n");
         return;
     },
@@ -113,7 +116,6 @@ var policy = {
     // have to continually query prefs
 	// nsIContentPolicy interface implementation
 	shouldLoad: function(contentType, contentLocation, requestOrigin, insecNode, mimeTypeGuess, extra) {
-        this.log("ContentLocation: "+contentLocation.spec+"\n");
        
         /*. Debugging hack. DO NOT UNCOMMENT IN PRODUCTION ENVIRONMENTS
         if(contentLocation.spec.search("venkman") != -1) {
@@ -123,6 +125,7 @@ var policy = {
 
         if(!insecNode) {
             // Happens on startup
+            this.log("Skipping insec: "+contentLocation.spec+"\n");
             return ok;
         }
 
@@ -135,6 +138,7 @@ var policy = {
         var wind = getWindow(wrapNode(insecNode));
 
 		if (this.isLocalScheme(unwrapURL(contentLocation.spec))) {
+            this.log("Skipping local: "+contentLocation.spec+"\n");
 			return ok;
         } 
 
@@ -145,51 +149,39 @@ var policy = {
 		}
 
         if (!wind || !wind.top.location || !wind.top.location.href) {
-            this.log("Location\n");
+            this.log("Skipping no location: "+contentLocation.spec+"\n");
 			return ok;
         }
 
         var doc = wind.top.document;
         if(!doc) {
             // 1st load of a page in a new location
+            this.log("Skipping no doc: "+contentLocation.spec+"\n");
             return ok;
         }
 
-        // TODO: Ugly.. But seems to be no better option..
-        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-                     .getService(Components.interfaces.nsIWindowMediator);
-        var mainWindow = wm.getMostRecentWindow("navigator:browser");
-
-        if(!mainWindow) {
-            // 1st window gets this.
-            return ok;
+        var browser = this.wm.getBrowserForContentWindow(wind.top);
+        if(!browser) {
+            // This happens on the first load of a doc
+            // XXX: Other cases?
+            this.log("No window found: "+contentLocation.spec+"\n");
+            return ok; 
         }
 
-        var browser = mainWindow.getBrowser(); 
         var torTag = !this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
-       
-        // Find proper browser for this document.. ugh. this
-        // is gonna be SO fucking slow :(
-        // TODO: try nsIWindowWatcher.getChromeForWindow()
-        for (var i = 0; i < browser.browsers.length; ++i) {
-            var b = browser.browsers[i];
-            if (b && b.contentDocument == doc) {
-                if (typeof(b.__tb_js_state) == 'undefined') {
-                    this.log("UNTAGGED WINDOW2!!!!!!!!!");
-                    return block;
-                }
 
-                if(b.__tb_js_state == torTag) {
-                    return ok;
-                } else {
-                    this.log("block2: "+b.__tb_js_state+"\n");
-                    return block;
-                }
-            }
+        if (typeof(browser.__tb_js_state) == 'undefined') {
+            this.log("UNTAGGED WINDOW2!!!!!!!!! "+contentLocation.spec+"\n");
+            return block;
         }
 
-        // Favicons hit this.. Their document is browser.xml
-        return ok;
+        if(browser.__tb_js_state == torTag)
+            return ok;
+        else {
+            this.log("Blocking: "+contentLocation.spec+"\n");
+            return block;
+        }
+
 	},
 
 	shouldProcess: function(contentType, contentLocation, requestOrigin, insecNode, mimeType, extra) {

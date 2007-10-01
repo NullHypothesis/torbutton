@@ -1,8 +1,10 @@
 1.1.8
-  XX Sep 2007
+  XX Oct 2007
   * bugfix: bug 503: prevent sessionstore from writing Tor tabs to disk
   * bugfix: bug 510: decouple cookie clearing from Clear Private Data settings
   * bugfix: bug 474: decouple password+form saving from history writing
+  * bugfix: bug 460: rework handling of hooking based on global events+window
+    lookup
   * bugfix: cookies are now properly synced before storing into a jar
   * misc: tightened up the alerts a bit more for the javascript hooking
   * misc: changed defaults to be less intrusive to non-tor usage

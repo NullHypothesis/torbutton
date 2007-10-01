@@ -1013,32 +1013,25 @@ function torbutton_check_flag(obj, flag) {
     return (typeof(obj[flag]) != 'undefined');
 }
 
-function torbutton_check_load_state(doc, tor_tag) {
-    var browser = getBrowser();
-
-    // Find proper browser for this document.. ugh.
-    for (var i = 0; i < browser.browsers.length; ++i) {
-        var b = browser.browsers[i];
-        if (b && b.contentDocument == doc) {
-            torbutton_log(1, "Tab states "+tor_tag+" == "+
-                    b.__tb_js_state + " -> " + 
-                    (b.__tb_js_state == tor_tag)); 
-            return b.__tb_js_state == tor_tag;
-        }
-    }
-}
-
 function torbutton_hookdoc(win, doc) {
-    torbutton_log(1, "Hooking document: "+doc.location);
-    if(doc.doctype) {
-        torbutton_log(2, "Hooking document: "+doc.doctype.name);
-    }
     if (!m_tb_wasinited) {
         torbutton_init();
     }
 
-    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
+    if(win != win.top) {
+        torbutton_log(3, "Hook for non-toplevel window: "+doc.location);
+        win = win.top;
+    }
+
+    if(typeof(win.wrappedJSObject) == 'undefined') {
+        torbutton_log(3, "No JSObject: "+doc.location);
+        return;
+    }
+
+    torbutton_log(2, "Hooking document: "+doc.location);
+    if(doc.doctype) {
+        torbutton_log(2, "Hooking document: "+doc.doctype.name);
+    }
    
     // We can't just tag the document here because it is possible
     // to hit reload at just the right point such that the document
@@ -1047,11 +1040,17 @@ function torbutton_hookdoc(win, doc) {
         torbutton_log(2, "Already did hook " 
                 + torbutton_check_flag(win, "__tb_did_hook"));
         /* XXX: Remove this once bug #460 is resolved */
+        var wm = Components.classes["@torproject.org/content-window-mapper;1"]
+            .getService(Components.interfaces.nsISupports)
+            .wrappedJSObject;
+        var browser = wm.getBrowserForContentWindow(win);
+        if(!browser) win.alert("No window found!");
+
         /* hrmm.. would doc.isSupported("javascript") 
          * or doc.implementation.hasFeature() work better? */
         if(doc.contentType.indexOf("text/html") != -1 && 
-                torbutton_check_load_state(doc, false) && 
-                !torbutton_check_flag(win.window.wrappedJSObject, 
+                browser.__tb_js_state == false &&
+                !torbutton_check_flag(win.wrappedJSObject, 
                     "__tb_hooks_ran")) {
             torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website!");
             win.alert("False win hooking. Please report bug+website!");
@@ -1059,40 +1058,28 @@ function torbutton_hookdoc(win, doc) {
         return; // Ran already
     }
 
-    // We also can't just tag the window either, because it gets
-    // cleared on back/fwd(!??)
-    if(torbutton_check_flag(doc, "__tb_did_hook")) {
-        /* XXX: Remove this once bug #460 is resolved */
-        torbutton_log(4, "Hrmm.. Partial checked hook: "
-                + torbutton_check_flag(win, "__tb_did_hook"));
-        if(doc.contentType.indexOf("text/html") != -1 && 
-                torbutton_check_load_state(doc, false) && 
-                !torbutton_check_flag(win.window.wrappedJSObject, "__tb_hooks_ran")) {
-            torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website!");
-            win.alert("False doc hooking. Please report bug+website!");
-        } 
-        return; // Ran already
-    }
+    var wm = Components.classes["@torproject.org/content-window-mapper;1"]
+        .getService(Components.interfaces.nsISupports)
+        .wrappedJSObject;
 
-    var browser = getBrowser();
+    var browser = wm.getBrowserForContentWindow(win);
+    if(!browser) win.alert("No window found!");
+    torbutton_log(2, "Got browser "+browser.contentDocument.location+" for: " 
+            + doc.location);
+
+    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
-    // TODO: try nsIWindowWatcher.getChromeForWindow()
-
-    // Find proper browser for this document.. ugh.
-    for (var i = 0; i < browser.browsers.length; ++i) {
-        var b = browser.browsers[i];
-        if (b && b.contentDocument == doc) {
-            b.__tb_js_state = tor_tag;
-            b.docShell.allowPlugins = tor_tag || !kill_plugins;
-            b.docShell.allowJavascript = js_enabled;
-        }
-    }
+    torbutton_log(2, "Tagging browser for: " + doc.location);
+    browser.__tb_js_state = tor_tag;
+    browser.docShell.allowPlugins = tor_tag || !kill_plugins;
+    browser.docShell.allowJavascript = js_enabled;
 
     torbutton_log(1, "JS set to: " + js_enabled);
     
     if(!js_enabled) // XXX: bug #460 hack
-        win.window.wrappedJSObject.__tb_hooks_ran = true; 
+        win.wrappedJSObject.__tb_hooks_ran = true; 
 
     // No need to hook js if tor is off
     if(!js_enabled 
@@ -1100,7 +1087,6 @@ function torbutton_hookdoc(win, doc) {
             || !m_tb_prefs.getBoolPref('extensions.torbutton.kill_bad_js')) {
         torbutton_log(2, "Finished non-hook of: " + doc.location);
         torbutton_set_flag(win, "__tb_did_hook");
-        torbutton_set_flag(doc, "__tb_did_hook");
         return;
     }
 
@@ -1121,20 +1107,21 @@ function torbutton_hookdoc(win, doc) {
     str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
     str2 += m_tb_jshooks + "}";
 
-    torbutton_log(2, "Document: " + doc.domain);
-
     try {
-        var s = new Components.utils.Sandbox(win.window.wrappedJSObject);
-        s.window = win.window.wrappedJSObject;
+        torbutton_log(2, "Tupe of window: " + typeof(win));
+        torbutton_log(2, "Type of wrapped window: " + typeof(win.wrappedJSObject));
+        var s = new Components.utils.Sandbox(win.wrappedJSObject);
+        s.window = win.wrappedJSObject;
         var result = Components.utils.evalInSandbox(str2, s);
         if(result == 23) { // secret confirmation result code.
             torbutton_set_flag(win, "__tb_did_hook");
-            torbutton_set_flag(doc, "__tb_did_hook");
         } else {
             win.alert("Sandbox evaluation failed. Date hooks not applied!");
+            torbutton_log(4, "Hook evaluation failure at " + doc.location);
         }
     } catch (e) {
-        win.alert("Exception in sandbox evaluation. Date hooks not applied!");
+        win.alert("Exception in sandbox evaluation. Date hooks not applied:\n"+e);
+        torbutton_log(4, "Hook exception at: "+doc.location+", "+e);
     }
 
     torbutton_log(2, "Finished hook: " + doc.location);
@@ -1149,8 +1136,8 @@ function torbutton_check_progress(aProgress) {
         torbutton_log(1, "location progress");
         var doc = aProgress.DOMWindow.document;
         try {
-            if(doc && doc.domain) 
-                torbutton_hookdoc(aProgress.DOMWindow, doc);
+            if(doc && doc.domain)
+                torbutton_hookdoc(aProgress.DOMWindow.window, doc);
             else torbutton_log(2, "No DOM yet at location event");
         } catch(e) {
             torbutton_log(3, "Hit about:plugins? "+doc.location);
