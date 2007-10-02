@@ -22,9 +22,20 @@ function ContentWindowMapper() {
     this.cache = new Object();
     this.cache["bah"] = 0;
 
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefBranch);
+    this._loglevel = prefs.getIntPref("extensions.torbutton.loglevel");
+
+    this.log = function(str) {
+        // TODO: This could be done better/unified with the main log system..
+        if(this._loglevel <= 2) {
+            dump(str);
+        } 
+    },
+
     this.checkCache = function(topContentWindow) {
         if(typeof(this.cache[topContentWindow]) != "undefined") {
-            dump("Found cached element\n");
+            this.log("Found cached element\n");
             return this.cache[topContentWindow].browser;
         }
 
@@ -36,7 +47,7 @@ function ContentWindowMapper() {
         insertion.browser = browser;
         insertion.time = Date.now();
         this.cache[topContentWindow] = insertion; 
-        dump("Cached element\n");
+        this.log("Cached element\n");
     };
 
     this.expireOldCache = function() {
@@ -44,7 +55,7 @@ function ContentWindowMapper() {
 
         for(var elem in this.cache) {
             if((now - this.cache[elem].time) > EXPIRATION_TIME) {
-                dump("Deleting expired entry\n");
+                this.log("Deleting expired entry\n");
                 delete this.cache[elem];
             }
         }
@@ -70,9 +81,9 @@ function ContentWindowMapper() {
         }
 
         if(topContentWindow && topContentWindow.document && topContentWindow.document.location)
-            dump("No browser found: "+topContentWindow.document.location+"\n");
+            this.log("No browser found: "+topContentWindow.document.location+"\n");
         else
-            dump("No browser found!\n");
+            this.log("No browser found!\n");
 
         return null;
     };
