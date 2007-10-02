@@ -13,9 +13,21 @@ try {
                     .getService(Components.interfaces.nsIDebugLoggerManager); 
     m_tb_logger = logMngr.registerLogger("torbutton");
 } catch (exErr) {
-    m_tb_console = Components.classes["@mozilla.org/consoleservice;1"]
-                    .getService(Components.interfaces.nsIConsoleService);
     m_tb_logger = false;
+}
+m_tb_console = Components.classes["@mozilla.org/consoleservice;1"]
+.getService(Components.interfaces.nsIConsoleService);
+
+function torbutton_eclog(nLevel, sMsg) {
+    if(!m_tb_debug) return true;
+    var rDate = new Date();
+    
+    if (m_tb_console && nLevel >= m_tb_loglevel) {
+        m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
+    } else if (nLevel >= m_tb_loglevel) {
+        dump(rDate.getTime()+': '+sMsg+"\n");
+    }
+    return true;
 }
 
 function torbutton_log(nLevel, sMsg) {

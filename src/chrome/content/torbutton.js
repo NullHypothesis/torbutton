@@ -1134,13 +1134,16 @@ function torbutton_hookdoc(win, doc) {
 function torbutton_check_progress(aProgress) {
     // This fires when the location bar changes i.e load event is confirmed
     // or when the user switches tabs
+
+    // XXX: Warning! this can also fire when the 'debuglogger' extension
+    // updates its window. Typically for this, doc.domain is null. Do not
+    // log in this case (until we find a better way to filter those
+    // events out). Use torbutton_eclog for common-path stuff.
     if(aProgress) {
-        torbutton_log(1, "location progress");
         var doc = aProgress.DOMWindow.document;
         try {
             if(doc && doc.domain)
                 torbutton_hookdoc(aProgress.DOMWindow.window, doc);
-            else torbutton_log(2, "No DOM yet at location event");
         } catch(e) {
             torbutton_log(3, "Hit about:plugins? "+doc.location);
         }        
@@ -1163,25 +1166,25 @@ var torbutton_weblistener =
 
   onStateChange: function(aProgress, aRequest, aFlag, aStatus)
   { 
-      torbutton_log(1, 'State change()');
+      torbutton_eclog(1, 'State change()');
       return torbutton_check_progress(aProgress);
   },
 
   onLocationChange: function(aProgress, aRequest, aURI)
   {
-      torbutton_log(1, 'onLocationChange');
+      torbutton_eclog(1, 'onLocationChange: '+aURI.asciiSpec);
       return torbutton_check_progress(aProgress);
   },
 
   onProgressChange: function(aProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
   { 
-      torbutton_log(1, 'called progressChange'); 
+      torbutton_eclog(1, 'called progressChange'); 
       return torbutton_check_progress(aProgress);
   },
   
   onStatusChange: function(aProgress, request, stat, message) 
   { 
-      torbutton_log(1, 'called progressChange'); 
+      torbutton_eclog(1, 'called progressChange'); 
       return torbutton_check_progress(aProgress);
   },
   
