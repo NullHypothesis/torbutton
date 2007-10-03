@@ -1058,6 +1058,28 @@ function torbutton_hookdoc(win, doc) {
         return; // Ran already
     }
 
+    if(torbutton_check_flag(doc, "__tb_did_hook")) {
+        torbutton_log(2, "Already did hook " 
+                + torbutton_check_flag(doc, "__tb_did_hook"));
+        /* XXX: Remove this once bug #460 is resolved */
+        var wm = Components.classes["@torproject.org/content-window-mapper;1"]
+            .getService(Components.interfaces.nsISupports)
+            .wrappedJSObject;
+        var browser = wm.getBrowserForContentWindow(win);
+        if(!browser) win.alert("No window found!");
+
+        /* hrmm.. would doc.isSupported("javascript") 
+         * or doc.implementation.hasFeature() work better? */
+        if(doc.contentType.indexOf("text/html") != -1 && 
+                browser.__tb_js_state == false &&
+                !torbutton_check_flag(win.wrappedJSObject, 
+                    "__tb_hooks_ran")) {
+            torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website!");
+            win.alert("False win hooking. Please report bug+website!");
+        }
+        return; // Ran already
+    }
+
     var wm = Components.classes["@torproject.org/content-window-mapper;1"]
         .getService(Components.interfaces.nsISupports)
         .wrappedJSObject;
@@ -1089,6 +1111,7 @@ function torbutton_hookdoc(win, doc) {
             || !m_tb_prefs.getBoolPref('extensions.torbutton.kill_bad_js')) {
         torbutton_log(2, "Finished non-hook of: " + doc.location);
         torbutton_set_flag(win, "__tb_did_hook");
+        torbutton_set_flag(doc, "__tb_did_hook");
         return;
     }
 
@@ -1117,6 +1140,7 @@ function torbutton_hookdoc(win, doc) {
         var result = Components.utils.evalInSandbox(str2, s);
         if(result == 23) { // secret confirmation result code.
             torbutton_set_flag(win, "__tb_did_hook");
+            torbutton_set_flag(doc, "__tb_did_hook");
         } else {
             win.alert("Sandbox evaluation failed. Date hooks not applied!");
             torbutton_log(4, "Hook evaluation failure at " + doc.location);
