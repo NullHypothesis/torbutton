@@ -1019,8 +1019,10 @@ function torbutton_hookdoc(win, doc) {
     }
 
     if(win != win.top) {
+        // Handle the iframe case
         torbutton_log(3, "Hook for non-toplevel window: "+doc.location);
         win = win.top;
+        doc = win.document;
     }
 
     if(typeof(win.wrappedJSObject) == 'undefined') {
