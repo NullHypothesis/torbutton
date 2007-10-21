@@ -148,6 +148,18 @@ var policy = {
 			wind = node;
 		}
 
+        if (contentType == 5) { // Object
+            // Never seems to happen.. But it would be nice if we 
+            // could handle it either here or shouldProcess, instead of in 
+            // the webprogresslistener
+            if(!torTag) {
+                if(this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+                    this.log("Blocking object at "+contentLocation.spec+"\n");
+                    return block;
+                }
+            }
+        }
+
         if (!wind || !wind.top.location || !wind.top.location.href) {
             this.log("Skipping no location: "+contentLocation.spec+"\n");
 			return ok;
@@ -175,6 +187,7 @@ var policy = {
             return block;
         }
 
+
         if(browser.__tb_js_state == torTag)
             return ok;
         else {
@@ -185,8 +198,12 @@ var policy = {
 	},
 
 	shouldProcess: function(contentType, contentLocation, requestOrigin, insecNode, mimeType, extra) {
-		return ok;
-	}
+        // Were this actually ever called, it might be useful :(
+        // Instead, related functionality has been grafted onto the 
+        // webprogresslistener :(	
+        // See mozilla bugs 380556, 305699, 309524
+        return ok;
+	},
 };
 
 /*

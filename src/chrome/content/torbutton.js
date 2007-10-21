@@ -6,6 +6,7 @@
 var m_tb_wasinited = false;
 var m_tb_prefs = false;
 var m_tb_jshooks = false;
+var m_tb_plugin_mimetypes = false;
 
 var torbutton_pref_observer =
 {
@@ -928,11 +929,24 @@ function torbutton_do_onetime_startup()
             getService(Components.interfaces.nsIWebProgress);
 
         progress.addProgressListener(torbutton_weblistener,
+//                Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL|
+//                Components.interfaces.nsIWebProgress.NOTIFY_ALL);
                 Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
                 Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
         torbutton_uninstall_observer.register();
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
+    }
+}
+
+function torbutton_get_plugin_mimetypes()
+{
+    m_tb_plugin_mimetypes = { null : null };
+    for(var i = 0; i < window.navigator.mimeTypes.length; ++i) {
+        var mime = window.navigator.mimeTypes.item(i);
+        if(mime && mime.enabledPlugin) {
+            m_tb_plugin_mimetypes[mime.type] = true;
+        }
     }
 }
 
@@ -961,6 +975,8 @@ function torbutton_new_window(event)
     
     torbutton_do_onetime_startup();
     torbutton_crash_recover();
+
+    torbutton_get_plugin_mimetypes();
 
     torbutton_tag_new_browser(browser.browsers[0], 
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
@@ -1157,14 +1173,26 @@ function torbutton_hookdoc(win, doc) {
     return;
 }
 
-function torbutton_check_progress(aProgress) {
-    // This fires when the location bar changes i.e load event is confirmed
-    // or when the user switches tabs
+function torbutton_check_progress(aProgress, aRequest) {
+    // This noise is a workaround for the fact that docShell.allowPlugins
+    // is ignored when you directly click on a link
+    if(aRequest instanceof Components.interfaces.nsIChannel
+            && aRequest.isPending() 
+            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+            && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+        try {
+            torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
 
-    // XXX: Warning! this can also fire when the 'debuglogger' extension
-    // updates its window. Typically for this, doc.domain is null. Do not
-    // log in this case (until we find a better way to filter those
-    // events out). Use torbutton_eclog for common-path stuff.
+            if (aRequest.contentType in m_tb_plugin_mimetypes) {
+                aRequest.cancel(0x804b0002);
+                window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                return 0;
+            }
+        } catch(e) {
+            torbutton_eclog(3, 'Exception on request cancel');
+        }
+    }
+
     if(aProgress) {
         var doc = aProgress.DOMWindow.document;
         try {
@@ -1179,6 +1207,10 @@ function torbutton_check_progress(aProgress) {
     return 0;
 }
 
+// Warning: These can also fire when the 'debuglogger' extension
+// updates its window. Typically for this, doc.domain is null. Do not
+// log in this case (until we find a better way to filter those
+// events out). Use torbutton_eclog for common-path stuff.
 var torbutton_weblistener =
 {
   QueryInterface: function(aIID)
@@ -1193,25 +1225,25 @@ var torbutton_weblistener =
   onStateChange: function(aProgress, aRequest, aFlag, aStatus)
   { 
       torbutton_eclog(1, 'State change()');
-      return torbutton_check_progress(aProgress);
+      return torbutton_check_progress(aProgress, aRequest);
   },
 
   onLocationChange: function(aProgress, aRequest, aURI)
   {
       torbutton_eclog(1, 'onLocationChange: '+aURI.asciiSpec);
-      return torbutton_check_progress(aProgress);
+      return torbutton_check_progress(aProgress, aRequest);
   },
 
-  onProgressChange: function(aProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
+  onProgressChange: function(aProgress, aRequest, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
   { 
       torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress);
+      return torbutton_check_progress(aProgress, aRequest);
   },
   
-  onStatusChange: function(aProgress, request, stat, message) 
+  onStatusChange: function(aProgress, aRequest, stat, message) 
   { 
       torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress);
+      return torbutton_check_progress(aProgress, aRequest);
   },
   
   onSecurityChange: function() {return 0;},

@@ -1,3 +1,9 @@
+1.1.9
+  21 Oct 2007
+  * bugfix: bug 521: Fix yet more false positive popups introduced in 1.1.8
+  * bugfix: bug 522: Block loading of direct clicks of plugin-handled content 
+    (discovered by goldy).
+
 1.1.8
   01 Oct 2007
   * bugfix: bug 503: Prevent sessionstore from writing Tor tabs to disk
