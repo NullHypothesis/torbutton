@@ -147,6 +147,8 @@ var policy = {
 			node = node.contentWindow;
 			wind = node;
 		}
+        
+        var torTag = !this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
 
         if (contentType == 5) { // Object
             // Never seems to happen.. But it would be nice if we 
@@ -179,8 +181,6 @@ var policy = {
             this.log("No window found: "+contentLocation.spec+"\n");
             return ok; 
         }
-
-        var torTag = !this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
 
         if (typeof(browser.__tb_js_state) == 'undefined') {
             this.log("UNTAGGED WINDOW2!!!!!!!!! "+contentLocation.spec+"\n");
