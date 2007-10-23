@@ -3,9 +3,6 @@
  *
  * Allows you to find a tabbrowser tab for a top level content window.
  *
- * TODO: Implement a local cache+timer expiration so this isn't ass-slow 
- * with lots of windows open.
- *
  *************************************************************************/
 
 // Module specific constants

@@ -1,5 +1,6 @@
 var m_tb_logger = false;
 var m_tb_console = false;
+var m_tb_ghetto = false;
 var m_tb_debug = Components.classes["@mozilla.org/preferences-service;1"]
             .getService(Components.interfaces.nsIPrefBranch)
             .getBoolPref("extensions.torbutton.debug");
@@ -18,14 +19,18 @@ try {
 m_tb_console = Components.classes["@mozilla.org/consoleservice;1"]
 .getService(Components.interfaces.nsIConsoleService);
 
+m_tb_ghetto = Components.classes["@torproject.org/ghetto-logger;1"]
+.getService(Components.interfaces.nsISupports).wrappedJSObject;
+
+
 function torbutton_eclog(nLevel, sMsg) {
     if(!m_tb_debug) return true;
     var rDate = new Date();
-    
+        
     if (m_tb_console && nLevel >= m_tb_loglevel) {
         m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
     } else if (nLevel >= m_tb_loglevel) {
-        dump(rDate.getTime()+': '+sMsg+"\n");
+        m_tb_ghetto.log(nLevel, rDate.getTime()+': '+sMsg+"\n");
     }
     return true;
 }
@@ -34,12 +39,13 @@ function torbutton_log(nLevel, sMsg) {
     if(!m_tb_debug) return true;
 
     var rDate = new Date();
+
     if (m_tb_logger) {
         m_tb_logger.log((6-nLevel), rDate.getTime()+': '+sMsg);
     } else if (m_tb_console && nLevel >= m_tb_loglevel) {
         m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
     } else if (nLevel >= m_tb_loglevel) {
-        dump(rDate.getTime()+': '+sMsg+"\n");
+        m_tb_ghetto.log(nLevel, rDate.getTime()+': '+sMsg+"\n");
     }
 
     // So we can use it in boolean expressions to determine where the 

@@ -37,6 +37,10 @@ var torbutton_pref_observer =
             case "extensions.torbutton.panel_style":
                 torbutton_set_panel_style();
                 break;
+            /* XXX: Why was this here? Gotta ask Scott.
+             * It causes an inf loop on ubuntu. The
+             * real question is why doesn't it cause this
+             * loop everywhere? it seems like it should
             case "extensions.torbutton.http_proxy":
             case "extensions.torbutton.http_port":
             case "extensions.torbutton.https_proxy":
@@ -48,6 +52,7 @@ var torbutton_pref_observer =
             case "extensions.torbutton.socks_host":
             case "extensions.torbutton.socks_port":
                 torbutton_init_prefs();
+            */
             case "network.proxy.http":
             case "network.proxy.http_port":
             case "network.proxy.ssl":
@@ -1176,11 +1181,11 @@ function torbutton_hookdoc(win, doc) {
 function torbutton_check_progress(aProgress, aRequest) {
     // This noise is a workaround for the fact that docShell.allowPlugins
     // is ignored when you directly click on a link
-    if(aRequest instanceof Components.interfaces.nsIChannel
-            && aRequest.isPending() 
-            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-            && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
-        try {
+    try {
+        if(aRequest instanceof Components.interfaces.nsIChannel
+                && aRequest.isPending() 
+                && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
             torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
 
             if (aRequest.contentType in m_tb_plugin_mimetypes) {
@@ -1188,9 +1193,9 @@ function torbutton_check_progress(aProgress, aRequest) {
                 window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
                 return 0;
             }
-        } catch(e) {
-            torbutton_eclog(3, 'Exception on request cancel');
         }
+    } catch(e) {
+        torbutton_eclog(3, 'Exception on request cancel');
     }
 
     if(aProgress) {
