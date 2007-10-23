@@ -1,5 +1,6 @@
 1.1.9
   21 Oct 2007
+  * bugfux: bug 519: Fix Ubuntu Gutsy hang on startup.
   * bugfix: bug 521: Fix yet more false positive popups introduced in 1.1.8
   * bugfix: bug 522: Block loading of direct clicks of plugin-handled content 
     (discovered by goldy).
