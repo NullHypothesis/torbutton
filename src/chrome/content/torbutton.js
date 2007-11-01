@@ -71,7 +71,7 @@ var torbutton_pref_observer =
                 torbutton_set_status();
                 break;
             case "extensions.torbutton.crashed":
-                // can we say getto hack, boys and girls?
+                // can we say ghetto hack, boys and girls?
                 torbutton_crash_recover();
                 break;
             case "extensions.torbutton.disable_referer":
@@ -562,6 +562,8 @@ function torbutton_update_status(mode, force_update) {
         torbutton_clear_history();
     }
 
+    // XXX: This is kind of not so user friendly to people who like
+    // to keep their own prefs.. Not sure what to do though..
     if(mode) {
         if(torprefs.getBoolPref('block_thwrite')) {
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
@@ -1204,10 +1206,10 @@ function torbutton_check_progress(aProgress, aRequest) {
             if(doc && doc.domain)
                 torbutton_hookdoc(aProgress.DOMWindow.window, doc);
         } catch(e) {
-            torbutton_log(3, "Hit about:plugins? "+doc.location);
+            torbutton_eclog(3, "Hit about:plugins? "+doc.location);
         }        
     } else {
-        torbutton_log(3, "No aProgress for location!");
+        torbutton_eclog(3, "No aProgress for location!");
     }
     return 0;
 }
@@ -1254,7 +1256,7 @@ var torbutton_weblistener =
   onSecurityChange: function() {return 0;},
   
   onLinkIconAvailable: function() 
-  { /*torbutton_log(1, 'called linkIcon'); */ return 0; }
+  { /*torbutton_eclog(1, 'called linkIcon'); */ return 0; }
 }
 
 

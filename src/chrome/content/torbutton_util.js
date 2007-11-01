@@ -1,52 +1,15 @@
-var m_tb_logger = false;
-var m_tb_console = false;
-var m_tb_ghetto = false;
-var m_tb_debug = Components.classes["@mozilla.org/preferences-service;1"]
-            .getService(Components.interfaces.nsIPrefBranch)
-            .getBoolPref("extensions.torbutton.debug");
-
-var m_tb_loglevel = Components.classes["@mozilla.org/preferences-service;1"]
-            .getService(Components.interfaces.nsIPrefBranch)
-            .getIntPref("extensions.torbutton.loglevel");
-
-try {
-    var logMngr = Components.classes["@mozmonkey.com/debuglogger/manager;1"]
-                    .getService(Components.interfaces.nsIDebugLoggerManager); 
-    m_tb_logger = logMngr.registerLogger("torbutton");
-} catch (exErr) {
-    m_tb_logger = false;
-}
-m_tb_console = Components.classes["@mozilla.org/consoleservice;1"]
-.getService(Components.interfaces.nsIConsoleService);
-
-m_tb_ghetto = Components.classes["@torproject.org/ghetto-logger;1"]
+var m_tb_torlog = Components.classes["@torproject.org/torbutton-logger;1"]
 .getService(Components.interfaces.nsISupports).wrappedJSObject;
 
 
 function torbutton_eclog(nLevel, sMsg) {
-    if(!m_tb_debug) return true;
-    var rDate = new Date();
-        
-    if (m_tb_console && nLevel >= m_tb_loglevel) {
-        m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
-    } else if (nLevel >= m_tb_loglevel) {
-        m_tb_ghetto.log(nLevel, rDate.getTime()+': '+sMsg+"\n");
-    }
+    m_tb_torlog.eclog(nLevel, sMsg);
+
     return true;
 }
 
 function torbutton_log(nLevel, sMsg) {
-    if(!m_tb_debug) return true;
-
-    var rDate = new Date();
-
-    if (m_tb_logger) {
-        m_tb_logger.log((6-nLevel), rDate.getTime()+': '+sMsg);
-    } else if (m_tb_console && nLevel >= m_tb_loglevel) {
-        m_tb_console.logStringMessage(rDate.getTime()+': '+sMsg);
-    } else if (nLevel >= m_tb_loglevel) {
-        m_tb_ghetto.log(nLevel, rDate.getTime()+': '+sMsg+"\n");
-    }
+    m_tb_torlog.log(nLevel, sMsg);
 
     // So we can use it in boolean expressions to determine where the 
     // short-circuit is..

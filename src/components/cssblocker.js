@@ -88,19 +88,15 @@ var policy = {
 	init: function() {
         this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
             .getService(Components.interfaces.nsIPrefBranch);
-        this._loglevel = this._prefs.getIntPref("extensions.torbutton.loglevel");
         this.wm = Components.classes["@torproject.org/content-window-mapper;1"]
             .getService(Components.interfaces.nsISupports)
             .wrappedJSObject;
-        this.log("init done\n");
-        return;
-    },
+        // XXX: Ewww. torbutton.logger may not be loaded yet..
+        this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+            .getService(Components.interfaces.nsISupports).wrappedJSObject;
 
-    log: function(str) {
-        // TODO: This could be done better/unified with the main log system..
-        if(this._loglevel <= 2) {
-            dump(str);
-        } 
+        dump("Content policy component initialized\n");
+        return;
     },
 
     isLocalScheme: function(loc) {
@@ -119,26 +115,28 @@ var policy = {
        
         /*. Debugging hack. DO NOT UNCOMMENT IN PRODUCTION ENVIRONMENTS
         if(contentLocation.spec.search("venkman") != -1) {
-            this.log("chrome-venk\n");
+            this.logger.log(3, "chrome-venk");
             return ok;
         }*/
 
         if(!insecNode) {
             // Happens on startup
-            this.log("Skipping insec: "+contentLocation.spec+"\n");
+            this.logger.log(3, "Skipping no insec: "+contentLocation.spec);
             return ok;
         }
 
         if(!this._prefs.getBoolPref("extensions.torbutton.isolate_content")) {
-            this.log("disabled\n");
+            this.logger.eclog(1, "Content policy disabled");
             return ok;
         }
         
         var node = wrapNode(insecNode);
         var wind = getWindow(wrapNode(insecNode));
 
-		if (this.isLocalScheme(unwrapURL(contentLocation.spec))) {
-            this.log("Skipping local: "+contentLocation.spec+"\n");
+		// Local stuff has to be eclog because otherwise debuglogger will
+        // get into an infinite log-loop w/ its chrome updates
+        if (this.isLocalScheme(unwrapURL(contentLocation.spec))) {
+            this.logger.eclog(1, "Skipping local: "+contentLocation.spec);
 			return ok;
         } 
 
@@ -147,7 +145,8 @@ var policy = {
 			node = node.contentWindow;
 			wind = node;
 		}
-        
+
+        // XXX: Something is rotten in denmark        
         var torTag = !this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
 
         if (contentType == 5) { // Object
@@ -156,21 +155,21 @@ var policy = {
             // the webprogresslistener
             if(!torTag) {
                 if(this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
-                    this.log("Blocking object at "+contentLocation.spec+"\n");
+                    this.logger.log(4, "Blocking object at "+contentLocation.spec);
                     return block;
                 }
             }
         }
 
         if (!wind || !wind.top.location || !wind.top.location.href) {
-            this.log("Skipping no location: "+contentLocation.spec+"\n");
+            this.logger.log(4, "Skipping no location: "+contentLocation.spec);
 			return ok;
         }
 
         var doc = wind.top.document;
         if(!doc) {
             // 1st load of a page in a new location
-            this.log("Skipping no doc: "+contentLocation.spec+"\n");
+            this.logger.log(3, "Skipping no doc: "+contentLocation.spec);
             return ok;
         }
 
@@ -178,12 +177,12 @@ var policy = {
         if(!browser) {
             // This happens on the first load of a doc
             // XXX: Other cases?
-            this.log("No window found: "+contentLocation.spec+"\n");
+            this.logger.log(3, "No window found: "+contentLocation.spec);
             return ok; 
         }
 
         if (typeof(browser.__tb_js_state) == 'undefined') {
-            this.log("UNTAGGED WINDOW2!!!!!!!!! "+contentLocation.spec+"\n");
+            this.logger.log(5, "UNTAGGED WINDOW2!!!!!!!!! "+contentLocation.spec);
             return block;
         }
 
@@ -191,7 +190,7 @@ var policy = {
         if(browser.__tb_js_state == torTag)
             return ok;
         else {
-            this.log("Blocking: "+contentLocation.spec+"\n");
+            this.logger.log(3, "Blocking: "+contentLocation.spec);
             return block;
         }
 

@@ -21,18 +21,14 @@ function ContentWindowMapper() {
 
     var prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
-    this._loglevel = prefs.getIntPref("extensions.torbutton.loglevel");
 
-    this.log = function(str) {
-        // TODO: This could be done better/unified with the main log system..
-        if(this._loglevel <= 2) {
-            dump(str);
-        } 
-    },
+    this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+        .getService(Components.interfaces.nsISupports).wrappedJSObject;
+        
 
     this.checkCache = function(topContentWindow) {
         if(typeof(this.cache[topContentWindow]) != "undefined") {
-            this.log("Found cached element\n");
+            this.logger.log(1, "Found cached element");
             return this.cache[topContentWindow].browser;
         }
 
@@ -44,7 +40,7 @@ function ContentWindowMapper() {
         insertion.browser = browser;
         insertion.time = Date.now();
         this.cache[topContentWindow] = insertion; 
-        this.log("Cached element\n");
+        this.loggger.log(2, "Cached element: "+topContentWindow.location);
     };
 
     this.expireOldCache = function() {
@@ -52,7 +48,13 @@ function ContentWindowMapper() {
 
         for(var elem in this.cache) {
             if((now - this.cache[elem].time) > EXPIRATION_TIME) {
-                this.log("Deleting expired entry\n");
+                this.loggger.log(2, "Deleting cached element: "+elem.location);
+                delete this.cache[elem];
+            }
+        }
+        for(var elem in this.cache) {
+            if((now - this.cache[elem].time) > EXPIRATION_TIME) {
+                this.loggger.log(4, "ELEMENT STILL REMAINS: "+elem.location);
                 delete this.cache[elem];
             }
         }
@@ -77,17 +79,18 @@ function ContentWindowMapper() {
             }
         }
 
-        if(topContentWindow && topContentWindow.document && topContentWindow.document.location)
-            this.log("No browser found: "+topContentWindow.document.location+"\n");
+        if(topContentWindow && topContentWindow.location)
+            this.logger.log(3, "No browser found: "+topContentWindow.location);
         else
-            this.log("No browser found!\n");
+            this.logger.log(3, "No browser found!");
 
         return null;
     };
 
-
   // This JSObject is exported directly to chrome
   this.wrappedJSObject = this;
+
+  dump("Window mapper component initialized\n");
 }
 
 /**
