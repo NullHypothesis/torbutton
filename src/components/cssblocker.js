@@ -41,6 +41,7 @@ function getWindow(node) {
     return node.defaultView;
 }
 
+//FIXME: can we kill this noise?
 //HACKHACK: need a way to get an implicit wrapper for nodes because of bug 337095 (fixed in Gecko 1.8.0.5)
 var fakeFactory = {
 	createInstance: function(outer, iid) {
@@ -65,6 +66,8 @@ function wrapNode(insecNode) {
 	return fakeFactory.createInstance(insecNode, Components.interfaces.nsISupports);
 }
 
+
+
 // Unwraps jar:, view-source: and wyciwyg: URLs, returns the contained URL
 function unwrapURL(url) {
 	if (!url)
@@ -84,21 +87,32 @@ var localSchemes = {"about" : true, "chrome" : true, "file" : true,
     "resource" : true, "x-jsd" : true, "addbook" : true, "cid" : true, 
     "mailbox" : true, "data" : true, "javascript" : true};
 
-var policy = {
-	init: function() {
-        this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
-            .getService(Components.interfaces.nsIPrefBranch);
-        this.wm = Components.classes["@torproject.org/content-window-mapper;1"]
-            .getService(Components.interfaces.nsISupports)
-            .wrappedJSObject;
-        // XXX: Ewww. torbutton.logger may not be loaded yet..
-        this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
-            .getService(Components.interfaces.nsISupports).wrappedJSObject;
+function ContentPolicy() {
+    this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefBranch);
+    this.wm = Components.classes["@torproject.org/content-window-mapper;1"]
+        .getService(Components.interfaces.nsISupports)
+        .wrappedJSObject;
+    
+    // XXX: Ewww. torbutton.logger may not be loaded yet..
+    this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+        .getService(Components.interfaces.nsISupports).wrappedJSObject;
+        
+    this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
+    this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
-        dump("Content policy component initialized\n");
-        return;
-    },
+    // Register observer: FIXME: Restrict this to extensions.torbutton branch?
+    var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefBranchInternal);
+    this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    this._branch.addObserver("", this, false);
 
+    dump("Content policy component initialized\n");
+    return;
+}
+
+ContentPolicy.prototype = {
     isLocalScheme: function(loc) {
         if (loc.indexOf(":") < 0)
             return false;
@@ -107,9 +121,6 @@ var policy = {
         return (scheme in localSchemes) || loc == "about:blank";
     },
 
-
-    // TODO: Optimize this with a pref observer so it doesn't
-    // have to continually query prefs
 	// nsIContentPolicy interface implementation
 	shouldLoad: function(contentType, contentLocation, requestOrigin, insecNode, mimeTypeGuess, extra) {
        
@@ -125,13 +136,13 @@ var policy = {
             return ok;
         }
 
-        if(!this._prefs.getBoolPref("extensions.torbutton.isolate_content")) {
+        if(!this.isolate_content) {
             this.logger.eclog(1, "Content policy disabled");
             return ok;
         }
         
         var node = wrapNode(insecNode);
-        var wind = getWindow(wrapNode(insecNode));
+        var wind = getWindow(node);
 
 		// Local stuff has to be eclog because otherwise debuglogger will
         // get into an infinite log-loop w/ its chrome updates
@@ -147,17 +158,15 @@ var policy = {
 		}
 
         // XXX: Something is rotten in denmark        
-        var torTag = !this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+        var tor_state = this.tor_enabled;
 
         if (contentType == 5) { // Object
             // Never seems to happen.. But it would be nice if we 
             // could handle it either here or shouldProcess, instead of in 
             // the webprogresslistener
-            if(!torTag) {
-                if(this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
-                    this.logger.log(4, "Blocking object at "+contentLocation.spec);
-                    return block;
-                }
+            if(this.tor_enabled && this.no_tor_plugins) {
+                this.logger.log(4, "Blocking object at "+contentLocation.spec);
+                return block;
             }
         }
 
@@ -176,20 +185,18 @@ var policy = {
         var browser = this.wm.getBrowserForContentWindow(wind.top);
         if(!browser) {
             // This happens on the first load of a doc
-            // XXX: Other cases?
             this.logger.log(3, "No window found: "+contentLocation.spec);
             return ok; 
         }
 
-        if (typeof(browser.__tb_js_state) == 'undefined') {
+        if (typeof(browser.__tb_tor_fetched) == 'undefined') {
             this.logger.log(5, "UNTAGGED WINDOW2!!!!!!!!! "+contentLocation.spec);
             return block;
         }
 
-
-        if(browser.__tb_js_state == torTag)
+        if(browser.__tb_tor_fetched == tor_state) {
             return ok;
-        else {
+        } else {
             this.logger.log(3, "Blocking: "+contentLocation.spec);
             return block;
         }
@@ -203,11 +210,34 @@ var policy = {
         // See mozilla bugs 380556, 305699, 309524
         return ok;
 	},
+
+    // Pref observer interface implementation
+  
+    // topic:   what event occurred
+    // subject: what nsIPrefBranch we're observing
+    // data:    which pref has been changed (relative to subject)
+    observe: function(subject, topic, data)
+    {
+        if (topic != "nsPref:changed") return;
+        switch (data) {
+            case "extensions.torbutton.isolate_content":
+                this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
+                break;
+            case "extensions.torbutton.tor_enabled":
+                this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+                break;
+            case "extensions.torbutton.no_tor_plugins":
+                this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
+                break;
+        }
+    }
 };
 
 /*
  * Factory object
  */
+
+var ContentPolicyInstance = null;
 
 const factory = {
 	// nsIFactory interface implementation
@@ -223,8 +253,10 @@ const factory = {
             return null;
         }
 
-        policy.init();
-		return policy;
+        if(!ContentPolicyInstance)
+            ContentPolicyInstance = new ContentPolicy();
+
+		return ContentPolicyInstance;
 	},
 
 	// nsISupports interface implementation

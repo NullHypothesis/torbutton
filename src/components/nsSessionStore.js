@@ -785,8 +785,8 @@ SessionStoreService.prototype = {
       var tabData = { entries: [], index: 0 };
       
       var browser = browsers[i];
-      if(bypass_tor && typeof(browser.__tb_js_state) != "undefined" && 
-              !browser.__tb_js_state) {
+      if(bypass_tor && typeof(browser.__tb_tor_fetched) != "undefined" && 
+              browser.__tb_tor_fetched) {
           //dump("bypassing tor tab\n");
           //tabs.push(tabData);
           continue;

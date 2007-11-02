@@ -15,6 +15,7 @@ var torbutton_pref_observer =
         var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
                                      .getService(Components.interfaces.nsIPrefBranchInternal);
         this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+        // FIXME: Narrow these topics
         this._branch.addObserver("", this, false);
     },
 
@@ -479,12 +480,18 @@ function torbutton_update_status(mode, force_update) {
             }
         } else {
             try {
-                m_tb_prefs.clearUserPref("general.appname.override");
-                m_tb_prefs.clearUserPref("general.appversion.override");
-                m_tb_prefs.clearUserPref("general.useragent.override");
-                m_tb_prefs.clearUserPref("general.useragent.vendor");
-                m_tb_prefs.clearUserPref("general.useragent.vendorSub");
-                m_tb_prefs.clearUserPref("general.platform.override");
+                if(m_tb_prefs.prefHasUserValue("general.appname.override"))
+                    m_tb_prefs.clearUserPref("general.appname.override");
+                if(m_tb_prefs.prefHasUserValue("general.appversion.override"))
+                    m_tb_prefs.clearUserPref("general.appversion.override");
+                if(m_tb_prefs.prefHasUserValue("general.useragent.override"))
+                    m_tb_prefs.clearUserPref("general.useragent.override");
+                if(m_tb_prefs.prefHasUserValue("general.useragent.vendor"))
+                    m_tb_prefs.clearUserPref("general.useragent.vendor");
+                if(m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
+                    m_tb_prefs.clearUserPref("general.useragent.vendorSub");
+                if(m_tb_prefs.prefHasUserValue("general.platform.override"))
+                    m_tb_prefs.clearUserPref("general.platform.override");
             } catch (e) {
                 // This happens because we run this from time to time
                 torbutton_log(3, "Prefs already cleared");
@@ -512,8 +519,10 @@ function torbutton_update_status(mode, force_update) {
                 torprefs.getCharPref("spoof_language"));
     } else {
         try {
-            m_tb_prefs.clearUserPref("intl.accept_charsets");
-            m_tb_prefs.clearUserPref("intl.accept_languages");
+            if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
+                m_tb_prefs.clearUserPref("intl.accept_charsets");
+            if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
+                m_tb_prefs.clearUserPref("intl.accept_languages");
         } catch (e) {
             // Can happen if english browser.
             torbutton_log(3, "Browser already english");
@@ -547,7 +556,7 @@ function torbutton_update_status(mode, force_update) {
         m_tb_prefs.setBoolPref("security.enable_java", !mode);
     }
 
-    torbutton_toggle_jsplugins(!mode, 
+    torbutton_toggle_jsplugins(mode, 
             changed && torprefs.getBoolPref("isolate_content"),
             torprefs.getBoolPref("no_tor_plugins"));
 
@@ -562,7 +571,7 @@ function torbutton_update_status(mode, force_update) {
         torbutton_clear_history();
     }
 
-    // XXX: This is kind of not so user friendly to people who like
+    // FIXME: This is kind of not so user friendly to people who like
     // to keep their own prefs.. Not sure what to do though..
     if(mode) {
         if(torprefs.getBoolPref('block_thwrite')) {
@@ -739,22 +748,22 @@ function torbutton_jar_cookies(mode) {
 
 // -------------- JS/PLUGIN HANDLING CODE ---------------------
 
-function torbutton_check_js_tag(browser, allowed, js_enabled) {
-    if (typeof(browser.__tb_js_state) == 'undefined') {
-        // XXX: the error console is still a navigator:browser
+function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
+    if (typeof(browser.__tb_tor_fetched) == 'undefined') {
+        // FIXME: the error console is still a navigator:browser
         // and triggers this.
         // Is there any way to otherwise detect it?
         torbutton_log(5, "UNTAGGED WINDOW!!!!!!!!!");
     }
 
-    if(browser.__tb_js_state == allowed) { // States match, js ok 
+    if(browser.__tb_tor_fetched == tor_enabled) { // States match, js ok 
         browser.docShell.allowJavascript = js_enabled;
     } else { // States differ or undefined, js not ok 
         browser.docShell.allowJavascript = false;
     }
 }
 
-function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_dyn, 
+function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
                                         kill_plugins) {
     var browser = win.getBrowser();
     var browsers = browser.browsers;
@@ -762,15 +771,15 @@ function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_dyn,
     for (var i = 0; i < browsers.length; ++i) {
         var b = browser.browsers[i];
         if (b) {
-            // Only allow plugins if the tab load was from an allowed state 
-            // and the current tor state is off.
+            // Only allow plugins if the tab load was from an 
+            // non-tor state and the current tor state is off.
             if(kill_plugins) 
-                b.docShell.allowPlugins = allowed && b.__tb_js_state;
+                b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
             else 
                 browser.docShell.allowPlugins = true;
             
             if(isolate_dyn) {
-                torbutton_check_js_tag(b, allowed, js_enabled);
+                torbutton_check_js_tag(b, tor_enabled, js_enabled);
                 // kill meta-refresh and existing page loading 
                 b.webNavigation.stop(b.webNavigation.STOP_ALL);
             }
@@ -780,15 +789,15 @@ function torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_dyn,
 
 // This is an ugly beast.. But unfortunately it has to be so..
 // Looping over all tabs twice is not somethign we wanna do..
-function torbutton_toggle_jsplugins(allowed, isolate_dyn, kill_plugins) {
-    torbutton_log(1, "Plugins: "+allowed);
+function torbutton_toggle_jsplugins(tor_enabled, isolate_dyn, kill_plugins) {
+    torbutton_log(1, "Tor state: "+tor_enabled);
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                        .getService(Components.interfaces.nsIWindowMediator);
     var enumerator = wm.getEnumerator("navigator:browser");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
-        torbutton_toggle_win_jsplugins(win, allowed, js_enabled, isolate_dyn, 
+        torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
                                        kill_plugins);   
     }
 }
@@ -799,9 +808,9 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 
     // Only tag new windows
-    if (typeof(browser.__tb_js_state) == 'undefined') {
+    if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         torbutton_log(3, "Tagging new window: "+tor_tag);
-        browser.__tb_js_state = tor_tag;
+        browser.__tb_tor_fetched = !tor_tag;
     }
 }
 
@@ -1042,6 +1051,21 @@ function torbutton_hookdoc(win, doc) {
     }
 
     if(win != win.top) {
+        // XXX: Same-origin policy may prevent our hooks from applying
+        // to inner iframes.. Test with frames, iframes, and
+        // popups:
+        //  - http://www.htmlbasix.com/popup.shtml
+        //  - http://msdn2.microsoft.com/en-us/library/ms531202.aspx
+        //  - Url-free: http://www.yourhtmlsource.com/javascript/popupwindows.html#accessiblepopups
+        //    - Blocked by default (tho perhaps only via onload). 
+        //      see popup blocker detectors:
+        //      - http://javascript.internet.com/snippets/popup-blocker-detection.html
+        //      - http://www.visitor-stats.com/articles/detect-popup-blocker.php 
+        //      - http://www.dynamicdrive.com/dynamicindex8/dhtmlwindow.htm
+        //  - popup blocker tests:
+        //    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
+        //  - pure javascript pages/non-text/html pages
+        //
         // Handle the iframe case
         torbutton_log(3, "Hook for non-toplevel window: "+doc.location);
         win = win.top;
@@ -1057,7 +1081,10 @@ function torbutton_hookdoc(win, doc) {
     if(doc.doctype) {
         torbutton_log(2, "Hooking document: "+doc.doctype.name);
     }
-   
+  
+    // XXX: These alerts seem to happen with certain form posts via Tor that
+    // were originally loaded in non-tor 
+
     // We can't just tag the document here because it is possible
     // to hit reload at just the right point such that the document
     // has been cleared but the window remained.
@@ -1074,11 +1101,11 @@ function torbutton_hookdoc(win, doc) {
         /* hrmm.. would doc.isSupported("javascript") 
          * or doc.implementation.hasFeature() work better? */
         if(doc.contentType.indexOf("text/html") != -1 && 
-                browser.__tb_js_state == false &&
+                browser.__tb_tor_fetched == true &&
                 !torbutton_check_flag(win.wrappedJSObject, 
                     "__tb_hooks_ran")) {
-            torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website!");
-            win.alert("False win hooking. Please report bug+website!");
+            torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website: "+doc.location);
+            win.alert("False win hooking. Please report bug+website: "+doc.location);
         }
         return; // Ran already
     }
@@ -1096,11 +1123,11 @@ function torbutton_hookdoc(win, doc) {
         /* hrmm.. would doc.isSupported("javascript") 
          * or doc.implementation.hasFeature() work better? */
         if(doc.contentType.indexOf("text/html") != -1 && 
-                browser.__tb_js_state == false &&
+                browser.__tb_tor_fetched == true &&
                 !torbutton_check_flag(win.wrappedJSObject, 
                     "__tb_hooks_ran")) {
-            torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website!");
-            win.alert("False win hooking. Please report bug+website!");
+            torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website: "+doc.location);
+            win.alert("False doc hooking. Please report bug+website: "+doc.location);
         }
         return; // Ran already
     }
@@ -1121,7 +1148,7 @@ function torbutton_hookdoc(win, doc) {
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
     torbutton_log(2, "Tagging browser for: " + doc.location);
-    browser.__tb_js_state = tor_tag;
+    browser.__tb_tor_fetched = !tor_tag;
     browser.docShell.allowPlugins = tor_tag || !kill_plugins;
     browser.docShell.allowJavascript = js_enabled;
 
@@ -1190,6 +1217,8 @@ function torbutton_check_progress(aProgress, aRequest) {
                 && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
             torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
 
+            // XXX: This still does not work for pdfs :(
+            // NoScript manages to make it work though...
             if (aRequest.contentType in m_tb_plugin_mimetypes) {
                 aRequest.cancel(0x804b0002);
                 window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");

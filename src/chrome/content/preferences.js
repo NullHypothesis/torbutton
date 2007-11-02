@@ -298,7 +298,7 @@ function torbutton_prefs_reset_defaults() {
     var children;
     var i;
 
-    // XXX: change this to handle people with non-default proxy settings
+    // FIXME: change this to handle people with non-default proxy settings
     //  1. Clear proxy settings
     //  2. Restore saved prefs
     //  3. Clear torbutton settings
