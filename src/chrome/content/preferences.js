@@ -186,8 +186,16 @@ function torbutton_prefs_init(doc) {
             = doc.getElementById('torbutton_allShutdown');
     }
 
+    if(o_torprefs.getBoolPref('restore_tor')) {
+        doc.getElementById('torbutton_restoreTorGroup').selectedItem =
+            doc.getElementById('torbutton_restoreTor');
+    } else {
+        doc.getElementById('torbutton_restoreTorGroup').selectedItem =
+            doc.getElementById('torbutton_restoreNonTor');
+    }
+
     doc.getElementById('torbutton_noTorSessionStore').checked = o_torprefs.getBoolPref('notor_sessionstore');
-    doc.getElementById('torbutton_restoreTor').checked = o_torprefs.getBoolPref('restore_tor');
+
     doc.getElementById('torbutton_reloadCrashedJar').checked = o_torprefs.getBoolPref('reload_crashed_jar');
     doc.getElementById('torbutton_blockTorHRead').checked = o_torprefs.getBoolPref('block_thread');
     doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
@@ -270,9 +278,13 @@ function torbutton_prefs_save(doc) {
         doc.getElementById('torbutton_shutdownGroup').selectedItem
             = doc.getElementById('torbutton_noShutdown');
     }
+    
+
+    o_torprefs.setBoolPref('restore_tor', 
+            doc.getElementById('torbutton_restoreTorGroup').selectedItem ==
+            doc.getElementById('torbutton_restoreTor'));
 
     o_torprefs.setBoolPref('notor_sessionstore', doc.getElementById('torbutton_noTorSessionStore').checked);
-    o_torprefs.setBoolPref('restore_tor', doc.getElementById('torbutton_restoreTor').checked);
     o_torprefs.setBoolPref('reload_crashed_jar', doc.getElementById('torbutton_reloadCrashedJar').checked);
     o_torprefs.setBoolPref('block_thread', doc.getElementById('torbutton_blockTorHRead').checked);
     o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);

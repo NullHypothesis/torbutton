@@ -63,6 +63,6 @@
 <!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
 <!ENTITY torbutton.prefs.tor    "Tor">
 <!ENTITY torbutton.prefs.non_tor    "Non-Tor">
-<!ENTITY torbutton.prefs.restore_tor   "Restore saved session via Tor after Firefox crash (optional)">
+<!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
 <!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
-<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars">
+<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">

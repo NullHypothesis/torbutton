@@ -210,10 +210,20 @@
             </radiogroup>
             <checkbox id="torbutton_reloadCrashedJar" label="&torbutton.prefs.reload_crashed_jar;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             
             <checkbox id="torbutton_noTorSessionStore" label="&torbutton.prefs.notor_sessionstore;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
-            <checkbox id="torbutton_restoreTor" label="&torbutton.prefs.restore_tor;" 
+            <hbox align="center" flex="1">
+             <label align="center" value="&torbutton.prefs.restore_tor;" control="torbutton_restoreTorGroup"/>
+             <radiogroup align="center" orient="horizontal" id="torbutton_restoreTorGroup">
+              <radio id="torbutton_restoreTor" 
+                   label="&torbutton.prefs.tor;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              <radio id="torbutton_restoreNonTor" 
+                   label="&torbutton.prefs.non_tor;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             </radiogroup>
+             </hbox>
            </vbox>
           </tabpanel>
           <tabpanel id="headers">

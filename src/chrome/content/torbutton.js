@@ -862,6 +862,8 @@ function torbutton_crash_recover()
             torbutton_restore_cookies();
         if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
             torbutton_conditional_set(true);
+        else
+            torbutton_conditional_set(false);
         m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
     }
     torbutton_log(3, "End crash recover check");
