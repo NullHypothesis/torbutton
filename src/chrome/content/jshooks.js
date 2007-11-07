@@ -1,8 +1,6 @@
 window.__HookObjects = function() {
-  /* XXX: Removeme once bug #460 is resolved */
   if (typeof(window.__tb_hooks_ran) == "boolean") {
-      window.alert("Error, double jshook!");
-      return;
+      return false;
   }
  
   /* TODO: It might be a good idea to hook window sizes also..
@@ -157,10 +155,15 @@ window.__HookObjects = function() {
 
   Date.now=function(){return tmp.now();}
   Date.UTC=function(){return tmp.apply(tmp, arguments); }
+
+  return true;
 }
 
 if (typeof(window.__HookObjects) != "undefined") {
-    window.__HookObjects();
+    var eval = 23;
+    if(!window.__HookObjects()) {
+        eval = 13;
+    }
 
     window.__HookObjects = undefined;
     delete window['__HookObjects'];
@@ -170,7 +173,8 @@ if (typeof(window.__HookObjects) != "undefined") {
     delete window['__tb_platform'];
     delete window['__tb_productSub'];
 
-    /* XXX: Removeme */
+    // XXX: test that breaking this and forcing hooks to apply
+    // twice doesn't hurt anything.
     window.__tb_hooks_ran = true;
-    23; // Secret result code.
+    eval; // Secret result code.
 }

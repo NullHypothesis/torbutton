@@ -69,6 +69,7 @@ var torbutton_pref_observer =
             case "network.proxy.socks_remote_dns":
             case "network.proxy.type":
                 torbutton_log(1, "Got update message, setting status");
+                // XXX: called way too often
                 torbutton_set_status();
                 break;
             case "extensions.torbutton.crashed":
@@ -1045,31 +1046,50 @@ function torbutton_check_flag(obj, flag) {
     return (typeof(obj[flag]) != 'undefined');
 }
 
+function torbutton_is_same_origin(source, target) {
+    var fixup = Components.classes["@mozilla.org/docshell/urifixup;1"]
+        .getService(Components.interfaces.nsIURIFixup);
+    var source = fixup.createFixupURI(win.top.location.href, 0);
+    var target = fixup.createFixupURI(win.location.href, 0);
+
+    var secmgr = Components.classes["@mozilla.org/scriptsecuritymanager;1"]
+        .getService(Components.interfaces.nsIScriptSecurityManager);
+
+    if(!source || !target) {
+        torbutton_log(5, "Can't convert one of: "+win.document.location+", parent is: "+win.top.document.location);
+    }
+
+    // XXX: this doesn't work.. esp if document modifies document.domain
+    // window.windowRoot instead? Also, prints an error message
+    // to the error console..
+    try {
+        secmgr.checkSameOriginURI(source, target);
+        torbutton_log(3, "Same-origin non-toplevel window: "+win.document.location+", parent is: "+win.top.document.location);
+        win = win.top;
+    } catch(e) {
+        torbutton_log(3, "Exception w/ non-same-origin non-toplevel window: "+win.document.location+", parent is: "+win.top.document.location);
+    }
+}
+
+// XXX: Same-origin policy may prevent our hooks from applying
+// to inner iframes.. Test with frames, iframes, and
+// popups. Test these extensively:
+// http://taossa.com/index.php/2007/02/08/same-origin-policy/
+//  - http://www.htmlbasix.com/popup.shtml
+//  - http://msdn2.microsoft.com/en-us/library/ms531202.aspx
+//  - Url-free: http://www.yourhtmlsource.com/javascript/popupwindows.html#accessiblepopups
+//    - Blocked by default (tho perhaps only via onload). 
+//      see popup blocker detectors:
+//      - http://javascript.internet.com/snippets/popup-blocker-detection.html
+//      - http://www.visitor-stats.com/articles/detect-popup-blocker.php 
+//      - http://www.dynamicdrive.com/dynamicindex8/dhtmlwindow.htm
+//  - popup blocker tests:
+//    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
+//  - pure javascript pages/non-text/html pages
+//  - Messing with variables/existing hooks
 function torbutton_hookdoc(win, doc) {
     if (!m_tb_wasinited) {
         torbutton_init();
-    }
-
-    if(win != win.top) {
-        // XXX: Same-origin policy may prevent our hooks from applying
-        // to inner iframes.. Test with frames, iframes, and
-        // popups:
-        //  - http://www.htmlbasix.com/popup.shtml
-        //  - http://msdn2.microsoft.com/en-us/library/ms531202.aspx
-        //  - Url-free: http://www.yourhtmlsource.com/javascript/popupwindows.html#accessiblepopups
-        //    - Blocked by default (tho perhaps only via onload). 
-        //      see popup blocker detectors:
-        //      - http://javascript.internet.com/snippets/popup-blocker-detection.html
-        //      - http://www.visitor-stats.com/articles/detect-popup-blocker.php 
-        //      - http://www.dynamicdrive.com/dynamicindex8/dhtmlwindow.htm
-        //  - popup blocker tests:
-        //    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
-        //  - pure javascript pages/non-text/html pages
-        //
-        // Handle the iframe case
-        torbutton_log(3, "Hook for non-toplevel window: "+doc.location);
-        win = win.top;
-        doc = win.document;
     }
 
     if(typeof(win.wrappedJSObject) == 'undefined') {
@@ -1079,66 +1099,17 @@ function torbutton_hookdoc(win, doc) {
 
     torbutton_log(2, "Hooking document: "+doc.location);
     if(doc.doctype) {
-        torbutton_log(2, "Hooking document: "+doc.doctype.name);
+        torbutton_log(2, "Type: "+doc.doctype.name);
     }
   
-    // XXX: These alerts seem to happen with certain form posts via Tor that
-    // were originally loaded in non-tor 
-
-    // We can't just tag the document here because it is possible
-    // to hit reload at just the right point such that the document
-    // has been cleared but the window remained.
-    if(torbutton_check_flag(win, "__tb_did_hook")) {
-        torbutton_log(2, "Already did hook " 
-                + torbutton_check_flag(win, "__tb_did_hook"));
-        /* XXX: Remove this once bug #460 is resolved */
-        var wm = Components.classes["@torproject.org/content-window-mapper;1"]
-            .getService(Components.interfaces.nsISupports)
-            .wrappedJSObject;
-        var browser = wm.getBrowserForContentWindow(win);
-        if(!browser) win.alert("No window found!");
-
-        /* hrmm.. would doc.isSupported("javascript") 
-         * or doc.implementation.hasFeature() work better? */
-        if(doc.contentType.indexOf("text/html") != -1 && 
-                browser.__tb_tor_fetched == true &&
-                !torbutton_check_flag(win.wrappedJSObject, 
-                    "__tb_hooks_ran")) {
-            torbutton_log(5, "FALSE WIN HOOKING. Please report bug+website: "+doc.location);
-            win.alert("False win hooking. Please report bug+website: "+doc.location);
-        }
-        return; // Ran already
-    }
-
-    if(torbutton_check_flag(doc, "__tb_did_hook")) {
-        torbutton_log(2, "Already did hook " 
-                + torbutton_check_flag(doc, "__tb_did_hook"));
-        /* XXX: Remove this once bug #460 is resolved */
-        var wm = Components.classes["@torproject.org/content-window-mapper;1"]
-            .getService(Components.interfaces.nsISupports)
-            .wrappedJSObject;
-        var browser = wm.getBrowserForContentWindow(win);
-        if(!browser) win.alert("No window found!");
-
-        /* hrmm.. would doc.isSupported("javascript") 
-         * or doc.implementation.hasFeature() work better? */
-        if(doc.contentType.indexOf("text/html") != -1 && 
-                browser.__tb_tor_fetched == true &&
-                !torbutton_check_flag(win.wrappedJSObject, 
-                    "__tb_hooks_ran")) {
-            torbutton_log(5, "FALSE DOC HOOKING. Please report bug+website: "+doc.location);
-            win.alert("False doc hooking. Please report bug+website: "+doc.location);
-        }
-        return; // Ran already
-    }
-
     var wm = Components.classes["@torproject.org/content-window-mapper;1"]
         .getService(Components.interfaces.nsISupports)
         .wrappedJSObject;
+   
+    // Expire the cache on page loads. FIXME: Do a timer instead.. 
+    if(win == win.top) wm.expireOldCache();
 
-    wm.expireOldCache();
-
-    var browser = wm.getBrowserForContentWindow(win);
+    var browser = wm.getBrowserForContentWindow(win.top);
     if(!browser) win.alert("No window found!");
     torbutton_log(2, "Got browser "+browser.contentDocument.location+" for: " 
             + doc.location);
@@ -1147,10 +1118,13 @@ function torbutton_hookdoc(win, doc) {
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
-    torbutton_log(2, "Tagging browser for: " + doc.location);
-    browser.__tb_tor_fetched = !tor_tag;
-    browser.docShell.allowPlugins = tor_tag || !kill_plugins;
-    browser.docShell.allowJavascript = js_enabled;
+    if (!torbutton_check_flag(win.top, "__tb_did_hook")) {
+        torbutton_log(2, "Tagging browser for: " + doc.location);
+        torbutton_set_flag(win.top, "__tb_did_hook");
+        browser.__tb_tor_fetched = !tor_tag;
+        browser.docShell.allowPlugins = tor_tag || !kill_plugins;
+        browser.docShell.allowJavascript = js_enabled;
+    }
 
     torbutton_log(1, "JS set to: " + js_enabled);
     
@@ -1162,8 +1136,6 @@ function torbutton_hookdoc(win, doc) {
             || !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
             || !m_tb_prefs.getBoolPref('extensions.torbutton.kill_bad_js')) {
         torbutton_log(2, "Finished non-hook of: " + doc.location);
-        torbutton_set_flag(win, "__tb_did_hook");
-        torbutton_set_flag(doc, "__tb_did_hook");
         return;
     }
 
@@ -1191,15 +1163,16 @@ function torbutton_hookdoc(win, doc) {
         s.window = win.wrappedJSObject;
         var result = Components.utils.evalInSandbox(str2, s);
         if(result == 23) { // secret confirmation result code.
-            torbutton_set_flag(win, "__tb_did_hook");
-            torbutton_set_flag(doc, "__tb_did_hook");
+            torbutton_log(3, "Javascript hooks applied successfully at: " + doc.location);
+        } else if(result == 13) {
+            torbutton_log(3, "Double-hook at: " + doc.location);
         } else {
             win.alert("Sandbox evaluation failed. Date hooks not applied!");
-            torbutton_log(4, "Hook evaluation failure at " + doc.location);
+            torbutton_log(5, "Hook evaluation failure at " + doc.location);
         }
     } catch (e) {
         win.alert("Exception in sandbox evaluation. Date hooks not applied:\n"+e);
-        torbutton_log(4, "Hook exception at: "+doc.location+", "+e);
+        torbutton_log(5, "Hook exception at: "+doc.location+", "+e);
     }
 
     torbutton_log(2, "Finished hook: " + doc.location);
@@ -1211,6 +1184,7 @@ function torbutton_check_progress(aProgress, aRequest) {
     // This noise is a workaround for the fact that docShell.allowPlugins
     // is ignored when you directly click on a link
     try {
+        // XXX: do we need to QI this bastard?
         if(aRequest instanceof Components.interfaces.nsIChannel
                 && aRequest.isPending() 
                 && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
