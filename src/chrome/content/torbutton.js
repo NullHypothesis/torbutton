@@ -1186,8 +1186,10 @@ function torbutton_check_progress(aProgress, aRequest) {
     // This noise is a workaround for the fact that docShell.allowPlugins
     // is ignored when you directly click on a link
     try {
+        var chanreq = aRequest.QueryInterface(Components.interfaces.nsIChannel);
         // XXX: do we need to QI this bastard?
-        if(aRequest instanceof Components.interfaces.nsIChannel
+        if(chanreq
+                && aRequest instanceof Components.interfaces.nsIChannel
                 && aRequest.isPending() 
                 && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
                 && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
@@ -1197,7 +1199,28 @@ function torbutton_check_progress(aProgress, aRequest) {
             // NoScript manages to make it work though...
             if (aRequest.contentType in m_tb_plugin_mimetypes) {
                 aRequest.cancel(0x804b0002);
-                window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                if(aProgress) {
+                    // ZOMG DIE DIE DXIE!!!!!@
+                    try {
+                        aProgress.DOMWindow.stop();
+                        torbutton_eclog(2, 'Stopped document');
+                        aProgress.DOMWindow.document.clear();
+                        torbutton_eclog(2, 'Cleared document');
+                        
+                        if(typeof(aProgress.DOMWindow.__tb_kill_flag) == 'undefined') {
+                            window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                            aProgress.DOMWindow.__tb_kill_flag = true;
+                        }
+                        aProgress.DOMWindow.document.removeChild(
+                                aProgress.DOMWindow.document.firstChild);
+                    } catch(e) {
+                        torbutton_eclog(3, 'Exception on stop/clear');
+                    }
+                } else {
+                    torbutton_eclog(4, 'No progress for document cancel!');
+                    window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                }
+                torbutton_eclog(3, 'Killed plugin document');
                 return 0;
             }
         }
