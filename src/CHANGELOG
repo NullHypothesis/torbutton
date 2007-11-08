@@ -1,3 +1,12 @@
+1.1.10
+  06 Nov 2007
+  * bugfix: bug 522: Try harder to kill plugins before they do any network IO
+  * bugfix: bug 460: Remove hook verification. Attempt to apply hooks at every
+    location event.
+  * misc: New logging system
+  * new: Have user choose between starting in Tor or Non-Tor after crash.
+    Leaving it to Firefox is non-deterministic and should not be an option.
+
 1.1.9.1
   23 Oct 2007
   * bugfix: 1.1.9 killed all plugins. Bring them back to life.
