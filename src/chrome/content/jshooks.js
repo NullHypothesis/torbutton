@@ -160,9 +160,9 @@ window.__HookObjects = function() {
 }
 
 if (typeof(window.__HookObjects) != "undefined") {
-    var eval = 23;
+    var res = 23;
     if(!window.__HookObjects()) {
-        eval = 13;
+        res = 13;
     }
 
     window.__HookObjects = undefined;
@@ -176,5 +176,5 @@ if (typeof(window.__HookObjects) != "undefined") {
     // XXX: test that breaking this and forcing hooks to apply
     // twice doesn't hurt anything.
     window.__tb_hooks_ran = true;
-    eval; // Secret result code.
+    res; // Secret result code.
 }
