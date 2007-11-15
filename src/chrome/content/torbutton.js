@@ -8,7 +8,7 @@ var m_tb_prefs = false;
 var m_tb_jshooks = false;
 var m_tb_plugin_mimetypes = false;
 
-var torbutton_pref_observer =
+var torbutton_window_pref_observer =
 {
     register: function()
     {
@@ -16,13 +16,13 @@ var torbutton_pref_observer =
                                      .getService(Components.interfaces.nsIPrefBranchInternal);
         this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
         // FIXME: Narrow these topics
-        this._branch.addObserver("", this, false);
+        this._branch.addObserver("extensions.torbutton", this, false);
     },
 
     unregister: function()
     {
         if (!this._branch) return;
-        this._branch.removeObserver("", this);
+        this._branch.removeObserver("extensions.torbutton", this);
     },
 
     // topic:   what event occurred
@@ -39,9 +39,41 @@ var torbutton_pref_observer =
             case "extensions.torbutton.panel_style":
                 torbutton_set_panel_style();
                 break;
+            case "extensions.torbutton.tor_enabled":
+                var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+                torbutton_update_toolbutton(mode);
+                torbutton_update_statusbar(mode);
+                break;
+        }
+    }
+}
 
+var torbutton_unique_pref_observer =
+{
+    register: function()
+    {
+        var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
+                                     .getService(Components.interfaces.nsIPrefBranchInternal);
+        this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+        // FIXME: Narrow these topics
+        this._branch.addObserver("extensions.torbutton", this, false);
+        this._branch.addObserver("network.proxy", this, false);
+    },
 
-            // XXX: this can be global, but update_status must change
+    unregister: function()
+    {
+        if (!this._branch) return;
+        this._branch.removeObserver("extensions.torbutton", this);
+        this._branch.removeObserver("network.proxy", this);
+    },
+
+    // topic:   what event occurred
+    // subject: what nsIPrefBranch we're observing
+    // data:    which pref has been changed (relative to subject)
+    observe: function(subject, topic, data)
+    {
+        if (topic != "nsPref:changed") return;
+        switch (data) {
             case "network.proxy.http":
             case "network.proxy.http_port":
             case "network.proxy.ssl":
@@ -57,11 +89,9 @@ var torbutton_pref_observer =
             case "network.proxy.socks_remote_dns":
             case "network.proxy.type":
                 torbutton_log(1, "Got update message, setting status");
-                // XXX: called way too often
                 torbutton_set_status();
                 break;
 
-            // XXX: global
             case "extensions.torbutton.cookie_jars":
             case "extensions.torbutton.clear_cookies":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars")
@@ -71,21 +101,17 @@ var torbutton_pref_observer =
                 }
                 break;
             
-            // XXX: global
             case "extensions.torbutton.crashed":
                 // can we say ghetto hack, boys and girls?
                 torbutton_crash_recover();
                 break;
 
-            // XXX: global
             case "extensions.torbutton.disable_referer":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.disable_referer")) {
                     m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", true);
                     m_tb_prefs.setIntPref("network.http.sendRefererHeader", 2);
                 }
 
-
-            // XXX: can be global if update_status is fixed
             case "extensions.torbutton.no_tor_plugins":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
@@ -103,6 +129,7 @@ var torbutton_pref_observer =
         }
     }
 }
+
 
 function torbutton_set_panel_view() {
     var o_statuspanel = false;
@@ -205,7 +232,7 @@ function torbutton_init() {
 
         torbutton_log(1, 'registering pref observer');
         // XXX: Perf: do we really need one for each window?
-        torbutton_pref_observer.register(); 
+        torbutton_window_pref_observer.register(); 
         m_tb_wasinited = true;
     } else {
         torbutton_log(1, 'skipping pref observer init');
@@ -214,6 +241,9 @@ function torbutton_init() {
     torbutton_set_panel_view();
     torbutton_log(1, 'setting torbutton status from proxy prefs');
     torbutton_set_status();
+    var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    torbutton_update_toolbutton(mode);
+    torbutton_update_statusbar(mode);
     torbutton_log(3, 'init completed');
 }
 
@@ -451,9 +481,6 @@ function torbutton_update_status(mode, force_update) {
     torprefs.setBoolPref('tor_enabled', mode);
 
     torbutton_log(2, 'called update_status: '+mode);
-    torbutton_update_toolbutton(mode);
-    torbutton_update_statusbar(mode);
-
     torbutton_log(2, 'Changed: '+changed);
 
     // this function is called every time there is a new window! Alot of this
@@ -974,6 +1001,7 @@ function torbutton_do_onetime_startup()
                 Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
                 Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
+        torbutton_unique_pref_observer.register();
         torbutton_uninstall_observer.register();
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
@@ -1025,7 +1053,7 @@ function torbutton_new_window(event)
 }
 
 function torbutton_close_window(event) {
-    torbutton_pref_observer.unregister();
+    torbutton_window_pref_observer.unregister();
 }
 
 window.addEventListener('load',torbutton_new_window,false);
