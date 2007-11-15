@@ -160,9 +160,12 @@ window.__HookObjects = function() {
 }
 
 if (typeof(window.__HookObjects) != "undefined") {
-    var res = 23;
+    // XXX: Woah.. scope issues with this var if it
+    // has the same name as a div id?? That doesn't make
+    // any sense..
+    var __tb_res = 23;
     if(!window.__HookObjects()) {
-        res = 13;
+        __tb_res = 13;
     }
 
     window.__HookObjects = undefined;
@@ -173,8 +176,9 @@ if (typeof(window.__HookObjects) != "undefined") {
     delete window['__tb_platform'];
     delete window['__tb_productSub'];
 
-    // XXX: test that breaking this and forcing hooks to apply
-    // twice doesn't hurt anything.
     window.__tb_hooks_ran = true;
-    res; // Secret result code.
+
+    __tb_res; // Secret result code.
+} else {
+    42;
 }

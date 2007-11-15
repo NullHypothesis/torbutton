@@ -32,28 +32,16 @@ var torbutton_pref_observer =
     {
         if (topic != "nsPref:changed") return;
         switch (data) {
+            // These two need to be per-window:
             case "extensions.torbutton.display_panel":
                 torbutton_set_panel_view();
                 break;
             case "extensions.torbutton.panel_style":
                 torbutton_set_panel_style();
                 break;
-            /* XXX: Why was this here? Gotta ask Scott.
-             * It causes an inf loop on ubuntu. The
-             * real question is why doesn't it cause this
-             * loop everywhere? it seems like it should
-            case "extensions.torbutton.http_proxy":
-            case "extensions.torbutton.http_port":
-            case "extensions.torbutton.https_proxy":
-            case "extensions.torbutton.https_port":
-            case "extensions.torbutton.ftp_proxy":
-            case "extensions.torbutton.ftp_port":
-            case "extensions.torbutton.gopher_proxy":
-            case "extensions.torbutton.gopher_port":
-            case "extensions.torbutton.socks_host":
-            case "extensions.torbutton.socks_port":
-                torbutton_init_prefs();
-            */
+
+
+            // XXX: this can be global, but update_status must change
             case "network.proxy.http":
             case "network.proxy.http_port":
             case "network.proxy.ssl":
@@ -72,6 +60,8 @@ var torbutton_pref_observer =
                 // XXX: called way too often
                 torbutton_set_status();
                 break;
+
+            // XXX: global
             case "extensions.torbutton.cookie_jars":
             case "extensions.torbutton.clear_cookies":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars")
@@ -80,15 +70,22 @@ var torbutton_pref_observer =
                             torprefs.getIntPref("saved.cookieLifetime")); 
                 }
                 break;
+            
+            // XXX: global
             case "extensions.torbutton.crashed":
                 // can we say ghetto hack, boys and girls?
                 torbutton_crash_recover();
                 break;
+
+            // XXX: global
             case "extensions.torbutton.disable_referer":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.disable_referer")) {
                     m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", true);
                     m_tb_prefs.setIntPref("network.http.sendRefererHeader", 2);
                 }
+
+
+            // XXX: can be global if update_status is fixed
             case "extensions.torbutton.no_tor_plugins":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
@@ -1188,9 +1185,9 @@ function torbutton_hookdoc(win, doc) {
         var s = new Components.utils.Sandbox(win.wrappedJSObject);
         s.window = win.wrappedJSObject;
         var result = Components.utils.evalInSandbox(str2, s);
-        if(result == 23) { // secret confirmation result code.
+        if(result === 23) { // secret confirmation result code.
             torbutton_log(3, "Javascript hooks applied successfully at: " + doc.location);
-        } else if(result == 13) {
+        } else if(result === 13) {
             torbutton_log(3, "Double-hook at: " + doc.location);
         } else {
             win.alert("Sandbox evaluation failed. Date hooks not applied!");
