@@ -72,6 +72,14 @@ var torbutton_pref_observer =
                 // XXX: called way too often
                 torbutton_set_status();
                 break;
+            case "extensions.torbutton.cookie_jars":
+            case "extensions.torbutton.clear_cookies":
+                if(!m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars")
+                    && !m_tb_prefs.getBoolPref("extensions.torbutton.clear_cookies")) {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
+                            torprefs.getIntPref("saved.cookieLifetime")); 
+                }
+                break;
             case "extensions.torbutton.crashed":
                 // can we say ghetto hack, boys and girls?
                 torbutton_crash_recover();
@@ -199,6 +207,7 @@ function torbutton_init() {
         torbutton_init_jshooks();
 
         torbutton_log(1, 'registering pref observer');
+        // XXX: Perf: do we really need one for each window?
         torbutton_pref_observer.register(); 
         m_tb_wasinited = true;
     } else {
@@ -287,7 +296,7 @@ function torbutton_get_toolbutton() {
     } else if (document.getElementById("torbutton-button-tb-msg")) {
         o_toolbutton = document.getElementById("torbutton-button-tb-msg");
     } else {
-        torbutton_log(5, 'get_toolbutton(): did not find torbutton-button');
+        torbutton_log(3, 'get_toolbutton(): did not find torbutton-button');
     }
 
     return o_toolbutton;
@@ -499,7 +508,7 @@ function torbutton_update_status(mode, force_update) {
             }
         }
     }
-    
+
     torbutton_log(2, 'Done with user agent: '+changed);
 
     // FIXME: This is not ideal, but the refspoof method is not compatible
@@ -609,6 +618,21 @@ function torbutton_update_status(mode, force_update) {
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
+
+    // Prevent tor cookies from being written to disk
+    if(torprefs.getBoolPref('clear_cookies') 
+            || torprefs.getBoolPref('cookie_jars')) {
+        torbutton_log(2, "Changing cookie lifetime");
+        if(mode) {
+            torprefs.setIntPref("saved.cookieLifetime", 
+                    m_tb_prefs.getIntPref("network.cookie.lifetimePolicy"));
+            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+        } else {
+            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
+                    torprefs.getIntPref("saved.cookieLifetime")); 
+        }
+        torbutton_log(2, "Cookie lifetime changed");
+    }
 
     if (torprefs.getBoolPref('clear_cookies')) {
         torbutton_clear_cookies();
@@ -1189,7 +1213,7 @@ function torbutton_check_progress(aProgress, aRequest) {
         var chanreq = aRequest.QueryInterface(Components.interfaces.nsIChannel);
         // XXX: do we need to QI this bastard?
         if(chanreq
-                && aRequest instanceof Components.interfaces.nsIChannel
+                && chanreq instanceof Components.interfaces.nsIChannel
                 && aRequest.isPending() 
                 && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
                 && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
