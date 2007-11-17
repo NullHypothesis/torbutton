@@ -1,3 +1,11 @@
+1.1.11
+  16 Nov 2007
+  * bugfix: Fix a scope issue with the JS hooks that caused problems with 
+    some sites (gmail, others?)
+  * misc: Performance enhancements for speeding up toggle
+  * new: Prevent Tor cookies from being written to disk if the user wants
+    them cleared.
+
 1.1.10
   06 Nov 2007
   * bugfix: bug 522: Try harder to kill plugins before they do any network IO
