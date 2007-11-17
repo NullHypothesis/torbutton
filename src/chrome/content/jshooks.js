@@ -14,8 +14,8 @@ window.__HookObjects = function() {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
-      navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
-      navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
+      window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+      window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
       /*navigator.__defineGetter__("platform", function() { return tmp_platform;});*/
   }
 
@@ -53,8 +53,8 @@ window.__HookObjects = function() {
     } 
   } 
 
-  var tmp = Date;
-  Date = function() {
+  var tmp = window.Date;
+  window.Date = function() {
     /* DO NOT make 'd' a member! EvilCode will use it! */
     var d;
     var a = arguments;
@@ -77,62 +77,62 @@ window.__HookObjects = function() {
       }
     }
 
-    Date.prototype.valueOf=Date.prototype.getTime = /* UTC already */
+    window.Date.prototype.valueOf=window.Date.prototype.getTime = /* UTC already */
          function(){return d.getTime();}
-    Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
-    Date.prototype.getYear=function() {return d.getYear();}
-    Date.prototype.getMonth=function(){return d.getUTCMonth();}
-    Date.prototype.getDate=function() {return d.getUTCDate();}
-    Date.prototype.getDay=function() {return d.getUTCDay();}
-    Date.prototype.getHours=function(){return d.getUTCHours();}
-    Date.prototype.getMinutes=function(){return d.getUTCMinutes();}
-    Date.prototype.getSeconds=function(){return d.getUTCSeconds();}
-    Date.prototype.getMilliseconds=function(){return d.getUTCMilliseconds();}
-    Date.prototype.getTimezoneOffset=function(){return 0;}
+    window.Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
+    window.Date.prototype.getYear=function() {return d.getYear();}
+    window.Date.prototype.getMonth=function(){return d.getUTCMonth();}
+    window.Date.prototype.getDate=function() {return d.getUTCDate();}
+    window.Date.prototype.getDay=function() {return d.getUTCDay();}
+    window.Date.prototype.getHours=function(){return d.getUTCHours();}
+    window.Date.prototype.getMinutes=function(){return d.getUTCMinutes();}
+    window.Date.prototype.getSeconds=function(){return d.getUTCSeconds();}
+    window.Date.prototype.getMilliseconds=function(){return d.getUTCMilliseconds();}
+    window.Date.prototype.getTimezoneOffset=function(){return 0;}
  
-    Date.prototype.setTime = 
+    window.Date.prototype.setTime = 
        function(x) {return d.setTime(x);}
-    Date.prototype.setFullYear=function(x){return d.setUTCFullYear(x);}
-    Date.prototype.setYear=function(x){return d.setYear(x);}
-    Date.prototype.setMonth=function(x){return d.setUTCMonth(x);}
-    Date.prototype.setDate=function(x){return d.setUTCDate(x);}
-    Date.prototype.setDay=function(x){return d.setUTCDay(x);}
-    Date.prototype.setHours=function(x){return d.setUTCHours(x);}
-    Date.prototype.setMinutes=function(x){return d.setUTCMinutes(x);}
-    Date.prototype.setSeconds=function(x){return d.setUTCSeconds(x);}
-    Date.prototype.setMilliseconds=
+    window.Date.prototype.setFullYear=function(x){return d.setUTCFullYear(x);}
+    window.Date.prototype.setYear=function(x){return d.setYear(x);}
+    window.Date.prototype.setMonth=function(x){return d.setUTCMonth(x);}
+    window.Date.prototype.setDate=function(x){return d.setUTCDate(x);}
+    window.Date.prototype.setDay=function(x){return d.setUTCDay(x);}
+    window.Date.prototype.setHours=function(x){return d.setUTCHours(x);}
+    window.Date.prototype.setMinutes=function(x){return d.setUTCMinutes(x);}
+    window.Date.prototype.setSeconds=function(x){return d.setUTCSeconds(x);}
+    window.Date.prototype.setMilliseconds=
        function(x) {return d.setUTCMilliseconds(x);}
  
-    Date.prototype.getUTCFullYear=function(){return d.getUTCFullYear();}  
-    Date.prototype.getUTCMonth=function(){return d.getUTCMonth();}
-    Date.prototype.getUTCDate=function() {return d.getUTCDate();}
-    Date.prototype.getUTCDay=function() {return d.getUTCDay();}
-    Date.prototype.getUTCHours=function(){return d.getUTCHours();}
-    Date.prototype.getUTCMinutes=function(){return d.getUTCMinutes();}
-    Date.prototype.getUTCSeconds=function(){return d.getUTCSeconds();}
-    Date.prototype.getUTCMilliseconds=
+    window.Date.prototype.getUTCFullYear=function(){return d.getUTCFullYear();}  
+    window.Date.prototype.getUTCMonth=function(){return d.getUTCMonth();}
+    window.Date.prototype.getUTCDate=function() {return d.getUTCDate();}
+    window.Date.prototype.getUTCDay=function() {return d.getUTCDay();}
+    window.Date.prototype.getUTCHours=function(){return d.getUTCHours();}
+    window.Date.prototype.getUTCMinutes=function(){return d.getUTCMinutes();}
+    window.Date.prototype.getUTCSeconds=function(){return d.getUTCSeconds();}
+    window.Date.prototype.getUTCMilliseconds=
        function(){return d.getUTCMilliseconds();}
      
-    Date.prototype.setUTCFullYear=function(x){return d.setUTCFullYear(x);}
-    Date.prototype.setUTCMonth=function(x){return d.setUTCMonth(x);}
-    Date.prototype.setUTCDate=function(x){return d.setUTCDate(x);}
-    Date.prototype.setUTCDay=function(x){return d.setUTCDay(x);}
-    Date.prototype.setUTCHours=function(x){return d.setUTCHours(x);}
-    Date.prototype.setUTCMinutes=function(x){return d.setUTCMinutes(x);}
-    Date.prototype.setUTCSeconds=function(x){return d.setUTCSeconds(x);}
-    Date.prototype.setUTCMilliseconds=
+    window.Date.prototype.setUTCFullYear=function(x){return d.setUTCFullYear(x);}
+    window.Date.prototype.setUTCMonth=function(x){return d.setUTCMonth(x);}
+    window.Date.prototype.setUTCDate=function(x){return d.setUTCDate(x);}
+    window.Date.prototype.setUTCDay=function(x){return d.setUTCDay(x);}
+    window.Date.prototype.setUTCHours=function(x){return d.setUTCHours(x);}
+    window.Date.prototype.setUTCMinutes=function(x){return d.setUTCMinutes(x);}
+    window.Date.prototype.setUTCSeconds=function(x){return d.setUTCSeconds(x);}
+    window.Date.prototype.setUTCMilliseconds=
         function(x) {return d.setUTCMilliseconds(x);}
   
-    Date.prototype.toUTCString=function(){return d.toUTCString();}
-    Date.prototype.toGMTString=function(){return d.toGMTString();}
-    Date.prototype.toString=function(){return d.toUTCString();}
-    Date.prototype.toLocaleString=function(){return d.toUTCString();}
+    window.Date.prototype.toUTCString=function(){return d.toUTCString();}
+    window.Date.prototype.toGMTString=function(){return d.toGMTString();}
+    window.Date.prototype.toString=function(){return d.toUTCString();}
+    window.Date.prototype.toLocaleString=function(){return d.toUTCString();}
     
     /* Fuck 'em if they can't take a joke: */
-    Date.prototype.toLocaleTimeString=function(){return d.toUTCString();}
-    Date.prototype.toLocaleDateString=function(){return d.toUTCString();}
-    Date.prototype.toDateString=function(){return d.toUTCString();}
-    Date.prototype.toTimeString=function(){return d.toUTCString();}
+    window.Date.prototype.toLocaleTimeString=function(){return d.toUTCString();}
+    window.Date.prototype.toLocaleDateString=function(){return d.toUTCString();}
+    window.Date.prototype.toDateString=function(){return d.toUTCString();}
+    window.Date.prototype.toTimeString=function(){return d.toUTCString();}
     
     /* Hack to solve the problem of multiple date objects
      * all sharing the same lexically scoped d every time a new one is
@@ -143,29 +143,26 @@ window.__HookObjects = function() {
      * this function we modified Date.prototype to create the new methods
      * with the lexically scoped d reference.
      */
-    Date.prototype = new Object.prototype.toSource();
+    window.Date.prototype = new Object.prototype.toSource();
     return d.toUTCString();
   }
 
-  Date.parse=function(s) {
+  window.Date.parse=function(s) {
     var d = new tmp(s);
     if(typeof(s) == "string") reparseDate(d, s);
     return d.getTime();    
   }
 
-  Date.now=function(){return tmp.now();}
-  Date.UTC=function(){return tmp.apply(tmp, arguments); }
+  window.Date.now=function(){return tmp.now();}
+  window.Date.UTC=function(){return tmp.apply(tmp, arguments); }
 
   return true;
 }
 
 if (typeof(window.__HookObjects) != "undefined") {
-    // XXX: Woah.. scope issues with this var if it
-    // has the same name as a div id?? That doesn't make
-    // any sense..
-    var __tb_res = 23;
+    var res = 23;
     if(!window.__HookObjects()) {
-        __tb_res = 13;
+        res = 13;
     }
 
     window.__HookObjects = undefined;
@@ -178,7 +175,7 @@ if (typeof(window.__HookObjects) != "undefined") {
 
     window.__tb_hooks_ran = true;
 
-    __tb_res; // Secret result code.
+    res; // Secret result code.
 } else {
     42;
 }
