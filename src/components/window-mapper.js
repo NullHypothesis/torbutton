@@ -99,8 +99,6 @@ ContentWindowMapper.prototype =
       }
   },
 
-  // XXX: Handle case where browser XUL *is* the content window!
-  // (favicons and the like..)
   getBrowserForContentWindow: function(topContentWindow) {
       var cached = this.checkCache(topContentWindow);
       if(cached != null) return cached;
@@ -120,10 +118,15 @@ ContentWindowMapper.prototype =
           }
       }
 
+      if(topContentWindow instanceof Components.interfaces.nsIDOMChromeWindow) {
+          this.logger.log(3, "Chrome browser found: "+topContentWindow.location);
+          return topContentWindow.getBrowser().selectedTab.linkedBrowser;
+      }
+
       if(topContentWindow && topContentWindow.location)
-          this.logger.log(3, "No browser found: "+topContentWindow.location);
+          this.logger.log(5, "No browser found: "+topContentWindow.location);
       else
-          this.logger.log(3, "No browser found!");
+          this.logger.log(5, "No browser found!");
 
       return null;
   }

@@ -94,7 +94,6 @@ function ContentPolicy() {
         .getService(Components.interfaces.nsISupports)
         .wrappedJSObject;
     
-    // XXX: Ewww. torbutton.logger may not be loaded yet..
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;
         
@@ -157,7 +156,6 @@ ContentPolicy.prototype = {
 			wind = node;
 		}
 
-        // XXX: Something is rotten in denmark        
         var tor_state = this.tor_enabled;
 
         if (contentType == 5) { // Object
@@ -184,14 +182,14 @@ ContentPolicy.prototype = {
 
         var browser = this.wm.getBrowserForContentWindow(wind.top);
         if(!browser) {
-            // This happens on the first load of a doc
-            this.logger.log(3, "No window found: "+contentLocation.spec);
-            return ok; 
+            this.logger.log(5, "No window found: "+contentLocation.spec);
+            return block; 
         }
 
+        // This happens on the first load of a doc
         if (typeof(browser.__tb_tor_fetched) == 'undefined') {
-            this.logger.log(5, "UNTAGGED WINDOW2!!!!!!!!! "+contentLocation.spec);
-            return block;
+            this.logger.log(3, "Untagged window for "+contentLocation.spec);
+            return ok;
         }
 
         if(browser.__tb_tor_fetched == tor_state) {
