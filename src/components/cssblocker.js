@@ -185,7 +185,8 @@ ContentPolicy.prototype = {
             return block; 
         }
 
-        // This happens on the first load of a doc
+        // This happens on the first load of a doc and with non-browser
+        // chrome..
         if (typeof(browser.__tb_tor_fetched) == 'undefined') {
             this.logger.log(3, "Untagged window for "+contentLocation.spec);
             return ok;

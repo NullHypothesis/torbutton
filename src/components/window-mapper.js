@@ -99,8 +99,14 @@ ContentWindowMapper.prototype =
 
   getBrowserForContentWindow: function(topContentWindow) {
       if(topContentWindow instanceof Components.interfaces.nsIDOMChromeWindow) {
-          this.logger.log(3, "Chrome browser found: "+topContentWindow.location);
-          return topContentWindow.getBrowser().selectedTab.linkedBrowser;
+          if(topContentWindow.browserDOMWindow) {
+              this.logger.log(3, "Chrome browser found: "
+                      +topContentWindow.location);
+              return topContentWindow.getBrowser().selectedTab.linkedBrowser;
+          }
+          // Allow strange chrome to go through..
+          this.logger.log(3, "Odd chome window"+topContentWindow.location);
+          return topContentWindow;
       }
 
       var cached = this.checkCache(topContentWindow);
