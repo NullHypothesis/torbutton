@@ -96,10 +96,6 @@ function ContentPolicy() {
     
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;
-        
-    this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
-    this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
-    this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
     // Register observer: FIXME: Restrict this to extensions.torbutton branch?
     var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
@@ -107,7 +103,10 @@ function ContentPolicy() {
     this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
     this._branch.addObserver("extensions.torbutton", this, false);
 
-    dump("Content policy component initialized\n");
+    this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
+    this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
+
     return;
 }
 

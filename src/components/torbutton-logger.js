@@ -17,6 +17,13 @@ const Ci = Components.interfaces;
 function TorbuttonLogger() {
     this.prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
+
+    // Register observer
+    var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefBranchInternal);
+    this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    this._branch.addObserver("extensions.torbutton", this, false);
+
     this.loglevel = this.prefs.getIntPref("extensions.torbutton.loglevel");
     this.logmethod = this.prefs.getIntPref("extensions.torbutton.logmethod");
 
@@ -30,15 +37,8 @@ function TorbuttonLogger() {
     this._console = Components.classes["@mozilla.org/consoleservice;1"]
         .getService(Components.interfaces.nsIConsoleService);
 
-    // Register observer
-    var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
-        .getService(Components.interfaces.nsIPrefBranchInternal);
-    this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-    this._branch.addObserver("extensions.torbutton", this, false);
-
     // This JSObject is exported directly to chrome
     this.wrappedJSObject = this;
-    dump("Torbutton Logger component initialized\n");
 }
 
 /**
