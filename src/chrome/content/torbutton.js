@@ -7,6 +7,7 @@ var m_tb_wasinited = false;
 var m_tb_prefs = false;
 var m_tb_jshooks = false;
 var m_tb_plugin_mimetypes = false;
+var m_tb_is_main_window = false;
 
 var torbutton_window_pref_observer =
 {
@@ -231,7 +232,6 @@ function torbutton_init() {
         torbutton_init_jshooks();
 
         torbutton_log(1, 'registering pref observer');
-        // XXX: Perf: do we really need one for each window?
         torbutton_window_pref_observer.register(); 
         m_tb_wasinited = true;
     } else {
@@ -986,24 +986,30 @@ unregister : function() {
 }
 }
 
+function torbutton_do_main_window_startup()
+{
+    torbutton_log(3, "Torbutton main window startup");
+    m_tb_is_main_window = true;
+
+    // http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgress.html
+    var progress =
+        Components.classes["@mozilla.org/docloaderservice;1"].
+        getService(Components.interfaces.nsIWebProgress);
+
+    progress.addProgressListener(torbutton_weblistener,
+            //   Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL|
+            //   Components.interfaces.nsIWebProgress.NOTIFY_ALL);
+        Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
+            Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
+
+    torbutton_unique_pref_observer.register();
+    torbutton_uninstall_observer.register();
+}
 
 function torbutton_do_onetime_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
-        torbutton_log(3, "Torbutton onetime startup");
-        // http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgress.html
-        var progress =
-            Components.classes["@mozilla.org/docloaderservice;1"].
-            getService(Components.interfaces.nsIWebProgress);
-
-        progress.addProgressListener(torbutton_weblistener,
-//                Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL|
-//                Components.interfaces.nsIWebProgress.NOTIFY_ALL);
-                Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
-                Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
-
-        torbutton_unique_pref_observer.register();
-        torbutton_uninstall_observer.register();
+        torbutton_do_main_window_startup();
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
 }
@@ -1055,6 +1061,26 @@ function torbutton_new_window(event)
 
 function torbutton_close_window(event) {
     torbutton_window_pref_observer.unregister();
+
+    // XXX: This is a real ghetto hack.. When the original window
+    // closes, we need to find another window to handle observing 
+    // unique events... The right way to do this is to move the 
+    // majority of torbutton functionality into a XPCOM component.. 
+    // But that is a major overhaul..
+    if (m_tb_is_main_window) {
+        torbutton_log(3, "Original window closed. Searching for another");
+        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+            .getService(Components.interfaces.nsIWindowMediator);
+        var enumerator = wm.getEnumerator("navigator:browser");
+        while(enumerator.hasMoreElements()) {
+            var win = enumerator.getNext();
+            if(win != window) {
+                torbutton_log(3, "Found another window");
+                win.torbutton_do_main_window_startup();
+                break;
+            }
+        }
+    }
 }
 
 window.addEventListener('load',torbutton_new_window,false);

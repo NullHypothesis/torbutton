@@ -99,6 +99,8 @@ ContentWindowMapper.prototype =
       }
   },
 
+  // XXX: Handle case where browser XUL *is* the content window!
+  // (favicons and the like..)
   getBrowserForContentWindow: function(topContentWindow) {
       var cached = this.checkCache(topContentWindow);
       if(cached != null) return cached;
