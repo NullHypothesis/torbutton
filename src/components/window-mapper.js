@@ -30,8 +30,6 @@ function ContentWindowMapper() {
 
   // This JSObject is exported directly to chrome
   this.wrappedJSObject = this;
-
-  dump("Window mapper component initialized\n");
 }
 
 ContentWindowMapper.prototype =
@@ -100,6 +98,11 @@ ContentWindowMapper.prototype =
   },
 
   getBrowserForContentWindow: function(topContentWindow) {
+      if(topContentWindow instanceof Components.interfaces.nsIDOMChromeWindow) {
+          this.logger.log(3, "Chrome browser found: "+topContentWindow.location);
+          return topContentWindow.getBrowser().selectedTab.linkedBrowser;
+      }
+
       var cached = this.checkCache(topContentWindow);
       if(cached != null) return cached;
 
@@ -116,11 +119,6 @@ ContentWindowMapper.prototype =
                   return browser;
               }
           }
-      }
-
-      if(topContentWindow instanceof Components.interfaces.nsIDOMChromeWindow) {
-          this.logger.log(3, "Chrome browser found: "+topContentWindow.location);
-          return topContentWindow.getBrowser().selectedTab.linkedBrowser;
       }
 
       if(topContentWindow && topContentWindow.location)
