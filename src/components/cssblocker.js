@@ -185,11 +185,21 @@ ContentPolicy.prototype = {
             return block; 
         }
 
-        // This happens on the first load of a doc and with non-browser
-        // chrome..
-        if (typeof(browser.__tb_tor_fetched) == 'undefined') {
-            this.logger.log(3, "Untagged window for "+contentLocation.spec);
-            return ok;
+        // source window of browser chrome window with a document content
+        // type means the user entered a new URL.
+        if(wind.top instanceof Components.interfaces.nsIDOMChromeWindow) {
+            // This happens on non-browser chrome: updates, dialogs, etc
+            if (!wind.top.browserDOMWindow 
+                    && typeof(browser.__tb_tor_fetched) == 'undefined') {
+                this.logger.log(3, "Untagged window for "+contentLocation.spec);
+                return ok;
+            }
+
+            if(wind.top.browserDOMWindow 
+                    && contentType == CPolicy.TYPE_DOCUMENT) {
+                this.logger.log(3, "New location for "+contentLocation.spec);
+                return ok;
+            }
         }
 
         if(browser.__tb_tor_fetched == tor_state) {

@@ -62,11 +62,10 @@ ContentWindowMapper.prototype =
   // method of nsIClassInfo
   getHelperForLanguage: function(count) { return null; },
 
-
   checkCache: function(topContentWindow) {
-      if(typeof(this.cache[topContentWindow]) != "undefined") {
-          this.logger.log(1, "Found cached element for: "+topContentWindow.location);
-          return this.cache[topContentWindow].browser;
+      if(typeof(topContentWindow.ghetto_guid) != "undefined"
+         && typeof(this.cache[topContentWindow.ghetto_guid]) != "undefined") {
+          return this.cache[topContentWindow.ghetto_guid].browser;
       }
 
       return null;
@@ -76,8 +75,8 @@ ContentWindowMapper.prototype =
       var insertion = new Object();
       insertion.browser = browser;
       insertion.time = Date.now();
-      this.cache[topContentWindow] = insertion; 
-      this.logger.log(2, "Cached element: "+topContentWindow.location);
+      topContentWindow.ghetto_guid = Math.random().toString()+Math.random().toString();
+      this.cache[topContentWindow.ghetto_guid] = insertion; 
   },
 
   expireOldCache: function() {
@@ -100,9 +99,12 @@ ContentWindowMapper.prototype =
   getBrowserForContentWindow: function(topContentWindow) {
       if(topContentWindow instanceof Components.interfaces.nsIDOMChromeWindow) {
           if(topContentWindow.browserDOMWindow) {
-              this.logger.log(3, "Chrome browser found: "
+              // XXX: is this not a tabbed browser?
+              var browser = topContentWindow.getBrowser().selectedTab.linkedBrowser;
+              this.logger.log(3, "Chrome browser at "
+                      +browser.contentWindow.location+" found for: "
                       +topContentWindow.location);
-              return topContentWindow.getBrowser().selectedTab.linkedBrowser;
+              return browser;
           }
           // Allow strange chrome to go through..
           this.logger.log(3, "Odd chome window"+topContentWindow.location);
@@ -110,7 +112,9 @@ ContentWindowMapper.prototype =
       }
 
       var cached = this.checkCache(topContentWindow);
-      if(cached != null) return cached;
+      if(cached != null) {
+          return cached;
+      }
 
       var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
           .getService(Components.interfaces.nsIWindowMediator);
@@ -121,8 +125,8 @@ ContentWindowMapper.prototype =
           for (var i = 0; i < browser.browsers.length; ++i) {
               var b = browser.browsers[i];
               if (b && b.contentWindow == topContentWindow) {
-                  this.addCache(topContentWindow, browser);
-                  return browser;
+                  this.addCache(topContentWindow, b);
+                  return b;
               }
           }
       }

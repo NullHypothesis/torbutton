@@ -1169,8 +1169,8 @@ function torbutton_update_tags(win) {
         return;
         //win.alert("No window found!");
     }
-    torbutton_log(2, "Got browser "+browser.contentDocument.location+" for: " 
-            + win.location);
+    torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
+            + win.location + ", under: "+win.top.location);
 
     var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
