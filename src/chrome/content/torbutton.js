@@ -489,6 +489,7 @@ function torbutton_update_status(mode, force_update) {
     if(!changed && !force_update) return;
 
     torbutton_log(2, 'Setting user agent');
+    // XXX: this needs an else block...
     if(torprefs.getBoolPref("set_uagent")) {
         if(mode) {
             try {
