@@ -1,3 +1,11 @@
+1.1.12
+  26 Nov 2007
+  * bugfix: bug 520: Fix some content policy/tagging issues. Not sure if this
+    is the whole bug.
+  * bugfix: Fix a nasty bug where torbutton mostly broke if the first Firefox
+    window was closed (introduced in 1.1.11)
+  * bugfix: Fix a favicon proxy-leak discussed in onionland
+
 1.1.11
   16 Nov 2007
   * bugfix: Fix a scope issue with the JS hooks that caused problems with 
