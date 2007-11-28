@@ -107,17 +107,39 @@ var torbutton_unique_pref_observer =
                 torbutton_crash_recover();
                 break;
 
+            case "extensions.torbutton.set_uagent":
+                // If the user turns off the pref, reset their user agent to
+                // vanilla
+                if(!m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
+                    if(m_tb_prefs.prefHasUserValue("general.appname.override"))
+                        m_tb_prefs.clearUserPref("general.appname.override");
+                    if(m_tb_prefs.prefHasUserValue("general.appversion.override"))
+                        m_tb_prefs.clearUserPref("general.appversion.override");
+                    if(m_tb_prefs.prefHasUserValue("general.useragent.override"))
+                        m_tb_prefs.clearUserPref("general.useragent.override");
+                    if(m_tb_prefs.prefHasUserValue("general.useragent.vendor"))
+                        m_tb_prefs.clearUserPref("general.useragent.vendor");
+                    if(m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
+                        m_tb_prefs.clearUserPref("general.useragent.vendorSub");
+                    if(m_tb_prefs.prefHasUserValue("general.platform.override"))
+                        m_tb_prefs.clearUserPref("general.platform.override");
+                } else {
+                    torbutton_log(1, "Got update message, updating status");
+                    torbutton_update_status(
+                            m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
+                            true);
+                }
+                break;
+
             case "extensions.torbutton.disable_referer":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.disable_referer")) {
                     m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", true);
                     m_tb_prefs.setIntPref("network.http.sendRefererHeader", 2);
                 }
-
             case "extensions.torbutton.no_tor_plugins":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
             case "extensions.torbutton.block_cache":
-            case "extensions.torbutton.set_uagent":
             case "extensions.torbutton.block_nthwrite":
             case "extensions.torbutton.block_thwrite":
             case "extensions.torbutton.shutdown_method":
@@ -489,7 +511,7 @@ function torbutton_update_status(mode, force_update) {
     if(!changed && !force_update) return;
 
     torbutton_log(2, 'Setting user agent');
-    // XXX: this needs an else block...
+    
     if(torprefs.getBoolPref("set_uagent")) {
         if(mode) {
             try {
@@ -1078,9 +1100,19 @@ function torbutton_close_window(event) {
             if(win != window) {
                 torbutton_log(3, "Found another window");
                 win.torbutton_do_main_window_startup();
+                m_tb_is_main_window = false;
                 break;
             }
         }
+
+        // remove old listeners
+        var progress = Components.classes["@mozilla.org/docloaderservice;1"].
+            getService(Components.interfaces.nsIWebProgress);
+
+        progress.removeProgressListener(torbutton_weblistener);
+        torbutton_unique_pref_observer.unregister();
+        torbutton_uninstall_observer.unregister();
+
     }
 }
 
