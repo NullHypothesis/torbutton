@@ -1,0 +1,390 @@
+<html>
+<head>
+<title>Torbutton - Quickly toggle Firefox's use of the Tor network</title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="gimpy.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="Google Canada" href="search/google-ca.xml">
+<link rel="search" type="application/opensearchdescription+xml" title="Google UK" href="http://torbutton.torproject.org/dev/search/google-uk.xml">
+<link rel="search" type="application/opensearchdescription+xml" title="Google USA" href="search/google-us.xml">
+<script>
+
+function addSearchProvider(prov) {
+
+try {
+window.external.AddSearchProvider(prov);
+}
+
+catch (e) {
+alert("Search plugins require Firefox 2");
+return;
+}
+}
+
+function addEngine(name,ext,cat,pid)
+{
+  if ((typeof window.sidebar == "object") && (typeof window.sidebar.addSearchEngine == "function")) {
+    window.sidebar.addSearchEngine(
+      "http://mycroft.mozdev.org/install.php/" + pid + "/" + name + ".src",
+      "http://mycroft.mozdev.org/install.php/" + pid + "/" + name + "."+ ext, name, cat );
+  } else {
+    alert("You will need a browser which supports Sherlock to install this plugin.");
+  }
+}
+
+function addOpenSearch(name,ext,cat,pid,meth)
+{
+  if ((typeof window.external == "object") && ((typeof window.external.AddSearchProvider == "unknown") || (typeof window.external.AddSearchProvider == "function"))) {
+    if ((typeof window.external.AddSearchProvider == "unknown") && meth == "p") {
+      alert("This plugin uses POST which is not currently supported by Internet Explorer's implementation of OpenSearch.");
+    } else {
+      window.external.AddSearchProvider(
+        "http://mycroft.mozdev.org/installos.php/" + pid + "/" + name + ".xml");
+    }
+  } else {
+    alert("You will need a browser which supports OpenSearch to install this plugin.");
+  }
+}
+
+function addOpenSearch2(name,ext,cat,pid,meth)
+{
+  if ((typeof window.external == "object") && ((typeof window.external.AddSearchProvider == "unknown") || (typeof window.external.AddSearchProvider == "function"))) {
+    if ((typeof window.external.AddSearchProvider == "unknown") && meth == "p") {
+      alert("This plugin uses POST which is not currently supported by Internet Explorer's implementation of OpenSearch.");
+    } else {
+      window.external.AddSearchProvider(
+        "http://torbutton.torproject.org/dev/search/" + name + ".xml");
+    }
+  } else {
+    alert("You will need a browser which supports OpenSearch to install this plugin.");
+  }
+}
+
+function install (aEvent)
+{
+  var params = {
+    "Torbutton": { URL: aEvent.target.href,
+             Hash: aEvent.target.getAttribute("hash"),
+             toString: function () { return this.URL; }
+    }
+  };
+  InstallTrigger.install(params);
+
+  return false;
+}
+
+
+</script>
+</head>
+<body>
+
+<h1>Torbutton Development Branch</h1>
+<strong>Current version:</strong> 1.1.12 (26 Nov 2007)<br/>
+<br/>
+<strong>Authors:</strong> Scott Squires &amp; Mike Perry<br>
+<strong>Email:</strong> squires at freehaven dot net, mikeperry (o) fscked/org<br/>
+<br/>
+<strong>Install:</strong> 
+<a href="http://torbutton.torproject.org/dev/torbutton-current-alpha.xpi"
+  hash="sha1:fb84b6eddf6d01969c425fc8b1876f82f3fba322"
+  onclick="return install(event);">Local (Javascript verified)</a><br/>
+<strong>Past Releases:</strong> <a href="releases/">Local (non-https)</a><br/>
+<strong>Extras:</strong> 
+
+Google search plugins for
+
+<a href="/jsreq.html" title="Ref: 14938 (googleCA)"
+ onClick="addOpenSearch('GoogleCanada','ico','General','14937','g');return false">Google CA</a>, and 
+
+<a href="/jsreq.html" title="Ref: 14938 (googleCA)"
+ onClick="addOpenSearch('googleuk_web','png','General','14445','g');return false">Google UK</a>.
+<br/>
+<!--
+<strong>Install:</strong> <a href="torbutton-1.0.4.xpi">torbutton-1.0.4.xpi</a><br/>
+-->
+<strong>Source:</strong> You can <a href="https://tor-svn.freehaven.net/svn/torbutton/trunk/">browse the repository</a> or simply unzip the xpi.
+<br/>
+<strong>Bug Reports:</strong> <a href="http://bugs.noreply.org/flyspray/index.php?tasks=all&project=5">Flyspray at noreply.org</a><br/>
+<strong>Documents:</strong> <b>[</b> <a href="CHANGELOG">changelog</a> <b>|</b> <a href="LICENSE">license</a> <b>|</b> <a href="CREDITS">credits</a> <b>]</b><br/>
+<h2>About</h2>
+<p>
+Torbutton is a 1-click way for Firefox users to enable or disable the browser's use of <a href="http://tor.eff.org/">Tor</a>.  It adds a panel to the statusbar that says "Tor Enabled" (in green) or "Tor Disabled" (in red).  The user may click on the panel to toggle the status.  If the user (or some other extension) changes the proxy settings, the change is automatically reflected in the statusbar.
+</p><p>
+Some users may prefer a toolbar button instead of a statusbar panel.  Such a button is included, and one adds it to the toolbar by right-clicking on the desired toolbar, selecting "Customize...", and then dragging the Torbutton icon onto the toolbar.  There is an option in the preferences to hide the statusbar panel (Tools->Extensions, select Torbutton, and click on Preferences).
+</p>
+<p>
+Newer Firefoxes have the ability to send DNS resolves through the socks proxy, and Torbutton will make use of this feature if it is available in your version of Firefox.
+</p>
+
+<h2>Description of Options</h2>
+
+<p>The development branch of Torbutton adds several new security features to
+protect your anonymity from all the major threats the author is aware of. The
+defaults should be fine for most people, but in case you are the tweaker type,
+or if you prefer to try to outsource some options to more flexible extensions,
+here is the complete list. (In an ideal world, these descriptions should all be
+tooltips in the extension itself, but Firefox bugs <a
+href="https://bugzilla.mozilla.org/show_bug.cgi?id=45375">45375</a> and <a
+href="https://bugzilla.mozilla.org/show_bug.cgi?id=218223">218223</a> currently
+prevent this).</p>
+
+<ul>
+ <li>Disable plugins on Tor Usage (crucial)</li>
+
+  This option is key to Tor security. Plugins perform their own networking
+independent of the browser, and many plugins only partially obey even their own
+proxy settings.
+
+  <li>Isolate Dynamic Content to Tor State (crucial)</li>
+
+  Another crucial option, this setting causes the plugin to disable Javascript
+  on tabs that are loaded during a Tor state different than the current one,
+  to prevent delayed fetches of injected URLs that contain unique identifiers,
+  and to prevent meta-refresh tags from revealing your IP when you turn off
+  Tor. It also prevents all fetches from tabs loaded with an opposite Tor
+  state. This serves to block non-Javascript dynamic content such as CSS
+  popups from revealing your IP address if you disable Tor.
+
+  <li>Hook Dangerous Javascript (crucial)</li>
+
+This setting enables the Javascript hooking code. Javascript is injected into
+pages to hook the Date object to mask your timezone, and to hook the navigator
+object to mask OS and user agent properties not handled by the standard
+Firefox user agent override settings.
+
+  <li>Disable Updates During Tor (recommended)</li>
+
+Many extension authors do not update their extensions from SSL-enabled
+websites. It is possible for malicious Tor nodes to hijack these extensions and
+replace them with malicious ones, or add malicious code to existing extensions.
+
+  <li>Disable Search Suggestions during Tor (optional)</li>
+
+This optional setting governs if you get Google search suggestions during Tor
+usage. Since no cookie is transmitted during search suggestions, this is a
+relatively benign behavior.
+
+  <li>Block History Reads during Tor (crucial)</li>
+
+  Based on code contributed by <a href="http://www.collinjackson.com/">Collin
+  Jackson</a>, when enabled and Tor is enabled, this setting prevents the
+rendering engine from knowing if certain links were visited.  This mechanism
+defeats all document-based history disclosure attacks, including CSS-only
+attacks.
+
+  <li>Block History Reads during Non-Tor (recommended)</li>
+
+  This setting accomplishes the same but for your Non-Tor activity.
+
+  <li>Block History Writes during Tor (recommended)</li>
+
+  This setting prevents the rendering engine from recording visited URLs, and
+also disables download manager history. Note that if you allow writing of Tor history,
+it is recommended that you disable non-Tor history reads, since malicious
+websites you visit without Tor can query your history for .onion sites and
+other history recorded during Tor usage (such as Google queries).
+
+  <li>Block History Writes during Non-Tor (optional)</li>
+
+This setting also disables recording any history information during Non-Tor
+usage.
+
+<li>Clear History During Tor Toggle (optional)</li>
+
+  This is an alternate setting to use instead of (or in addition to) blocking
+history reads or writes.
+
+  <li>Block Password+Form saving during Tor/Non-Tor</li>
+
+  These options govern if the browser writes your passwords and search
+  submissions to disk for the given state.
+
+  <li>Block Tor disk cache and clear all cache on Tor Toggle</li>
+
+  Since the browser cache can be leveraged to store unique identifiers, cache
+must not persist across Tor sessions. This option keeps the memory cache active
+during Tor usage for performance, but blocks disk access for caching.
+
+  <li>Block disk and memory cache during Tor</li>
+
+  This setting entirely blocks the cache during Tor, but preserves it for
+Non-Tor usage.
+
+  <li>Clear Cookies on Tor Toggle</li>
+
+  Fully clears all cookies on Tor toggle.
+  
+  <li>Store Non-Tor cookies in a protected jar</li>
+
+  This option stores your persistent Non-Tor cookies in a special cookie jar
+  file, in case you wish to preserve some cookies. Based on code contributed
+  by <a href="http://www.collinjackson.com/">Collin Jackson</a>. It is
+  compatible with third party extensions that you use to manage your Non-Tor
+  cookies. Your Tor cookies will be cleared on toggle, of course.
+
+  <li>Store both Non-Tor and Tor cookies in a protected jar (dangerous)</li>
+
+  This option stores your persistent Tor and Non-Tor cookies 
+  seperate cookie jar files. Note that it is a bad idea to keep Tor
+  cookies around for any length of time, as they can be retrieved by exit
+  nodes that inject spoofed forms into plaintext pages you fetch.
+
+  <li>Manage My Own Cookies (dangerous)</li>
+
+  This setting allows you to manage your own cookies with an alternate
+extension, such as <a href="https://addons.mozilla.org/firefox/addon/82">CookieCuller</a>. Note that this is particularly dangerous,
+since malicious exit nodes can spoof document elements that appear to be from
+sites you have preserved cookies for (and can then do things like fetch your
+entire gmail inbox, even if you were not using gmail or visiting any google
+pages at the time!).
+
+  <li>Disable DOM Storage during Tor usage (crucial)</li>
+
+  Firefox has recently added the ability to store additional state and
+  identifiers in persistant tables, called <a
+  href="http://developer.mozilla.org/en/docs/DOM:Storage">DOM Storage</a>.
+  Obviously this can compromise your anonymity if stored content can be
+  fetched across Tor-state.
+
+  <li>Clear cookies on Tor/Non-Tor shutdown</li>
+
+  These settings install a shutdown handler to clear cookies on Tor
+and/or Non-Tor browser shutdown. It is independent of your Clear Private Data
+settings, and does in fact clear the corresponding cookie jars.
+
+  <li>Reload cookie jar/clear cookies on Firefox crash (recommended)</li>
+
+  Unfortunately, Firefox does not always sync the current Tor state to disk in
+  the event of a crash. This setting installs a handler to either reload the
+  appropriate cookie jar, or if none exists, to clear cookies on the event of
+  restart after a Firefox crash.
+
+  <li>Prevent session store from saving Tor-loaded tabs (recommended)</li>
+
+  This option augments the session store to prevent it from writing out
+  Tor-loaded tabs to disk. Unfortunately, this also disables your ability to 
+  undo closed tabs. The reason why this setting is recommended is because
+  after a session crash, your browser will be in an undefined Tor state, and
+  can potentially load a bunch of Tor tabs without Tor. The following option
+  is another alternative to protect against this.
+
+  <li>After a crash, restore saved session via: Tor/Non-Tor</li>
+
+  When Firefox crashes, the Tor state upon restart usually is completely
+  random, and depending on your choice for the above option, may load 
+  a bunch of tabs in the wrong state. This setting allows you to choose
+  which state the crashed session should always be restored in to.
+  
+  <li>Set user agent during Tor usage (crucial)</li>
+
+  User agent masking is done with the idea of making all Tor users appear
+uniform. A recent Firefox 2.0.0.4 Windows build was chosen to mimic for this
+string and supporting navigator.* properties, and this version will remain the
+same for all TorButton versions until such time as specific incompatibility
+issues are demonstrated. Uniformity of this value is obviously very important
+to anonymity. Note that for this option to have full effectiveness, the user
+must also allow Hook Dangerous Javascript ensure that the navigator.*
+properties are reset correctly.  The browser does not set some of them via the
+exposed user agent override preferences.
+
+  <li>Spoof US English Browser</li>
+
+This option causes Firefox to send http headers as if it were an English
+browser. Useful for internationalized users.
+
+  <li>Don't send referer during Tor Usage</li>
+
+This option disables the referer header, preventing sites from determining
+where you came from to visit them. This can break some sites, however. <a
+href="http://www.digg.com">Digg</a> in particular seemed to be broken by this.
+A more streamlined, less instrusive version of this option should be available
+eventually. In the meantime, <a
+href="https://addons.mozilla.org/en-US/firefox/addon/953">RefControl</a> can
+provide this functionality via a default option of <b>Forge</b>.
+</ul>
+<h2>FAQ</h2>
+<strong>When I toggle Tor, my sites that use javascript stop working. Why?</strong>
+<p>
+
+Javascript can do things like wait until you have disabled Tor before trying
+to contact its source site, thus revealing your IP address. As such, Torbutton
+must disable Javascript, Meta-Refresh tags, and certain CSS behavior when Tor
+state changes from the state that was used to load a given page. These features 
+are re-enabled when Torbutton goes back into the state that was used to load
+the page, but in some cases (particularly with Javascript and CSS) it is
+sometimes not possible to fully recover from the resulting errors, and the
+page is broken. Unfortunately, the only thing you can do (and still remain
+safe from having your IP address leak) is to reload the page when you toggle
+Tor, or just ensure you do all your work in a page before switching tor state.
+
+</p>
+<strong>When I use Tor, Firefox is no longer filling in logins/search boxes
+for me. Why?</strong>
+<p>
+
+Currently, this is tied to the "<b>Block history writes during Tor</b>"
+setting. If you have enabled that setting, all formfill functionality (both
+saving and reading) is disabled. If this bothers you, you can uncheck that
+option, but both history and forms will be saved. To prevent history
+disclosure attacks via Non-Tor usage, it is recommended you disable Non-Tor
+history reads if you allow history writing during Tor.
+
+</p>
+
+
+<strong>Which Firefox extensions should I avoid using?</strong>
+<p>
+
+This is a tough one. There are thousands of Firefox extensions: making a
+complete list of ones that are bad for anonymity is near impossible. However,
+here are a few examples that should get you started as to what sorts of
+behavior are dangerous.
+
+<ol>
+ <li>StumbleUpon, et al</li>
+ This extension will send all sorts of information about the websites you
+ visit to the stumbleupon servers, and correlate this information with a
+ unique identifier. This is obviously terrible for your anonymity.
+ More generally, any sort of extension that requires registration, or even
+ extensions that provide information about websites you visit should be
+ suspect.
+ <li>NoScript</li>
+ Torbutton currently mitigates all known anonymity issues with Javascript.
+ While it may be tempting to get better security by disabling Javascript for
+ certain sites, you are far better off with an all-or-nothing approach.
+ NoScript is exceedingly complicated, and has many subleties that can surprise
+ even advanced users. For example, addons.mozilla.org verifies extension
+ integrity via Javascript over https, but downloads them in the clear. Not 
+ adding it to your whitelist effectively
+ means you are pulling down unverified extensions. Worse still, using NoScript
+ can actually disable protections that Torbutton itself provides via
+ Javascript, yet still allow malicious exit nodes to compromise your
+ anonymity via the default whitelist (which they can spoof).
+ <li>FoxyProxy</li>
+ FoxyProxy faces similar problems as NoScript. Since it only loads some
+ content elements through a proxy, it is possible for exit nodes or malicious
+ websites to insert links to sites that are allowed to bypass your proxy
+ rules, and unmask you that way. Fixing this issue is currently on the
+ <a href="http://foxyproxy.mozdev.org/roadmap.html">FoxyProxy roadmap</a>.
+ There is also risk of <a
+ href="http://foxyproxy.mozdev.org/faq.html#privacy-01">correlation and
+ other</a> leaks between ad servers and the sites that host
+ content. Without careful filters, it is possible for ad servers to obtain
+ your real IP and have it fully correlated to your Tor usage.
+ <li>SwitchProxy, et al</li>
+ In theory, Torbutton should tolerate third-party proxy switchers that behave
+ sanely (ie in an all-or-nothing fashion). In practice, there are likely bugs
+ relating to this. Please be vigilant if you are going to attempt combining
+ Torbutton with another proxy siwtcher. There may be cases where Torbutton
+ gets confused as to which state it currently is in, leaving you vulnerable to
+ all sorts of unmasking attacks. If do you notice incompatibility between
+ SwitchProxy and Torbutton, please <a
+ href="http://bugs.noreply.org/flyspray/index.php?tasks=all&project=5">file a
+ bug</a>.
+
+</ol>
+
+</p>
+
+
+</body>
+</html>
