@@ -16,19 +16,33 @@ const kMODULE_NAME = "Ignore History";
 const kMODULE_CONTRACTID = "@mozilla.org/browser/global-history;2";
 const kMODULE_CID = Components.ID("bc666d45-a9a1-4096-9511-f6db6f686881");
 
-/* Mozilla defined interfaces */
-const kREAL_HISTORY_CID = "{59648a91-5a60-4122-8ff2-54b839c84aed}";
-const kREAL_HISTORY = Components.classesByID[kREAL_HISTORY_CID];
+/* Mozilla defined interfaces for FF3.0 and 2.0 */
+const kREAL_HISTORY_CID3 = "{88cecbb7-6c63-4b3b-8cd4-84f3b8228c69}";
+const kREAL_HISTORY_CID2 = "{59648a91-5a60-4122-8ff2-54b839c84aed}";
+
+// const kREAL_HISTORY = Components.classesByID[kREAL_HISTORY_CID];
+
 const kHistoryInterfaces = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
 
 const Cr = Components.results;
 
 function HistoryWrapper() {
+  // assuming we're running under Firefox
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
+  if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
+    this._real_history = Components.classesByID[kREAL_HISTORY_CID3];
+  } else {
+    this._real_history = Components.classesByID[kREAL_HISTORY_CID2];
+  }
+
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefBranch);
 
   this._history = function() {
-    var history = kREAL_HISTORY.getService();
+    var history = this._real_history.getService();
     for (var i = 0; i < kHistoryInterfaces.length; i++) {
       history.QueryInterface(Components.interfaces[kHistoryInterfaces[i]]);
     }
@@ -52,6 +66,7 @@ HistoryWrapper.prototype =
   /*
    * Determine whether we should hide visited links
    */
+  // XXX: Make observer?
   blockReadHistory: function() {
     return ((this._prefs.getBoolPref("extensions.torbutton.block_thread") 
             && this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))
@@ -125,6 +140,7 @@ HistoryWrapperFactory.createInstance = function (outer, iid)
     return null;
   }
 
+  // XXX: needs updating for FF3
   if (!iid.equals(Components.interfaces.nsIGlobalHistory2) &&
       !iid.equals(Components.interfaces.nsIBrowserHistory) &&
     !iid.equals(Components.interfaces.nsISupports)) {

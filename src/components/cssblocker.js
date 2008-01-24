@@ -20,7 +20,7 @@
  *************************************************************************/
 
 // This is all local scope
-const CSSB_CONTRACTID = "@freehaven.net/cssblocker;1";
+const CSSB_CONTRACTID = "@torproject.org/cssblocker;1";
 const CSSB_CID = Components.ID("{23f4d9ba-023a-94ab-eb75-67aed7562a18}");
 
 const DNode = Components.interfaces.nsIDOMNode;
@@ -208,7 +208,6 @@ ContentPolicy.prototype = {
             this.logger.log(3, "Blocking: "+contentLocation.spec);
             return block;
         }
-
 	},
 
 	shouldProcess: function(contentType, contentLocation, requestOrigin, insecNode, mimeType, extra) {

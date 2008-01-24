@@ -930,8 +930,14 @@ function torbutton_crash_recover()
         torbutton_log(4, "Crash detected, attempting recovery");
         m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", 
                 torbutton_check_status());
+       
+        // Do the restore cookies first because we potentially save
+        // cookies by toggling tor state in the next pref. If we
+        // do this first, we can be sure we have the 'right' cookies
+        // currently loaded before the switch writes out a new jar
         if(m_tb_prefs.getBoolPref("extensions.torbutton.reload_crashed_jar"))
             torbutton_restore_cookies();
+
         if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
             torbutton_conditional_set(true);
         else
@@ -1331,6 +1337,10 @@ function torbutton_check_progress(aProgress, aRequest) {
                             window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
                             aProgress.DOMWindow.__tb_kill_flag = true;
                         }
+                        // This doesn't seem to actually remove the child..
+                        // It usually just causes an exception to be thrown,
+                        // which strangely enough, actually does finally 
+                        // kill the plugin.
                         aProgress.DOMWindow.document.removeChild(
                                 aProgress.DOMWindow.document.firstChild);
                     } catch(e) {

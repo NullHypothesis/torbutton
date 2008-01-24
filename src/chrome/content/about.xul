@@ -18,8 +18,8 @@
     <label value="Torbutton" style="font-weight: bold;"/>
     <label id="torbuttonVersion"/>
     <label value="Scott Squires & Mike Perry"/>
-    <label value="http://freehaven.net/~squires/torbutton/"
+    <label value="https://torbutton.torproject.org/dev"
           class="url"
           style="color: blue; text-decoration: underline;"
-          onclick="window.open('http://freehaven.net/~squires/torbutton/');"/>
+          onclick="window.open('https://torbutton.torproject.org/dev');"/>
 </dialog>
