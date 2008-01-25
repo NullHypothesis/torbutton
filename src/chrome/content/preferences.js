@@ -209,6 +209,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
     doc.getElementById('torbutton_noReferer').checked = o_torprefs.getBoolPref('disable_referer');
     doc.getElementById('torbutton_spoofEnglish').checked = o_torprefs.getBoolPref('spoof_english');
+    doc.getElementById('torbutton_clearHttpAuth').checked = o_torprefs.getBoolPref('clear_http_auth');
     
 
     torbutton_prefs_set_field_attributes(doc);
@@ -259,6 +260,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
     o_torprefs.setBoolPref('dual_cookie_jars', doc.getElementById('torbutton_dualCookieJars').selected);
     o_torprefs.setBoolPref('disable_domstorage', doc.getElementById('torbutton_noDomStorage').checked);
+    o_torprefs.setBoolPref('clear_http_auth', doc.getElementById('torbutton_clearHttpAuth').checked);
 
     if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
             doc.getElementById('torbutton_noShutdown')) {

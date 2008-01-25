@@ -193,6 +193,9 @@
             <checkbox id="torbutton_noDomStorage" 
                    label="&torbutton.prefs.disable_domstorage;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            <checkbox id="torbutton_clearHttpAuth" 
+                   label="&torbutton.prefs.clear_http_auth;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
           <tabpanel id="shutdown">

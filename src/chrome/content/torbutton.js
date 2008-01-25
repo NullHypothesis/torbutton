@@ -598,12 +598,35 @@ function torbutton_update_status(mode, force_update) {
         m_tb_prefs.setBoolPref("network.http.use-cache", !mode);
     }
 
+    var children = m_tb_prefs.getChildList("network.protocol-handler.warn-external", 
+            new Object());
+    torbutton_log(2, 'Children: '+ children.length);
+    for(var i = 0; i < children.length; i++) {
+        torbutton_log(2, 'Children: '+ children[i]);
+        if(mode) {
+            m_tb_prefs.setBoolPref(children[i], mode);
+        } else {
+            if(m_tb_prefs.prefHasUserValue(children[i]))
+                m_tb_prefs.clearUserPref(children[i]);
+        }
+    }
+
     // Always block disk cache during Tor. We clear it on toggle, 
     // so no need to keep it around for someone to rifle through.
     m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
 
+    // I think this pref is evil (and also hidden from user configuration, 
+    // which makes it extra evil) and so therefore am disabling it 
+    // by fiat for both tor and non-tor. Basically, I'm not willing 
+    // to put the code in to allow it to be enabled until someone 
+    // complains that it breaks stuff.
+    m_tb_prefs.setBoolPref("browser.send_pings", false);
+
     // Always, always disable remote "safe browsing" lookups.
     m_tb_prefs.setBoolPref("browser.safebrowsing.remoteLookups", false);
+   
+    // Disable safebrowsing in Tor. It fetches some info in cleartext 
+    m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
 
     if (torprefs.getBoolPref("no_search")) {
         m_tb_prefs.setBoolPref("browser.search.suggest.enabled", !mode);
@@ -660,11 +683,18 @@ function torbutton_update_status(mode, force_update) {
         }
     }
 
+    
     torbutton_log(2, "Prefs pretty much done");
 
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
+
+    if(torprefs.getBoolPref('clear_http_auth')) {
+        var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
+        getService(Components.interfaces.nsIHttpAuthManager);
+        auth.clearAll();
+    }
 
     // Prevent tor cookies from being written to disk
     if(torprefs.getBoolPref('clear_cookies') 
@@ -687,7 +717,6 @@ function torbutton_update_status(mode, force_update) {
             || torprefs.getBoolPref('dual_cookie_jars')) {
         torbutton_jar_cookies(mode);
     }
-
 }
 
 function torbutton_open_prefs_dialog() {

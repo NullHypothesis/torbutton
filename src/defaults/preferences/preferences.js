@@ -72,6 +72,7 @@ pref("extensions.torbutton.block_tforms",true);
 pref("extensions.torbutton.block_ntforms",false);
 pref("extensions.torbutton.startup",false);
 pref("extensions.torbutton.crashed",false);
+pref("extensions.torbutton.clear_http_auth",true);
 
 pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; en-US)");

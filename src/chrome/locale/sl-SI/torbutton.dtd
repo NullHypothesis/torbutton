@@ -47,7 +47,7 @@
 <!ENTITY torbutton.prefs.cookies              "Cookies">
 <!ENTITY torbutton.prefs.cache                "Cache">
 <!ENTITY torbutton.prefs.history             "History">
-<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (optional)">
+<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (recommended)">
 <!ENTITY torbutton.prefs.shutdown              "Shutdown">
 <!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
@@ -66,3 +66,4 @@
 <!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
 <!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
 <!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
+<!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
