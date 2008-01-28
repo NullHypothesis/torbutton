@@ -151,6 +151,8 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_blockJSHistory" label="&torbutton.prefs.block_js_history;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
           <tabpanel id="forms">

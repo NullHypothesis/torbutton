@@ -10,7 +10,7 @@ window.__HookObjects = function() {
 
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
-  if(window.__tb_set_uagent) {
+  if(window.__tb_set_uagent==true) {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
@@ -52,6 +52,28 @@ window.__HookObjects = function() {
       }
     } 
   } 
+
+  // This can potentially be done by hooking shistory;1 component, but
+  // this is simpler and less code.
+  // XXX: probably should do it that way for localization and 
+  // Non-Tor -> Tor correlation protection 
+  // XXX: Also needs localization
+  if(window.__tb_block_js_history==true) {
+      var htmp = window.history;
+      var hmine = new Object();
+      var ran = 0;
+      window.__defineGetter__("history", function() { return hmine; });
+      window.history.__defineGetter__("length", function() { return htmp.length; });
+      var f = function() {
+          if(!ran) {
+              ran = 1;
+              window.alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
+          }
+      }
+      window.history.back = f;
+      window.history.forward = f;
+      window.history.go = f;
+  }
 
   var tmp = window.Date;
   window.Date = function() {

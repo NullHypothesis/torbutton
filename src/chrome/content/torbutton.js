@@ -194,6 +194,26 @@ function torbutton_toggle() {
     } else {
         torbutton_enable_tor();
     }
+
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.close_on_toggle")) {
+        // 1. Open new tabbrowser in current window..
+        var browser = getBrowser();
+        var newb = browser.addTab("about:blank");
+        
+        // 2. Close all tabs in the current window except new one
+        browser.removeAllTabsBut(newb);
+        
+        // 3. Close all other windows except this one
+        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+            .getService(Components.interfaces.nsIWindowMediator);
+        var enumerator = wm.getEnumerator("navigator:browser");
+        while(enumerator.hasMoreElements()) {
+            var win = enumerator.getNext();
+            if(win != window) {
+                win.close(); // XXX: confirm?
+            }
+        }
+    }
 }
 
 function torbutton_set_status() {
@@ -1310,6 +1330,7 @@ function torbutton_hookdoc(win, doc) {
     str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
     str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
     str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
+    str2 += "window.__tb_block_js_history="+m_tb_prefs.getBoolPref('extensions.torbutton.block_js_history')+";\r\n";
     str2 += m_tb_jshooks;
 
     try {
@@ -1341,18 +1362,50 @@ function torbutton_check_progress(aProgress, aRequest) {
         torbutton_init();
     }
 
-    // This noise is a workaround for the fact that docShell.allowPlugins
-    // is ignored when you directly click on a link
+    // This noise is a workaround for firefox bugs involving
+    // enforcement of docShell.allowPlugins and docShell.allowJavascript
+    // (Bugs 401296 and 409737 respectively) 
     try {
         var chanreq = aRequest.QueryInterface(Components.interfaces.nsIChannel);
         if(chanreq
                 && chanreq instanceof Components.interfaces.nsIChannel
-                && aRequest.isPending() 
-                && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+                && aRequest.isPending()) {
+
+            if(aProgress && aProgress.DOMWindow) {
+                torbutton_eclog(3, 'Document: '+aProgress.DOMWindow.location);
+            }
+
+            if((aProgress && aProgress.DOMWindow.opener 
+               && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content"))) {
+                
+                if(!(aProgress.DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
+                    // Workaround for Firefox bug 409737
+                    // The idea is that the content policy should stop all
+                    // forms of javascript fetches except for popups. This
+                    // code handles blocking popups from alternate tor states.
+                    var wm = Components.classes["@torproject.org/content-window-mapper;1"]
+                        .getService(Components.interfaces.nsISupports)
+                        .wrappedJSObject;
+
+                    var browser = wm.getBrowserForContentWindow(aProgress.DOMWindow.opener);
+
+                    if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                        torbutton_eclog(3, 'Stopping document: '+aProgress.DOMWindow.location);
+                        aRequest.cancel(0x804b0002);
+                        aProgress.DOMWindow.stop();
+                        torbutton_eclog(3, 'Stopped document: '+aProgress.DOMWindow.location);
+                        aProgress.DOMWindow.document.clear();
+                        torbutton_eclog(3, 'Cleared document: '+aProgress.DOMWindow.location);
+                    }
+                }
+            }
+            
             torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
 
-            if (aRequest.contentType in m_tb_plugin_mimetypes) {
+            // Workaround for Firefox Bug 401296
+            if((m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")
+                && aRequest.contentType in m_tb_plugin_mimetypes)) {
                 aRequest.cancel(0x804b0002);
                 if(aProgress) {
                     // ZOMG DIE DIE DXIE!!!!!@
@@ -1363,6 +1416,7 @@ function torbutton_check_progress(aProgress, aRequest) {
                         torbutton_eclog(2, 'Cleared document');
                         
                         if(typeof(aProgress.DOMWindow.__tb_kill_flag) == 'undefined') {
+                            // XXX: localize
                             window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
                             aProgress.DOMWindow.__tb_kill_flag = true;
                         }
@@ -1377,6 +1431,7 @@ function torbutton_check_progress(aProgress, aRequest) {
                     }
                 } else {
                     torbutton_eclog(4, 'No progress for document cancel!');
+                    // XXX: localize
                     window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
                 }
                 torbutton_eclog(3, 'Killed plugin document');

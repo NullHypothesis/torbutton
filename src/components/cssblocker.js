@@ -84,8 +84,9 @@ function unwrapURL(url) {
 }
 
 var localSchemes = {"about" : true, "chrome" : true, "file" : true, 
-    "resource" : true, "x-jsd" : true, "addbook" : true, "cid" : true, 
-    "mailbox" : true, "data" : true, "javascript" : true};
+    "resource" : true, "x-jsd" : true, "addbook" : true, 
+    //    "cid" : true, "data" : true, "javascript" : true,
+    "mailbox" : true};
 
 function ContentPolicy() {
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -179,7 +180,14 @@ ContentPolicy.prototype = {
             return ok;
         }
 
-        var browser = this.wm.getBrowserForContentWindow(wind.top);
+        var browser;
+        if(wind.top.opener) {
+            this.logger.log(3, "Popup found: "+contentLocation.spec);
+            browser = this.wm.getBrowserForContentWindow(wind.top.opener.top)
+        } else {
+            browser = this.wm.getBrowserForContentWindow(wind.top);
+        }
+
         if(!browser) {
             this.logger.log(5, "No window found: "+contentLocation.spec);
             return block; 
@@ -197,7 +205,20 @@ ContentPolicy.prototype = {
 
             if(wind.top.browserDOMWindow 
                     && contentType == CPolicy.TYPE_DOCUMENT) {
-                this.logger.log(3, "New location for "+contentLocation.spec);
+                this.logger.log(3, "New location for "+contentLocation.spec+" (currently: "+wind.top.location+" and "+browser.currentURI.spec+")");
+                if(requestOrigin) {
+                    var scheme = requestOrigin.spec.replace(/:.*/, "").toLowerCase();
+                    if(scheme != "chrome") {
+                        // Workaround for Firefox Bug 409737
+                        if(browser.__tb_tor_fetched == tor_state) {
+                            return ok;
+                        } else {
+                            this.logger.log(3, "Blocking: "+contentLocation.spec);
+                            return block;
+                        }
+                    }
+                    this.logger.log(3, "Origin: "+requestOrigin.spec);
+                }
                 return ok;
             }
         }
@@ -215,6 +236,9 @@ ContentPolicy.prototype = {
         // Instead, related functionality has been grafted onto the 
         // webprogresslistener :(	
         // See mozilla bugs 380556, 305699, 309524
+        if(ContentLocation) {
+            this.logger.log(2, "Process for "+contentLocation.spec);
+        }
         return ok;
 	},
 
