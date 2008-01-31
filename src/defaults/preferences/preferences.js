@@ -73,7 +73,7 @@ pref("extensions.torbutton.block_ntforms",false);
 pref("extensions.torbutton.startup",false);
 pref("extensions.torbutton.crashed",false);
 pref("extensions.torbutton.clear_http_auth",true);
-pref("extensions.torbutton.close_on_toggle",true);
+pref("extensions.torbutton.close_on_toggle",false);
 pref("extensions.torbutton.block_js_history",true);
 
 pref("extensions.torbutton.appname_override","Netscape");

@@ -181,7 +181,8 @@ ContentPolicy.prototype = {
         }
 
         var browser;
-        if(wind.top.opener) {
+        if(wind.top.opener && 
+            !(wind.top.opener instanceof Components.interfaces.nsIDOMChromeWindow)) {
             this.logger.log(3, "Popup found: "+contentLocation.spec);
             browser = this.wm.getBrowserForContentWindow(wind.top.opener.top)
         } else {
@@ -206,18 +207,20 @@ ContentPolicy.prototype = {
             if(wind.top.browserDOMWindow 
                     && contentType == CPolicy.TYPE_DOCUMENT) {
                 this.logger.log(3, "New location for "+contentLocation.spec+" (currently: "+wind.top.location+" and "+browser.currentURI.spec+")");
+                // Workaround for Firefox Bug 409737.
+                // This disables window.location style redirects if the tor state
+                // has changed
                 if(requestOrigin) {
+                    this.logger.log(3, "Origin: "+requestOrigin.spec);
                     var scheme = requestOrigin.spec.replace(/:.*/, "").toLowerCase();
                     if(scheme != "chrome") {
-                        // Workaround for Firefox Bug 409737
                         if(browser.__tb_tor_fetched == tor_state) {
                             return ok;
                         } else {
-                            this.logger.log(3, "Blocking: "+contentLocation.spec);
+                            this.logger.log(3, "Blocking redirect: "+contentLocation.spec);
                             return block;
                         }
                     }
-                    this.logger.log(3, "Origin: "+requestOrigin.spec);
                 }
                 return ok;
             }
