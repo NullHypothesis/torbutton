@@ -1,3 +1,16 @@
+1.1.13
+  ?? Feb 2007
+  * bugfix: Implement workarounds to disable Javascript network access 
+    for Firefox Bug 409737
+  * bugfix: Improved plugin-disabling workarounds for Firefox Bug 401296 
+  * misc: Set network.protocol-handler.warn-external.* to warn on external 
+    app handlers during Tor usage
+  * misc: Disable browser.safebrowsing.enabled during Tor usage since it
+    retrieves some information in plaintext.
+  * misc: Disable browser.send_pings.
+  * misc: Block Javascript back/forward manipulation if Tor is enabled
+  * new: Option to clear HTTP auth on Tor toggle
+
 1.1.12
   26 Nov 2007
   * bugfix: bug 520: Fix some content policy/tagging issues. Not sure if this
