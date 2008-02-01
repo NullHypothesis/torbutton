@@ -1064,6 +1064,38 @@ unregister : function() {
 }
 }
 
+// This observer is to catch some additional http load events
+// to deal with firefox bug 401296
+var torbutton_http_observer = {
+observe : function(subject, topic, data) {
+  torbutton_eclog(2, 'Examine response: '+subject.name);
+  if (!((subject instanceof Components.interfaces.nsIHttpChannel)
+      && (subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI)))
+      return;
+  if (topic == "http-on-examine-response") {
+      torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
+      torbutton_check_progress(null, subject);
+  } 
+},
+register : function() {
+ var observerService =
+   Components.classes["@mozilla.org/observer-service;1"].
+     getService(Components.interfaces.nsIObserverService);
+ torbutton_log(3, "Observer register");
+
+ observerService.addObserver(this, "http-on-examine-response", false);
+ torbutton_log(3, "Observer register");
+},
+unregister : function() {
+  var observerService =
+    Components.classes["@mozilla.org/observer-service;1"].
+      getService(Components.interfaces.nsIObserverService);
+
+  observerService.removeObserver(this,"http-on-examine-response");
+}
+}
+
+
 function torbutton_do_main_window_startup()
 {
     torbutton_log(3, "Torbutton main window startup");
@@ -1082,6 +1114,7 @@ function torbutton_do_main_window_startup()
 
     torbutton_unique_pref_observer.register();
     torbutton_uninstall_observer.register();
+    torbutton_http_observer.register();
 }
 
 function torbutton_do_onetime_startup()
@@ -1167,6 +1200,7 @@ function torbutton_close_window(event) {
         progress.removeProgressListener(torbutton_weblistener);
         torbutton_unique_pref_observer.unregister();
         torbutton_uninstall_observer.unregister();
+        torbutton_http_observer.unregister();
 
     }
 }
@@ -1362,6 +1396,22 @@ function torbutton_check_progress(aProgress, aRequest) {
         torbutton_init();
     }
 
+    var DOMWindow = null;
+
+    if(aProgress) {
+        DOMWindow = aProgress.DOMWindow;
+    } else {
+        try {
+            DOMWindow = aRequest.notificationCallbacks.QueryInterface(
+                    Components.interfaces.nsIInterfaceRequestor).getInterface(
+                        Components.interfaces.nsIDOMWindow);
+        } catch(e) {
+        }
+    }
+
+    // XXX if intstanceof nsIHttpChannel check headers for 
+    // Content-Disposition..
+
     // This noise is a workaround for firefox bugs involving
     // enforcement of docShell.allowPlugins and docShell.allowJavascript
     // (Bugs 401296 and 409737 respectively) 
@@ -1371,14 +1421,12 @@ function torbutton_check_progress(aProgress, aRequest) {
                 && chanreq instanceof Components.interfaces.nsIChannel
                 && aRequest.isPending()) {
 
-            if(aProgress && aProgress.DOMWindow) {
-                torbutton_eclog(3, 'Document: '+aProgress.DOMWindow.location);
-            }
+            torbutton_eclog(3, 'Pending request: '+aRequest.name);
 
-            if((aProgress && aProgress.DOMWindow.opener 
-               && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content"))) {
+            if(DOMWindow && DOMWindow.opener 
+               && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content")) {
                 
-                if(!(aProgress.DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
+                if(!(DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
                     // Workaround for Firefox bug 409737
                     // The idea is that the content policy should stop all
                     // forms of javascript fetches except for popups. This
@@ -1387,15 +1435,15 @@ function torbutton_check_progress(aProgress, aRequest) {
                         .getService(Components.interfaces.nsISupports)
                         .wrappedJSObject;
 
-                    var browser = wm.getBrowserForContentWindow(aProgress.DOMWindow.opener);
+                    var browser = wm.getBrowserForContentWindow(DOMWindow.opener);
 
                     if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-                        torbutton_eclog(3, 'Stopping document: '+aProgress.DOMWindow.location);
-                        aRequest.cancel(0x804b0002);
-                        aProgress.DOMWindow.stop();
-                        torbutton_eclog(3, 'Stopped document: '+aProgress.DOMWindow.location);
-                        aProgress.DOMWindow.document.clear();
-                        torbutton_eclog(3, 'Cleared document: '+aProgress.DOMWindow.location);
+                        torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
+                        aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
+                        DOMWindow.stop();
+                        torbutton_eclog(3, 'Stopped document: '+DOMWindow.location);
+                        DOMWindow.document.clear();
+                        torbutton_eclog(3, 'Cleared document: '+DOMWindow.location);
                     }
                 }
             }
@@ -1406,26 +1454,26 @@ function torbutton_check_progress(aProgress, aRequest) {
             if((m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
                 && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")
                 && aRequest.contentType in m_tb_plugin_mimetypes)) {
-                aRequest.cancel(0x804b0002);
-                if(aProgress) {
+                aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
+                if(DOMWindow) {
                     // ZOMG DIE DIE DXIE!!!!!@
                     try {
-                        aProgress.DOMWindow.stop();
+                        DOMWindow.stop();
                         torbutton_eclog(2, 'Stopped document');
-                        aProgress.DOMWindow.document.clear();
+                        DOMWindow.document.clear();
                         torbutton_eclog(2, 'Cleared document');
                         
-                        if(typeof(aProgress.DOMWindow.__tb_kill_flag) == 'undefined') {
+                        if(typeof(DOMWindow.__tb_kill_flag) == 'undefined') {
                             // XXX: localize
                             window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
-                            aProgress.DOMWindow.__tb_kill_flag = true;
+                            DOMWindow.__tb_kill_flag = true;
                         }
                         // This doesn't seem to actually remove the child..
                         // It usually just causes an exception to be thrown,
                         // which strangely enough, actually does finally 
                         // kill the plugin.
-                        aProgress.DOMWindow.document.removeChild(
-                                aProgress.DOMWindow.document.firstChild);
+                        DOMWindow.document.removeChild(
+                                DOMWindow.document.firstChild);
                     } catch(e) {
                         torbutton_eclog(3, 'Exception on stop/clear');
                     }
@@ -1437,17 +1485,21 @@ function torbutton_check_progress(aProgress, aRequest) {
                 torbutton_eclog(3, 'Killed plugin document');
                 return 0;
             }
+        } else {
+            torbutton_eclog(2, 'Nonpending: '+aRequest.name);
+            torbutton_eclog(2, 'Type: '+aRequest.contentType);
         }
     } catch(e) {
         torbutton_eclog(3, 'Exception on request cancel');
     }
 
-    if(aProgress) {
-        var doc = aProgress.DOMWindow.document;
+    // XXX: separate this from the above?
+    if(DOMWindow) {
+        var doc = DOMWindow.document;
         try {
             if(doc && doc.domain) {
-                torbutton_update_tags(aProgress.DOMWindow.window);
-                torbutton_hookdoc(aProgress.DOMWindow.window, doc);
+                torbutton_update_tags(DOMWindow.window);
+                torbutton_hookdoc(DOMWindow.window, doc);
             }
         } catch(e) {
             torbutton_eclog(3, "Hit about:plugins? "+doc.location);

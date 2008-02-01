@@ -29,6 +29,8 @@ const ok = Components.interfaces.nsIContentPolicy.ACCEPT;
 const block = Components.interfaces.nsIContentPolicy.REJECT_REQUEST;
 const CPolicy = Components.interfaces.nsIContentPolicy;
 const Cr = Components.results;
+const Cc = Components.classes;
+const Ci = Components.interfaces;
 
 // Retrieves the window object for a node or returns null if it isn't possible
 function getWindow(node) {
@@ -142,6 +144,22 @@ ContentPolicy.prototype = {
         
         var node = wrapNode(insecNode);
         var wind = getWindow(node);
+
+        // Block file in tor mode.
+        // XXX: Add checkbox? Only ask in tor?
+        //var scheme = contentLocation.spec.replace(/:.*/, "").toLowerCase();
+        /* 
+        if(scheme == "file") {
+            var windowMediator = Cc["@mozilla.org/appshell/window-mediator;1"].
+                getService(Ci.nsIWindowMediator);
+            var nav = windowMediator.getMostRecentWindow("navigator:browser");
+            var load = nav.confirm("WARNING! Loading files allows malicious script to read+transmit files from your hard drive!\n\nAre you sure you want to do this?\n\n");
+            if(load) {
+                return ok;
+            } else {
+                return block;
+            }
+        } */
 
 		// Local stuff has to be eclog because otherwise debuglogger will
         // get into an infinite log-loop w/ its chrome updates
