@@ -232,6 +232,11 @@ ContentPolicy.prototype = {
                     this.logger.log(3, "Origin: "+requestOrigin.spec);
                     var scheme = requestOrigin.spec.replace(/:.*/, "").toLowerCase();
                     if(scheme != "chrome") {
+                        if(typeof(browser.__tb_tor_fetched) == 'undefined') {
+                            // This happens for "open in new window" context menu
+                            this.logger.log(3, "Untagged window for redirect "+contentLocation.spec);
+                            return ok;
+                        }
                         if(browser.__tb_tor_fetched == tor_state) {
                             return ok;
                         } else {
