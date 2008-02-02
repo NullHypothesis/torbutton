@@ -1,5 +1,5 @@
 1.1.13
-  ?? Feb 2007
+  01 Feb 2007
   * bugfix: Implement workarounds to disable Javascript network access 
     for Firefox Bug 409737
   * bugfix: Improved plugin-disabling workarounds for Firefox Bug 401296 
