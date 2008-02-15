@@ -36,6 +36,11 @@ function StoreWrapper() {
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefBranch);
 
+  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+      .getService(Components.interfaces.nsISupports).wrappedJSObject;
+  dump("New crash observer\n");
+  this.logger.log(3, "New StoreWrapper");
+
   this._store = function() {
     var store = kREAL_STORE.getService();
     for (var i = 0; i < kStoreInterfaces.length; i++) {
@@ -49,9 +54,14 @@ StoreWrapper.prototype =
 {
   QueryInterface: function(iid) {
 
-    if (iid.equals(Components.interfaces.nsISupports) ||
-        iid.equals(Components.interfaces.nsIClassInfo)) {
-      return this.QueryInterface(iid);
+    if (iid.equals(Components.interfaces.nsISupports)) {
+        return this;
+    }
+
+    if(iid.equals(Components.interfaces.nsIClassInfo)) {
+      var ret = this._store().QueryInterface(iid);
+      dump("classInfo: "+ret.classID);
+      return ret;
     }
 
     try {
@@ -68,24 +78,33 @@ StoreWrapper.prototype =
   /* 
    * Copies methods from the true sessionstore object we are wrapping
    */
-  copyMethods: function(store) {
-    var mimic = function(obj, method) {
-      if(typeof(store[method]) == "function") {
-          obj[method] = function(a, b, c, d, e, f, g) {
-              return store[method](a, b, c, d, e, f, g);
-          };
+  copyMethods: function(wrapped) {
+    var mimic = function(newObj, method) {
+      if(typeof(wrapped[method]) == "function") {
+          // Code courtesy of timeless: 
+          // http://www.webwizardry.net/~timeless/windowStubs.js
+          var params = [];
+          params.length = wrapped[method].length;
+          var x = 0;
+          var call = method + "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
+          var fun = "function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);}";
+          // Already in scope
+          //var Components = this.Components;
+          newObj[method] = eval(fun);
       } else {
-          obj.__defineGetter__(method, function() { return store[method]; });
-          obj.__defineSetter__(method, function(val) { store[method] = val; });
+          newObj.__defineGetter__(method, function() { return wrapped[method]; });
+          newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });
       }
     };
-    for (var method in store) {
+    for (var method in wrapped) {
       if(typeof(this[method]) == "undefined") mimic(this, method);
     }
   },
 
-  observe: function sss_observe(aSubject, aTopic, aData) {
+  observe: function(aSubject, aTopic, aData) {
     if(aTopic == "app-startup") {
+      dump("App startup\n");
+      this.logger.log(3, "Got app-startup");
       this._startup = true;
       var observerService = Cc["@mozilla.org/observer-service;1"].
           getService(Ci.nsIObserverService);
@@ -95,10 +114,12 @@ StoreWrapper.prototype =
     this._store().observe(aSubject, aTopic, aData);
   },
 
-  doRestore: function sss_doRestore() {
+  doRestore: function() {
     var ret = false;
     // This is so lame. But the exposed API is braindead so it 
     // must be hacked around
+    dump("new doRestore\n");
+    this.logger.log(3, "Got doRestore");
     if((ret = this._store().doRestore()) && this._startup) {
         this._prefs.setBoolPref("extensions.torbutton.crashed", true);
     } 
@@ -151,6 +172,7 @@ function (compMgr, fileSpec, location, type){
                                   fileSpec, 
                                   location, 
                                   type);
+  dump("Registered crash observer\n");
 };
 
 StoreWrapperModule.getClassObject = function (compMgr, cid, iid)

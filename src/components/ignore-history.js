@@ -13,7 +13,8 @@
 
 // Module specific constants
 const kMODULE_NAME = "Ignore History";
-const kMODULE_CONTRACTID = "@mozilla.org/browser/global-history;2";
+const kMODULE_CONTRACTID2 = "@mozilla.org/browser/global-history;2";
+const kMODULE_CONTRACTID3 = "@mozilla.org/browser/nav-history-service;1";
 const kMODULE_CID = Components.ID("bc666d45-a9a1-4096-9511-f6db6f686881");
 
 /* Mozilla defined interfaces for FF3.0 and 2.0 */
@@ -22,7 +23,13 @@ const kREAL_HISTORY_CID2 = "{59648a91-5a60-4122-8ff2-54b839c84aed}";
 
 // const kREAL_HISTORY = Components.classesByID[kREAL_HISTORY_CID];
 
-const kHistoryInterfaces = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
+const kHistoryInterfaces2 = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
+
+const kHistoryInterfaces3 = [ "nsIBrowserHistory", "nsIGlobalHistory2", 
+                             "nsIAutoCompleteSearch", "nsIGlobalHistory3",
+                             "nsIDownloadHistory", "nsIBrowserHistory",
+                             "nsIAutoCompleteSimpleResultListener",
+                             "nsINavHistoryService" ];
 
 const Cr = Components.results;
 
@@ -32,10 +39,13 @@ function HistoryWrapper() {
       .getService(Components.interfaces.nsIXULAppInfo);
   var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
+
   if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
     this._real_history = Components.classesByID[kREAL_HISTORY_CID3];
+    this._interfaces = kHistoryInterfaces3;
   } else {
     this._real_history = Components.classesByID[kREAL_HISTORY_CID2];
+    this._interfaces = kHistoryInterfaces2;
   }
 
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -43,8 +53,8 @@ function HistoryWrapper() {
 
   this._history = function() {
     var history = this._real_history.getService();
-    for (var i = 0; i < kHistoryInterfaces.length; i++) {
-      history.QueryInterface(Components.interfaces[kHistoryInterfaces[i]]);
+    for (var i = 0; i < this._interfaces.length; i++) {
+      history.QueryInterface(Components.interfaces[this._interfaces[i]]);
     }
     return history;
   };
@@ -53,7 +63,6 @@ function HistoryWrapper() {
 HistoryWrapper.prototype =
 {
   QueryInterface: function(iid) {
-
     if (iid.equals(Components.interfaces.nsISupports)) {
       return this;
     }
@@ -87,18 +96,25 @@ HistoryWrapper.prototype =
   /* 
    * Copies methods from the true history object we are wrapping
    */
-  copyMethods: function(history) {
-    var mimic = function(obj, method) {
-      if(typeof(history[method]) == "function") {
-          obj[method] = function(a, b, c, d, e, f, g) {
-              return history[method](a, b, c, d, e, f, g);
-          };
+  copyMethods: function(wrapped) {
+    var mimic = function(newObj, method) {
+      if(typeof(wrapped[method]) == "function") {
+          // Code courtesy of timeless: 
+          // http://www.webwizardry.net/~timeless/windowStubs.js
+          var params = [];
+          params.length = wrapped[method].length;
+          var x = 0;
+          var call = method + "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
+          var fun = "function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);}";
+          // already in scope
+          //var Components = this.Components;
+          newObj[method] = eval(fun);
       } else {
-          obj.__defineGetter__(method, function() { return history[method]; });
-          obj.__defineSetter__(method, function(val) { history[method] = val; });
+          newObj.__defineGetter__(method, function() { return wrapped[method]; });
+          newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });
       }
     };
-    for (var method in history) {
+    for (var method in wrapped) {
       if(typeof(this[method]) == "undefined") mimic(this, method);
     }
   },
@@ -139,15 +155,15 @@ HistoryWrapperFactory.createInstance = function (outer, iid)
     Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
     return null;
   }
-
-  // XXX: needs updating for FF3
+  /*
   if (!iid.equals(Components.interfaces.nsIGlobalHistory2) &&
       !iid.equals(Components.interfaces.nsIBrowserHistory) &&
     !iid.equals(Components.interfaces.nsISupports)) {
 
+    dump("Holla noint: "+iid.toString() +"\n");
     Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
     return null;
-  }
+  }*/
 
   if(!HistoryWrapperSingleton)
     HistoryWrapperSingleton = new HistoryWrapper();
@@ -170,10 +186,23 @@ function (compMgr, fileSpec, location, type){
   compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
   compMgr.registerFactoryLocation(kMODULE_CID,
                                   kMODULE_NAME,
-                                  kMODULE_CONTRACTID,
+                                  kMODULE_CONTRACTID2,
                                   fileSpec, 
                                   location, 
                                   type);
+
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
+  if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
+      compMgr.registerFactoryLocation(kMODULE_CID,
+              kMODULE_NAME,
+              kMODULE_CONTRACTID3,
+              fileSpec, 
+              location, 
+              type);
+  }
 };
 
 HistoryWrapperModule.getClassObject = function (compMgr, cid, iid)
