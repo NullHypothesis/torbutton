@@ -8,10 +8,10 @@
    <author>
     <firstname>Mike</firstname><surname>Perry</surname>
     <affiliation>
-     <address><email>mikeperry.fscked@org</email></address>
+     <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Jan 19 2008</pubdate>
+   <pubdate>Feb 16 2008</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension.
+Torbutton Firefox extension. It is current as of Torbutton 1.1.13-alpha.
 
   </para>
   <sect2 id="adversary">
@@ -429,7 +429,7 @@ actually receiving the event. The Torbutton window mapper allows the Torbutton
 chrome and other components to look up a <ulink
 url="http://www.xulplanet.com/references/elemref/ref_tabbrowser.html">browser
 tab</ulink> for a given <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDOMWindow.html">html content
+url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDOMWindow.html">HTML content
 window</ulink>. It does this by traversing all windows and all browsers, until it
 finds the browser with the requested <ulink
 url="http://www.xulplanet.com/references/elemref/ref_browser.html#prop_contentWindow">contentWindow</ulink> element. Since the content policy
@@ -503,8 +503,47 @@ url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink
 respectively).</para> 
 <para>
 The browser overlay helps to satisfy a number of Torbutton requirements. These
-are better enumerated in each of the Torbutton preferences below.
+are better enumerated in each of the Torbutton preferences below. However,
+there are also a number of Firefox preferences set in
+<function>torbutton_update_status()</function> that aren't governed by any
+Torbutton setting. These are:
 </para>
+<orderedlist>
+ <listitem><ulink url="http://kb.mozillazine.org/Browser.send_pings">browser.send_pings</ulink>
+ <para>
+This setting is currently always disabled. If anyone ever complains saying
+that they *want* their browser to be able to send ping notifications to a
+page or arbitrary link, I'll make this a pref or Tor-only. But I'm not holding
+my breath.
+ </para>
+ </listitem>
+ <listitem><ulink
+url="http://kb.mozillazine.org/Browser.safebrowsing.remoteLookups">browser.safebrowsing.remoteLookups</ulink>
+ <para>
+Likewise for this setting. I find it hard to imagine anyone who wants to ask
+google in real time if each URL they visit is safe, especially when the list
+of unsafe URLs is downloaded anyway.
+ </para>
+ </listitem>
+ <listitem><ulink
+url="http://kb.mozillazine.org/Browser.safebrowsing.enabled">browser.safebrowsing.enabled</ulink>
+ <para>
+Safebrowsing does some network activity in cleartext. I decided to disable it
+during Tor usage for now until someone convinces me this is acceptable and 
+safe for some reason.
+ </para>
+ </listitem>
+ <listitem><ulink
+url="http://kb.mozillazine.org/Network.protocol-handler.warn-external.%28protocol%29">network.protocol-handler.warn-external.(protocol)</ulink>
+ <para>
+If Tor is enabled, we need to prevent random external applications from
+launching without at least warning the user. This group of settings only
+partially accomplishes this, however. Applications can still be launched via
+plugins. The mechanisms for handling this are described under the "Disable
+Plugins During Tor Usage" preference.
+ </para>
+</listitem>
+</orderedlist>
 </sect2>
 <sect2>
  <title>Preferences Window - <ulink
@@ -550,11 +589,13 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker
  
  <para>Even all this turns out to be insufficient if the user directly
  clicks on a plugin-handled mime-type. <ulink
-url="http://www.janusvm.com/goldy/pdf/">In this case</ulink>, the browser decides that
+url="http://www.janusvm.com/goldy/pdf/">In this case</ulink> (and also <ulink
+url="http://www.janusvm.com/goldy/side-channels/frames/">this
+one</ulink>), the browser decides that
  maybe it should ignore all these other settings and load the plugin anyways,
  because maybe the user really did want to load it (never mind this same
  load-style could happen automatically  with meta-refresh or any number of
- other ways..). To handle this case, Torbutton stores a list of plugin-handled
+ other ways..). To handle these cases, Torbutton stores a list of plugin-handled
  mime-types, and if it detects a load of one of them from the web progress
  listener, it attempts to cancel the request. For some reason, this is not
  always sufficient. In fact, the only way I was able to prevent the plugin
@@ -601,6 +642,27 @@ url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDocShell.html">docSh
 <ulink
 url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebNavigation.html#method_stop">webNavigation.stop(webNavigation.STOP_ALL)</ulink> to each browser tab (the
 equivalent of hitting the STOP button).</para>
+
+<para>
+
+Unfortunately, <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox bug
+409737</ulink> prevents <command>docShell.allowJavascript</command> from killing
+all event handlers, and event handlers registered with <ulink
+url="http://developer.mozilla.org/en/docs/DOM:element.addEventListener">addEventListener()</ulink>
+are still able to execute. The <link linkend="contentpolicy">Torbutton Content
+Policy</link> should prevent such code from performing network activity within
+the current tab, but activity that happens via a popup window or via a
+Javascript redirect can still slip by. For this reason, Torbutton blocks
+popups by checking for a valid <ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.opener">window.opener</ulink>
+attribute in <function>torbutton_check_progress()</function>. If the window
+has an opener from a different Torstate, its load is blocked. The content
+policy also takes similar action to prevent Javascript redirects. This also
+has the side effect/feature of preventing the user from following any links
+from a page loaded in an opposite Tor state.
+
+</para>
 
 <para>
 This setting is responsible for satisfying the <link
@@ -720,6 +782,31 @@ This setting is an optional way to help satisfy the <link
 linkend="state">State Separation</link> requirement.
 </para>
 
+</sect2>
+<sect2>
+
+<title>Block Javascript access to history navigation (recommended)</title>
+
+<para>Option: <command>extensions.torbutton.block_js_history</command></para>
+
+<para>
+
+This setting governs if Javascript hooks are applied to block content window
+Javascript from accessing the methods of the <ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.history">window.history</ulink>
+object to redirect the user to arbitrary pages in the session history for 
+the current tab.
+
+</para>
+<para>
+This setting helps satisfy the <link
+linkend="state">State Separation</link> requirement. Until <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox bug
+409737</ulink> is fixed, it also helps to satisfy the <link
+linkend="isolation">Network Isolation</link> requirement by preventing
+redirects from still-active event handlers.
+
+</para>
 </sect2>
 <sect2>
 
@@ -886,8 +973,32 @@ This setting helps to satisfy the <link
 linkend="state">State Separation</link> requirement.
 </para>
 
+</sect2>
+
+<sect2>
+
+  <title>Clear HTTP Auth on Tor Toggle (recommended)</title>
+
+<para>Option: <command>extensions.torbutton.clear_http_auth</command>
+  </para>
+
+<para>
+
+This setting causes Torbutton to call <ulink
+url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIHttpAuthManager.html#method_clearAll">nsIHttpAuthManager.clearAll()</ulink>
+every time Tor is toggled.
+
+</para>
+
+<para>
+This setting helps to satisfy the <link
+linkend="state">State Separation</link> requirement.
+</para>
+
 
 </sect2>
+
+
 <sect2>
 
   <title>Clear cookies on Tor/Non-Tor shutdown</title>
@@ -1013,6 +1124,9 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshook
 same mechanism that hooks the date object.
 </para>
 
+
+<para>
+This setting helps to satisfy the <link
 linkend="setpreservation">Anonymity Set Preservation</link> requirement.
 </para>
 
@@ -1062,6 +1176,102 @@ some may desire to mask their referrer for general privacy concerns.
 
 </sect2>
 
+</sect1>
+
+<sect1 id="FirefoxBugs">
+  <title>Relevant Firefox Bugs</title>
+  <para>
+
+  </para>
+  <sect2 id="FirefoxSecurity">
+   <title>Bugs impacting security</title>
+   <para>
+   Torbutton has to work around a number of Firefox bugs that impact its
+security. Most of these are mentioned elsewhere in this document, but they
+have also been gathered here for reference. In order of decreasing severity,
+they are:
+   </para>
+   <orderedlist>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Bug 409737 -
+javascript.enabled and docShell.allowJavascript do not disable all event
+handlers</ulink>
+     <para>
+This bug allows pages to execute javascript via addEventListener and perhaps
+other callbacks. In order to prevent this bug from enabling an attacker to
+break the <link linkend="isolation">Network Isolation</link> requirement.
+Torbutton 1.1.13 began blocking popups and history manipulation from different
+Torstates.
+     </para>
+     </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">Bug 401296 -docShell.allowPlugins
+not honored for direct links</ulink> (Perhaps subset of <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=282106">Bug 282106</ulink>?)
+     <para>
+Similar to the javascript plugin disabling attribute, the plugin disabling
+attribute is also not perfect - it is ignored for direct links to plugin
+handled content, as well as meta-refreshes to plugin handled content.
+This requires Torbutton to listen to a number of different http events to
+intercept plugin-related mime type urls and cancel their requests.
+     </para>
+     </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=309524">Bug 309524</ulink>
+and <ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=380556">Bug
+380556</ulink> - nsIContentPolicy::shouldProcess is not called.
+     <para>
+This is a call that would be useful to develop a better workaround for the
+allowPlugins issue above. If the content policy were called before a URL was
+handed over to a plugin or helper app, it would make the workaround a lot
+cleaner. Obviously this is not as severe as the other two though.
+     </para>
+     </listitem>
+    </orderedlist>
+  </sect2>
+
+  <sect2 id="FirefoxWishlist">
+   <title>Bugs blocking functionality</title>
+   <para>
+The following bugs impact Torbutton and similar extensions' functionality.
+Like the security bugs above, most have workarounds, but these workarounds are often somewhat ugly hacks.
+   </para>
+
+    <orderedlist>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=413682">Contract-based
+component re-registration fails</ulink>
+   <para>
+In Firefox 3 there seems to be a bug with re-registering some component
+contracts, specifically the <ulink
+url="http://www.xulplanet.com/references/xpcomref/comps/c_browsersessionstartup1.html">sesstionstartup;1</ulink>
+component. Without the ability to hook this component, Torbutton is unable to
+receive crucial app startup and crash recovery information, and will not run
+on Firefox 3. 
+   </para>
+   </listitem>
+
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Timezone
+config/chrome API</ulink>
+   <para>
+The lack of a config or API to configure the timezone requires Torbutton to
+insert client content window javascript to hook the Data object. While this is
+workable, it is clunky, and makes the author slightly nervous.
+   </para>
+   </listitem>
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=417869">Bug 41789 -
+Browser context is difficult to obtain from many XPCOM callbacks</ulink>
+   <para>
+It is very difficult to determine which tabbrowser many XPCOM callbacks
+originate from, and in some cases absolutely no context information is
+provided at all. This makes writing extensions that would like to do 
+per-tab settings and content filters difficult to impossible.
+   </para>
+   </listitem>
+  </orderedlist>
+  </sect2>
 </sect1>
 
 <sect1 id="TestPlan">
@@ -1232,7 +1442,7 @@ methods in combination to deduce the timezone offset. Of course, the author
 tried his best to cover all the methods he could foresee, but it's always good
 to have another set of eyes try it out.</listitem>
      <listitem>Alternate ways to store and fetch unique identifiers. For example, <ulink
-url="http://developer.mozilla.org/en/docs/DOM:Storage">DOM Storage</ulink> caught us offguard. Are there any other
+url="http://developer.mozilla.org/en/docs/DOM:Storage">DOM Storage</ulink> caught us off guard. Are there any other
 arcane or experimental ways that Firefox provides to create and store unique
 identifiers? Or perhaps unique identifiers can be queried or derived from
 properties of the machine/browser that Javascript has access to? How unique
