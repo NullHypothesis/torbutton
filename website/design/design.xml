@@ -1234,7 +1234,8 @@ cleaner. Obviously this is not as severe as the other two though.
    <title>Bugs blocking functionality</title>
    <para>
 The following bugs impact Torbutton and similar extensions' functionality.
-Like the security bugs above, most have workarounds, but these workarounds are often somewhat ugly hacks.
+Like the security bugs above, most have workarounds, but these workarounds 
+are often somewhat ugly hacks.
    </para>
 
     <orderedlist>
@@ -1270,6 +1271,14 @@ provided at all. This makes writing extensions that would like to do
 per-tab settings and content filters difficult to impossible.
    </para>
    </listitem>
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=417994">Bug 217994 -
+navigator object does not fully reflect user agent settings</ulink>
+   <para>
+Despite providing a spoofed information to the general.useragent.* settings,
+the properties <command>navigator.oscpu</command> and
+<command>navigator.productSub</command> reveal the original platform and build date.
+   </para>
   </orderedlist>
   </sect2>
 </sect1>
