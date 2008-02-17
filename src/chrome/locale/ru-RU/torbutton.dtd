@@ -68,3 +68,4 @@
 <!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
 <!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
 <!ENTITY torbutton.prefs.block_js_history       "Block javascript access to history navigation (recommended)">
+<!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">

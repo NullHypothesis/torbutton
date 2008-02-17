@@ -133,6 +133,8 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_killBadJS" label="&torbutton.prefs.kill_bad_js;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_resizeOnToggle" label="&torbutton.prefs.resize_on_toggle;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noUpdates" label="&torbutton.prefs.no_updates;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noSearch" label="&torbutton.prefs.no_search;" 

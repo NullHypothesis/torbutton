@@ -19,6 +19,40 @@ window.__HookObjects = function() {
       /*navigator.__defineGetter__("platform", function() { return tmp_platform;});*/
   }
 
+  // No pref for this.. Should be mostly harmless..
+  if(true) {
+      window.__defineGetter__("outerWidth", function() { return window.innerWidth;});
+      window.__defineGetter__("outerHeight", function() { return window.innerHeight;});
+      window.__defineGetter__("screenX", function() { return 0;});
+      window.__defineGetter__("screenY", function() { return 0;});
+      window.__defineGetter__("pageXOffset", function() { return 0;});
+      window.__defineGetter__("pageYOffset", function() { return 0;});
+
+      // We can't define individual getters/setters for window.screen 
+      // for some reason. works in html but not in these hooks.. No idea why
+      var scr = new Object();
+      var origScr = window.screen;
+      scr.__defineGetter__("height", function() { return window.innerHeight; });
+      scr.__defineGetter__("width", function() { return window.innerWidth; });
+
+      scr.__defineGetter__("availTop", function() { return 0;});
+      scr.__defineGetter__("availLeft", function() { return 0;});
+
+      scr.__defineGetter__("top", function() { return 0;});
+      scr.__defineGetter__("left", function() { return 0;});
+
+      scr.__defineGetter__("availHeight", function() { return window.innerHeight;});
+      scr.__defineGetter__("availWidth", function() { return window.innerWidth;});
+
+      scr.__defineGetter__("colorDepth", function() { return origScr.colorDepth;});
+      scr.__defineGetter__("pixelDepth", function() { return origScr.pixelDepth;});
+
+      scr.__defineGetter__("availTop", function() { return 0;});
+      scr.__defineGetter__("availLeft", function() { return 0;});
+
+      window.__defineGetter__("screen", function() { return scr; });
+  }
+
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
     /* Rules:
@@ -183,6 +217,7 @@ window.__HookObjects = function() {
 
 if (typeof(window.__HookObjects) != "undefined") {
     var res = 23;
+
     if(!window.__HookObjects()) {
         res = 13;
     }

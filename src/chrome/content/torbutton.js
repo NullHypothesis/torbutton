@@ -93,6 +93,7 @@ var torbutton_unique_pref_observer =
                 torbutton_set_status();
                 break;
 
+            case "extensions.torbutton.dual_cookie_jars":
             case "extensions.torbutton.cookie_jars":
             case "extensions.torbutton.clear_cookies":
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars")
@@ -144,6 +145,7 @@ var torbutton_unique_pref_observer =
             case "extensions.torbutton.block_thwrite":
             case "extensions.torbutton.shutdown_method":
             case "extensions.torbutton.spoof_english":
+            case "extensions.torbutton.resize_on_toggle":
                 torbutton_log(1, "Got update message, updating status");
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
@@ -590,12 +592,16 @@ function torbutton_update_status(mode, force_update) {
     }
 
     if(torprefs.getBoolPref("spoof_english") && mode) {
+        m_tb_prefs.setCharPref("general.useragent.locale", 
+                torprefs.getCharPref("spoof_locale"));
         m_tb_prefs.setCharPref("intl.accept_charsets", 
                 torprefs.getCharPref("spoof_charset"));
         m_tb_prefs.setCharPref("intl.accept_languages",
                 torprefs.getCharPref("spoof_language"));
     } else {
         try {
+            if(m_tb_prefs.prefHasUserValue("general.useragent.locale"))
+                m_tb_prefs.clearUserPref("general.useragent.locale");
             if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
                 m_tb_prefs.clearUserPref("intl.accept_charsets");
             if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
@@ -703,8 +709,23 @@ function torbutton_update_status(mode, force_update) {
         }
     }
 
-    
     torbutton_log(2, "Prefs pretty much done");
+    
+    // If the window is not maximized (sizemode)
+    if(mode && torprefs.getBoolPref("resize_on_toggle")) {
+        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+            .getService(Components.interfaces.nsIWindowMediator);
+        var enumerator = wm.getEnumerator("navigator:browser");
+        while(enumerator.hasMoreElements()) {
+            var win = enumerator.getNext();
+            if(win.windowState 
+                    == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
+                var bWin = win.getBrowser().contentWindow;
+                bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
+                bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+            }
+        }
+    }
 
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)

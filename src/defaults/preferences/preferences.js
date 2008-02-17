@@ -66,6 +66,7 @@ pref("extensions.torbutton.reload_crashed_jar",true);
 pref("extensions.torbutton.spoof_english",true);
 pref("extensions.torbutton.spoof_charset",'iso-8859-1,*,utf-8');
 pref("extensions.torbutton.spoof_language",'en-us, en');
+pref("extensions.torbutton.spoof_locale",'en-US');
 pref("extensions.torbutton.disable_referer",false);
 pref("extensions.torbutton.shutdown_method",1); // 0=none, 1=tor, 2=all
 pref("extensions.torbutton.block_tforms",true);
@@ -75,7 +76,7 @@ pref("extensions.torbutton.crashed",false);
 pref("extensions.torbutton.clear_http_auth",true);
 pref("extensions.torbutton.close_on_toggle",false);
 pref("extensions.torbutton.block_js_history",true);
-
+pref("extensions.torbutton.resize_on_toggle",true);
 pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; en-US)");
 pref("extensions.torbutton.platform_override","Win32");
