@@ -719,7 +719,7 @@ function torbutton_update_status(mode, force_update) {
         while(enumerator.hasMoreElements()) {
             var win = enumerator.getNext();
             if(win.windowState 
-                    == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
+                == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
                 var bWin = win.getBrowser().contentWindow;
                 bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
                 bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
@@ -1172,6 +1172,16 @@ function torbutton_new_tab(event)
     }
 }
 
+function torbutton_do_resize(ev)
+{
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+            && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
+        var bWin = window.getBrowser().contentWindow;
+        bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
+        bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+    }
+}
+
 function torbutton_new_window(event)
 {
     torbutton_log(3, "New window");
@@ -1189,6 +1199,7 @@ function torbutton_new_window(event)
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
+    window.addEventListener("resize", torbutton_do_resize, false);
 }
 
 function torbutton_close_window(event) {
@@ -1325,6 +1336,13 @@ function torbutton_update_tags(win) {
         browser.__tb_tor_fetched = !tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
         browser.docShell.allowJavascript = js_enabled;
+
+        // We need to do the resize here as well in case the window
+        // was minimized during toggle...
+        if(!tor_tag && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
+            win.top.innerHeight = Math.round(win.top.innerHeight/50.0)*50;
+            win.top.innerWidth = Math.round(win.top.innerWidth/50.0)*50;
+        }
     }
 
     torbutton_log(2, "Tags updated.");
