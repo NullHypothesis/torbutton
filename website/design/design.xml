@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Feb 16 2008</pubdate>
+   <pubdate>Feb 18 2008</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.1.13-alpha.
+Torbutton Firefox extension. It is current as of Torbutton 1.1.14-alpha.
 
   </para>
   <sect2 id="adversary">
@@ -45,7 +45,8 @@ choosing.</para>
      <para>If direct proxy bypass is not possible, the adversary will likely
 happily settle for the ability to correlate something a user did via Tor with
 their non-Tor activity. This can be done with cookies, cache identifiers,
-javascript events, and even CSS.</para>
+javascript events, and even CSS. Sometimes the fact that a user uses Tor may
+be enough for some authorities.</para>
      </listitem>
      <listitem><command>History disclosure</command>
      <para>
@@ -202,6 +203,53 @@ adserver-class adversaries.
 
      </para>
      </listitem>
+     <listitem id="fingerprinting"><command>Fingerprint Users Based on Browser Attributes</command>
+<para>
+
+There is an absurd amount of information available to websites via attributes
+of the browser. This information can be used to reduce anonymity set, or even
+uniquely
+fingerprint individual users. For illustration, lets start with a
+back-of-the-envelope calculation on the number of anonymity sets for just the
+resolution information available in the <ulink
+url="http://developer.mozilla.org/en/docs/DOM:window">window</ulink> and
+<ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>
+objects. Browser window resolution information provides something like
+(1280-640)*(1024-480)=348160 different anonymity sets. Desktop resolution
+information contributes about another factor of 5 (for about 5 resolutions in
+typical use). In addition, the dimensions and position of the desktop taskbar
+are available, which can reveal hints on OS information. This boosts the count
+by a factor of 4 (for each of the major desktops - Windows, OSX, KDE and
+Gnome), multiplied again by the resolution factor to account for dynamic
+taskbar resizing, yielding about a factor of 20. Finally, the dimensions of
+the browser content window vs the browser chrome provide yet more information.
+Depending on toolbar presence (3 toolbars
+on/off=2<superscript>3</superscript>), platform specific rendering (3
+platforms), and font scaling for resolution (5 resolutions), this is also
+probably another factor of 120.
+Multiply this all out, and you have 
+(1280-640)*(1024-480)*5*20*120 ~= 2<superscript>32</superscript>, or a 32bit
+identifier based on resolution alone. 
+
+</para>
+<para>
+
+Resolution information can also be <ulink
+url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">combined with
+extension information and other attributes</ulink> to produce a unique ID. It
+should be noted that fuzzy comparisons based on bit vector spaces will work
+much better than the hash used in that article though. Each and every
+extension on <ulink
+url="https://addons.mozilla.org">addons.mozilla.org</ulink> is another bit to
+that 2<superscript>32</superscript>. With hundreds of popular extensions and
+thousands of extensions total, it is easy to see that if used properly by
+a competent and determined adversary (such as an ad network), this sort of
+information is an impressively powerful identifier.
+
+</para>
+
+     </listitem>
      <listitem><command>Remotely or locally exploit browser and/or
 OS</command>
      <para>
@@ -226,6 +274,17 @@ From the above Adversary Model, a number of requirements become clear.
 
    </para>
 
+<note>
+
+To avoid gobs of duplicate content, this document is structured by
+components and settings since many settings satisfy multiple requirements.
+However, if you are the type that would rather read the document from the
+requirements perspective, it is in fact possible to search for each of the
+following phrases in the text to find the relevant features that help these
+requirements be met.
+
+</note>
+
 <orderedlist> 
 <!-- These aren't really commands.. But it's the closest I could find in an
 acceptable style.. Don't really want to make my own stylesheet -->
@@ -245,7 +304,16 @@ MUST NOT bypass Tor proxy settings for any content.</para></listitem>
  timezone or locale via Tor.</para></listitem>
  <listitem id="setpreservation"><command>Anonymity Set
 Preservation</command><para>The browser SHOULD NOT leak any other anonymity set reducing information 
- (such as user agent) automatically via Tor.</para></listitem>
+ (such as user agent, extension presence, and resolution information)
+automatically via Tor. The assessment of the attacks above should make it clear
+that anonymity set reduction is a very powerful method of tracking and
+eventually identifying anonymous users.
+</para></listitem>
+ <listitem id="undiscoverability"><command>Tor Undiscoverability</command><para>With
+the advent of bridge support in Tor 0.2.0.x, there are now a class of Tor
+users whose network fingerprint does not obviously betray the fact that they
+are using Tor. This should extend to the browser as well - Torbutton must not
+reveal its presence while Tor is disabled.</para></listitem>
  <listitem id="updates"><command>Update Safety</command><para>The browser SHOULD NOT perform updates, upgrades, or any other automatic
  network activity via Tor.</para></listitem>
  <listitem id="interoperate"><command>Interoperability</command><para>Torbutton SHOULD interoperate with third-party proxy switchers that
@@ -456,12 +524,17 @@ member function to determine if the load should proceed. In Torbutton's case,
 the content policy looks up the appropriate browser tab using the window mapper,
 and checks that tab's load tag against the current Tor state. If the tab was
 loaded in a different state than the current state, the fetch is denied.
-Otherwise, it is allowed.</para>
+Otherwise, it is allowed.</para> This helps to achieve the <link linkend="state">State
+Separation</link> requirements of Torbutton.
 
-<para>
-This component helps to address the <link linkend="state">State
-Separation</link> requirement of Torbutton.
-</para>
+<para>In addition, the content policy also blocks website javascript from
+<ulink url="http://pseudo-flaw.net/content/tor/torbutton/">querying for
+versions and existence of extension chrome</ulink> while Tor is enabled. It
+also masks the presence of Torbutton to website javascript while Tor is
+disabled. This helps to fulfill both the <link
+linkend="setpreservation">Anonymity Set Preservation</link> and the <link
+linkend="undiscoverability">Tor Undiscoverability</link> requirements of
+Torbutton.</para>
 
 </sect3>
 </sect2>
@@ -680,24 +753,78 @@ linkend="isolation">Network Isolation</link> requirement.
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshooks.js">Javascript
 hooking code</ulink>. Javascript is injected into
 pages to hook the <ulink url="http://phrogz.net/objJob/object.asp?id=224">Date
-class</ulink> to mask your timezone, and to hook the <ulink
-url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink>
-object to mask OS and user agent properties not handled by the standard
-Firefox user agent override settings. This is done in the chrome in
+class</ulink> to mask your timezone. This is done in the chrome in
 <function>torbutton_hookdoc()</function>, which is called ultimately by the 
 <ulink
 url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgressListener.html">webprogress
-listener</ulink> <command>torbutton_weblistener</command>.
+listener</ulink> <command>torbutton_weblistener</command>. This behavior helps to satisfy the <link
+linkend="location">Location Neutrality</link> requirement.
 
 </para>
 <para>
-This setting helps to satisfy the <link
-linkend="location">Location Neutrality</link> and <link
+
+In addition, this setting also hooks various resolution properties of the
+<ulink url="http://developer.mozilla.org/en/docs/DOM:window">window</ulink>,
+<ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>,
+and <ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.navigator">window.navigator</ulink>
+to mask window size information and user agent properties not handled by the
+standard Firefox user agent override settings. The resolution hooks
+effectively make the Firefox browser window appear to websites as if the renderable area
+takes up the entire desktop, has no toolbar or other GUI element space, and
+the desktop itself has no toolbars.
+These hooks drastically reduce the amount of information available to do <link
+linkend="fingerprinting">anonymity set reduction attacks</link> and help to
+meet the <link linkend="setpreservation">Anonymity Set Preservation</link>
+requirements.
+
+</para>
+</sect2>
+<sect2>
+<title>Resize window dimensions to multiples of 50px on Toggle (recommended)</title>
+
+ <para>Option: <command>extensions.torbutton.resize_windows</command></para>
+
+<para>
+
+This option drastically cuts down on the number of distinct anonymity sets that
+divide the Tor web userbase. Without this setting, the dimensions for a typical
+browser window range from 600-1200 horizontal pixels and 400-1000 vertical
+pixels, or about 600x600 = 360000 different sets. Resizing the browser window
+to multiples of 50 on each side reduces the number of sets by 50^2, bringing
+the total sets to 144. Of course, the distribution among these sets are not
+uniform, but scaling by 50 only will improve the situation with this
+non-uniformity. Obviously the ideal situation would be to lie entirely about
+the browser window size, but this will likely cause all sorts of rendering
+issues, and is also not implementable in a foolproof way from extension land.
+
+</para>
+<para>
+
+The implementation of this setting is spread across a couple of different
+locations in the Torbutton javascript browser overlay. The primary place is
+with the rest of the Torbutton settings updates:
+<function>torbutton_update_status()</function>. However, since resizing
+minimized windows causes them to be restored, and since maximized windows
+remember their previous size to the pixel, windows must also be resized before
+every document load (at the time of browser tagging) in
+<function>torbutton_update_tags()</function>. In addition, to prevent the user
+from resizing a window to a non-50px multiple, a resize listener
+(<function>torbutton_do_resize()</function>) is installed
+on every new browser window. In all cases, the browser's
+contentWindow.innerWidth and innerHeight are set. This ensures that the when
+there is no discrepancy between the 50 pixel cutoff and the actual renderable
+area of the browser (so that it is not possible to infer toolbar
+size/presence, etc).
+
+</para>
+<para>
+This setting helps to meet the <link
 linkend="setpreservation">Anonymity Set Preservation</link> requirements.
 </para>
 </sect2>
 <sect2>
-
 <title>Disable Updates During Tor (recommended)</title>
 
   <para>Option: <command>extensions.torbutton.no_updates</command></para>
@@ -1144,8 +1271,10 @@ linkend="setpreservation">Anonymity Set Preservation</link> requirement.
 </para>
 
 <para> This option causes Torbutton to set
+<command>general.useragent.locale</command>,
 <command>intl.accept_charsets</command> and
 <command>intl.accept_languages</command> to the value specified in
+<command>extensions.torbutton.spoof_locale</command>,
 <command>extensions.torbutton.spoof_charset</command> and
 <command>extensions.torbutton.spoof_language</command> during Tor usage.  </para>
 <para>
@@ -1192,6 +1321,15 @@ have also been gathered here for reference. In order of decreasing severity,
 they are:
    </para>
    <orderedlist>
+     <listitem><ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=418119">Bug 418119 - nsIContentPolicy not called for external DTDs of XML documents</ulink>
+      <para>
+XML documents can source chrome and resource URLS in their DTDs without a call
+to nsIContentPolicy::shouldLoad. This makes it impossible for extensions such
+as Adblock and Torbutton to prevent websites from enumerating a user's chrome
+urls for vulnerable extensions, or to prevent them from using installed
+extension information in a fingerprint for tracking purposes.
+      </para>
+     </listitem>
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Bug 409737 -
 javascript.enabled and docShell.allowJavascript do not disable all event
@@ -1223,13 +1361,12 @@ and <ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=380556">Bug
      <para>
 This is a call that would be useful to develop a better workaround for the
 allowPlugins issue above. If the content policy were called before a URL was
-handed over to a plugin or helper app, it would make the workaround a lot
-cleaner. Obviously this is not as severe as the other two though.
+handed over to a plugin or helper app, it would make the workaround for the above allowPlugins bug a lot
+cleaner. Obviously this is not as severe as the others though, and if the others were fixed, it would no longer be useful, but it might be nice to have as a backup.
      </para>
      </listitem>
     </orderedlist>
   </sect2>
-
   <sect2 id="FirefoxWishlist">
    <title>Bugs blocking functionality</title>
    <para>
@@ -1279,6 +1416,7 @@ Despite providing a spoofed information to the general.useragent.* settings,
 the properties <command>navigator.oscpu</command> and
 <command>navigator.productSub</command> reveal the original platform and build date.
    </para>
+   </listitem>
   </orderedlist>
   </sect2>
 </sect1>
