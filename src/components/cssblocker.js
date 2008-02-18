@@ -159,7 +159,10 @@ ContentPolicy.prototype = {
             var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc);
             if(!source) {
                 this.logger.eclog(4, "No Source! Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
-            } else if(!origScheme || origScheme != "chrome" && source[1] != "browser" && source[1] != "global") {
+            } else if(!origScheme || origScheme != "chrome" 
+                    // XXX: hrmm, methinks this is going to get ugly.
+                    && source[1] != "browser" && source[1] != "global"
+                    && source[1] != "mozapps") {
                 this.logger.eclog(2, "Source: "+ source[1] + ". Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
                 if(source[1] == "torbutton" || this.tor_enabled) {
                     // Always conceal torbutton's presence. Conceal 
