@@ -170,7 +170,7 @@ ContentPolicy.prototype = {
             }
         } else if(scheme == "resource" || scheme == "data" || scheme == "cid" 
                 || scheme == "javascript") {
-            if(origScheme && origScheme == "chrome") {
+            if(origScheme && (origScheme == "chrome" || origScheme == "file")) {
                 this.logger.eclog(1, "Skipping chrome-sourced local: "+cleanContentLoc);
                 return ok;
             } else if(this.tor_enabled) {

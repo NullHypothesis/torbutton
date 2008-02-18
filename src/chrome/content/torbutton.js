@@ -1177,8 +1177,11 @@ function torbutton_do_resize(ev)
     if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
         var bWin = window.getBrowser().contentWindow;
-        bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
-        bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+        if(window.windowState 
+                == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
+            bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
+            bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+        }
     }
 }
 
@@ -1340,8 +1343,11 @@ function torbutton_update_tags(win) {
         // We need to do the resize here as well in case the window
         // was minimized during toggle...
         if(!tor_tag && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-            win.top.innerHeight = Math.round(win.top.innerHeight/50.0)*50;
-            win.top.innerWidth = Math.round(win.top.innerWidth/50.0)*50;
+            if(win.windowState 
+                    == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
+                win.top.innerHeight = Math.round(win.top.innerHeight/50.0)*50;
+                win.top.innerWidth = Math.round(win.top.innerWidth/50.0)*50;
+            }
         }
     }
 
