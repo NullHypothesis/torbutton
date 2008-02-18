@@ -208,8 +208,8 @@ adserver-class adversaries.
 
 There is an absurd amount of information available to websites via attributes
 of the browser. This information can be used to reduce anonymity set, or even
-uniquely
-fingerprint individual users. For illustration, lets start with a
+<ulink url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">uniquely
+fingerprint individual users</ulink>. For illustration, lets start with a
 back-of-the-envelope calculation on the number of anonymity sets for just the
 resolution information available in the <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window">window</ulink> and
@@ -220,32 +220,34 @@ objects. Browser window resolution information provides something like
 information contributes about another factor of 5 (for about 5 resolutions in
 typical use). In addition, the dimensions and position of the desktop taskbar
 are available, which can reveal hints on OS information. This boosts the count
-by a factor of 4 (for each of the major desktops - Windows, OSX, KDE and
-Gnome), multiplied again by the resolution factor to account for dynamic
-taskbar resizing, yielding about a factor of 20. Finally, the dimensions of
+by a factor of 5 (for each of the major desktops - Windows, OSX, KDE and
+Gnome, and "None"). The dimensions of
 the browser content window vs the browser chrome provide yet more information.
 Depending on toolbar presence (3 toolbars
-on/off=2<superscript>3</superscript>), platform specific rendering (3
-platforms), and font scaling for resolution (5 resolutions), this is also
-probably another factor of 120.
-Multiply this all out, and you have 
-(1280-640)*(1024-480)*5*20*120 ~= 2<superscript>32</superscript>, or a 32bit
-identifier based on resolution alone. 
+on/off=2<superscript>3</superscript>=8), interface effects such as titlebar
+fontsize and window manager settings (say 3 common font sizes for titlebar and
+3 common sizes for for browser gui element fonts), this is also another factor
+of 8*3*3=72. Multiply this all out, and you have
+(1280-640)*(1024-480)*5*5*72 ~= 2<superscript>29</superscript>, or a 29bit
+identifier based on resolution alone. Of course, this space is non-uniform
+and prone to incremental changes, but it should be noted that fuzzy
+comparisons based on bit vector spaces will work much better than a straight
+hash in the face of slightly resized windows and incremental changes to
+browser state.
 
 </para>
 <para>
 
-Resolution information can also be <ulink
-url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">combined with
-extension information and other attributes</ulink> to produce a unique ID. It
-should be noted that fuzzy comparisons based on bit vector spaces will work
-much better than the hash used in that article though. Each and every
-extension on <ulink
-url="https://addons.mozilla.org">addons.mozilla.org</ulink> is another bit to
-that 2<superscript>32</superscript>. With hundreds of popular extensions and
-thousands of extensions total, it is easy to see that if used properly by
+To add insult to injury, <ulink
+url="http://pseudo-flaw.net/content/tor/torbutton/">Chrome disclosure
+attacks</ulink> mean that each and every extension on <ulink
+url="https://addons.mozilla.org">addons.mozilla.org</ulink> adds another bit
+to that 2<superscript>29</superscript>. With hundreds of popular extensions
+and thousands of extensions total, it is easy to see that if used properly by
 a competent and determined adversary (such as an ad network), this sort of
-information is an impressively powerful identifier.
+information is an impressively powerful identifier. A bit vector space
+approach here (instead of a hash) would also deal with incremental changes to
+installed extensions.
 
 </para>
 
@@ -1460,7 +1462,11 @@ remote site without Tor. Every browser plugin we have tested with Firefox has
 some form of network capability, and every one ignores proxy settings or worse - only
 partially obeys them. This includes but is not limited to:
 QuickTime, Windows Media Player, RealPlayer, mplayerplug-in, AcroRead, and
-Flash.
+Flash. In addition, 
+<ulink url="http://www.janusvm.com/goldy/pdf/">issues have been
+discovered</ulink> with the browsers handling of
+<ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">direct links to plugin-handled
+content</ulink> as well as meta-refreshes to plugin content.
     </para>
    </sect3>
    <sect3>
@@ -1475,11 +1481,18 @@ other anonymity set reducing information. This can be done by either
     </para>
    </sect3>
    <sect3>
-    <title>User agent and OS information</title>
+    <title>User agent, extension, resolution and OS information</title>
     <para>
 
-<ulink url="http://gemal.dk/browserspy/basic.html">User agent and OS
-information</ulink> should be obscured while Tor is enabled.
+As mentioned above, these properties can be combined to greatly reduce
+anonymity set and even build a potentially <link
+linkend="fingerprinting">globally unique identifier</link> for
+users. <ulink
+url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">Examples of this
+in the wild</ulink> rely on <ulink url="http://gemal.dk/browserspy/basic.html">user agent and OS
+information</ulink> as well as <ulink
+url="http://pseudo-flaw.net/content/tor/torbutton/">chrome disclosure
+information</ulink>.
 
     </para>
    </sect3>
@@ -1576,6 +1589,11 @@ reloaded in rapid succession. Think race conditions and deep,
 parallel nesting, involving iframes from both <ulink
 url="http://en.wikipedia.org/wiki/Same_origin_policy">same-origin and
 non-same-origin</ulink> domains.</listitem>
+     <listitem>In addition, there may be alternate ways and other
+methods to query the timezone, or otherwise use some of the Date object's
+methods in combination to deduce the timezone offset. Of course, the author
+tried his best to cover all the methods he could foresee, but it's always good
+to have another set of eyes try it out.</listitem>
      <listitem>Similarly, is there any way to confuse the <link
 linkend="contentpolicy">content policy</link>
 mentioned above to cause it to allow certain types of page fetches? For
@@ -1583,13 +1601,16 @@ example, it was recently discovered that favicons are not fetched by the
 content, but the chrome itself, hence the content policy did not look up the
 correct window to determine the current Tor tag for the favicon fetch. Are
 there other things that can do this? Popups? Bookmarklets? Active bookmarks? </listitem>
-     <listitem>In addition, there may be alternate ways and other
-methods to query the timezone, or otherwise use some of the Date object's
-methods in combination to deduce the timezone offset. Of course, the author
-tried his best to cover all the methods he could foresee, but it's always good
-to have another set of eyes try it out.</listitem>
      <listitem>Alternate ways to store and fetch unique identifiers. For example, <ulink
-url="http://developer.mozilla.org/en/docs/DOM:Storage">DOM Storage</ulink> caught us off guard. Are there any other
+url="http://developer.mozilla.org/en/docs/DOM:Storage">DOM Storage</ulink>
+caught us off guard. 
+It was
+also discovered by <ulink url="http://pseudo-flaw.net">Gregory
+Fleischer</ulink> that <ulink
+url="http://pseudo-flaw.net/content/tor/torbutton/">content window access to
+chrome</ulink> can be used to build <link linkend="fingerprinting">unique
+identifiers</link>. 
+Are there any other
 arcane or experimental ways that Firefox provides to create and store unique
 identifiers? Or perhaps unique identifiers can be queried or derived from
 properties of the machine/browser that Javascript has access to? How unique
