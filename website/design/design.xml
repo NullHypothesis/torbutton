@@ -209,7 +209,9 @@ adserver-class adversaries.
 There is an absurd amount of information available to websites via attributes
 of the browser. This information can be used to reduce anonymity set, or even
 <ulink url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">uniquely
-fingerprint individual users</ulink>. For illustration, lets start with a
+fingerprint individual users</ulink>. </para>
+<para>
+For illustration, lets perform a
 back-of-the-envelope calculation on the number of anonymity sets for just the
 resolution information available in the <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window">window</ulink> and
@@ -220,34 +222,36 @@ objects. Browser window resolution information provides something like
 information contributes about another factor of 5 (for about 5 resolutions in
 typical use). In addition, the dimensions and position of the desktop taskbar
 are available, which can reveal hints on OS information. This boosts the count
-by a factor of 5 (for each of the major desktops - Windows, OSX, KDE and
-Gnome, and "None"). The dimensions of
-the browser content window vs the browser chrome provide yet more information.
-Depending on toolbar presence (3 toolbars
-on/off=2<superscript>3</superscript>=8), interface effects such as titlebar
-fontsize and window manager settings (say 3 common font sizes for titlebar and
-3 common sizes for for browser GUI element fonts), this is also another factor
-of 8*3*3=72. Multiply this all out, and you have
-(1280-640)*(1024-480)*5*5*72 ~= 2<superscript>29</superscript>, or a 29bit
-identifier based on resolution alone. Of course, this space is non-uniform
-and prone to incremental changes, but it should be noted that fuzzy
-comparisons based on bit vector spaces will work much better than a straight
-hash in the face of slightly resized windows and incremental changes to
-browser state.
+by a factor of 5 (for each of the major desktop taskbars - Windows, OSX, KDE
+and Gnome, and None). Subtracting the browser content window
+size from the browser outer window size provide yet more information.
+Firefox toolbar presence gives about a factor of 8 (3 toolbars on/off give
+2<superscript>3</superscript>=8). Interface effects such as titlebar fontsize
+and window manager settings gives a factor of about 9 (say 3 common font sizes
+for the titlebar and 3 common sizes for browser GUI element fonts).
+Multiply this all out, and you have (1280-640)*(1024-480)*5*5*8*9 ~=
+2<superscript>29</superscript>, or a 29 bit identifier based on resolution
+alone. </para>
+
+<para>
+Of course, this space is non-uniform and prone to incremental changes.
+However, if a bit vector space of size ranges were used instead of the hash
+approach used in The Hacker Webzine article above, minor changes in browser
+window resolution will no longer generate totally new identifiers.
 
 </para>
 <para>
 
 To add insult to injury, <ulink
-url="http://pseudo-flaw.net/content/tor/torbutton/">Chrome disclosure
+url="http://pseudo-flaw.net/content/tor/torbutton/">chrome URL disclosure
 attacks</ulink> mean that each and every extension on <ulink
 url="https://addons.mozilla.org">addons.mozilla.org</ulink> adds another bit
 to that 2<superscript>29</superscript>. With hundreds of popular extensions
-and thousands of extensions total, it is easy to see that if used properly by
-a competent and determined adversary (such as an ad network), this sort of
-information is an impressively powerful identifier. A bit vector space
-approach here (instead of a hash) would also deal with incremental changes to
-installed extensions.
+and thousands of extensions total, it is easy to see that this sort of
+information is an impressively powerful identifier if used properly by a
+competent and determined adversary such as an ad network.  A bit vector space
+approach here would also gracefully handle incremental changes to installed
+extensions.
 
 </para>
 
