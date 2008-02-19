@@ -65,13 +65,14 @@ location of a particular dissident or whistleblower.
 
      </para>
      </listitem>
-     <listitem><command>Misc anonymity set reduction</command>
+     <listitem><command>Miscellaneous anonymity set reduction</command>
      <para>
 
 Anonymity set reduction is also useful in attempting to zero in on a
 particular individual. If the dissident or whistleblower is using a rare build
 of Firefox for an obscure operating system, this can be very useful
-information for tracking them down.
+information for tracking them down, or at least <link
+linkend="fingerprinting">tracking their activities</link>.
 
      </para>
      </listitem>
@@ -231,7 +232,7 @@ and window manager settings gives a factor of about 9 (say 3 common font sizes
 for the titlebar and 3 common sizes for browser GUI element fonts).
 Multiply this all out, and you have (1280-640)*(1024-480)*5*5*8*9 ~=
 2<superscript>29</superscript>, or a 29 bit identifier based on resolution
-alone. </para>
+information alone. </para>
 
 <para>
 Of course, this space is non-uniform and prone to incremental changes.
@@ -274,22 +275,21 @@ for completeness.
 
   <sect2 id="requirements">
    <title>Torbutton Requirements</title>
+<note>
+
+Since many settings satisfy multiple requirements, this design document is
+organized primarily by Torbutton components and settings. However, if you are
+the type that would rather read the document from the requirements
+perspective, it is in fact possible to search for each of the following
+requirement phrases in the text to find the relevant features that help meet
+that requirement.
+
+</note>
    <para>
 
 From the above Adversary Model, a number of requirements become clear. 
 
    </para>
-
-<note>
-
-To avoid gobs of duplicate content, this document is structured by
-components and settings since many settings satisfy multiple requirements.
-However, if you are the type that would rather read the document from the
-requirements perspective, it is in fact possible to search for each of the
-following phrases in the text to find the relevant features that help these
-requirements be met.
-
-</note>
 
 <orderedlist> 
 <!-- These aren't really commands.. But it's the closest I could find in an
@@ -361,10 +361,11 @@ url="http://developer.mozilla.org/en/docs/XUL_Reference">XUL</ulink>.</para>
 <sect1>
   <title>Components</title>
   <para>
+
 Torbutton installs components for two purposes: hooking existing components to
-reimplement their interfaces to change behavior or receive notification; and
-creating its own components for maintaining state and providing services to
-other pieces of the extension. 
+reimplement their interfaces; and creating new components that provide
+services to other pieces of the extension.
+ 
   </para>
 
   <sect2>
@@ -374,7 +375,7 @@ other pieces of the extension.
 of its own standalone components as well.  Let's discuss the hooked components
 first.</para>
 
-<sect3>
+<sect3 id="sessionstore">
  <title><ulink
 url="http://developer.mozilla.org/en/docs/nsISessionStore">@mozilla.org/browser/sessionstore;1</ulink> -
 <ulink
@@ -1493,7 +1494,8 @@ Components do not expose disk interfaces</ulink>
 
 Several components currently provide no way of reimplementing their disk
 access to easily satisfy Torbutton's <link linkend="disk">Disk
-Avoidance</link> requirements. Workarounds exist, but they are clunky, and
+Avoidance</link> requirements. Workarounds exist, but they are <link
+linkend="sessionstore">clunky</link>, and
 some of them involve disabling functionality during Tor usage.
 
    </para>
