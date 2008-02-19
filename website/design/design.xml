@@ -1413,7 +1413,7 @@ are often somewhat ugly hacks.
 
     <orderedlist>
      <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=413682">Contract-based
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=413682">Bug 413682 - Contract-based
 component re-registration fails</ulink>
    <para>
 In Firefox 3 there seems to be a bug with re-registering some component
@@ -1425,7 +1425,7 @@ on Firefox 3.
    </para>
    </listitem>
      <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Timezone
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 392274 - Timezone
 config/chrome API</ulink>
    <para>
 The lack of a config or API to configure the timezone requires Torbutton to
