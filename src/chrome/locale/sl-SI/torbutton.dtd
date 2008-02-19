@@ -69,3 +69,5 @@
 <!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
 <!ENTITY torbutton.prefs.block_js_history       "Block javascript access to history navigation (recommended)">
 <!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
+<!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
+<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">

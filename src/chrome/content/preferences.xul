@@ -135,6 +135,10 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noSearch" label="&torbutton.prefs.no_search;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_closeTor" label="&torbutton.prefs.close_tor;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_closeNonTor" label="&torbutton.prefs.close_nontor;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
           <tabpanel id="history">

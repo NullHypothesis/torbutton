@@ -196,26 +196,6 @@ function torbutton_toggle() {
     } else {
         torbutton_enable_tor();
     }
-
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.close_on_toggle")) {
-        // 1. Open new tabbrowser in current window..
-        var browser = getBrowser();
-        var newb = browser.addTab("about:blank");
-        
-        // 2. Close all tabs in the current window except new one
-        browser.removeAllTabsBut(newb);
-        
-        // 3. Close all other windows except this one
-        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-            .getService(Components.interfaces.nsIWindowMediator);
-        var enumerator = wm.getEnumerator("navigator:browser");
-        while(enumerator.hasMoreElements()) {
-            var win = enumerator.getNext();
-            if(win != window) {
-                win.close(); // XXX: confirm?
-            }
-        }
-    }
 }
 
 function torbutton_set_status() {
@@ -730,6 +710,46 @@ function torbutton_update_status(mode, force_update) {
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
+
+    var close_tor = m_tb_prefs.getBoolPref("extensions.torbutton.close_tor");
+    var close_nontor = m_tb_prefs.getBoolPref("extensions.torbutton.close_nontor");
+
+    if((!close_tor && !mode) || (mode && !close_nontor)) {
+        torbutton_log(3, "Not closing tabs");
+        return;
+    }
+
+    torbutton_log(3, "Closing tabs");
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+    var enumerator = wm.getEnumerator("navigator:browser");
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        var browser = win.getBrowser();
+        var tabs = browser.browsers.length;
+        var remove = new Array();
+        for(var i = 0; i < tabs; i++) {
+            if(browser.browsers[i].__tb_tor_fetched != mode) {
+                remove.push(browser.browsers[i]);
+            }
+        }
+
+        for(var i = 0; i < remove.length; i++) {
+            browser.removeTab(remove[i]);
+        }
+
+        torbutton_log(3, "Length: "+browser.browsers.length);
+
+        if(browser.browsers.length == 1 
+                && browser.browsers[0].__tb_tor_fetched != mode) {
+            if(win != window) {
+                win.close();
+            } else {
+                var newb = browser.addTab("about:blank");
+                browser.removeAllTabsBut(newb);
+            }
+        }
+    }
 
     if(torprefs.getBoolPref('clear_http_auth')) {
         var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
