@@ -226,7 +226,7 @@ the browser content window vs the browser chrome provide yet more information.
 Depending on toolbar presence (3 toolbars
 on/off=2<superscript>3</superscript>=8), interface effects such as titlebar
 fontsize and window manager settings (say 3 common font sizes for titlebar and
-3 common sizes for for browser gui element fonts), this is also another factor
+3 common sizes for for browser GUI element fonts), this is also another factor
 of 8*3*3=72. Multiply this all out, and you have
 (1280-640)*(1024-480)*5*5*72 ~= 2<superscript>29</superscript>, or a 29bit
 identifier based on resolution alone. Of course, this space is non-uniform
@@ -888,7 +888,7 @@ are truly paranoid and would like additional assurance that once Tor is
 toggled all page activity has ceased, and also as a workaround in the event a
 content policy failure is discovered. It also provides an additional
 level of protection for the <link linkend="disk">Disk Avoidance</link>
-protection so that browser state is not sititng around waiting to be swapped
+protection so that browser state is not sitting around waiting to be swapped
 out longer than necessary.
 
 </para>
@@ -1358,12 +1358,16 @@ they are:
    <orderedlist>
      <listitem><ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=418119">Bug 418119 - nsIContentPolicy not called for external DTDs of XML documents</ulink>
       <para>
+
 XML documents can source chrome and resource URLS in their DTDs without a call
-to nsIContentPolicy::shouldLoad. This makes it impossible for extensions such
-as Adblock and Torbutton to prevent websites from enumerating a user's chrome
-urls for vulnerable extensions, or to prevent them from using installed
-extension information in a fingerprint for tracking purposes. There is no
-workaround for this bug as of yet.
+to nsIContentPolicy::shouldLoad. Enumerating chrome urls gives websites and
+exit nodes a lot of information. They can use it to probe for vulnerable
+versions of extensions, and can also use it to build an <link
+linkend="fingerprinting">identifier for tracking purposes</link>.  This bug
+makes it impossible for extensions such as Adblock and Torbutton to prevent
+chrome inspection and enumeration.  There is no workaround for this bug as of
+yet.
+
       </para>
      </listitem>
      <listitem><ulink
@@ -1371,23 +1375,32 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Bug 409737 -
 javascript.enabled and docShell.allowJavascript do not disable all event
 handlers</ulink>
      <para>
+
 This bug allows pages to execute javascript via addEventListener and perhaps
 other callbacks. In order to prevent this bug from enabling an attacker to
 break the <link linkend="isolation">Network Isolation</link> requirement.
 Torbutton 1.1.13 began blocking popups and history manipulation from different
-Torstates.
+Torstates, relying on its content policy to otherwise block Javascript network
+access. If there are ways to open popups such that Torbutton can not block
+them, pages may still have free reign to break the Network Isolation
+requirement.
+
      </para>
      </listitem>
      <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">Bug 401296 -docShell.allowPlugins
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">Bug 401296 - docShell.allowPlugins
 not honored for direct links</ulink> (Perhaps subset of <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=282106">Bug 282106</ulink>?)
      <para>
+
 Similar to the javascript plugin disabling attribute, the plugin disabling
 attribute is also not perfect - it is ignored for direct links to plugin
 handled content, as well as meta-refreshes to plugin handled content.
 This requires Torbutton to listen to a number of different http events to
-intercept plugin-related mime type urls and cancel their requests.
+intercept plugin-related mime type urls and cancel their requests. Torbutton's
+code to perform this workaround has been subverted at least once already by
+Kyle Williams.
+
      </para>
      </listitem>
      <listitem><ulink
@@ -1434,6 +1447,17 @@ workable, it is clunky, and makes the author slightly nervous.
    </para>
    </listitem>
    <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=417994">Bug 217994 -
+navigator object does not fully reflect user agent settings</ulink>
+   <para>
+Despite providing a spoofed information to the general.useragent.* settings,
+the properties <command>navigator.oscpu</command> and
+<command>navigator.productSub</command> reveal the original platform and build
+date. This also requires Javascript hooks to be inserted to work around.
+   </para>
+   </listitem>
+
+   <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=417869">Bug 41789 -
 Browser context is difficult to obtain from many XPCOM callbacks</ulink>
    <para>
@@ -1444,21 +1468,12 @@ per-tab settings and content filters difficult to impossible.
    </para>
    </listitem>
    <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=417994">Bug 217994 -
-navigator object does not fully reflect user agent settings</ulink>
-   <para>
-Despite providing a spoofed information to the general.useragent.* settings,
-the properties <command>navigator.oscpu</command> and
-<command>navigator.productSub</command> reveal the original platform and build date.
-   </para>
-   </listitem>
-   <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=418321">Bug 418321 -
 Components do not expose disk interfaces</ulink>
    <para>
 
 Several components currently provide no way of hooking their specific disk
-access to easily statisfy Torbutton's <link linkend="disk">Disk
+access to easily satisfy Torbutton's <link linkend="disk">Disk
 Avoidance</link> requirements. Workarounds exist, but some of them do involve
 disabling functionality during Tor usage, and they are rather clunky
 workarounds as well.
