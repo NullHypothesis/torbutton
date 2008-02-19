@@ -868,6 +868,39 @@ for Tor usage.
 </para>
 </sect2>
 <sect2>
+<title>Close all Tor/Non-Tor tabs and windows on toggle (optional)</title>
+
+  <para>Option: <command>extensions.torbutton.close_nontor</command></para>
+  <para>Option: <command>extensions.torbutton.close_tor</command></para>
+
+<para>
+
+These settings cause Torbutton to enumerate through all windows and close all
+tabs in each window for the appropriate Tor state. This code can be found in
+<function>torbutton_update_status()</function>.  The main reason these settings exist
+is as a backup mechanism in the event of any Javascript or content policy
+leaks due to <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox Bug 409737</ulink>.
+Torbutton currently tries to block all Javascript network activity via the
+content policy, but until that bug is fixed, there is some risk that there are
+alternate ways to bypass the policy. This option is available for those who
+are truly paranoid and would like additional assurance that once Tor is
+toggled all page activity has ceased, and also as a workaround in the event a
+content policy failure is discovered. It also provides an additional
+level of protection for the <link linkend="disk">Disk Avoidance</link>
+protection so that browser state is not sititng around waiting to be swapped
+out longer than necessary.
+
+</para>
+<para>
+While this setting doesn't satisfy any Torbutton requirements, the fact that
+cookies are transmitted for partially typed queries does not seem desirable
+for Tor usage.
+</para>
+</sect2>
+
+
+<sect2>
 <title>History Settings</title>
 
   <para>Options:
@@ -1329,7 +1362,8 @@ XML documents can source chrome and resource URLS in their DTDs without a call
 to nsIContentPolicy::shouldLoad. This makes it impossible for extensions such
 as Adblock and Torbutton to prevent websites from enumerating a user's chrome
 urls for vulnerable extensions, or to prevent them from using installed
-extension information in a fingerprint for tracking purposes.
+extension information in a fingerprint for tracking purposes. There is no
+workaround for this bug as of yet.
       </para>
      </listitem>
      <listitem><ulink
@@ -1390,7 +1424,6 @@ receive crucial app startup and crash recovery information, and will not run
 on Firefox 3. 
    </para>
    </listitem>
-
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Timezone
 config/chrome API</ulink>
@@ -1419,6 +1452,20 @@ the properties <command>navigator.oscpu</command> and
 <command>navigator.productSub</command> reveal the original platform and build date.
    </para>
    </listitem>
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=418321">Bug 418321 -
+Components do not expose disk interfaces</ulink>
+   <para>
+
+Several components currently provide no way of hooking their specific disk
+access to easily statisfy Torbutton's <link linkend="disk">Disk
+Avoidance</link> requirements. Workarounds exist, but some of them do involve
+disabling functionality during Tor usage, and they are rather clunky
+workarounds as well.
+
+   </para>
+   </listitem>
+  
   </orderedlist>
   </sect2>
 </sect1>
