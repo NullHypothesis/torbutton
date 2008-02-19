@@ -466,7 +466,7 @@ move the current cookies.txt file to the appropriate backup location
 into place.</para>
 
 <para>
-This component helps to address the <link linkend="isolation">Network
+This component helps to address the <link linkend="state">State
 Isolation</link> requirement of Torbutton.
 </para>
 
@@ -526,8 +526,9 @@ member function to determine if the load should proceed. In Torbutton's case,
 the content policy looks up the appropriate browser tab using the window mapper,
 and checks that tab's load tag against the current Tor state. If the tab was
 loaded in a different state than the current state, the fetch is denied.
-Otherwise, it is allowed.</para> This helps to achieve the <link linkend="state">State
-Separation</link> requirements of Torbutton.
+Otherwise, it is allowed.</para> This helps to achieve the <link
+linkend="isolation">Network
+Isolation</link> requirements of Torbutton.
 
 <para>In addition, the content policy also blocks website javascript from
 <ulink url="http://pseudo-flaw.net/content/tor/torbutton/">querying for
@@ -682,7 +683,7 @@ one</ulink>), the browser decides that
  <para>
  All this could be avoided, of course, if Firefox would either <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">obey
- allowPlugins</ulink> for directly visited urls, or notify its content policy for such
+ allowPlugins</ulink> for directly visited URLs, or notify its content policy for such
  loads either <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=309524">via</ulink> <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=380556">shouldProcess</ulink> or shouldLoad. The fact that it does not is
@@ -745,7 +746,7 @@ linkend="isolation">Network Isolation</link> requirement.
 </para>
 
 </sect2>
-<sect2>
+<sect2 id="jshooks">
 
 <title>Hook Dangerous Javascript (crucial)</title>
 
@@ -877,19 +878,20 @@ for Tor usage.
 
 These settings cause Torbutton to enumerate through all windows and close all
 tabs in each window for the appropriate Tor state. This code can be found in
-<function>torbutton_update_status()</function>.  The main reason these settings exist
-is as a backup mechanism in the event of any Javascript or content policy
-leaks due to <ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox Bug 409737</ulink>.
-Torbutton currently tries to block all Javascript network activity via the
-content policy, but until that bug is fixed, there is some risk that there are
-alternate ways to bypass the policy. This option is available for those who
-are truly paranoid and would like additional assurance that once Tor is
-toggled all page activity has ceased, and also as a workaround in the event a
-content policy failure is discovered. It also provides an additional
-level of protection for the <link linkend="disk">Disk Avoidance</link>
-protection so that browser state is not sitting around waiting to be swapped
-out longer than necessary.
+<function>torbutton_update_status()</function>.  The main reason these
+settings exist is as a backup mechanism in the event of any Javascript or
+content policy leaks due to <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox Bug
+409737</ulink>.  Torbutton currently tries to block all Javascript network
+activity via the content policy, but until that bug is fixed, there is some
+risk that there are alternate ways to bypass the policy. This option is
+available as an extra assurance of <link linkend="isolation">Network
+Isolation</link> for those who are truly paranoid and would like to be sure
+that when Tor is toggled all page activity has ceased. It also serves as a
+potential future workaround in the event a content policy failure is
+discovered, and provides an additional level of protection for the <link
+linkend="disk">Disk Avoidance</link> protection so that browser state is not
+sitting around waiting to be swapped out longer than necessary.
 
 </para>
 <para>
@@ -984,6 +986,8 @@ redirects from still-active event handlers.
 <para>These settings govern if Torbutton disables
 <command>browser.formfill.enable</command>
 and <command>signon.rememberSignons</command> during Tor and Non-Tor usage.
+Since form fields can be read at any time by Javascript, this setting is a lot
+more important than it seems.
 </para>
 
 <para>
@@ -1359,8 +1363,8 @@ they are:
      <listitem><ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=418119">Bug 418119 - nsIContentPolicy not called for external DTDs of XML documents</ulink>
       <para>
 
-XML documents can source chrome and resource URLS in their DTDs without a call
-to nsIContentPolicy::shouldLoad. Enumerating chrome urls gives websites and
+XML documents can source chrome and resource URLs in their DTDs without a call
+to nsIContentPolicy::shouldLoad. Enumerating chrome URLs gives websites and
 exit nodes a lot of information. They can use it to probe for vulnerable
 versions of extensions, and can also use it to build an <link
 linkend="fingerprinting">identifier for tracking purposes</link>.  This bug
@@ -1380,8 +1384,10 @@ This bug allows pages to execute javascript via addEventListener and perhaps
 other callbacks. In order to prevent this bug from enabling an attacker to
 break the <link linkend="isolation">Network Isolation</link> requirement.
 Torbutton 1.1.13 began blocking popups and history manipulation from different
-Torstates, relying on its content policy to otherwise block Javascript network
-access. If there are ways to open popups such that Torbutton can not block
+Torstates.  So long as there are no ways to open popups or redirect the user
+to a new page, the <link linkend="contentpolicy">Torbutton content
+policy</link> should block Javascript network access. However, if there are
+ways to open popups or perform redirects such that Torbutton can not block
 them, pages may still have free reign to break the Network Isolation
 requirement.
 
@@ -1397,7 +1403,7 @@ Similar to the javascript plugin disabling attribute, the plugin disabling
 attribute is also not perfect - it is ignored for direct links to plugin
 handled content, as well as meta-refreshes to plugin handled content.
 This requires Torbutton to listen to a number of different http events to
-intercept plugin-related mime type urls and cancel their requests. Torbutton's
+intercept plugin-related mime type URLs and cancel their requests. Torbutton's
 code to perform this workaround has been subverted at least once already by
 Kyle Williams.
 
@@ -1408,10 +1414,13 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=309524">Bug 309524</ulink>
 and <ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=380556">Bug
 380556</ulink> - nsIContentPolicy::shouldProcess is not called.
      <para>
+
 This is a call that would be useful to develop a better workaround for the
 allowPlugins issue above. If the content policy were called before a URL was
-handed over to a plugin or helper app, it would make the workaround for the above allowPlugins bug a lot
-cleaner. Obviously this is not as severe as the others though, and if the others were fixed, it would no longer be useful, but it might be nice to have as a backup.
+handed over to a plugin or helper app, it would make the workaround for the
+above allowPlugins bug a lot cleaner. Obviously this bug is not as severe as
+the others though, but it might be nice to have as a backup.
+
      </para>
      </listitem>
     </orderedlist>
@@ -1434,26 +1443,32 @@ contracts, specifically the <ulink
 url="http://www.xulplanet.com/references/xpcomref/comps/c_browsersessionstartup1.html">sesstionstartup;1</ulink>
 component. Without the ability to hook this component, Torbutton is unable to
 receive crucial app startup and crash recovery information, and will not run
-on Firefox 3. 
+properly on Firefox 3. 
    </para>
    </listitem>
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 392274 - Timezone
 config/chrome API</ulink>
    <para>
+
 The lack of a config or API to configure the timezone requires Torbutton to
-insert client content window javascript to hook the Data object. While this is
-workable, it is clunky, and makes the author slightly nervous.
+<link linkend="jshooks">insert client content window javascript</link> to hook
+the Date object. While this does work, it is clunky and makes the author
+slightly nervous.
+
    </para>
    </listitem>
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=417994">Bug 217994 -
 navigator object does not fully reflect user agent settings</ulink>
    <para>
+
 Despite providing a spoofed information to the general.useragent.* settings,
 the properties <command>navigator.oscpu</command> and
 <command>navigator.productSub</command> reveal the original platform and build
-date. This also requires Javascript hooks to be inserted to work around.
+date. This also requires Javascript hooks to be inserted in the navigator
+object as a work around.
+
    </para>
    </listitem>
 
@@ -1472,11 +1487,10 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=418321">Bug 418321 -
 Components do not expose disk interfaces</ulink>
    <para>
 
-Several components currently provide no way of hooking their specific disk
+Several components currently provide no way of reimplementing their disk
 access to easily satisfy Torbutton's <link linkend="disk">Disk
-Avoidance</link> requirements. Workarounds exist, but some of them do involve
-disabling functionality during Tor usage, and they are rather clunky
-workarounds as well.
+Avoidance</link> requirements. Workarounds exist, but they are clunky, and
+some of them involve disabling functionality during Tor usage.
 
    </para>
    </listitem>
