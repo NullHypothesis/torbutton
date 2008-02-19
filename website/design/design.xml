@@ -464,7 +464,7 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar
 
 <para>The cookie jar selector (also based on code from <ulink
 url="http://www.collinjackson.com/">Collin
-Jackson</ulink> is used by the Torbutton chrome to switch between
+Jackson</ulink>) is used by the Torbutton chrome to switch between
 Tor and Non-Tor cookies. Its operations are simple: sync cookies to disk, then
 move the current cookies.txt file to the appropriate backup location
 (cookies-tor.txt or cookies-nontor.txt), and then moving the other cookie jar
@@ -556,7 +556,7 @@ url="http://developer.mozilla.org/en/docs/XUL_Reference">XML file</ulink>, with 
 files attached. The scope of these Javascript files is their containing
 window.</para>
 
-<sect2>
+<sect2 id="browseroverlay">
 <title>Browser Overlay - <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.xul">torbutton.xul</ulink></title>
 
@@ -595,15 +595,19 @@ Torbutton setting. These are:
 This setting is currently always disabled. If anyone ever complains saying
 that they *want* their browser to be able to send ping notifications to a
 page or arbitrary link, I'll make this a pref or Tor-only. But I'm not holding
-my breath.
+my breath. I haven't checked if the content policy is called for pings, but if
+not, this setting helps with meeting the <link linkend="isolation">Network
+Isolation</link> requirement.
  </para>
  </listitem>
  <listitem><ulink
 url="http://kb.mozillazine.org/Browser.safebrowsing.remoteLookups">browser.safebrowsing.remoteLookups</ulink>
  <para>
 Likewise for this setting. I find it hard to imagine anyone who wants to ask
-google in real time if each URL they visit is safe, especially when the list
-of unsafe URLs is downloaded anyway.
+Google in real time if each URL they visit is safe, especially when the list
+of unsafe URLs is downloaded anyway. This helps fulfill the <link
+linkend="disk">Disk Avoidance</link> requirement, by preventing your entire
+browsing history from ending up on Google's disks.
  </para>
  </listitem>
  <listitem><ulink
@@ -611,7 +615,8 @@ url="http://kb.mozillazine.org/Browser.safebrowsing.enabled">browser.safebrowsin
  <para>
 Safebrowsing does some network activity in cleartext. I decided to disable it
 during Tor usage for now until someone convinces me this is acceptable and 
-safe for some reason.
+safe for some reason. This helps fulfill the <link linkend="updates">Update
+Safety</link> requirement.
  </para>
  </listitem>
  <listitem><ulink
@@ -621,7 +626,10 @@ If Tor is enabled, we need to prevent random external applications from
 launching without at least warning the user. This group of settings only
 partially accomplishes this, however. Applications can still be launched via
 plugins. The mechanisms for handling this are described under the "Disable
-Plugins During Tor Usage" preference.
+Plugins During Tor Usage" preference. This helps fulfill the <link
+linkend="proxy">Proxy Obedience</link> requirement, by preventing external
+applications from accessing network resources at the command of Tor-fetched
+pages.
  </para>
 </listitem>
 </orderedlist>
@@ -661,7 +669,7 @@ browser properties.</para>
  created (<function>torbutton_tag_new_browser()</function>), every time a web
 load
 event occurs
- (<function>torbutton_update_tags()</function>)), and every time the tor state is changed
+ (<function>torbutton_update_tags()</function>), and every time the tor state is changed
  (<function>torbutton_update_status()</function>). As a backup measure, plugins are also
  prevented from loading by the content policy in <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> if Tor is
@@ -738,7 +746,7 @@ Javascript redirect can still slip by. For this reason, Torbutton blocks
 popups by checking for a valid <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.opener">window.opener</ulink>
 attribute in <function>torbutton_check_progress()</function>. If the window
-has an opener from a different Torstate, its load is blocked. The content
+has an opener from a different Tor state, its load is blocked. The content
 policy also takes similar action to prevent Javascript redirects. This also
 has the side effect/feature of preventing the user from following any links
 from a page loaded in an opposite Tor state.
@@ -796,35 +804,35 @@ requirements.
 
 <para>
 
-This option drastically cuts down on the number of distinct anonymity sets that
-divide the Tor web userbase. Without this setting, the dimensions for a typical
-browser window range from 600-1200 horizontal pixels and 400-1000 vertical
-pixels, or about 600x600 = 360000 different sets. Resizing the browser window
-to multiples of 50 on each side reduces the number of sets by 50^2, bringing
-the total sets to 144. Of course, the distribution among these sets are not
-uniform, but scaling by 50 only will improve the situation with this
-non-uniformity. Obviously the ideal situation would be to lie entirely about
-the browser window size, but this will likely cause all sorts of rendering
-issues, and is also not implementable in a foolproof way from extension land.
+This option drastically cuts down on the number of distinct anonymity sets
+that divide the Tor web userbase. Without this setting, the dimensions for a
+typical browser window range from 600-1200 horizontal pixels and 400-1000
+vertical pixels, or about 600x600 = 360000 different sets. Resizing the
+browser window to multiples of 50 on each side reduces the number of sets by
+50^2, bringing the total number of sets to 144. Of course, the distribution
+among these sets are not uniform, but scaling by 50 will improve the situation
+due to this non-uniformity for users in the less common resolutions.
+Obviously the ideal situation would be to lie entirely about the browser
+window size, but this will likely cause all sorts of rendering issues, and is
+also not implementable in a foolproof way from extension land.
 
 </para>
 <para>
 
 The implementation of this setting is spread across a couple of different
-locations in the Torbutton javascript browser overlay. The primary place is
-with the rest of the Torbutton settings updates:
-<function>torbutton_update_status()</function>. However, since resizing
-minimized windows causes them to be restored, and since maximized windows
-remember their previous size to the pixel, windows must also be resized before
-every document load (at the time of browser tagging) in
+locations in the Torbutton javascript <link linkend="browseroverlay">browser
+overlay</link>. The primary place is with the rest of the Torbutton settings
+updates: <function>torbutton_update_status()</function>. However, since
+resizing minimized windows causes them to be restored, and since maximized
+windows remember their previous size to the pixel, windows must also be
+resized before every document load (at the time of browser tagging) in
 <function>torbutton_update_tags()</function>. In addition, to prevent the user
 from resizing a window to a non-50px multiple, a resize listener
-(<function>torbutton_do_resize()</function>) is installed
-on every new browser window. In all cases, the browser's
-contentWindow.innerWidth and innerHeight are set. This ensures that the when
-there is no discrepancy between the 50 pixel cutoff and the actual renderable
-area of the browser (so that it is not possible to infer toolbar
-size/presence, etc).
+(<function>torbutton_do_resize()</function>) is installed on every new browser
+window. In all cases, the browser's contentWindow.innerWidth and innerHeight
+are set. This ensures that there is no discrepancy between the 50 pixel cutoff
+and the actual renderable area of the browser (so that it is not possible to
+infer toolbar size/presence by the distance to the nearest 50 pixel roundoff).
 
 </para>
 <para>
@@ -863,7 +871,7 @@ This setting causes Torbutton to disable <ulink
 url="http://kb.mozillazine.org/Browser.search.suggest.enabled"><command>browser.search.suggest.enabled</command></ulink>
 during Tor usage.
 This governs if you get Google search suggestions during Tor
-usage. Your google cookie is transmitted with google search suggestions, hence
+usage. Your Google cookie is transmitted with google search suggestions, hence
 this is recommended to be disabled.
 
 </para>
@@ -876,27 +884,31 @@ for Tor usage.
 <sect2>
 <title>Close all Tor/Non-Tor tabs and windows on toggle (optional)</title>
 
-  <para>Option: <command>extensions.torbutton.close_nontor</command></para>
-  <para>Option: <command>extensions.torbutton.close_tor</command></para>
+  <para>Options: 
+   <simplelist>
+   <member><command>extensions.torbutton.close_nontor</command></member>
+   <member><command>extensions.torbutton.close_tor</command></member>
+   </simplelist>
+  </para>
 
 <para>
 
 These settings cause Torbutton to enumerate through all windows and close all
 tabs in each window for the appropriate Tor state. This code can be found in
-<function>torbutton_update_status()</function>.  The main reason these
-settings exist is as a backup mechanism in the event of any Javascript or
-content policy leaks due to <ulink
+<function>torbutton_update_status()</function>.  The main reason these settings
+exist is as a backup mechanism in the event of any Javascript or content policy
+leaks due to <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox Bug
 409737</ulink>.  Torbutton currently tries to block all Javascript network
 activity via the content policy, but until that bug is fixed, there is some
 risk that there are alternate ways to bypass the policy. This option is
 available as an extra assurance of <link linkend="isolation">Network
-Isolation</link> for those who are truly paranoid and would like to be sure
-that when Tor is toggled all page activity has ceased. It also serves as a
-potential future workaround in the event a content policy failure is
-discovered, and provides an additional level of protection for the <link
-linkend="disk">Disk Avoidance</link> protection so that browser state is not
-sitting around waiting to be swapped out longer than necessary.
+Isolation</link> for those who would like to be sure that when Tor is toggled
+all page activity has ceased. It also serves as a potential future workaround
+in the event a content policy failure is discovered, and provides an additional
+level of protection for the <link linkend="disk">Disk Avoidance</link>
+protection so that browser state is not sitting around waiting to be swapped
+out longer than necessary.
 
 </para>
 <para>
@@ -1389,7 +1401,7 @@ This bug allows pages to execute javascript via addEventListener and perhaps
 other callbacks. In order to prevent this bug from enabling an attacker to
 break the <link linkend="isolation">Network Isolation</link> requirement,
 Torbutton 1.1.13 began blocking popups and history manipulation from different
-Torstates.  So long as there are no ways to open popups or redirect the user
+Tor states.  So long as there are no ways to open popups or redirect the user
 to a new page, the <link linkend="contentpolicy">Torbutton content
 policy</link> should block Javascript network access. However, if there are
 ways to open popups or perform redirects such that Torbutton cannot block
@@ -1555,7 +1567,7 @@ content</ulink> as well as meta-refreshes to plugin content.
     <title>History Disclosure attacks</title>
     <para>
 The browser's history can also be queried by a remote site to inspect for
-google queries, visits to sites that contain usernames in the URLs, or
+Google queries, visits to sites that contain usernames in the URLs, or
 other anonymity set reducing information. This can be done by either
 <ulink ulink="http://gemal.dk/browserspy/css.html">Javascript</ulink>, or by 
 <ulink url="http://ha.ckers.org/weird/CSS-history.cgi">CSS</ulink> without any scripting involved.
