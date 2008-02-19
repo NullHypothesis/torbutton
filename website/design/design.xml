@@ -212,7 +212,7 @@ of the browser. This information can be used to reduce anonymity set, or even
 <ulink url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">uniquely
 fingerprint individual users</ulink>. </para>
 <para>
-For illustration, lets perform a
+For illustration, let's perform a
 back-of-the-envelope calculation on the number of anonymity sets for just the
 resolution information available in the <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window">window</ulink> and
@@ -1248,7 +1248,7 @@ crashes.
   </para>
 
   <para>This option also works with the Torbutton <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-obseever.js">crash-observer.js</ulink> 
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
   to set the Tor state after a crash is detected (via the 
   <command>extensions.torbutton.crashed</command> pref)</para>
 <para>
@@ -1387,12 +1387,12 @@ handlers</ulink>
 
 This bug allows pages to execute javascript via addEventListener and perhaps
 other callbacks. In order to prevent this bug from enabling an attacker to
-break the <link linkend="isolation">Network Isolation</link> requirement.
+break the <link linkend="isolation">Network Isolation</link> requirement,
 Torbutton 1.1.13 began blocking popups and history manipulation from different
 Torstates.  So long as there are no ways to open popups or redirect the user
 to a new page, the <link linkend="contentpolicy">Torbutton content
 policy</link> should block Javascript network access. However, if there are
-ways to open popups or perform redirects such that Torbutton can not block
+ways to open popups or perform redirects such that Torbutton cannot block
 them, pages may still have free reign to break the Network Isolation
 requirement.
 
@@ -1405,7 +1405,7 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=282106">Bug 282106</ulink>?)
      <para>
 
 Similar to the javascript plugin disabling attribute, the plugin disabling
-attribute is also not perfect - it is ignored for direct links to plugin
+attribute is also not perfect &mdash; it is ignored for direct links to plugin
 handled content, as well as meta-refreshes to plugin handled content.
 This requires Torbutton to listen to a number of different http events to
 intercept plugin-related mime type URLs and cancel their requests. Torbutton's
