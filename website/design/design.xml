@@ -204,7 +204,8 @@ adserver-class adversaries.
 
      </para>
      </listitem>
-     <listitem id="fingerprinting"><command>Fingerprint Users Based on Browser Attributes</command>
+     <listitem id="fingerprinting"><command>Fingerprint users based on browser
+attributes</command>
 <para>
 
 There is an absurd amount of information available to websites via attributes
@@ -235,10 +236,13 @@ Multiply this all out, and you have (1280-640)*(1024-480)*5*5*8*9 ~=
 information alone. </para>
 
 <para>
+
 Of course, this space is non-uniform and prone to incremental changes.
-However, if a bit vector space of size ranges were used instead of the hash
-approach used in The Hacker Webzine article above, minor changes in browser
-window resolution will no longer generate totally new identifiers.
+However, if a bit vector space consisting of the above extracted attributes
+were used instead of the hash approach from <ulink
+url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">The Hacker
+Webzine article above</ulink>, minor changes in browser window resolution will
+no longer generate totally new identifiers. 
 
 </para>
 <para>
@@ -250,9 +254,9 @@ url="https://addons.mozilla.org">addons.mozilla.org</ulink> adds another bit
 to that 2<superscript>29</superscript>. With hundreds of popular extensions
 and thousands of extensions total, it is easy to see that this sort of
 information is an impressively powerful identifier if used properly by a
-competent and determined adversary such as an ad network.  A bit vector space
-approach here would also gracefully handle incremental changes to installed
-extensions.
+competent and determined adversary such as an ad network.  Again, a
+nearest-neighbor bit vector space approach here would also gracefully handle
+incremental changes to installed extensions.
 
 </para>
 
@@ -590,6 +594,18 @@ there are also a number of Firefox preferences set in
 Torbutton setting. These are:
 </para>
 <orderedlist>
+ <listitem><ulink
+url="http://kb.mozillazine.org/Network.security.ports.banned">network.security.ports.banned</ulink>
+ <para>
+Torbutton sets this setting to add ports 8123, 8118, 9050 and 9051 (which it
+reads from <command>extensions.torbutton.banned_ports</command>) to the list
+of ports Firefox is forbidden to access. These ports are polipo, privoxy, Tor,
+and the Tor control port, respectively. This is set for both Tor and Non-Tor
+usage, and prevents websites from attempting to do http fetches from these
+ports to see if they are open, which addresses the <link
+linkend="undiscoverability">Tor Undiscoverability</link> requirement.
+ </para>
+ </listitem>
  <listitem><ulink url="http://kb.mozillazine.org/Browser.send_pings">browser.send_pings</ulink>
  <para>
 This setting is currently always disabled. If anyone ever complains saying
@@ -645,8 +661,9 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/prefer
 <sect2>
  <title>Other Windows</title>
 
-<para>There are additional windows that describe popups for right clicking on the
-status bar, the toolbutton, and the about page.</para>
+<para>There are additional windows that describe popups for right clicking on
+the status bar, the toolbutton, and the about page.</para>
+
 </sect2>
 </sect1>
 <sect1>
@@ -1679,7 +1696,7 @@ success</ulink> with direct loads/meta-refreshes of plugin-handled URLs.</listit
      <listitem>The Date and Timezone hooks should be verified to work with
 crazy combinations of iframes, nested iframes, iframes in frames, frames in
 iframes, and popups being loaded and
-reloaded in rapid succession. Think race conditions and deep, 
+reloaded in rapid succession, and/or from one another. Think race conditions and deep, 
 parallel nesting, involving iframes from both <ulink
 url="http://en.wikipedia.org/wiki/Same_origin_policy">same-origin and
 non-same-origin</ulink> domains.</listitem>
@@ -1715,7 +1732,8 @@ can these identifiers be?
 write no history, cookie, or other browsing activity information to the
 harddisk.</listitem>
      <listitem>Do popup windows make it easier to break any of the above
-behavior? Are javascript events still canceled in popups? What about CSS
+behavior? Are javascript events still canceled in popups? What about recursive
+popups from Javascript, data, and other funky URL types? What about CSS
 popups? Are they still blocked after Tor is toggled?</listitem>
      <listitem>Chrome-escalation attacks. The interaction between the
 Torbutton chrome Javascript and the client content window javascript is pretty
