@@ -68,9 +68,8 @@ function wrapNode(insecNode) {
 	return fakeFactory.createInstance(insecNode, Components.interfaces.nsISupports);
 }
 
-
-
 // Unwraps jar:, view-source: and wyciwyg: URLs, returns the contained URL
+// XXX: what about %encoding and null characters?
 function unwrapURL(url) {
 	if (!url)
 		return url;
@@ -114,11 +113,7 @@ function ContentPolicy() {
 }
 
 ContentPolicy.prototype = {
-    isLocalScheme: function(loc) {
-        if (loc.indexOf(":") < 0)
-            return false;
-
-        var scheme = loc.replace(/:.*/, "").toLowerCase();
+    isLocalScheme: function(scheme) {
         return (scheme in localSchemes) || loc == "about:blank";
     },
 
@@ -147,22 +142,28 @@ ContentPolicy.prototype = {
             cleanOriginLoc = unwrapURL(requestOrigin.spec);
         }
 
+        // XXX: use .scheme or schemeIs()!!
         var scheme = cleanContentLoc.replace(/:.*/, "").toLowerCase();
         var origScheme = null;
         if(requestOrigin && requestOrigin.spec) {
             origScheme = cleanOriginLoc.replace(/:.*/, "").toLowerCase();
         }
         if(!origScheme) {
-            this.logger.eclog(5, "NO ORIGIN! Chrome: "+cleanContentLoc);
+            // this gets hit for chrome://pippki for ssl confirm dialog..
+            // Need to kill the warning for that case..
+            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc).toLowerCase();
+            if(source[1] != "pippki") {
+                this.logger.eclog(5, "NO ORIGIN! Chrome: "+cleanContentLoc);
+            }
         }
         if(scheme == "chrome") {
-            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc);
+            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc).toLowerCase();
             if(!source) {
                 this.logger.eclog(4, "No Source! Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
             } else if(!origScheme || origScheme != "chrome" 
-                    // XXX: hrmm, methinks this is going to get ugly.
+                    // FIXME: hrmm, methinks this is going to get ugly.
                     && source[1] != "browser" && source[1] != "global"
-                    && source[1] != "mozapps") {
+                    && source[1] != "mozapps" && source[1] != "pippki") {
                 this.logger.eclog(2, "Source: "+ source[1] + ". Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
                 if(source[1] == "torbutton" || this.tor_enabled) {
                     // Always conceal torbutton's presence. Conceal 
@@ -172,19 +173,19 @@ ContentPolicy.prototype = {
                 }
             }
         } else if(scheme == "resource" || scheme == "data" || scheme == "cid" 
-                || scheme == "javascript") {
+                || scheme == "javascript" || scheme == "file") {
             if(origScheme && (origScheme == "chrome" || origScheme == "file")) {
                 this.logger.eclog(1, "Skipping chrome-sourced local: "+cleanContentLoc);
                 return ok;
             } else if(this.tor_enabled) {
-                this.logger.eclog(4, "Blocking chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
+                this.logger.eclog(4, "Blocking local: "+cleanContentLoc+" from: "+cleanOriginLoc);
                 return block;
             }
         }
 
 		// Local stuff has to be eclog because otherwise debuglogger will
         // get into an infinite log-loop w/ its chrome updates
-        if (this.isLocalScheme(cleanContentLoc)) {
+        if (this.isLocalScheme(scheme)) {
             this.logger.eclog(1, "Skipping local: "+cleanContentLoc);
 			return ok;
         } 
