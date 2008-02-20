@@ -114,7 +114,7 @@ function ContentPolicy() {
 
 ContentPolicy.prototype = {
     isLocalScheme: function(scheme) {
-        return (scheme in localSchemes) || loc == "about:blank";
+        return (scheme in localSchemes);
     },
 
 	// nsIContentPolicy interface implementation
@@ -151,13 +151,14 @@ ContentPolicy.prototype = {
         if(!origScheme) {
             // this gets hit for chrome://pippki for ssl confirm dialog..
             // Need to kill the warning for that case..
-            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc).toLowerCase();
-            if(source[1] != "pippki") {
+            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc);
+            // XXX: need to tolowercase this.. or maybe just get from nsURI
+            if(!source || source[1] != "pippki") {
                 this.logger.eclog(5, "NO ORIGIN! Chrome: "+cleanContentLoc);
             }
         }
         if(scheme == "chrome") {
-            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc).toLowerCase();
+            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc);
             if(!source) {
                 this.logger.eclog(4, "No Source! Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
             } else if(!origScheme || origScheme != "chrome" 
