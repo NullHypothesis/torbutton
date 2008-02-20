@@ -616,10 +616,15 @@ function torbutton_update_status(mode, force_update) {
                 m_tb_prefs.clearUserPref(children[i]);
         }
     }
+    
 
     // Always block disk cache during Tor. We clear it on toggle, 
     // so no need to keep it around for someone to rifle through.
     m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
+
+    // Disable safebrowsing in Tor. It fetches some info in cleartext 
+    m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
+
 
     // I think this pref is evil (and also hidden from user configuration, 
     // which makes it extra evil) and so therefore am disabling it 
@@ -630,10 +635,11 @@ function torbutton_update_status(mode, force_update) {
 
     // Always, always disable remote "safe browsing" lookups.
     m_tb_prefs.setBoolPref("browser.safebrowsing.remoteLookups", false);
-   
-    // Disable safebrowsing in Tor. It fetches some info in cleartext 
-    m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
 
+    // Prevent pages from pinging the Tor ports regardless tor mode
+    m_tb_prefs.setCharPref("network.security.ports.banned", 
+            m_tb_prefs.getCharPref("extensions.torbutton.banned_ports"));
+   
     if (torprefs.getBoolPref("no_search")) {
         m_tb_prefs.setBoolPref("browser.search.suggest.enabled", !mode);
     }
@@ -1063,6 +1069,16 @@ observe : function(subject, topic, data) {
         torbutton_disable_tor();
         // Still called by pref observer:
         // torbutton_update_status(false, false);
+
+        // Clear out prefs set regardless of Tor state 
+        if(m_tb_prefs.prefHasUserValue("browser.send_pings"))
+            m_tb_prefs.clearUserPref("browser.send_pings");
+
+        if(m_tb_prefs.prefHasUserValue("browser.safebrowsing.remoteLookups"))
+            m_tb_prefs.clearUserPref("browser.safebrowsing.remoteLookups");
+
+        if(m_tb_prefs.prefHasUserValue("network.security.ports.banned"))
+            m_tb_prefs.clearUserPref("extensions.torbutton.banned_ports");
     }
 
     if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
@@ -1456,6 +1472,10 @@ function torbutton_hookdoc(win, doc) {
     return;
 }
 
+// XXX: Tons of exceptions get thrown from this function on account
+// of its being called so early. Need to find a quick way to check if
+// aProgress and aRequest are actually fully initialized 
+// (without throwing exceptions)
 function torbutton_check_progress(aProgress, aRequest) {
     if (!m_tb_wasinited) {
         torbutton_init();

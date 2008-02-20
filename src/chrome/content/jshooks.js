@@ -51,6 +51,9 @@ window.__HookObjects = function() {
       scr.__defineGetter__("availLeft", function() { return 0;});
 
       window.__defineGetter__("screen", function() { return scr; });
+      with(window) {
+          screen = scr;
+      }
   }
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
@@ -97,7 +100,7 @@ window.__HookObjects = function() {
       var hmine = new Object();
       var ran = 0;
       window.__defineGetter__("history", function() { return hmine; });
-      window.history.__defineGetter__("length", function() { return htmp.length; });
+      window.history.__defineGetter__("length", function() { return 0; });
       var f = function() {
           if(!ran) {
               ran = 1;
@@ -107,6 +110,10 @@ window.__HookObjects = function() {
       window.history.back = f;
       window.history.forward = f;
       window.history.go = f;
+      // Needed for Firefox bug XXX:
+      with(window) {
+        history = htmp;
+      }
   }
 
   var tmp = window.Date;
