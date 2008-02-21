@@ -1078,7 +1078,7 @@ observe : function(subject, topic, data) {
             m_tb_prefs.clearUserPref("browser.safebrowsing.remoteLookups");
 
         if(m_tb_prefs.prefHasUserValue("network.security.ports.banned"))
-            m_tb_prefs.clearUserPref("extensions.torbutton.banned_ports");
+            m_tb_prefs.clearUserPref("network.security.ports.banned");
     }
 
     if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
