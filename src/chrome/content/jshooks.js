@@ -93,9 +93,6 @@ window.__HookObjects = function() {
 
   // This can potentially be done by hooking shistory;1 component, but
   // this is simpler and less code.
-  // XXX: probably should do it that way for localization and 
-  // Non-Tor -> Tor correlation protection 
-  // XXX: Also needs localization
   if(window.__tb_block_js_history==true) {
       var htmp = window.history;
       var hmine = new Object();
@@ -105,6 +102,7 @@ window.__HookObjects = function() {
       var f = function() {
           if(!ran) {
               ran = 1;
+              // XXX: Also needs localization
               window.alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
           }
       }

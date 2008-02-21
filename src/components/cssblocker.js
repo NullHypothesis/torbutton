@@ -107,7 +107,7 @@ function ContentPolicy() {
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;
 
-    // Register observer: FIXME: Restrict this to extensions.torbutton branch?
+    // Register observer: 
     var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranchInternal);
     this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
@@ -186,23 +186,6 @@ ContentPolicy.prototype = {
         var node = wrapNode(insecNode);
         var wind = getWindow(node);
 
-        // Block file in tor mode.
-        // XXX: Add checkbox? Only ask in tor?
-        // NO! This is EXPLICITLY FORBIDDEN in the nsIContentPolicy doc!
-        //var scheme = contentLocation.spec.replace(/:.*/, "").toLowerCase();
-        /* 
-        if(scheme == "file") {
-            var windowMediator = Cc["@mozilla.org/appshell/window-mediator;1"].
-                getService(Ci.nsIWindowMediator);
-            var nav = windowMediator.getMostRecentWindow("navigator:browser");
-            var load = nav.confirm("WARNING! Loading files allows malicious script to read+transmit files from your hard drive!\n\nAre you sure you want to do this?\n\n");
-            if(load) {
-                return ok;
-            } else {
-                return block;
-            }
-        } */
-        
 		// For frame elements go to their window
 		if (contentType == CPolicy.TYPE_SUBDOCUMENT && node.contentWindow) {
 			node = node.contentWindow;

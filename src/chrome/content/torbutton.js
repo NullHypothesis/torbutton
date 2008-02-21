@@ -16,7 +16,6 @@ var torbutton_window_pref_observer =
         var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
                                      .getService(Components.interfaces.nsIPrefBranchInternal);
         this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-        // FIXME: Narrow these topics
         this._branch.addObserver("extensions.torbutton", this, false);
     },
 
@@ -56,7 +55,6 @@ var torbutton_unique_pref_observer =
         var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
                                      .getService(Components.interfaces.nsIPrefBranchInternal);
         this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-        // FIXME: Narrow these topics
         this._branch.addObserver("extensions.torbutton", this, false);
         this._branch.addObserver("network.proxy", this, false);
     },
@@ -1244,7 +1242,7 @@ function torbutton_new_window(event)
 function torbutton_close_window(event) {
     torbutton_window_pref_observer.unregister();
 
-    // XXX: This is a real ghetto hack.. When the original window
+    // TODO: This is a real ghetto hack.. When the original window
     // closes, we need to find another window to handle observing 
     // unique events... The right way to do this is to move the 
     // majority of torbutton functionality into a XPCOM component.. 
@@ -1317,7 +1315,7 @@ function torbutton_check_flag(obj, flag) {
     return (typeof(obj[flag]) != 'undefined');
 }
 
-function torbutton_is_same_origin(source, target) {
+function torbutton_is_same_origin(source, target) { // unused.
     var fixup = Components.classes["@mozilla.org/docshell/urifixup;1"]
         .getService(Components.interfaces.nsIURIFixup);
     var source = fixup.createFixupURI(win.top.location.href, 0);
@@ -1330,7 +1328,7 @@ function torbutton_is_same_origin(source, target) {
         torbutton_log(5, "Can't convert one of: "+win.document.location+", parent is: "+win.top.document.location);
     }
 
-    // XXX: this doesn't work.. esp if document modifies document.domain
+    // TODO: this doesn't work.. esp if document modifies document.domain
     // window.windowRoot instead? Also, prints an error message
     // to the error console..
     try {
@@ -1353,7 +1351,7 @@ function torbutton_update_tags(win) {
         .getService(Components.interfaces.nsISupports)
         .wrappedJSObject;
 
-    // Expire the cache on page loads. FIXME: Do a timer instead.. 
+    // Expire the cache on page loads. TODO: Do a timer instead.. 
     if(win == win.top) wm.expireOldCache();
 
     var browser = wm.getBrowserForContentWindow(win.top);
@@ -1419,7 +1417,7 @@ function torbutton_hookdoc(win, doc) {
     
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
    
-    if(!js_enabled) // XXX: bug #460 hack
+    if(!js_enabled) // bug #460 hack
         win.wrappedJSObject.__tb_hooks_ran = true; 
 
     // No need to hook js if tor is off
@@ -1494,7 +1492,7 @@ function torbutton_check_progress(aProgress, aRequest) {
         }
     }
 
-    // XXX if intstanceof nsIHttpChannel check headers for 
+    // FIXME if intstanceof nsIHttpChannel check headers for 
     // Content-Disposition..
 
     // This noise is a workaround for firefox bugs involving
@@ -1578,7 +1576,7 @@ function torbutton_check_progress(aProgress, aRequest) {
         torbutton_eclog(3, 'Exception on request cancel');
     }
 
-    // XXX: separate this from the above?
+    // TODO: separate this from the above?
     if(DOMWindow) {
         var doc = DOMWindow.document;
         try {

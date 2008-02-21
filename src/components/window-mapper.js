@@ -99,7 +99,6 @@ ContentWindowMapper.prototype =
   getBrowserForContentWindow: function(topContentWindow) {
       if(topContentWindow instanceof Components.interfaces.nsIDOMChromeWindow) {
           if(topContentWindow.browserDOMWindow) {
-              // XXX: is this not a tabbed browser?
               var browser = topContentWindow.getBrowser().selectedTab.linkedBrowser;
               this.logger.log(3, "Chrome browser at "
                       +browser.contentWindow.location+" found for: "

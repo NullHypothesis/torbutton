@@ -75,7 +75,7 @@ HistoryWrapper.prototype =
   /*
    * Determine whether we should hide visited links
    */
-  // XXX: Make observer?
+  // FIXME: Make observer?
   blockReadHistory: function() {
     return ((this._prefs.getBoolPref("extensions.torbutton.block_thread") 
             && this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))

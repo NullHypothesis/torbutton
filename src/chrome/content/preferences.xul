@@ -121,7 +121,6 @@
          </tabs>
          <tabpanels style="border: 0px">
           <tabpanel id="plugins">
-        <!-- XXX: Border? -->
            <vbox>
         <checkbox id="torbutton_disablePlugins" label="&torbutton.prefs.disable_plugins;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
