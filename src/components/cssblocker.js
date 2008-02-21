@@ -89,6 +89,14 @@ var localSchemes = {"about" : true, "chrome" : true, "file" : true,
     //    "cid" : true, "data" : true, "javascript" : true,
     "mailbox" : true};
 
+var browserSources = { "browser":true, "mozapps":true, "global":true, 
+     "pippki":true};
+
+var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
+     "javascript":true, "file":true};
+
+var safeOriginSchemes = { "about":true, "chrome":true, "file":true};
+
 function ContentPolicy() {
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
@@ -136,58 +144,42 @@ ContentPolicy.prototype = {
             return ok;
         }
 
-        var cleanContentLoc = unwrapURL(contentLocation.spec);
-        var cleanOriginLoc = "none";
-        if(requestOrigin && requestOrigin.spec) {
-            cleanOriginLoc = unwrapURL(requestOrigin.spec);
-        }
-
-        // XXX: use .scheme or schemeIs()!!
-        var scheme = cleanContentLoc.replace(/:.*/, "").toLowerCase();
-        var origScheme = null;
-        if(requestOrigin && requestOrigin.spec) {
-            origScheme = cleanOriginLoc.replace(/:.*/, "").toLowerCase();
-        }
-        if(!origScheme) {
-            // this gets hit for chrome://pippki for ssl confirm dialog..
-            // Need to kill the warning for that case..
-            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc);
-            // XXX: need to tolowercase this.. or maybe just get from nsURI
-            if(!source || source[1] != "pippki") {
-                this.logger.eclog(5, "NO ORIGIN! Chrome: "+cleanContentLoc);
+        if(contentLocation.scheme in hostFreeSchemes) {
+            if(!requestOrigin) {
+                this.logger.eclog(5, "NO ORIGIN! Chrome: "+contentLocation.spec);
             }
-        }
-        if(scheme == "chrome") {
-            var source = (new RegExp(scheme+":\/\/([^\/]+)\/")).exec(cleanContentLoc);
-            if(!source) {
-                this.logger.eclog(4, "No Source! Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
-            } else if((!origScheme || origScheme != "chrome") 
-                    // FIXME: hrmm, methinks this is going to get ugly.
-                    && source[1] != "browser" && source[1] != "global"
-                    && source[1] != "mozapps" && source[1] != "pippki") {
-                this.logger.eclog(2, "Source: "+ source[1] + ". Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
-                if(source[1] == "torbutton" || this.tor_enabled) {
-                    // Always conceal torbutton's presence. Conceal 
-                    // other stuff only if tor is enabled though.
-                    this.logger.eclog(4, "Blocking source: "+ source[1] + ". Chrome: "+cleanContentLoc+" from: "+cleanOriginLoc);
-                    return block;
-                }
-            }
-        } else if(scheme == "resource" || scheme == "data" || scheme == "cid" 
-                || scheme == "javascript" || scheme == "file") {
-            if(origScheme && (origScheme == "chrome" || origScheme == "file")) {
-                this.logger.eclog(1, "Skipping chrome-sourced local: "+cleanContentLoc);
+            if(requestOrigin && 
+                    (requestOrigin.scheme in safeOriginSchemes)) { 
+                this.logger.eclog(1, "Skipping chrome-sourced local: "+contentLocation.spec);
                 return ok;
             } else if(this.tor_enabled) {
-                this.logger.eclog(4, "Blocking local: "+cleanContentLoc+" from: "+cleanOriginLoc);
+                this.logger.eclog(4, "Blocking local: "+contentLocation.spec+" from: "+requestOrigin.spec);
                 return block;
+            }
+        } else if(contentLocation.schemeIs("chrome")) { // XXX: components, defaults??
+            if(!requestOrigin) {
+                if(contentLocation.host != "pippki") {
+                    this.logger.eclog(5, "NO ORIGIN! Chrome: "+contentLocation.spec);
+                }
+            }
+
+            if((!requestOrigin || !requestOrigin.schemeIs("chrome")) 
+                    && !(contentLocation.host in browserSources)) {
+                // Prevent access to all but the browser source chrome
+                this.logger.eclog(2, "Source: "+ contentLocation.host + ". Chrome: "+contentLocation.spec+" from: "+requestOrigin.spec);
+                if(contentLocation.host  == "torbutton" || this.tor_enabled) {
+                    // Always conceal torbutton's presence. Conceal 
+                    // other stuff only if tor is enabled though.
+                    this.logger.eclog(4, "Blocking source: "+contentLocation.host+ ". Chrome: "+contentLocation.spec+" from: "+requestOrigin.spec);
+                    return block;
+                }
             }
         }
 
 		// Local stuff has to be eclog because otherwise debuglogger will
         // get into an infinite log-loop w/ its chrome updates
-        if (this.isLocalScheme(scheme)) {
-            this.logger.eclog(1, "Skipping local: "+cleanContentLoc);
+        if (this.isLocalScheme(contentLocation.scheme)) {
+            this.logger.eclog(1, "Skipping local: "+contentLocation.spec);
 			return ok;
         } 
         
@@ -197,7 +189,7 @@ ContentPolicy.prototype = {
         // Block file in tor mode.
         // XXX: Add checkbox? Only ask in tor?
         // NO! This is EXPLICITLY FORBIDDEN in the nsIContentPolicy doc!
-        //var scheme = cleanContentLoc.replace(/:.*/, "").toLowerCase();
+        //var scheme = contentLocation.spec.replace(/:.*/, "").toLowerCase();
         /* 
         if(scheme == "file") {
             var windowMediator = Cc["@mozilla.org/appshell/window-mediator;1"].
@@ -224,13 +216,13 @@ ContentPolicy.prototype = {
             // could handle it either here or shouldProcess, instead of in 
             // the webprogresslistener
             if(this.tor_enabled && this.no_tor_plugins) {
-                this.logger.log(4, "Blocking object at "+cleanContentLoc);
+                this.logger.log(4, "Blocking object at "+contentLocation.spec);
                 return block;
             }
         }
 
         if (!wind || !wind.top.location || !wind.top.location.href) {
-            this.logger.log(4, "Skipping no location: "+cleanContentLoc);
+            this.logger.log(4, "Skipping no location: "+contentLocation.spec);
 			return ok;
         }
 
@@ -238,21 +230,21 @@ ContentPolicy.prototype = {
         var doc = wind.top.document;
         if(!doc) {
             // 1st load of a page in a new location
-            this.logger.log(3, "Skipping no doc: "+cleanContentLoc);
+            this.logger.log(3, "Skipping no doc: "+contentLocation.spec);
             return ok;
         }
 
         var browser;
         if(wind.top.opener && 
             !(wind.top.opener instanceof Components.interfaces.nsIDOMChromeWindow)) {
-            this.logger.log(3, "Popup found: "+cleanContentLoc);
+            this.logger.log(3, "Popup found: "+contentLocation.spec);
             browser = this.wm.getBrowserForContentWindow(wind.top.opener.top)
         } else {
             browser = this.wm.getBrowserForContentWindow(wind.top);
         }
 
         if(!browser) {
-            this.logger.log(5, "No window found: "+cleanContentLoc);
+            this.logger.log(5, "No window found: "+contentLocation.spec);
             return block; 
         }
 
@@ -262,28 +254,28 @@ ContentPolicy.prototype = {
             // This happens on non-browser chrome: updates, dialogs, etc
             if (!wind.top.browserDOMWindow 
                     && typeof(browser.__tb_tor_fetched) == 'undefined') {
-                this.logger.log(3, "Untagged window for "+cleanContentLoc);
+                this.logger.log(3, "Untagged window for "+contentLocation.spec);
                 return ok;
             }
 
             if(wind.top.browserDOMWindow 
                     && contentType == CPolicy.TYPE_DOCUMENT) {
-                this.logger.log(3, "New location for "+cleanContentLoc+" (currently: "+wind.top.location+" and "+browser.currentURI.spec+")");
+                this.logger.log(3, "New location for "+contentLocation.spec+" (currently: "+wind.top.location+" and "+browser.currentURI.spec+")");
                 // Workaround for Firefox Bug 409737.
                 // This disables window.location style redirects if the tor state
                 // has changed
-                if(origScheme) {
-                    this.logger.log(3, "Origin: "+cleanOriginLoc);
-                    if(origScheme != "chrome") {
+                if(requestOrigin) {
+                    this.logger.log(3, "Origin: "+requestOrigin.spec);
+                    if(!requestOrigin.schemeIs("chrome")) {
                         if(typeof(browser.__tb_tor_fetched) == 'undefined') {
                             // This happens for "open in new window" context menu
-                            this.logger.log(3, "Untagged window for redirect "+cleanContentLoc);
+                            this.logger.log(3, "Untagged window for redirect "+contentLocation.spec);
                             return ok;
                         }
                         if(browser.__tb_tor_fetched == tor_state) {
                             return ok;
                         } else {
-                            this.logger.log(3, "Blocking redirect: "+cleanContentLoc);
+                            this.logger.log(3, "Blocking redirect: "+contentLocation.spec);
                             return block;
                         }
                     }
@@ -295,7 +287,7 @@ ContentPolicy.prototype = {
         if(browser.__tb_tor_fetched == tor_state) {
             return ok;
         } else {
-            this.logger.log(3, "Blocking: "+cleanContentLoc);
+            this.logger.log(3, "Blocking: "+contentLocation.spec);
             return block;
         }
 	},
@@ -306,7 +298,7 @@ ContentPolicy.prototype = {
         // webprogresslistener :(	
         // See mozilla bugs 380556, 305699, 309524
         if(ContentLocation) {
-            this.logger.log(2, "Process for "+cleanContentLoc);
+            this.logger.log(2, "Process for "+contentLocation.spec);
         }
         return ok;
 	},
