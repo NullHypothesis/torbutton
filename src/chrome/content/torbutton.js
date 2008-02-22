@@ -1199,10 +1199,39 @@ function torbutton_new_tab(event)
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
     var browser = event.currentTarget;
 
+    // The second tab of a window shrinks our content window by some number
+    // of pix because of the tab array. Resize the content window back up
+    // to compensate.
+    if(browser.browsers.length == 2) {
+        if(!tor_tag && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
+            // Round up
+            torbutton_log(2, "Rounding up tab");
+            browser.contentWindow.innerHeight = Math.ceil(browser.contentWindow.innerHeight/50.0)*50;
+            browser.contentWindow.innerWidth = Math.ceil(contentWindow.innerWidth/50.0)*50;
+        }
+    }
+
     // Fucking garbage.. event is delivered to the current tab, not the 
     // newly created one. Need to traverse the current window for it.
     for (var i = 0; i < browser.browsers.length; ++i) {
         torbutton_tag_new_browser(browser.browsers[i], tor_tag, no_plugins);
+    }
+}
+
+function torbutton_close_tab(event)
+{
+    // Also need to resize the last tab of a window down so that 
+    // the window doesn't keep growing.
+    var browser = event.currentTarget;
+    torbutton_log(2, "Close tab: "+browser.browsers.length);
+    if(browser.browsers.length == 2 
+            && m_tb_prefs.getBoolPref("browser.tabs.autoHide")) {
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+           && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
+            torbutton_log(2, "Rounding down tab");
+            browser.contentWindow.innerHeight = Math.floor(browser.contentWindow.innerHeight/50.0)*50;
+            browser.contentWindow.innerWidth = Math.floor(contentWindow.innerWidth/50.0)*50;
+        }
     }
 }
 
@@ -1213,6 +1242,7 @@ function torbutton_do_resize(ev)
         var bWin = window.getBrowser().contentWindow;
         if(window.windowState 
                 == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
+            torbutton_log(2, "Resizing window");
             bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
             bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
         }
@@ -1235,6 +1265,8 @@ function torbutton_new_window(event)
     torbutton_tag_new_browser(browser.browsers[0], 
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+
+    torbutton_do_resize(null);
 
     window.addEventListener("resize", torbutton_do_resize, false);
 }
@@ -1277,6 +1309,7 @@ function torbutton_close_window(event) {
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
 getBrowser().addEventListener("TabOpen", torbutton_new_tab, false);
+getBrowser().addEventListener("TabClose", torbutton_close_tab, false);
 
 
 // ----------- JAVASCRIPT HOOKING + EVENT HANDLERS ----------------
@@ -1376,13 +1409,7 @@ function torbutton_update_tags(win) {
 
         // We need to do the resize here as well in case the window
         // was minimized during toggle...
-        if(!tor_tag && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-            if(win.windowState 
-                    == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
-                win.top.innerHeight = Math.round(win.top.innerHeight/50.0)*50;
-                win.top.innerWidth = Math.round(win.top.innerWidth/50.0)*50;
-            }
-        }
+        torbutton_do_resize(null);
     }
 
     torbutton_log(2, "Tags updated.");
@@ -1416,9 +1443,6 @@ function torbutton_hookdoc(win, doc) {
     }
     
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
-   
-    if(!js_enabled) // bug #460 hack
-        win.wrappedJSObject.__tb_hooks_ran = true; 
 
     // No need to hook js if tor is off
     if(!js_enabled 
