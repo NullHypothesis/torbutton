@@ -1,16 +1,11 @@
 window.__HookObjects = function() {
-  if (typeof(window.__tb_hooks_ran) == "boolean") {
+  if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;
   }
  
-  /* TODO: It might be a good idea to hook window sizes also..
-     But that will almost certainly fuck with rendering.. Maybe set
-     user's window to a fixed size or random size? That seems annoying 
-     though. */
-
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
-  if(window.__tb_set_uagent==true) {
+  if(window.__tb_set_uagent===true) {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
@@ -52,10 +47,36 @@ window.__HookObjects = function() {
       scr.__defineGetter__("availLeft", function() { return 0;});
 
       window.__defineGetter__("screen", function() { return scr; });
+      // Needed for Firefox bug 418983:
       with(window) {
           screen = scr;
       }
   }
+
+  // This can potentially be done by hooking shistory;1 component, but
+  // this is simpler and less code.
+  if(window.__tb_block_js_history===true) {
+      var htmp = window.history;
+      var hmine = new Object();
+      var ran = 0;
+      window.__defineGetter__("history", function() { return hmine; });
+      window.history.__defineGetter__("length", function() { return 0; });
+      var f = function() {
+          if(!ran) {
+              ran = 1;
+              // XXX: Also needs localization
+              window.alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
+          }
+      }
+      window.history.back = f;
+      window.history.forward = f;
+      window.history.go = f;
+      // Needed for Firefox bug 418983:
+      with(window) {
+        history = htmp;
+      }
+  }
+
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
@@ -90,30 +111,6 @@ window.__HookObjects = function() {
       }
     } 
   } 
-
-  // This can potentially be done by hooking shistory;1 component, but
-  // this is simpler and less code.
-  if(window.__tb_block_js_history==true) {
-      var htmp = window.history;
-      var hmine = new Object();
-      var ran = 0;
-      window.__defineGetter__("history", function() { return hmine; });
-      window.history.__defineGetter__("length", function() { return 0; });
-      var f = function() {
-          if(!ran) {
-              ran = 1;
-              // XXX: Also needs localization
-              window.alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
-          }
-      }
-      window.history.back = f;
-      window.history.forward = f;
-      window.history.go = f;
-      // Needed for Firefox bug XXX:
-      with(window) {
-        history = htmp;
-      }
-  }
 
   var tmp = window.Date;
   window.Date = function() {
