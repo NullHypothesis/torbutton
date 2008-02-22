@@ -599,7 +599,7 @@ url="http://kb.mozillazine.org/Network.security.ports.banned">network.security.p
  <para>
 Torbutton sets this setting to add ports 8123, 8118, 9050 and 9051 (which it
 reads from <command>extensions.torbutton.banned_ports</command>) to the list
-of ports Firefox is forbidden to access. These ports are polipo, privoxy, Tor,
+of ports Firefox is forbidden to access. These ports are Polipo, Privoxy, Tor,
 and the Tor control port, respectively. This is set for both Tor and Non-Tor
 usage, and prevents websites from attempting to do http fetches from these
 ports to see if they are open, which addresses the <link
@@ -1316,7 +1316,7 @@ true, Torbutton copies all of the other above prefs into their corresponding
 browser preferences during Tor usage.</para>
 
 <para>However, this is not the whole story. Additionally, even with the above
-prefs set, the <command>oscpu</command> and <command>productSub</command> fields of the
+prefs set, the <command>oscpu</command>, <command>buildID</command>, and <command>productSub</command> fields of the
 <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink> object are not changed appropriately by the above prefs.
 Javascript hooks implemented in <ulink
@@ -1493,19 +1493,34 @@ slightly nervous.
    </para>
    </listitem>
    <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=417994">Bug 217994 -
-navigator object does not fully reflect user agent settings</ulink>
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=417994">Bug
+417994</ulink>/<ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=350521">Bug 350521</ulink> -
+navigator object does not fully reflect user agent settings
    <para>
 
 Despite providing a spoofed information to the general.useragent.* settings,
-the properties <command>navigator.oscpu</command> and
-<command>navigator.productSub</command> reveal the original platform and build
+the properties <command>navigator.oscpu</command>,
+<command>navigator.productSub</command> and
+<command>navigator.buildID</command> reveal the original platform and build
 date. This also requires Javascript hooks to be inserted in the navigator
 object as a work around.
 
    </para>
    </listitem>
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=418986">Bug 418986 - window.screen
+provides a large amount of identifiable information</ulink>
+   <para>
 
+As <link linkend="fingerprinting">mentioned above</link>, a large amount of
+information is available from <ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>.
+Currently, there is no way to obscure this information without javascript
+hooking. This bug is a request to provide some other method.
+
+   </para>
+   </listitem>
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=417869">Bug 41789 -
 Browser context is difficult to obtain from many XPCOM callbacks</ulink>
@@ -1529,7 +1544,19 @@ some of them involve disabling functionality during Tor usage.
 
    </para>
    </listitem>
-  
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=418983">Bug 41893 - Scoping
+issues with window.__defineGetter__()</ulink>
+   <para>
+
+For some reason, defining getters off of window seems to mess with the
+implicit window scoping in some documents. There is a workaround for this bug,
+so it is barely relevant. It would be far more useful to eliminate the need
+for Javascript hooking in the first place by addressing the above bugs. This
+bug is just listed for completeness.
+
+   </para>
+   </listitem>
   </orderedlist>
   </sect2>
 </sect1>
