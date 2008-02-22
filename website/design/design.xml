@@ -28,7 +28,7 @@ Torbutton Firefox extension. It is current as of Torbutton 1.1.14-alpha.
 
 A Tor web browser adversary has a number of goals, capabilities, and attack
 types that can be used to guide us towards a set of requirements for the
-Torbutton extension. Let's start with the Goals.
+Torbutton extension. Let's start with the goals.
 
    </para>
    <sect3>
@@ -1435,11 +1435,14 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=282106">Bug 282106</ulink>?)
 
 Similar to the javascript plugin disabling attribute, the plugin disabling
 attribute is also not perfect &mdash; it is ignored for direct links to plugin
-handled content, as well as meta-refreshes to plugin handled content.
-This requires Torbutton to listen to a number of different http events to
-intercept plugin-related mime type URLs and cancel their requests. Torbutton's
-code to perform this workaround has been subverted at least once already by
-Kyle Williams.
+handled content, as well as meta-refreshes to plugin handled content.  This
+requires Torbutton to listen to a number of different http events to intercept
+plugin-related mime type URLs and cancel their requests. Again, since plugins
+are quite horrible about obeying proxy settings, loading a plugin pretty much
+ensures a way to break the <link linkend="isolation">Network Isolation</link>
+requirement and reveal a user's original IP address. Torbutton's code to
+perform this workaround has been subverted at least once already by Kyle
+Williams.
 
      </para>
      </listitem>
@@ -1516,9 +1519,9 @@ provides a large amount of identifiable information</ulink>
 As <link linkend="fingerprinting">mentioned above</link>, a large amount of
 information is available from <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>.
-Currently, there is no way to obscure this information without javascript
-hooking. This bug is a request to provide some other method to change these
-values.
+Currently, there is no way to obscure this information without Javascript
+hooking. This bug is a feature request to provide some other method to change
+these values.
 
    </para>
    </listitem>
