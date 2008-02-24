@@ -12,7 +12,7 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 
 // Module specific constants
-const kMODULE_NAME = "Sesstion crash detector";
+const kMODULE_NAME = "Session crash detector";
 const kMODULE_CONTRACTID = "@mozilla.org/browser/sessionstartup;1";
 const kMODULE_CID = Components.ID("9215354b-1787-4aef-9946-780f046c75a9");
 
