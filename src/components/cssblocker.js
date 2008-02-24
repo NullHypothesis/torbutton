@@ -69,7 +69,8 @@ function wrapNode(insecNode) {
 }
 
 // Unwraps jar:, view-source: and wyciwyg: URLs, returns the contained URL
-// XXX: what about %encoding and null characters?
+// This is no longer needed. These urls are now blocked by mozilla,
+// or treated as normal network urls
 function unwrapURL(url) {
 	if (!url)
 		return url;
@@ -86,14 +87,13 @@ function unwrapURL(url) {
 
 var localSchemes = {"about" : true, "chrome" : true, "file" : true, 
     "resource" : true, "x-jsd" : true, "addbook" : true, 
-    //    "cid" : true, "data" : true, "javascript" : true,
     "mailbox" : true};
 
 var browserSources = { "browser":true, "mozapps":true, "global":true, 
      "pippki":true};
 
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
-     "javascript":true, "file":true};
+     "javascript":true, "file":true, "jar":true};
 
 var safeOriginSchemes = { "about":true, "chrome":true, "file":true};
 
@@ -156,7 +156,7 @@ ContentPolicy.prototype = {
                 this.logger.eclog(4, "Blocking local: "+contentLocation.spec+" from: "+requestOrigin.spec);
                 return block;
             }
-        } else if(contentLocation.schemeIs("chrome")) { // XXX: components, defaults??
+        } else if(contentLocation.schemeIs("chrome")) { 
             if(!requestOrigin) {
                 if(contentLocation.host != "pippki") {
                     this.logger.eclog(5, "NO ORIGIN! Chrome: "+contentLocation.spec);
@@ -165,7 +165,7 @@ ContentPolicy.prototype = {
 
             if((!requestOrigin || !requestOrigin.schemeIs("chrome")) 
                     && !(contentLocation.host in browserSources)) {
-                // Prevent access to all but the browser source chrome
+                // Prevent access to all but the browser source chrome from websites
                 this.logger.eclog(2, "Source: "+ contentLocation.host + ". Chrome: "+contentLocation.spec+" from: "+requestOrigin.spec);
                 if(contentLocation.host  == "torbutton" || this.tor_enabled) {
                     // Always conceal torbutton's presence. Conceal 
