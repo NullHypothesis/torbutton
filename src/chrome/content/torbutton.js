@@ -1528,10 +1528,12 @@ function torbutton_check_progress(aProgress, aRequest) {
                 && chanreq instanceof Components.interfaces.nsIChannel
                 && aRequest.isPending()) {
 
-            torbutton_eclog(3, 'Pending request: '+aRequest.name);
+            torbutton_eclog(2, 'Pending request: '+aRequest.name);
 
             if(DOMWindow && DOMWindow.opener 
                && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content")) {
+            
+                torbutton_eclog(3, 'Popup request: '+aRequest.name);
                 
                 if(!(DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
                     // Workaround for Firefox bug 409737
@@ -1543,6 +1545,7 @@ function torbutton_check_progress(aProgress, aRequest) {
                         .wrappedJSObject;
 
                     var browser = wm.getBrowserForContentWindow(DOMWindow.opener);
+                    torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
 
                     if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
                         torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
