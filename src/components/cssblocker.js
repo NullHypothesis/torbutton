@@ -93,7 +93,7 @@ var browserSources = { "browser":true, "mozapps":true, "global":true,
      "pippki":true};
 
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
-     "javascript":true, "file":true, "jar":true};
+     "javascript":true, "file":true};
 
 var safeOriginSchemes = { "about":true, "chrome":true, "file":true};
 
