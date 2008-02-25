@@ -1,5 +1,24 @@
+1.1.14
+  24 Feb 2008
+  * bugfix: set general.useragent.locale if user wants to spoof an English
+    browser. This handles navigator.locale
+  * bugfix: Mask navigator.buildID. Reported by Greg Fleischer
+  * Initial Firefox 3 work. Functionality still broken due to FF Bug 413682
+  * bug 580: Resize preferences window to fit in 640x480 displays
+  * new: Spoof window.screen to mask desktop resolution and resize the 
+    browser to multiples of 50px while tor is enabled.
+  * new: Block content window access to chrome urls if Tor is enabled, 
+    and hide Torbutton if Tor is disabled. Thanks to Greg Fleischer for 
+    reporting the chrome disclosure issues
+  * new: Added option to close all opened tabs on a Tor toggle. Useful 
+    for general convenience and also as a backup protection against 
+    Bug 409737.
+  * new: Add Tor ports to the list of banned ports for Firefox. Should
+    prevent http-ping based fingerprinting attacks.
+  * new: Finally add support for automatic updates.
+
 1.1.13
-  01 Feb 2007
+  01 Feb 2008
   * bugfix: Implement workarounds to disable Javascript network access 
     for Firefox Bug 409737
   * bugfix: Improved plugin-disabling workarounds for Firefox Bug 401296 
