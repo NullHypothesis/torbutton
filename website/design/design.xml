@@ -1620,7 +1620,7 @@ content</ulink> as well as meta-refreshes to plugin content.
 The browser's history can also be queried by a remote site to inspect for
 Google queries, visits to sites that contain usernames in the URLs, or
 other anonymity set reducing information. This can be done by either
-<ulink ulink="http://gemal.dk/browserspy/css.html">Javascript</ulink>, or by 
+<ulink url="http://gemal.dk/browserspy/css.html">Javascript</ulink>, or by 
 <ulink url="http://ha.ckers.org/weird/CSS-history.cgi">CSS</ulink> without any scripting involved.
 
     </para>
