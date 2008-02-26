@@ -1,3 +1,14 @@
+1.1.15
+  26 Feb 2008
+  * bugfix: Fix hook unmasking of window.screen, window.history,
+    and window.navigator discovered by Greg Fleischer. window.Date 
+    unmasking is still unfixed. window.history unmasking represents
+    potential IP disclosure due to Firefox Bug 409737.
+  * bugfix: Fix view-source extension disclosure bug found by Greg 
+    Fleischer.
+  * bugfix: Fix javascript and about links. Found by Greg Fleischer.
+  * new: Attempt to prevent window sizes from drifting during resize.
+
 1.1.14
   24 Feb 2008
   * bugfix: set general.useragent.locale if user wants to spoof an English
