@@ -704,9 +704,7 @@ function torbutton_update_status(mode, force_update) {
             var win = enumerator.getNext();
             if(win.windowState 
                 == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
-                var bWin = win.getBrowser().contentWindow;
-                bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
-                bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+                torbutton_floor_or_round(win.getBrowser());
             }
         }
     }
@@ -723,6 +721,7 @@ function torbutton_update_status(mode, force_update) {
         return;
     }
 
+    // XXX: muck around with browser.tabs.warnOnClose
     torbutton_log(3, "Closing tabs");
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
         .getService(Components.interfaces.nsIWindowMediator);
@@ -1230,7 +1229,7 @@ function torbutton_close_tab(event)
            && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
             torbutton_log(2, "Rounding down tab");
             browser.contentWindow.innerHeight = Math.floor(browser.contentWindow.innerHeight/50.0)*50;
-            browser.contentWindow.innerWidth = Math.floor(contentWindow.innerWidth/50.0)*50;
+            browser.contentWindow.innerWidth = Math.floor(browser.contentWindow.innerWidth/50.0)*50;
         }
     }
 }
@@ -1245,6 +1244,24 @@ function torbutton_do_resize(ev)
             torbutton_log(2, "Resizing window");
             bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
             bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+        }
+    }
+}
+
+function torbutton_floor_or_round(browser) 
+{
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+            && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
+        // Round down on single tab windows, because it usually remembers the size
+        // when tabs were displayed (thus making the content window slightly larger)
+        if(browser.browsers.length == 1 && m_tb_prefs.getBoolPref("browser.tabs.autoHide")) {
+            torbutton_log(2, "Rounding down new window");
+            browser.contentWindow.innerHeight = Math.floor(browser.contentWindow.innerHeight/50.0)*50;
+            browser.contentWindow.innerWidth = Math.floor(browser.contentWindow.innerWidth/50.0)*50;
+        } else {
+            torbutton_log(2, "Resizing window");
+            browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
+            browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
         }
     }
 }
@@ -1266,8 +1283,7 @@ function torbutton_new_window(event)
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
-    torbutton_do_resize(null);
-
+    torbutton_floor_or_round(window.getBrowser());
     window.addEventListener("resize", torbutton_do_resize, false);
 }
 
@@ -1409,7 +1425,7 @@ function torbutton_update_tags(win) {
 
         // We need to do the resize here as well in case the window
         // was minimized during toggle...
-        torbutton_do_resize(null);
+        torbutton_floor_or_round(browser);
     }
 
     torbutton_log(2, "Tags updated.");
