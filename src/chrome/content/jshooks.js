@@ -9,20 +9,20 @@ window.__HookObjects = function() {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
-      window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
-      window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
-      window.navigator.__defineGetter__("buildID", function() { return 0;});
-      /*navigator.__defineGetter__("platform", function() { return tmp_platform;});*/
+      window.navigator.__proto__.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+      window.navigator.__proto__.__defineGetter__("productSub", function() { return tmp_productSub;});
+      window.navigator.__proto__.__defineGetter__("buildID", function() { return 0;});
+      /*navigator.__proto__.__defineGetter__("platform", function() { return tmp_platform;});*/
   }
 
   // No pref for this.. Should be mostly harmless..
   if(true) {
-      window.__defineGetter__("outerWidth", function() { return window.innerWidth;});
-      window.__defineGetter__("outerHeight", function() { return window.innerHeight;});
-      window.__defineGetter__("screenX", function() { return 0;});
-      window.__defineGetter__("screenY", function() { return 0;});
-      window.__defineGetter__("pageXOffset", function() { return 0;});
-      window.__defineGetter__("pageYOffset", function() { return 0;});
+      window.__proto__.__defineGetter__("outerWidth", function() { return window.innerWidth;});
+      window.__proto__.__defineGetter__("outerHeight", function() { return window.innerHeight;});
+      window.__proto__.__defineGetter__("screenX", function() { return 0;});
+      window.__proto__.__defineGetter__("screenY", function() { return 0;});
+      window.__proto__.__defineGetter__("pageXOffset", function() { return 0;});
+      window.__proto__.__defineGetter__("pageYOffset", function() { return 0;});
 
       // We can't define individual getters/setters for window.screen 
       // for some reason. works in html but not in these hooks.. No idea why
@@ -47,6 +47,8 @@ window.__HookObjects = function() {
       scr.__defineGetter__("availLeft", function() { return 0;});
 
       window.__defineGetter__("screen", function() { return scr; });
+      window.__proto__.__defineGetter__("screen", function() { return scr; });
+
       // Needed for Firefox bug 418983:
       with(window) {
           screen = scr;
@@ -56,24 +58,28 @@ window.__HookObjects = function() {
   // This can potentially be done by hooking shistory;1 component, but
   // this is simpler and less code.
   if(window.__tb_block_js_history===true) {
-      var htmp = window.history;
+      var hold = window.history;
       var hmine = new Object();
       var ran = 0;
       window.__defineGetter__("history", function() { return hmine; });
+      window.__proto__.__defineGetter__("history", function() { return hmine; });
+
       window.history.__defineGetter__("length", function() { return 0; });
+      var window_alert = window.alert; // save reference to avoid code injection
       var f = function() {
           if(!ran) {
               ran = 1;
               // XXX: Also needs localization
-              window.alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
+              window_alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
           }
       }
       window.history.back = f;
       window.history.forward = f;
       window.history.go = f;
+      
       // Needed for Firefox bug 418983:
       with(window) {
-        history = htmp;
+        history = hmine;
       }
   }
 
@@ -112,20 +118,20 @@ window.__HookObjects = function() {
     } 
   } 
 
-  var tmp = window.Date;
-  window.Date = function() {
+  var origDate = window.Date;
+  var newDate = function() {
     /* DO NOT make 'd' a member! EvilCode will use it! */
     var d;
     var a = arguments;
     /* apply doesn't seem to work for constructors :( */
-    if(arguments.length == 0) d=new tmp();
-    if(arguments.length == 1) d=new tmp(a[0]);
-    if(arguments.length == 3) d=new tmp(a[0],a[1],a[2]);
-    if(arguments.length == 4) d=new tmp(a[0],a[1],a[2],a[3]);
-    if(arguments.length == 5) d=new tmp(a[0],a[1],a[2],a[3],a[4]);
-    if(arguments.length == 6) d=new tmp(a[0],a[1],a[2],a[3],a[4],a[5]);
-    if(arguments.length == 7) d=new tmp(a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
-    if(arguments.length > 7) d=new tmp();
+    if(arguments.length == 0) d=new origDate();
+    if(arguments.length == 1) d=new origDate(a[0]);
+    if(arguments.length == 3) d=new origDate(a[0],a[1],a[2]);
+    if(arguments.length == 4) d=new origDate(a[0],a[1],a[2],a[3]);
+    if(arguments.length == 5) d=new origDate(a[0],a[1],a[2],a[3],a[4]);
+    if(arguments.length == 6) d=new origDate(a[0],a[1],a[2],a[3],a[4],a[5]);
+    if(arguments.length == 7) d=new origDate(a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
+    if(arguments.length > 7) d=new origDate();
 
     if(arguments.length > 0) {
       if((arguments.length == 1) && typeof(a[0]) == "string") {
@@ -135,6 +141,8 @@ window.__HookObjects = function() {
         d.setTime(d.getTime()-(d.getTimezoneOffset()*60000));
       }
     }
+
+    //window.alert("New date");
 
     window.Date.prototype.valueOf=window.Date.prototype.getTime = /* UTC already */
          function(){return d.getTime();}
@@ -206,14 +214,32 @@ window.__HookObjects = function() {
     return d.toUTCString();
   }
 
-  window.Date.parse=function(s) {
-    var d = new tmp(s);
+  newDate.parse=function(s) {
+    var d = new origDate(s);
     if(typeof(s) == "string") reparseDate(d, s);
     return d.getTime();    
   }
 
-  window.Date.now=function(){return tmp.now();}
-  window.Date.UTC=function(){return tmp.apply(tmp, arguments); }
+  newDate.now=function(){return origDate.now();}
+  newDate.UTC=function(){return origDate.apply(origDate, arguments); }
+
+  // d = new Date();
+  // d.__proto__ === Date.prototype
+  // d.constructor === Date
+  // d.__proto__ === d.constructor.prototype
+  // Date.prototype.__proto__  ===  Date.prototype.constructor.prototype 
+  // window.__proto__ === Window.prototype
+
+  // XXX: This is still not enough.. But at least we get to claim the bug
+  // is violating ECMA-262 by allowing the deletion of var's..
+  with(window) {
+    var Date = newDate;
+  }
+  with(window.__proto__) {
+    Date = newDate;
+  }
+
+  window.__proto__ = null; // Prevent delete from unmasking our properties.
 
   return true;
 }
