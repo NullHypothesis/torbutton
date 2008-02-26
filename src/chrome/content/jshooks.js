@@ -9,6 +9,9 @@ window.__HookObjects = function() {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
+      window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+      window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
+      window.navigator.__defineGetter__("buildID", function() { return 0;});
       window.navigator.__proto__.__defineGetter__("oscpu", function() { return tmp_oscpu;});
       window.navigator.__proto__.__defineGetter__("productSub", function() { return tmp_productSub;});
       window.navigator.__proto__.__defineGetter__("buildID", function() { return 0;});
