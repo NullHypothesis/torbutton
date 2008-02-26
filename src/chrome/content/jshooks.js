@@ -12,6 +12,7 @@ window.__HookObjects = function() {
       window.navigator.__proto__.__defineGetter__("oscpu", function() { return tmp_oscpu;});
       window.navigator.__proto__.__defineGetter__("productSub", function() { return tmp_productSub;});
       window.navigator.__proto__.__defineGetter__("buildID", function() { return 0;});
+      window.navigator.__proto__ = null;
       /*navigator.__proto__.__defineGetter__("platform", function() { return tmp_platform;});*/
   }
 
