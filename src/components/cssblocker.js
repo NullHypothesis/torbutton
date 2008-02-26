@@ -90,10 +90,10 @@ var localSchemes = {"about" : true, "chrome" : true, "file" : true,
     "mailbox" : true};
 
 var browserSources = { "browser":true, "mozapps":true, "global":true, 
-     "pippki":true};
+     "pippki":true, "branding":true};
 
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
-     "javascript":true, "file":true};
+     "file":true, "view-source":true};
 
 var safeOriginSchemes = { "about":true, "chrome":true, "file":true};
 
@@ -144,6 +144,7 @@ ContentPolicy.prototype = {
             return ok;
         }
 
+        // "Host-free" schemes do not have an nsIURI.host property
         if(contentLocation.scheme in hostFreeSchemes) {
             if(!requestOrigin) {
                 this.logger.eclog(5, "NO ORIGIN! Chrome: "+contentLocation.spec);
@@ -152,7 +153,7 @@ ContentPolicy.prototype = {
                     (requestOrigin.scheme in safeOriginSchemes)) { 
                 this.logger.eclog(1, "Skipping chrome-sourced local: "+contentLocation.spec);
                 return ok;
-            } else if(this.tor_enabled) {
+            } else if(contentLocation.spec.toLowerCase().indexOf("torbutton") != -1 || this.tor_enabled) {
                 this.logger.eclog(4, "Blocking local: "+contentLocation.spec+" from: "+requestOrigin.spec);
                 return block;
             }
