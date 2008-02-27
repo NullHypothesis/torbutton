@@ -9,14 +9,38 @@ window.__HookObjects = function() {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
-      window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
-      window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
-      window.navigator.__defineGetter__("buildID", function() { return 0;});
-      window.navigator.__proto__.__defineGetter__("oscpu", function() { return tmp_oscpu;});
-      window.navigator.__proto__.__defineGetter__("productSub", function() { return tmp_productSub;});
-      window.navigator.__proto__.__defineGetter__("buildID", function() { return 0;});
-      window.navigator.__proto__ = null;
-      /*navigator.__proto__.__defineGetter__("platform", function() { return tmp_platform;});*/
+
+      // XXX: This is just unreasonable.. Firefox caches 
+      // window.navigator.__proto__ between same-origin loads of a document. 
+      // So this means when we null it out, we lose most of the navigator 
+      // object for subsequent loads. I tried doing the whole-object hooks 
+      // like we do for Date, screen, and history, but it seems to behave 
+      // like Date upon delete, allowing unmasking for that case. Talk about 
+      // rock+hard place. 
+      try {
+          var cE = window.navigator.cookieEnabled;
+          var lang = window.navigator.language;
+          var uA = window.navigator.userAgent;
+          var v = window.navigator.vendor;
+          var vS = window.navigator.vendorSub;
+          var jE = window.navigator.javaEnabled;
+
+          window.navigator.__defineGetter__("appCodeName", function() { return "Mozilla";});
+          window.navigator.__defineGetter__("appName", function() { return "Netscape";});
+          window.navigator.__defineGetter__("appVersion", function() { return "5.0";});
+          window.navigator.__defineGetter__("cookieEnabled", function() { return cE;});
+          window.navigator.__defineGetter__("language", function() { return lang;});
+          window.navigator.__defineGetter__("userAgent", function() { return uA;});
+          window.navigator.__defineGetter__("vendor", function() { return v;});
+          window.navigator.__defineGetter__("vendorSub", function() { return vS;});
+          window.navigator.__defineGetter__("javaEnabled", function() { return jE;});
+          window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+          window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
+          window.navigator.__defineGetter__("buildID", function() { return 0;});
+          window.navigator.__proto__ = null;
+          /*navigator.__proto__.__defineGetter__("platform", function() { return tmp_platform;});*/
+      } catch(e) {
+      }
   }
 
   // No pref for this.. Should be mostly harmless..
@@ -51,11 +75,12 @@ window.__HookObjects = function() {
       scr.__defineGetter__("availLeft", function() { return 0;});
 
       window.__defineGetter__("screen", function() { return scr; });
+      window.__defineSetter__("screen", function(a) { return; });
       window.__proto__.__defineGetter__("screen", function() { return scr; });
 
       // Needed for Firefox bug 418983:
       with(window) {
-          screen = scr;
+        var screen = scr;
       }
   }
 
@@ -65,10 +90,8 @@ window.__HookObjects = function() {
       var hold = window.history;
       var hmine = new Object();
       var ran = 0;
-      window.__defineGetter__("history", function() { return hmine; });
-      window.__proto__.__defineGetter__("history", function() { return hmine; });
 
-      window.history.__defineGetter__("length", function() { return 0; });
+      hmine.__defineGetter__("length", function() { return 0; });
       var window_alert = window.alert; // save reference to avoid code injection
       var f = function() {
           if(!ran) {
@@ -77,14 +100,19 @@ window.__HookObjects = function() {
               window_alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
           }
       }
-      window.history.back = f;
-      window.history.forward = f;
-      window.history.go = f;
-      
+      hmine.back = f;
+      hmine.forward = f;
+      hmine.go = f;
+
+      window.__defineGetter__("history", function() { return hmine; });
+      window.__defineSetter__("history", function(a) { return; });
+      window.__proto__.__defineGetter__("history", function() { return hmine; });
+
       // Needed for Firefox bug 418983:
       with(window) {
-        history = hmine;
+        var history = hmine;
       }
+
   }
 
 
@@ -146,10 +174,8 @@ window.__HookObjects = function() {
       }
     }
 
-    //window.alert("New date");
-
-    window.Date.prototype.valueOf=window.Date.prototype.getTime = /* UTC already */
-         function(){return d.getTime();}
+    window.Date.prototype.valueOf=function(){return d.toUTCString()};
+    window.Date.prototype.getTime=function(){return d.getTime();} /* UTC already */ 
     window.Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
     window.Date.prototype.getYear=function() {return d.getYear();}
     window.Date.prototype.getMonth=function(){return d.getUTCMonth();}
@@ -232,15 +258,23 @@ window.__HookObjects = function() {
   // d.constructor === Date
   // d.__proto__ === d.constructor.prototype
   // Date.prototype.__proto__  ===  Date.prototype.constructor.prototype 
-  // window.__proto__ === Window.prototype
-
-  // XXX: This is still not enough.. But at least we get to claim the bug
-  // is violating ECMA-262 by allowing the deletion of var's..
+  // window.__proto__ === Window.prototypea
+  
+  // XXX: This is still not enough.. But at least we get to claim the 
+  // unmasking is violating ECMA-262 by allowing the deletion of var's 
+  // (FF Bug 419598)
   with(window) {
     var Date = newDate;
   }
-  with(window.__proto__) {
-    Date = newDate;
+
+  window.__defineGetter__("valueOf", 
+          function() { return function() { return window; } });
+  window.__proto__.__defineGetter__("valueOf", 
+          function() { return function() { return window; } });
+
+  // FINALLY. We got a break! WAHOO ECMA-262 compliance!
+  with(window) {
+      var XPCNativeWrapper = function(a) { return a; };
   }
 
   window.__proto__ = null; // Prevent delete from unmasking our properties.
