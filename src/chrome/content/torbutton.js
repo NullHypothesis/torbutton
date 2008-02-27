@@ -190,8 +190,12 @@ function torbutton_toggle() {
     }
 
     if (torbutton_check_status()) {
+        // Close on toggle before actually changing proxy settings
+        // as additional safety precaution
+        torbutton_close_on_toggle(false);
         torbutton_disable_tor();
     } else {
+        torbutton_close_on_toggle(true);
         torbutton_enable_tor();
     }
 }
@@ -713,6 +717,39 @@ function torbutton_update_status(mode, force_update) {
     if(!changed && force_update)
         return;
 
+    // This call also has to be here for 3rd party proxy changers.
+    torbutton_close_on_toggle(mode);
+
+    if(torprefs.getBoolPref('clear_http_auth')) {
+        var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
+        getService(Components.interfaces.nsIHttpAuthManager);
+        auth.clearAll();
+    }
+
+    // Prevent tor cookies from being written to disk
+    if(torprefs.getBoolPref('clear_cookies') 
+            || torprefs.getBoolPref('cookie_jars')) {
+        torbutton_log(2, "Changing cookie lifetime");
+        if(mode) {
+            torprefs.setIntPref("saved.cookieLifetime", 
+                    m_tb_prefs.getIntPref("network.cookie.lifetimePolicy"));
+            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+        } else {
+            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
+                    torprefs.getIntPref("saved.cookieLifetime")); 
+        }
+        torbutton_log(2, "Cookie lifetime changed");
+    }
+
+    if (torprefs.getBoolPref('clear_cookies')) {
+        torbutton_clear_cookies();
+    } else if (torprefs.getBoolPref('cookie_jars') 
+            || torprefs.getBoolPref('dual_cookie_jars')) {
+        torbutton_jar_cookies(mode);
+    }
+}
+
+function torbutton_close_on_toggle(mode) {
     var close_tor = m_tb_prefs.getBoolPref("extensions.torbutton.close_tor");
     var close_nontor = m_tb_prefs.getBoolPref("extensions.torbutton.close_nontor");
 
@@ -753,35 +790,8 @@ function torbutton_update_status(mode, force_update) {
             }
         }
     }
-
-    if(torprefs.getBoolPref('clear_http_auth')) {
-        var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
-        getService(Components.interfaces.nsIHttpAuthManager);
-        auth.clearAll();
-    }
-
-    // Prevent tor cookies from being written to disk
-    if(torprefs.getBoolPref('clear_cookies') 
-            || torprefs.getBoolPref('cookie_jars')) {
-        torbutton_log(2, "Changing cookie lifetime");
-        if(mode) {
-            torprefs.setIntPref("saved.cookieLifetime", 
-                    m_tb_prefs.getIntPref("network.cookie.lifetimePolicy"));
-            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
-        } else {
-            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
-                    torprefs.getIntPref("saved.cookieLifetime")); 
-        }
-        torbutton_log(2, "Cookie lifetime changed");
-    }
-
-    if (torprefs.getBoolPref('clear_cookies')) {
-        torbutton_clear_cookies();
-    } else if (torprefs.getBoolPref('cookie_jars') 
-            || torprefs.getBoolPref('dual_cookie_jars')) {
-        torbutton_jar_cookies(mode);
-    }
 }
+
 
 function torbutton_open_prefs_dialog() {
     window.openDialog("chrome://torbutton/content/preferences.xul","torbutton-preferences","centerscreen, chrome");
