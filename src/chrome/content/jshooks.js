@@ -267,10 +267,18 @@ window.__HookObjects = function() {
     var Date = newDate;
   }
 
-  window.__defineGetter__("valueOf", 
-          function() { return function() { return window; } });
-  window.__proto__.__defineGetter__("valueOf", 
-          function() { return function() { return window; } });
+  // Gain access to the implict global object (which interestingly claims
+  // to be a 'Window' but is not the same class as 'window'...) and 
+  // replace its __proto__ with a copy of 'window'.
+  var tmp = new Object.prototype.toSource();
+  var wintmp = window;
+  with(window.valueOf.call()) {
+    for(var i in wintmp) {
+      tmp[i] = wintmp[i];                  
+    }
+
+    var __proto__ = tmp;
+  }
 
   // FINALLY. We got a break! WAHOO ECMA-262 compliance!
   with(window) {
