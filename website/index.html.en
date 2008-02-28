@@ -85,7 +85,7 @@ function install (aEvent)
 <br/>
 <strong>Install:</strong> 
 <a href="http://torbutton.torproject.org/dev/torbutton-current-alpha.xpi"
-  hash="sha1:b316f9d84930ecf23b0797f93a6433334a4c38d5"
+  hash="sha1:fa0d47c98d258ba904d828bea15b140ab438eb56"
   onclick="return install(event);">Local (Javascript verified)</a><br/>
 <strong>Past Releases:</strong> <a href="releases/">Local (non-https)</a><br/>
 <strong>Developer Documentation:</strong> <a href="design/">Torbutton Design Document</a> and <a href="design/MozillaBrownBag.pdf">Slides (Not actively updated)</a><br/>
