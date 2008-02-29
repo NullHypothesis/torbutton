@@ -267,6 +267,11 @@ window.__HookObjects = function() {
     var Date = newDate;
   }
 
+  // FINALLY. We got a break! WAHOO ECMA-262 compliance!
+  with(window) {
+      var XPCNativeWrapper = function(a) { return a; };
+  }
+
   // Gain access to the implict global object (which interestingly claims
   // to be a 'Window' but is not the same class as 'window'...) and 
   // replace its __proto__ with a copy of 'window'.
@@ -274,15 +279,15 @@ window.__HookObjects = function() {
   var wintmp = window;
   with(window.valueOf.call()) {
     for(var i in wintmp) {
-      tmp[i] = wintmp[i];                  
+      if(i == "globalStorage" || i == "sessionStorage") {
+          //Causes an exception without this. 
+          //Disabled for now anyways.
+          tmp[i] = new Object();
+      } else {
+          tmp[i] = wintmp[i];                  
+      }
     }
-
     var __proto__ = tmp;
-  }
-
-  // FINALLY. We got a break! WAHOO ECMA-262 compliance!
-  with(window) {
-      var XPCNativeWrapper = function(a) { return a; };
   }
 
   window.__proto__ = null; // Prevent delete from unmasking our properties.
