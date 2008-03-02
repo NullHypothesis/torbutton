@@ -2,6 +2,7 @@ window.__HookObjects = function() {
   if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;
   }
+  var win_is_FF3 = window.__tb_is_FF3;
  
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
@@ -269,7 +270,10 @@ window.__HookObjects = function() {
 
   // FINALLY. We got a break! WAHOO ECMA-262 compliance!
   with(window) {
-      var XPCNativeWrapper = function(a) { return a; };
+      XPCNativeWrapper = function(a) { return a; };
+  }
+  with(window.__proto__) {
+      XPCNativeWrapper = function(a) { return a; };
   }
 
   // Gain access to the implict global object (which interestingly claims
@@ -278,16 +282,20 @@ window.__HookObjects = function() {
   var tmp = new Object.prototype.toSource();
   var wintmp = window;
   with(window.valueOf.call()) {
-    for(var i in wintmp) {
-      if(i == "globalStorage" || i == "sessionStorage") {
-          //Causes an exception without this. 
-          //Disabled for now anyways.
-          tmp[i] = new Object();
-      } else {
-          tmp[i] = wintmp[i];                  
+      for(var i in wintmp) {
+          if(i == "globalStorage" || i == "sessionStorage") {
+              //Causes an exception without this. 
+              //Disabled for now anyways.
+              tmp[i] = new Object();
+          } else {
+              tmp[i] = wintmp[i];                  
+          }
       }
-    }
-    var __proto__ = tmp;
+      try { // FF3 throws an exception here
+          var __proto__ = tmp;
+      } catch(e) {
+          var __proto__ = null;
+      }
   }
 
   window.__proto__ = null; // Prevent delete from unmasking our properties.
