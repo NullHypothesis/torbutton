@@ -2,8 +2,7 @@ window.__HookObjects = function() {
   if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;
   }
-  var win_is_FF3 = window.__tb_is_FF3;
- 
+
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
   if(window.__tb_set_uagent===true) {
