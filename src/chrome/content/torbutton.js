@@ -1216,7 +1216,7 @@ function torbutton_new_tab(event)
             // Round up
             torbutton_log(2, "Rounding up tab");
             browser.contentWindow.innerHeight = Math.ceil(browser.contentWindow.innerHeight/50.0)*50;
-            browser.contentWindow.innerWidth = Math.ceil(contentWindow.innerWidth/50.0)*50;
+            browser.contentWindow.innerWidth = Math.ceil(browser.contentWindow.innerWidth/50.0)*50;
         }
     }
 
@@ -1264,7 +1264,7 @@ function torbutton_floor_or_round(browser)
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
         // Round down on single tab windows, because it usually remembers the size
         // when tabs were displayed (thus making the content window slightly larger)
-        if(browser.browsers.length == 1 && m_tb_prefs.getBoolPref("browser.tabs.autoHide")) {
+        if((!browser.browsers || browser.browsers.length == 1) && m_tb_prefs.getBoolPref("browser.tabs.autoHide")) {
             torbutton_log(2, "Rounding down new window");
             browser.contentWindow.innerHeight = Math.floor(browser.contentWindow.innerHeight/50.0)*50;
             browser.contentWindow.innerWidth = Math.floor(browser.contentWindow.innerWidth/50.0)*50;
@@ -1549,81 +1549,83 @@ function torbutton_check_progress(aProgress, aRequest) {
     // enforcement of docShell.allowPlugins and docShell.allowJavascript
     // (Bugs 401296 and 409737 respectively) 
     try {
-        var chanreq = aRequest.QueryInterface(Components.interfaces.nsIChannel);
-        if(chanreq
-                && chanreq instanceof Components.interfaces.nsIChannel
-                && aRequest.isPending()) {
+        if(aRequest) {
+            var chanreq = aRequest.QueryInterface(Components.interfaces.nsIChannel);
+            if(chanreq
+                    && chanreq instanceof Components.interfaces.nsIChannel
+                    && aRequest.isPending()) {
 
-            torbutton_eclog(2, 'Pending request: '+aRequest.name);
+                torbutton_eclog(2, 'Pending request: '+aRequest.name);
 
-            if(DOMWindow && DOMWindow.opener 
-               && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content")) {
-            
-                torbutton_eclog(3, 'Popup request: '+aRequest.name);
-                
-                if(!(DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
-                    // Workaround for Firefox bug 409737
-                    // The idea is that the content policy should stop all
-                    // forms of javascript fetches except for popups. This
-                    // code handles blocking popups from alternate tor states.
-                    var wm = Components.classes["@torproject.org/content-window-mapper;1"]
-                        .getService(Components.interfaces.nsISupports)
-                        .wrappedJSObject;
+                if(DOMWindow && DOMWindow.opener 
+                        && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content")) {
 
-                    var browser = wm.getBrowserForContentWindow(DOMWindow.opener);
-                    torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
+                    torbutton_eclog(3, 'Popup request: '+aRequest.name);
 
-                    if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-                        torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
-                        aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
-                        DOMWindow.stop();
-                        torbutton_eclog(3, 'Stopped document: '+DOMWindow.location);
-                        DOMWindow.document.clear();
-                        torbutton_eclog(3, 'Cleared document: '+DOMWindow.location);
-                    }
-                }
-            }
-            
-            torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
+                    if(!(DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
+                        // Workaround for Firefox bug 409737
+                        // The idea is that the content policy should stop all
+                        // forms of javascript fetches except for popups. This
+                        // code handles blocking popups from alternate tor states.
+                        var wm = Components.classes["@torproject.org/content-window-mapper;1"]
+                            .getService(Components.interfaces.nsISupports)
+                            .wrappedJSObject;
 
-            // Workaround for Firefox Bug 401296
-            if((m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")
-                && aRequest.contentType in m_tb_plugin_mimetypes)) {
-                aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
-                if(DOMWindow) {
-                    // ZOMG DIE DIE DXIE!!!!!@
-                    try {
-                        DOMWindow.stop();
-                        torbutton_eclog(2, 'Stopped document');
-                        DOMWindow.document.clear();
-                        torbutton_eclog(2, 'Cleared document');
-                        
-                        if(typeof(DOMWindow.__tb_kill_flag) == 'undefined') {
-                            // XXX: localize
-                            window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
-                            DOMWindow.__tb_kill_flag = true;
+                        var browser = wm.getBrowserForContentWindow(DOMWindow.opener);
+                        torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
+
+                        if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                            torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
+                            aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
+                            DOMWindow.stop();
+                            torbutton_eclog(3, 'Stopped document: '+DOMWindow.location);
+                            DOMWindow.document.clear();
+                            torbutton_eclog(3, 'Cleared document: '+DOMWindow.location);
                         }
-                        // This doesn't seem to actually remove the child..
-                        // It usually just causes an exception to be thrown,
-                        // which strangely enough, actually does finally 
-                        // kill the plugin.
-                        DOMWindow.document.removeChild(
-                                DOMWindow.document.firstChild);
-                    } catch(e) {
-                        torbutton_eclog(3, 'Exception on stop/clear');
                     }
-                } else {
-                    torbutton_eclog(4, 'No progress for document cancel!');
-                    // XXX: localize
-                    window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
                 }
-                torbutton_eclog(3, 'Killed plugin document');
-                return 0;
+
+                torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
+
+                // Workaround for Firefox Bug 401296
+                if((m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                            && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")
+                            && aRequest.contentType in m_tb_plugin_mimetypes)) {
+                    aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
+                    if(DOMWindow) {
+                        // ZOMG DIE DIE DXIE!!!!!@
+                        try {
+                            DOMWindow.stop();
+                            torbutton_eclog(2, 'Stopped document');
+                            DOMWindow.document.clear();
+                            torbutton_eclog(2, 'Cleared document');
+
+                            if(typeof(DOMWindow.__tb_kill_flag) == 'undefined') {
+                                // XXX: localize
+                                window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                                DOMWindow.__tb_kill_flag = true;
+                            }
+                            // This doesn't seem to actually remove the child..
+                            // It usually just causes an exception to be thrown,
+                            // which strangely enough, actually does finally 
+                            // kill the plugin.
+                            DOMWindow.document.removeChild(
+                                    DOMWindow.document.firstChild);
+                        } catch(e) {
+                            torbutton_eclog(3, 'Exception on stop/clear');
+                        }
+                    } else {
+                        torbutton_eclog(4, 'No progress for document cancel!');
+                        // XXX: localize
+                        window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                    }
+                    torbutton_eclog(3, 'Killed plugin document');
+                    return 0;
+                }
+            } else {
+                torbutton_eclog(2, 'Nonpending: '+aRequest.name);
+                torbutton_eclog(2, 'Type: '+aRequest.contentType);
             }
-        } else {
-            torbutton_eclog(2, 'Nonpending: '+aRequest.name);
-            torbutton_eclog(2, 'Type: '+aRequest.contentType);
         }
     } catch(e) {
         torbutton_eclog(3, 'Exception on request cancel');
