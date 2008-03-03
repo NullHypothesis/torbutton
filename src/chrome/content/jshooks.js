@@ -18,27 +18,24 @@ window.__HookObjects = function() {
       // like Date upon delete, allowing unmasking for that case. Talk about 
       // rock+hard place. 
       try {
-          var cE = window.navigator.cookieEnabled;
-          var lang = window.navigator.language;
-          var uA = window.navigator.userAgent;
-          var v = window.navigator.vendor;
-          var vS = window.navigator.vendorSub;
-          var jE = window.navigator.javaEnabled;
+          if(!(window.navigator.__proto__ == null) ||
+             typeof(window.navigator.__defineGetter__) === "function") {
+              var tmpNav = new Object();
+              var f;
+              for(var i in window.navigator) {
+                  tmpNav[i] = window.navigator[i];
+                  f = function() { // crazy scope hack to preserve i
+                      var holder = i;
+                      window.navigator.__defineGetter__(i, function() { return tmpNav[holder];});
+                  };
+                  f();
+              }
 
-          window.navigator.__defineGetter__("appCodeName", function() { return "Mozilla";});
-          window.navigator.__defineGetter__("appName", function() { return "Netscape";});
-          window.navigator.__defineGetter__("appVersion", function() { return "5.0";});
-          window.navigator.__defineGetter__("cookieEnabled", function() { return cE;});
-          window.navigator.__defineGetter__("language", function() { return lang;});
-          window.navigator.__defineGetter__("userAgent", function() { return uA;});
-          window.navigator.__defineGetter__("vendor", function() { return v;});
-          window.navigator.__defineGetter__("vendorSub", function() { return vS;});
-          window.navigator.__defineGetter__("javaEnabled", function() { return jE;});
-          window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
-          window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
-          window.navigator.__defineGetter__("buildID", function() { return 0;});
-          window.navigator.__proto__ = null;
-          /*navigator.__proto__.__defineGetter__("platform", function() { return tmp_platform;});*/
+              window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+              window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
+              window.navigator.__defineGetter__("buildID", function() { return 0;});
+              window.navigator.__proto__ = null;
+          }
       } catch(e) {
       }
   }
@@ -282,13 +279,7 @@ window.__HookObjects = function() {
   var wintmp = window;
   with(window.valueOf.call()) {
       for(var i in wintmp) {
-          if(i == "globalStorage" || i == "sessionStorage") {
-              //Causes an exception without this. 
-              //Disabled for now anyways.
-              tmp[i] = new Object();
-          } else {
-              tmp[i] = wintmp[i];                  
-          }
+          tmp[i] = wintmp[i];                  
       }
       try { // FF3 throws an exception here
           var __proto__ = tmp;
