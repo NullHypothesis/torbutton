@@ -1539,7 +1539,7 @@ function torbutton_hookdoc(win, doc) {
     }
 
     torbutton_log(2, "Hooking document: "+win.location);
-    if(doc.doctype) {
+    if(doc && doc.doctype) {
         torbutton_log(2, "Type: "+doc.doctype.name);
     }
     
@@ -1568,7 +1568,6 @@ function torbutton_hookdoc(win, doc) {
     str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
     str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
     str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
-    str2 += "window.__tb_block_js_history="+m_tb_prefs.getBoolPref('extensions.torbutton.block_js_history')+";\r\n";
     str2 += m_tb_jshooks;
 
     try {
@@ -1582,11 +1581,11 @@ function torbutton_hookdoc(win, doc) {
         } else if(result === 13) {
             torbutton_log(3, "Double-hook at: " + win.location);
         } else {
-            win.alert("Sandbox evaluation failed. Date hooks not applied!");
+            window.alert("Sandbox evaluation failed. Date hooks not applied!");
             torbutton_log(5, "Hook evaluation failure at " + win.location);
         }
     } catch (e) {
-        win.alert("Exception in sandbox evaluation. Date hooks not applied:\n"+e);
+        window.alert("Exception in sandbox evaluation. Date hooks not applied:\n"+e);
         torbutton_log(5, "Hook exception at: "+win.location+", "+e);
     }
 
@@ -1613,10 +1612,9 @@ function torbutton_check_progress(aProgress, aRequest) {
             DOMWindow = aRequest.notificationCallbacks.QueryInterface(
                     Components.interfaces.nsIInterfaceRequestor).getInterface(
                         Components.interfaces.nsIDOMWindow);
-        } catch(e) {
-        }
+        } catch(e) { }
     }
-
+    
     // FIXME if intstanceof nsIHttpChannel check headers for 
     // Content-Disposition..
 
@@ -1630,12 +1628,14 @@ function torbutton_check_progress(aProgress, aRequest) {
                     && chanreq instanceof Components.interfaces.nsIChannel
                     && aRequest.isPending()) {
 
-                torbutton_eclog(2, 'Pending request: '+aRequest.name);
+                try { torbutton_eclog(2, 'Pending request: '+aRequest.name); }
+                catch(e) { }
 
                 if(DOMWindow && DOMWindow.opener 
                         && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content")) {
 
-                    torbutton_eclog(3, 'Popup request: '+aRequest.name);
+                    try { torbutton_eclog(3, 'Popup request: '+aRequest.name); } 
+                    catch(e) { }
 
                     if(!(DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
                         // Workaround for Firefox bug 409737

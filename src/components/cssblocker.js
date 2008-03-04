@@ -140,9 +140,11 @@ ContentPolicy.prototype = {
         }
 
         if(!this.isolate_content) {
-            this.logger.eclog(1, "Content policy disabled");
+            this.logger.eclog(2, "Content policy disabled");
             return ok;
         }
+            
+        this.logger.log(2, "Cpolicy load of: "+contentLocation.spec+" from: "+requestOrigin.spec);
 
         // "Host-free" schemes do not have an nsIURI.host property
         if(contentLocation.scheme in hostFreeSchemes) {
@@ -151,7 +153,7 @@ ContentPolicy.prototype = {
             }
             if(requestOrigin && 
                     (requestOrigin.scheme in safeOriginSchemes)) { 
-                this.logger.eclog(1, "Skipping chrome-sourced local: "+contentLocation.spec);
+                this.logger.eclog(2, "Skipping chrome-sourced local: "+contentLocation.spec);
                 return ok;
             } else if(contentLocation.spec.toLowerCase().indexOf("torbutton") != -1 || this.tor_enabled) {
                 this.logger.eclog(4, "Blocking local: "+contentLocation.spec+" from: "+requestOrigin.spec);
@@ -180,10 +182,10 @@ ContentPolicy.prototype = {
 		// Local stuff has to be eclog because otherwise debuglogger will
         // get into an infinite log-loop w/ its chrome updates
         if (this.isLocalScheme(contentLocation.scheme)) {
-            this.logger.eclog(1, "Skipping local: "+contentLocation.spec);
+            this.logger.eclog(2, "Skipping local: "+contentLocation.spec);
 			return ok;
-        } 
-        
+        }
+
         var node = wrapNode(insecNode);
         var wind = getWindow(node);
 
@@ -232,6 +234,18 @@ ContentPolicy.prototype = {
             return block; 
         }
 
+        // For javascript links (and others?) the normal http events
+        // for the weblistener in torbutton.js are suppressed
+        if(tor_state && node instanceof Ci.nsIDOMWindow) {
+            var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                         .getService(Components.interfaces.nsIWindowMediator);
+            var chrome = wm.getMostRecentWindow("navigator:browser");
+
+            this.logger.eclog(2, "Hooking iframe domwindow");
+            // It doesn't really matter which chome window does the hooking.
+            chrome.torbutton_hookdoc(node, null);
+        }
+
         // source window of browser chrome window with a document content
         // type means the user entered a new URL.
         if(wind.top instanceof Components.interfaces.nsIDOMChromeWindow) {
@@ -259,7 +273,7 @@ ContentPolicy.prototype = {
                         if(browser.__tb_tor_fetched == tor_state) {
                             return ok;
                         } else {
-                            this.logger.log(3, "Blocking redirect: "+contentLocation.spec);
+                            this.logger.log(4, "Blocking redirect: "+contentLocation.spec);
                             return block;
                         }
                     }
@@ -271,7 +285,7 @@ ContentPolicy.prototype = {
         if(browser.__tb_tor_fetched == tor_state) {
             return ok;
         } else {
-            this.logger.log(3, "Blocking: "+contentLocation.spec);
+            this.logger.log(4, "Blocking: "+contentLocation.spec);
             return block;
         }
 	},
