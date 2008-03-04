@@ -1,3 +1,10 @@
+1.1.16
+  03 Mar 2008
+  * bugfix: Fix yet more javascript unmasking issues found by Greg.
+    Date is still unmaskable.
+  * bugfix: Close tabs *before* toggling proxy settings if pref is set.
+  * bugfix: Fix a couple exceptions thrown on resizing and plugin canceling
+
 1.1.15
   26 Feb 2008
   * bugfix: Fix hook unmasking of window.screen, window.history,
