@@ -978,6 +978,39 @@ function torbutton_toggle_jsplugins(tor_enabled, isolate_dyn, kill_plugins) {
     }
 }
 
+function tbHistoryListener(browser) {
+    this.browser = browser;
+
+    this.f1 = function() {
+        if(this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+            torbutton_log(3, "Blocking history manipulation");
+            window.alert("Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n");
+            return false;
+        } else {
+            return true;
+        }
+    };
+}
+
+tbHistoryListener.prototype = {
+    QueryInterface: function(iid) {
+        // XXX: Is this the right way to handle weak references from JS?
+        if(iid.equals(Components.interfaces.nsISHistoryListener) || 
+                iid.equals(Components.interfaces.nsISupports) ||
+                iid.equals(Components.interfaces.nsISupportsWeakReference))
+            return this;
+        else
+            return null;
+    },
+
+    OnHistoryGoBack: function(url) { return this.f1(); },
+    OnHistoryGoForward: function(url) { return this.f1(); },
+    OnHistoryGotoIndex: function(idx, url) { return this.f1(); }, 
+    OnHistoryNewEntry: function(url) { return true; },
+    OnHistoryPurge: function(ents) { return true; },
+    OnHistoryReload: function(uri,flags) { return this.f1(); }
+};
+
 function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     if (!tor_tag && no_plugins) {
         browser.docShell.allowPlugins = tor_tag;
@@ -987,6 +1020,17 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         torbutton_log(3, "Tagging new window: "+tor_tag);
         browser.__tb_tor_fetched = !tor_tag;
+
+        /*
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserAccess");
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");     
+        */
+
+        // XXX: Do we need to remove this listener on tab close?
+        var hlisten = new tbHistoryListener(browser);
+        browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
+        browser.__tb_hlistener = hlisten;
+        torbutton_log(2, "Added history listener");
     }
 }
 
@@ -1200,6 +1244,7 @@ function torbutton_get_plugin_mimetypes()
     }
 }
 
+
 function torbutton_new_tab(event)
 { 
     // listening for new tabs
@@ -1399,6 +1444,7 @@ function torbutton_is_same_origin(source, target) { // unused.
     }
 }
 
+
 function torbutton_update_tags(win) {
     torbutton_eclog(2, "Updating tags.");
     if(typeof(win.wrappedJSObject) == 'undefined') {
@@ -1429,6 +1475,35 @@ function torbutton_update_tags(win) {
     if (!torbutton_check_flag(win.top, "__tb_did_tag")) {
         torbutton_log(2, "Tagging browser for: " + win.location);
         torbutton_set_flag(win.top, "__tb_did_tag");
+
+        if(typeof(browser.__tb_tor_fetched) == "undefined") {
+            torbutton_log(5, "Untagged browser at: "+win.location);
+        } else if(browser.__tb_tor_fetched != !tor_tag) {
+            // Purge session history every time we fetch a new doc 
+            // in a new tor state
+            torbutton_log(2, "Purging session history");
+            if(browser.webNavigation.sessionHistory.count > 1) {
+                // XXX: This isn't quite right.. For some reason
+                // this breaks in some cases..
+                /*
+                var current = browser.webNavigation
+                    .QueryInterface(Components.interfaces.nsIDocShellHistory)
+                    .getChildSHEntry(0).clone(); // XXX: Use index??
+                    */
+                var current = browser.webNavigation.contentViewer.historyEntry;
+
+                browser.webNavigation.sessionHistory.PurgeHistory(
+                        browser.webNavigation.sessionHistory.count);
+
+                if(current) {
+                    // Add current page back in
+                    browser.webNavigation
+                        .QueryInterface(Components.interfaces.nsISHistoryInternal)
+                        .addChildSHEntry(current, true);
+                }
+            }
+        }
+
         browser.__tb_tor_fetched = !tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
         browser.docShell.allowJavascript = js_enabled;

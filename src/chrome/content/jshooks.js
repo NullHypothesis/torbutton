@@ -81,38 +81,6 @@ window.__HookObjects = function() {
       }
   }
 
-  // This can potentially be done by hooking shistory;1 component, but
-  // this is simpler and less code.
-  if(window.__tb_block_js_history===true) {
-      var hold = window.history;
-      var hmine = new Object();
-      var ran = 0;
-
-      hmine.__defineGetter__("length", function() { return 0; });
-      var window_alert = window.alert; // save reference to avoid code injection
-      var f = function() {
-          if(!ran) {
-              ran = 1;
-              // XXX: Also needs localization
-              window_alert("Torbutton blocked Javascript history manipulation.\n\nSee history settings to allow.\n\n");
-          }
-      }
-      hmine.back = f;
-      hmine.forward = f;
-      hmine.go = f;
-
-      window.__defineGetter__("history", function() { return hmine; });
-      window.__defineSetter__("history", function(a) { return; });
-      window.__proto__.__defineGetter__("history", function() { return hmine; });
-
-      // Needed for Firefox bug 418983:
-      with(window) {
-        var history = hmine;
-      }
-
-  }
-
-
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
     /* Rules:
