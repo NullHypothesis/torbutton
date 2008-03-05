@@ -68,21 +68,26 @@ function wrapNode(insecNode) {
 	return fakeFactory.createInstance(insecNode, Components.interfaces.nsISupports);
 }
 
+function make_nsIURI(url) {
+    var nsiuri = Cc["@mozilla.org/network/standard-url;1"].createInstance(Ci.nsIStandardURL);
+    nsiuri.init(Ci.nsIStandardURL.URLTYPE_STANDARD, -1, url, null, null);
+    return nsiuri;
+}
+
 // Unwraps jar:, view-source: and wyciwyg: URLs, returns the contained URL
-// This is no longer needed. These urls are now blocked by mozilla,
-// or treated as normal network urls
-function unwrapURL(url) {
+function unwrapURL(url, changed) {
 	if (!url)
 		return url;
 
-	var ret = url.replace(/^view-source:/).replace(/^wyciwyg:\/\/\d+\//);
+	var ret = url.replace(/^view-source:/, "").replace(/^wyciwyg:\/\/\d+\//, "");
 	if (/^jar:(.*?)!/.test(ret))
 		ret = RegExp.$1;
 
 	if (ret == url)
-		return url;
-	else
-		return unwrapURL(ret);
+        if(changed) return make_nsIURI(url);
+        else return url;
+    else
+		return unwrapURL(ret, true);
 }
 
 var localSchemes = {"about" : true, "chrome" : true, "file" : true, 
@@ -146,6 +151,13 @@ ContentPolicy.prototype = {
             
         this.logger.log(2, "Cpolicy load of: "+contentLocation.spec+" from: "+requestOrigin.spec);
 
+        var utmp = unwrapURL(contentLocation.spec, false);
+        if(utmp instanceof Ci.nsIURI) {
+            utmp = utmp.QueryInterface(Ci.nsIURI);            
+            contentLocation = utmp;
+            this.logger.log(2, "Unwrapped cpolicy load of: "+contentLocation.spec+" from: "+requestOrigin.spec);
+        }
+
         // "Host-free" schemes do not have an nsIURI.host property
         if(contentLocation.scheme in hostFreeSchemes) {
             if(!requestOrigin) {
@@ -155,7 +167,7 @@ ContentPolicy.prototype = {
                     (requestOrigin.scheme in safeOriginSchemes)) { 
                 this.logger.eclog(2, "Skipping chrome-sourced local: "+contentLocation.spec);
                 return ok;
-            } else if(contentLocation.spec.toLowerCase().indexOf("torbutton") != -1 || this.tor_enabled) {
+            } else if(this.tor_enabled) {
                 this.logger.eclog(4, "Blocking local: "+contentLocation.spec+" from: "+requestOrigin.spec);
                 return block;
             }
