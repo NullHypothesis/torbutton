@@ -1,3 +1,4 @@
+/* -*- Mode: javascript; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; -*- */
 /*************************************************************************
  * Content policy to block stuff not handled by other components
  * (such as CSS)
@@ -80,7 +81,7 @@ function unwrapURL(url, changed) {
 		return url;
 
 	var ret = url.replace(/^view-source:/, "").replace(/^wyciwyg:\/\/\d+\//, "");
-	if (/^jar:(.*?)!/.test(ret))
+	if (/^jar:(.*)!/.test(ret))
 		ret = RegExp.$1;
 
 	if (ret == url)
@@ -92,15 +93,13 @@ function unwrapURL(url, changed) {
 
 var localSchemes = {"about" : true, "chrome" : true, "file" : true, 
     "resource" : true, "x-jsd" : true, "addbook" : true, 
-    "mailbox" : true};
+    "mailbox" : true, "moz-icon" : true};
 
 var browserSources = { "browser":true, "mozapps":true, "global":true, 
      "pippki":true, "branding":true};
 
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
      "file":true, "view-source":true};
-
-var safeOriginSchemes = { "about":true, "chrome":true, "file":true};
 
 function ContentPolicy() {
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -149,53 +148,100 @@ ContentPolicy.prototype = {
             return ok;
         }
             
-        this.logger.log(2, "Cpolicy load of: "+contentLocation.spec+" from: "+requestOrigin.spec);
+        this.logger.log(2, "Cpolicy load of: "+contentLocation.spec+" from: "+
+                        (( null == requestOrigin ) ? "<null>" : requestOrigin.spec));
 
         var utmp = unwrapURL(contentLocation.spec, false);
         if(utmp instanceof Ci.nsIURI) {
             utmp = utmp.QueryInterface(Ci.nsIURI);            
             contentLocation = utmp;
-            this.logger.log(2, "Unwrapped cpolicy load of: "+contentLocation.spec+" from: "+requestOrigin.spec);
+            this.logger.log(2, "Unwrapped cpolicy load of: "+contentLocation.spec+" from: "+
+                            (( null == requestOrigin ) ? "<null>" : requestOrigin.spec));
         }
 
-        // "Host-free" schemes do not have an nsIURI.host property
-        if(contentLocation.scheme in hostFreeSchemes) {
-            if(!requestOrigin) {
-                this.logger.eclog(5, "NO ORIGIN! Chrome: "+contentLocation.spec);
-            }
-            if(requestOrigin && 
-                    (requestOrigin.scheme in safeOriginSchemes)) { 
-                this.logger.eclog(2, "Skipping chrome-sourced local: "+contentLocation.spec);
-                return ok;
-            } else if(this.tor_enabled) {
-                this.logger.eclog(4, "Blocking local: "+contentLocation.spec+" from: "+requestOrigin.spec);
+        if (!requestOrigin || !requestOrigin.scheme) {
+            if (this.tor_enabled) {
+                // in FF3, at startup requestOrigin is not set
+                if (("chrome" == contentLocation.scheme) && (contentLocation.host in browserSources)) {
+                    this.logger.eclog(1, "Allowing browser chrome request from: " +
+                                      "<null>" + " for: " +
+                                      contentLocation.spec);
+                    return ok;
+                }
+                this.logger.eclog(4, "NO ORIGIN! Blockng request for: "+contentLocation.spec);
                 return block;
             }
-        } else if(contentLocation.schemeIs("chrome")) { 
-            if(!requestOrigin) {
-                if(contentLocation.host != "pippki") {
-                    this.logger.eclog(5, "NO ORIGIN! Chrome: "+contentLocation.spec);
+        } else {
+            // rules based on request origin:
+            // 1) privileged schemes can access anything
+            // 2) locally privileged schemes can access local content
+            // 3) forbidden schemes should be blocked
+            // 4) all others cannot access any (unwrapped) local content
+            //    exceptions:
+            //    4a) any content can potentially access 'about:blank'
+            //    4b) browser chrome requests are allowed
+            // 
+            switch (requestOrigin.scheme) {
+            case "chrome":
+            case "about":
+            case "resource":
+                // privileged
+                // NOTE: don't log, chrome fills error console with chrome requests
+                return ok;
+                break;
+            case "view-source":
+            case "file":
+                // locally privileged
+                if ((contentLocation.scheme in localSchemes) ||
+                    (contentLocation.scheme in hostFreeSchemes)) {
+                    this.logger.eclog(1, "Accepted request from locally privileged scheme: " +
+                                      requestOrigin.scheme + " for: " +
+                                      contentLocation.spec);
+                    return ok;
+                } else {
+                    if (this.tor_enabled) {
+                        this.logger.eclog(3, "Blocking remote request from: " +
+                                          requestOrigin.spec + " for: " +
+                                          contentLocation.spec);
+                        return block;
+                    }
                 }
-            }
-
-            if((!requestOrigin || !requestOrigin.schemeIs("chrome")) 
-                    && !(contentLocation.host in browserSources)) {
-                // Prevent access to all but the browser source chrome from websites
-                this.logger.eclog(2, "Source: "+ contentLocation.host + ". Chrome: "+contentLocation.spec+" from: "+requestOrigin.spec);
-                if(contentLocation.host  == "torbutton" || this.tor_enabled) {
-                    // Always conceal torbutton's presence. Conceal 
-                    // other stuff only if tor is enabled though.
-                    this.logger.eclog(4, "Blocking source: "+contentLocation.host+ ". Chrome: "+contentLocation.spec+" from: "+requestOrigin.spec);
+                break;
+            case "moz-nullprincipal":
+                // forbidden
+                // XXX: 
+                if (this.tor_enabled) {
+                    this.logger.eclog(3, "Blocking request from: " +
+                                      requestOrigin.spec + " for: " +
+                                      contentLocation.spec);
                     return block;
                 }
-            }
-        }
+                break;
+            default:
+                if (contentLocation.scheme in localSchemes) {
+                    var targetScheme = contentLocation.scheme;
+                    var targetHost = "";
+                    if ( !(contentLocation.scheme in hostFreeSchemes) ) {
+                        targetHost = contentLocation.host;
+                    }
 
-		// Local stuff has to be eclog because otherwise debuglogger will
-        // get into an infinite log-loop w/ its chrome updates
-        if (this.isLocalScheme(contentLocation.scheme)) {
-            this.logger.eclog(2, "Skipping local: "+contentLocation.spec);
-			return ok;
+                    if (("about:blank" == contentLocation.spec)) {
+                        // ok, but don't return
+                    } else if (("chrome" == targetScheme) && (targetHost in browserSources)) {
+                        this.logger.eclog(1, "Allowing browser chrome request from: " +
+                                          requestOrigin.spec + " for: " +
+                                          contentLocation.spec);
+                        return ok;
+                    } else {
+                        if (this.tor_enabled || ("torbutton" == targetHost)) {
+                            this.logger.eclog(3, "Blocking local request from: " +
+                                              requestOrigin.spec + " for: " +
+                                              contentLocation.spec);
+                            return block;
+                        }
+                    }
+                }
+            }
         }
 
         var node = wrapNode(insecNode);
