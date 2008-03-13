@@ -1594,7 +1594,7 @@ Browser context is difficult to obtain from many XPCOM callbacks</ulink>
 
 It is difficult to determine which tabbrowser many XPCOM callbacks originate
 from, and in some cases absolutely no context information is provided at all.
-While this doesn't have much of an affect on Torbutton, it does make writing
+While this doesn't have much of an effect on Torbutton, it does make writing
 extensions that would like to do per-tab settings and content filters (such as
 FoxyProxy) difficult to impossible.
 
