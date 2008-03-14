@@ -627,6 +627,10 @@ function torbutton_update_status(mode, force_update) {
     // so no need to keep it around for someone to rifle through.
     m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
 
+    // Disable safebrowsing in Tor. It fetches some info in cleartext
+    // with no HMAC (Firefox Bug 360387)
+    m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
+
     // I think this pref is evil (and also hidden from user configuration, 
     // which makes it extra evil) and so therefore am disabling it 
     // by fiat for both tor and non-tor. Basically, I'm not willing 

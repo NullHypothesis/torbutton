@@ -10,7 +10,6 @@
   * misc: Improve window resizing to only resize on document load,
     and to try to address drift by remembering window sizes
   * misc: Clear session history if clear history on tor toggle is set
-  * misc: Re-enable safebrowsing updates during Tor
   * new: Remove history hooks in favor of nsISHistoryListeners that
     prevent history navigation from alternate Tor states
 
