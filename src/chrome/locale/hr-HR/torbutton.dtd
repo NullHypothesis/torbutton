@@ -72,3 +72,4 @@
 <!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
 <!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 <!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
+<!ENTITY torbutton.prefs.block_links        "Block link and reload access from different Tor states (optional)">
