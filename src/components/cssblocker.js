@@ -119,6 +119,7 @@ function ContentPolicy() {
 
     this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
     this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    this.block_file_net = this._prefs.getBoolPref("extensions.torbutton.block_file_net");
     this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
     return;
@@ -199,7 +200,7 @@ ContentPolicy.prototype = {
                                       contentLocation.spec);
                     return ok;
                 } else {
-                    if (this.tor_enabled) {
+                    if (this.block_file_net) {
                         this.logger.eclog(3, "Blocking remote request from: " +
                                           requestOrigin.spec + " for: " +
                                           contentLocation.spec);
@@ -373,6 +374,9 @@ ContentPolicy.prototype = {
                 break;
             case "extensions.torbutton.tor_enabled":
                 this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+                break;
+            case "extensions.torbutton.block_file_net":
+                this.block_file_net = this._prefs.getBoolPref("extensions.torbutton.block_file_net");
                 break;
             case "extensions.torbutton.no_tor_plugins":
                 this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");

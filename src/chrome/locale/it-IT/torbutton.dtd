@@ -71,3 +71,4 @@
 <!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
 <!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
 <!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
+<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">

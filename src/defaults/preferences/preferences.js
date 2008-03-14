@@ -87,3 +87,4 @@ pref("extensions.torbutton.productsub_override","20080201");
 pref("extensions.torbutton.useragent_vendor", "");
 pref("extensions.torbutton.useragent_vendorSub","");
 pref("extensions.torbutton.banned_ports","8118,8123,9050,9051");
+pref("extensions.torbutton.block_file_net",true);
