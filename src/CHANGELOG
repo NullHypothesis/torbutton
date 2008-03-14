@@ -1,3 +1,19 @@
+1.1.7
+  ?? Mar 2008
+  * bugfix: Improve chrome disclosure protection (patch from Greg Fleischer)
+  * bugfix: Block network access from file urls to workaround Firefox 
+    'Content-Disposition' file stealing attack (found/fixed by Greg)
+  * bugfix: Apply Javascript hooks to javascript: urls (found by Greg)
+  * bugfix: Improve Torbutton chrome concealment (found by Greg)
+  * bugfix: Use 127.0.0.1 instead of localhost for IPv6 users
+  * bugfix: Don't resize maximized windows
+  * misc: Improve window resizing to only resize on document load,
+    and to try to address drift by remembering window sizes
+  * misc: Clear session history if clear history on tor toggle is set
+  * misc: Re-enable safebrowsing updates during Tor
+  * new: Remove history hooks in favor of nsISHistoryListeners that
+    prevent history navigation from alternate Tor states
+
 1.1.16
   03 Mar 2008
   * bugfix: Fix yet more javascript unmasking issues found by Greg.
