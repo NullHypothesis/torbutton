@@ -142,6 +142,8 @@
           </tabpanel>
           <tabpanel id="history">
            <vbox>
+          <checkbox id="torbutton_blockJSHistory" label="&torbutton.prefs.block_js_history;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_blockTorHRead" label="&torbutton.prefs.block_thread;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_blockTorHWrite" label="&torbutton.prefs.block_thwrite;" 
@@ -151,8 +153,6 @@
           <checkbox id="torbutton_blockNonTorHWrite" label="&torbutton.prefs.block_nthwrite;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_clearHistory" label="&torbutton.prefs.clear_history;" 
-                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
-          <checkbox id="torbutton_blockJSHistory" label="&torbutton.prefs.block_js_history;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
