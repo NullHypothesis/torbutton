@@ -9,6 +9,9 @@ var m_tb_jshooks = false;
 var m_tb_plugin_mimetypes = false;
 var m_tb_is_main_window = false;
 
+var m_tb_window_height = 0;
+var m_tb_window_width = 0;
+
 var torbutton_window_pref_observer =
 {
     register: function()
@@ -624,10 +627,6 @@ function torbutton_update_status(mode, force_update) {
     // so no need to keep it around for someone to rifle through.
     m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
 
-    // Disable safebrowsing in Tor. It fetches some info in cleartext 
-    m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
-
-
     // I think this pref is evil (and also hidden from user configuration, 
     // which makes it extra evil) and so therefore am disabling it 
     // by fiat for both tor and non-tor. Basically, I'm not willing 
@@ -699,20 +698,6 @@ function torbutton_update_status(mode, force_update) {
 
     torbutton_log(2, "Prefs pretty much done");
     
-    // If the window is not maximized (sizemode)
-    if(mode && torprefs.getBoolPref("resize_on_toggle")) {
-        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-            .getService(Components.interfaces.nsIWindowMediator);
-        var enumerator = wm.getEnumerator("navigator:browser");
-        while(enumerator.hasMoreElements()) {
-            var win = enumerator.getNext();
-            if(win.windowState 
-                == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
-                torbutton_floor_or_round(win.getBrowser());
-            }
-        }
-    }
-
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
@@ -891,7 +876,26 @@ function torbutton_clear_history() {
     torbutton_log(2, 'called torbutton_clear_history');
     var hist = Components.classes["@mozilla.org/browser/global-history;2"]
                     .getService(Components.interfaces.nsIBrowserHistory);
-    hist.removeAllPages();    
+    hist.removeAllPages();
+
+    // Clear individual session histories also
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                       .getService(Components.interfaces.nsIWindowMediator);
+    var enumerator = wm.getEnumerator("navigator:browser");
+    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        var browser = win.getBrowser();
+        var browsers = browser.browsers;
+        torbutton_log(1, "Toggle window plugins");
+
+        for (var i = 0; i < browsers.length; ++i) {
+            var b = browser.browsers[i];
+
+            b.webNavigation.sessionHistory.PurgeHistory(
+                    b.webNavigation.sessionHistory.count);
+        }
+    }
 }
 
 function torbutton_clear_cookies() {
@@ -982,8 +986,10 @@ function tbHistoryListener(browser) {
     this.browser = browser;
 
     this.f1 = function() {
-        if(this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+        if(this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
             torbutton_log(3, "Blocking history manipulation");
+            // XXX: localize
             window.alert("Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n");
             return false;
         } else {
@@ -1021,16 +1027,24 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
         torbutton_log(3, "Tagging new window: "+tor_tag);
         browser.__tb_tor_fetched = !tor_tag;
 
-        /*
-        netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserAccess");
-        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");     
-        */
-
         // XXX: Do we need to remove this listener on tab close?
         var hlisten = new tbHistoryListener(browser);
-        browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
-        browser.__tb_hlistener = hlisten;
-        torbutton_log(2, "Added history listener");
+
+        var sessionSetter = function() {
+            if(!browser.webNavigation.sessionHistory) {
+                torbutton_log(4, "Still failed to add historyListener!");
+            }
+            browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
+            browser.__tb_hlistener = hlisten;
+            torbutton_log(2, "Added history listener");
+        }
+        
+        if(browser.webNavigation.sessionHistory) {
+            sessionSetter();
+        } else {
+            torbutton_log(3, "Delayed session setter");
+            window.setTimeout(sessionSetter, 500); 
+        }
     }
 }
 
@@ -1253,39 +1267,10 @@ function torbutton_new_tab(event)
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
     var browser = event.currentTarget;
 
-    // The second tab of a window shrinks our content window by some number
-    // of pix because of the tab array. Resize the content window back up
-    // to compensate.
-    if(browser.browsers.length == 2) {
-        if(!tor_tag && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-            // Round up
-            torbutton_log(2, "Rounding up tab");
-            browser.contentWindow.innerHeight = Math.ceil(browser.contentWindow.innerHeight/50.0)*50;
-            browser.contentWindow.innerWidth = Math.ceil(browser.contentWindow.innerWidth/50.0)*50;
-        }
-    }
-
     // Fucking garbage.. event is delivered to the current tab, not the 
     // newly created one. Need to traverse the current window for it.
     for (var i = 0; i < browser.browsers.length; ++i) {
         torbutton_tag_new_browser(browser.browsers[i], tor_tag, no_plugins);
-    }
-}
-
-function torbutton_close_tab(event)
-{
-    // Also need to resize the last tab of a window down so that 
-    // the window doesn't keep growing.
-    var browser = event.currentTarget;
-    torbutton_log(2, "Close tab: "+browser.browsers.length);
-    if(browser.browsers.length == 2 
-            && m_tb_prefs.getBoolPref("browser.tabs.autoHide")) {
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-           && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-            torbutton_log(2, "Rounding down tab");
-            browser.contentWindow.innerHeight = Math.floor(browser.contentWindow.innerHeight/50.0)*50;
-            browser.contentWindow.innerWidth = Math.floor(browser.contentWindow.innerWidth/50.0)*50;
-        }
     }
 }
 
@@ -1301,23 +1286,28 @@ function torbutton_do_resize(ev)
             bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
         }
     }
+
+    m_tb_window_height = window.height;
+    m_tb_window_width = window.width;
 }
 
-function torbutton_floor_or_round(browser) 
+function torbutton_check_round(browser) 
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-        // Round down on single tab windows, because it usually remembers the size
-        // when tabs were displayed (thus making the content window slightly larger)
-        if((!browser.browsers || browser.browsers.length == 1) && m_tb_prefs.getBoolPref("browser.tabs.autoHide")) {
-            torbutton_log(2, "Rounding down new window");
-            browser.contentWindow.innerHeight = Math.floor(browser.contentWindow.innerHeight/50.0)*50;
-            browser.contentWindow.innerWidth = Math.floor(browser.contentWindow.innerWidth/50.0)*50;
-        } else {
-            torbutton_log(2, "Resizing window");
-            browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
-            browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
+        
+        if(Math.abs(browser.contentWindow.innerHeight - 
+           Math.floor(Math.round(browser.contentWindow.innerHeight/50.0)*50))
+           > 0.1) {
+            torbutton_log(2, "Restoring orig window size");
+            window.height = m_tb_window_height;
+            window.width = m_tb_window_width;
         }
+
+        // Always round.
+        torbutton_log(2, "Resizing window");
+        browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
+        browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
     }
 }
 
@@ -1338,7 +1328,9 @@ function torbutton_new_window(event)
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
-    torbutton_floor_or_round(window.getBrowser());
+    m_tb_window_height = window.height;
+    m_tb_window_width = window.width;
+
     window.addEventListener("resize", torbutton_do_resize, false);
 }
 
@@ -1380,7 +1372,6 @@ function torbutton_close_window(event) {
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
 getBrowser().addEventListener("TabOpen", torbutton_new_tab, false);
-getBrowser().addEventListener("TabClose", torbutton_close_tab, false);
 
 
 // ----------- JAVASCRIPT HOOKING + EVENT HANDLERS ----------------
@@ -1482,7 +1473,8 @@ function torbutton_update_tags(win) {
             // Purge session history every time we fetch a new doc 
             // in a new tor state
             torbutton_log(2, "Purging session history");
-            if(browser.webNavigation.sessionHistory.count > 1) {
+            if(browser.webNavigation.sessionHistory.count > 1
+                    && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
                 // XXX: This isn't quite right.. For some reason
                 // this breaks in some cases..
                 /*
@@ -1510,7 +1502,7 @@ function torbutton_update_tags(win) {
 
         // We need to do the resize here as well in case the window
         // was minimized during toggle...
-        torbutton_floor_or_round(browser);
+        torbutton_check_round(browser);
     }
 
     torbutton_log(2, "Tags updated.");
