@@ -985,12 +985,14 @@ function torbutton_toggle_jsplugins(tor_enabled, isolate_dyn, kill_plugins) {
 function tbHistoryListener(browser) {
     this.browser = browser;
 
+    var o_stringbundle = torbutton_get_stringbundle();
+    var warning = o_stringbundle.GetStringFromName("torbutton.popup.history.warning");
+
     this.f1 = function() {
         if(this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
                 && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
             torbutton_log(3, "Blocking history manipulation");
-            // XXX: localize
-            window.alert("Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n");
+            window.alert(warning);
             return false;
         } else {
             return true;
@@ -1659,6 +1661,8 @@ function torbutton_check_progress(aProgress, aRequest) {
                             && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")
                             && aRequest.contentType in m_tb_plugin_mimetypes)) {
                     aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
+                    var o_stringbundle = torbutton_get_stringbundle();
+                    var warning = o_stringbundle.GetStringFromName("torbutton.popup.plugin.warning");
                     if(DOMWindow) {
                         // ZOMG DIE DIE DXIE!!!!!@
                         try {
@@ -1668,8 +1672,7 @@ function torbutton_check_progress(aProgress, aRequest) {
                             torbutton_eclog(2, 'Cleared document');
 
                             if(typeof(DOMWindow.__tb_kill_flag) == 'undefined') {
-                                // XXX: localize
-                                window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                                window.alert(warning);
                                 DOMWindow.__tb_kill_flag = true;
                             }
                             // This doesn't seem to actually remove the child..
@@ -1683,8 +1686,7 @@ function torbutton_check_progress(aProgress, aRequest) {
                         }
                     } else {
                         torbutton_eclog(4, 'No progress for document cancel!');
-                        // XXX: localize
-                        window.alert("Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n");
+                        window.alert(warning);
                     }
                     torbutton_eclog(3, 'Killed plugin document');
                     return 0;
