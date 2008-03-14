@@ -292,7 +292,7 @@ function torbutton_init_prefs() {
 
     if (torprefs.getBoolPref('use_privoxy'))
     {
-        proxy_host = 'localhost';
+        proxy_host = '127.0.0.1';
         proxy_port = 8118;
     }
     else
@@ -324,7 +324,7 @@ function torbutton_init_prefs() {
             torprefs.setIntPref('ftp_port', proxy_port);
             torprefs.setIntPref('gopher_port', proxy_port);
         }
-        torprefs.setCharPref('socks_host', 'localhost');
+        torprefs.setCharPref('socks_host', '127.0.0.1');
         torprefs.setIntPref('socks_port', 9050);
     }
 

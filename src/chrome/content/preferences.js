@@ -23,7 +23,7 @@ function torbutton_prefs_set_field_attributes(doc)
     var proxy_port;
     var proxy_host;
     if (doc.getElementById('torbutton_usePrivoxy').checked) {
-        proxy_host = 'localhost';
+        proxy_host = '127.0.0.1';
         proxy_port = 8118;
     } else {
         proxy_host = '';
@@ -52,7 +52,7 @@ function torbutton_prefs_set_field_attributes(doc)
             doc.getElementById('torbutton_gopherProxy').value = '';
             doc.getElementById('torbutton_gopherPort').value = 0;
         }
-        doc.getElementById('torbutton_socksHost').value = 'localhost';
+        doc.getElementById('torbutton_socksHost').value = '127.0.0.1';
         doc.getElementById('torbutton_socksPort').value = 9050;
 
         doc.getElementById('torbutton_httpProxy').disabled = true;
