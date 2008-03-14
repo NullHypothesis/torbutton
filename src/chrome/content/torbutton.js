@@ -1295,7 +1295,9 @@ function torbutton_do_resize(ev)
 
 function torbutton_check_round(browser) 
 {
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+    if(window.windowState 
+                == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL
+            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
         
         if(Math.abs(browser.contentWindow.innerHeight - 
