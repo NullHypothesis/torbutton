@@ -1,5 +1,5 @@
 1.1.7
-  ?? Mar 2008
+  15 Mar 2008
   * bugfix: Improve chrome disclosure protection (patch from Greg Fleischer)
   * bugfix: Block network access from file urls to workaround Firefox 
     'Content-Disposition' file stealing attack (found/fixed by Greg)
