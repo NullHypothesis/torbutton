@@ -110,7 +110,7 @@ Google search plugins for
 <p>
 Torbutton is a 1-click way for Firefox users to enable or disable the browser's use of <a href="https://www.torproject.org/">Tor</a>.  It adds a panel to the statusbar that says "Tor Enabled" (in green) or "Tor Disabled" (in red).  The user may click on the panel to toggle the status.  If the user (or some other extension) changes the proxy settings, the change is automatically reflected in the statusbar.
 </p><p>
-Some users may prefer a toolbar button instead of a statusbar panel.  Such a button is included, and one adds it to the toolbar by right-clicking on the desired toolbar, selecting "Customize...", and then dragging the Torbutton icon onto the toolbar.  There is an option in the preferences to hide the statusbar panel (Tools->Extensions, select Torbutton, and click on Preferences).
+Some users may prefer a toolbar button instead of a statusbar panel.  Such a button is included, and one adds it to the toolbar by right-clicking on the desired toolbar, selecting "Customize...", and then dragging the Torbutton icon onto the toolbar.  There is an option in the preferences to hide the statusbar panel (Tools-&gt;Extensions, select Torbutton, and click on Preferences).
 </p>
 <p>
 Newer Firefoxes have the ability to send DNS resolves through the socks proxy, and Torbutton will make use of this feature if it is available in your version of Firefox.
@@ -152,6 +152,12 @@ pages to hook the Date object to mask your timezone, and to hook the navigator
 object to mask OS and user agent properties not handled by the standard
 Firefox user agent override settings.
 
+  <li>Resize window dimensions to multiples of 50px on toggle (recommended)</li>
+
+To cut down on the amount of state available to fingerprint users uniquely, 
+this pref causes windows to be resized to a multiple of 50 pixels on each
+side when Tor is enabled and pages are loaded.
+
   <li>Disable Updates During Tor (recommended)</li>
 
 Many extension authors do not update their extensions from SSL-enabled
@@ -163,6 +169,31 @@ replace them with malicious ones, or add malicious code to existing extensions.
 This optional setting governs if you get Google search suggestions during Tor
 usage. Since no cookie is transmitted during search suggestions, this is a
 relatively benign behavior.
+
+  <li>Block access to network from file:// urls (recommended)</li>
+
+This setting prevents local html documents from transmitting local files to
+arbitrary websites <a href="http://www.gnucitizen.org/blog/content-disposition-hacking/">under Firefox 2</a>. Since exit nodes can insert headers that
+force the browser to save arbitrary pages locally (and also inject script into
+arbitrary html files you save to disk via Tor), it is probably a good idea to
+leave this setting on until Firefox 3 is released.
+
+  <li>Close all Non-Tor/Tor windows and tabs on toggle (optional)</li>
+
+These two settings allow you to obtain a greater degree of assurance that
+after you toggle out of Tor, the pages are really gone and can't perform any
+extra network activity. Currently, there is no known way that pages can still
+perform activity after toggle, but these options exist as a backup measure
+just in case a flaw is discovered. They can also serve as a handy 'Boss
+Button' feature for clearing all Tor browsing off your screen in a hurry.
+
+  <li>Isolate access to history navigation to Tor state (crucial)</li>
+
+This setting prevents both Javascript and accidental user clicks from causing
+the session history to load pages that were fetched in a different Tor state
+than the current one. Since this can be used to correlate Tor and Non-Tor
+activity and thus determine your IP address, it is marked as a crucial 
+setting.
 
   <li>Block History Reads during Tor (crucial)</li>
 
@@ -225,7 +256,7 @@ Non-Tor usage.
   <li>Store both Non-Tor and Tor cookies in a protected jar (dangerous)</li>
 
   This option stores your persistent Tor and Non-Tor cookies 
-  seperate cookie jar files. Note that it is a bad idea to keep Tor
+  separate cookie jar files. Note that it is a bad idea to keep Tor
   cookies around for any length of time, as they can be retrieved by exit
   nodes that inject spoofed forms into plaintext pages you fetch.
 
@@ -241,10 +272,14 @@ pages at the time!).
   <li>Disable DOM Storage during Tor usage (crucial)</li>
 
   Firefox has recently added the ability to store additional state and
-  identifiers in persistant tables, called <a
+  identifiers in persistent tables, called <a
   href="http://developer.mozilla.org/en/docs/DOM:Storage">DOM Storage</a>.
   Obviously this can compromise your anonymity if stored content can be
   fetched across Tor-state.
+
+  <li>Clear HTTP auth sessions (recommended)</li>
+
+  HTTP authentication credentials can be probed by exit nodes and used to both confirm that you visit a certain site that uses HTTP auth, and also impersonate you on this site. 
 
   <li>Clear cookies on Tor/Non-Tor shutdown</li>
 
@@ -292,17 +327,19 @@ exposed user agent override preferences.
 This option causes Firefox to send http headers as if it were an English
 browser. Useful for internationalized users.
 
-  <li>Don't send referer during Tor Usage</li>
+  <li>Don't send referrer during Tor Usage</li>
 
-This option disables the referer header, preventing sites from determining
+This option disables the referrer header, preventing sites from determining
 where you came from to visit them. This can break some sites, however. <a
 href="http://www.digg.com">Digg</a> in particular seemed to be broken by this.
-A more streamlined, less instrusive version of this option should be available
+A more streamlined, less intrusive version of this option should be available
 eventually. In the meantime, <a
 href="https://addons.mozilla.org/en-US/firefox/addon/953">RefControl</a> can
 provide this functionality via a default option of <b>Forge</b>.
 </ul>
+
 <h2>FAQ</h2>
+
 <strong>When I toggle Tor, my sites that use javascript stop working. Why?</strong>
 <p>
 
@@ -318,6 +355,21 @@ safe from having your IP address leak) is to reload the page when you toggle
 Tor, or just ensure you do all your work in a page before switching tor state.
 
 </p>
+
+<strong>I also can't click on links after I toggle! Why?</strong>
+<p>
+
+Due to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox
+Bug 409737</a>, pages can still open popups and perform Javascript redirects
+after Tor has been toggled. These popups and redirects can be blocked, but
+unfortunately they are indistinguishable from normal user interactions with the
+page (such as clicking on links or opening them in new tabs/windows), and so
+those are blocked as a side effect. Once that Firefox bug is fixed, this degree
+of isolation will become optional for people who do not want to accidentally
+click on links and give away information via referrers.
+
+</p>
+
 <strong>When I use Tor, Firefox is no longer filling in logins/search boxes
 for me. Why?</strong>
 <p>
@@ -330,7 +382,6 @@ disclosure attacks via Non-Tor usage, it is recommended you disable Non-Tor
 history reads if you allow history writing during Tor.
 
 </p>
-
 
 <strong>Which Firefox extensions should I avoid using?</strong>
 <p>
@@ -352,14 +403,14 @@ behavior are dangerous.
  Torbutton currently mitigates all known anonymity issues with Javascript.
  While it may be tempting to get better security by disabling Javascript for
  certain sites, you are far better off with an all-or-nothing approach.
- NoScript is exceedingly complicated, and has many subleties that can surprise
+ NoScript is exceedingly complicated, and has many subtleties that can surprise
  even advanced users. For example, addons.mozilla.org verifies extension
  integrity via Javascript over https, but downloads them in the clear. Not 
  adding it to your whitelist effectively
  means you are pulling down unverified extensions. Worse still, using NoScript
  can actually disable protections that Torbutton itself provides via
  Javascript, yet still allow malicious exit nodes to compromise your
- anonymity via the default whitelist (which they can spoof).
+ anonymity via the default whitelist (which they can spoof to inject any script they want). 
  <li>FoxyProxy</li>
  FoxyProxy faces similar problems as NoScript. Since it only loads some
  content elements through a proxy, it is possible for exit nodes or malicious
@@ -375,7 +426,7 @@ behavior are dangerous.
  In theory, Torbutton should tolerate third-party proxy switchers that behave
  sanely (ie in an all-or-nothing fashion). In practice, there are likely bugs
  relating to this. Please be vigilant if you are going to attempt combining
- Torbutton with another proxy siwtcher. There may be cases where Torbutton
+ Torbutton with another proxy switcher. There may be cases where Torbutton
  gets confused as to which state it currently is in, leaving you vulnerable to
  all sorts of unmasking attacks. If do you notice incompatibility between
  SwitchProxy and Torbutton, please <a
@@ -386,6 +437,44 @@ behavior are dangerous.
 
 </p>
 
+<strong>Which Firefox extensions do you recommend?</strong>
+<p>
+<ol>
+ <li><a href="https://addons.mozilla.org/en-US/firefox/addon/953">RefContorl</a></li>
+ Mentioned above, this extension allows more fine-grained referrer spoofing
+than Torbutton currently provides. It should break less sites than Torbutton's
+referrer spoofing option.
+ <li><a href="https://addons.mozilla.org/en-US/firefox/addon/1474">SafeCache</a></li>
+ If you use Tor excessively, and rarely disable it, you probably want to
+install this extension to minimize the ability of sites to store long term
+identifiers in your cache. This extension applies same origin policy to the
+cache, so that elements are retrieved from the cache only if they are fetched
+from a document in the same origin domain as the cached element. 
+</ol>
+
+</p>
+
+<strong>Are there any other issues I should be concerned about?</strong>
+<p>
+
+There is currently one known unfixed security issue with Torbutton: it is
+possible to unmask the javascript hooks that wrap the Date object to conceal
+your timezone. We are working with the Firefox team to fix one of <a
+href="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 399274</a> or
+<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=419598">Bug 419598</a>
+to address this. In the meantime, it is possible to set the <b>TZ</b>
+environment variable to <b>UTC</b> to cause the browser to use UTC as your
+timezone. Under Linux, you can add an <b>export TZ=UTC</b> to the 
+/usr/bin/firefox script, or edit your system bashrc to do the same. Under
+windows, you can set either a <a
+href="http://support.microsoft.com/kb/310519">User or System Environment
+Variable</a> for TZ via My Computer's properties. In MacOS, the situation is 
+<a
+href="http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/EnvironmentVars.html#//apple_ref/doc/uid/20002093-BCIJIJBH">a
+lot more complicated</a>, unfortunately.
+
+
+</p>
 
 </body>
 </html>
