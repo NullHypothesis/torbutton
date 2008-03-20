@@ -149,7 +149,7 @@ ContentPolicy.prototype = {
             return ok;
         }
             
-        this.logger.log(2, "Cpolicy load of: "+contentLocation.spec+" from: "+
+        this.logger.log(1, "Cpolicy load of: "+contentLocation.spec+" from: "+
                         (( null == requestOrigin ) ? "<null>" : requestOrigin.spec));
 
         var utmp = unwrapURL(contentLocation.spec, false);

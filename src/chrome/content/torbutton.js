@@ -1056,6 +1056,30 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
 
 function torbutton_conditional_set(state) {
     if (!m_tb_wasinited) torbutton_init();
+    var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
+            
+    torbutton_log(3, "Conditional set");
+    
+    // Need to set the tag on all tabs, some of them can be mis-set when
+    // the first window is created (before session restore)
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                       .getService(Components.interfaces.nsIWindowMediator);
+    var enumerator = wm.getEnumerator("navigator:browser");
+    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        var browser = win.getBrowser();
+        var browsers = browser.browsers;
+
+        for (var i = 0; i < browsers.length; ++i) {
+            var b = browser.browsers[i];
+
+            if (!state && no_plugins) {
+                b.docShell.allowPlugins = false;
+            } 
+            b.__tb_tor_fetched = state;
+        }
+    }
 
     torbutton_log(4, "Restoring tor state");
     if (torbutton_check_status() == state) return;
