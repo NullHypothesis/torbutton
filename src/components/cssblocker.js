@@ -99,7 +99,7 @@ var browserSources = { "browser":true, "mozapps":true, "global":true,
      "pippki":true, "branding":true};
 
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
-     "file":true, "view-source":true};
+     "file":true, "view-source":true, "about":true};
 
 function ContentPolicy() {
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -223,7 +223,13 @@ ContentPolicy.prototype = {
                     var targetScheme = contentLocation.scheme;
                     var targetHost = "";
                     if ( !(contentLocation.scheme in hostFreeSchemes) ) {
-                        targetHost = contentLocation.host;
+                        try {
+                            targetHost = contentLocation.host;
+                        } catch(e) {
+                            this.logger.eclog(4, "No host from: " +
+                                    requestOrigin.spec + " for: " +
+                                    contentLocation.spec);
+                        }
                     }
 
                     if (("about:blank" == contentLocation.spec)) {
