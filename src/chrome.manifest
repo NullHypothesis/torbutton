@@ -9,14 +9,15 @@ locale torbutton de-CH chrome/locale/de-CH/
 locale torbutton de-DE chrome/locale/de-DE/
 locale torbutton el-GR chrome/locale/el-GR/
 locale torbutton en-US chrome/locale/en-US/
-locale torbutton es-AR chrome/locale/es-AR/
 locale torbutton fr-FR chrome/locale/fr-FR/
 locale torbutton hr-HR chrome/locale/hr-HR/
 locale torbutton it-IT chrome/locale/it-IT/
 locale torbutton nl-NL chrome/locale/nl-NL/
 locale torbutton pl-PL chrome/locale/pl-PL/
 locale torbutton pt-BR chrome/locale/pt-BR/
-locale torbutton ru-RU chrome/locale/ru-RU/
+locale torbutton ru chrome/locale/ru/
+locale torbutton es chrome/locale/es/
+locale torbutton ar chrome/locale/ar/
 locale torbutton sl-SI chrome/locale/sl-SI/
 locale torbutton zh-CN chrome/locale/zh-CN/
 locale torbutton zh-TW chrome/locale/zh-TW/
