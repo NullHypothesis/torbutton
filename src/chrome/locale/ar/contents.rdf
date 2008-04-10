@@ -4,14 +4,14 @@
 
   <!-- skins supplied by this package -->
   <RDF:Seq about="urn:mozilla:locale:root">
-    <RDF:li resource="urn:mozilla:locale:es-AR"/>
+    <RDF:li resource="urn:mozilla:locale:ar"/>
   </RDF:Seq>
 
   <!-- locale information -->
-  <RDF:Description about="urn:mozilla:locale:es-AR">
+  <RDF:Description about="urn:mozilla:locale:ar">
     <chrome:packages>
-      <RDF:Seq about="urn:mozilla:locale:es-AR:packages">
-        <RDF:li resource="urn:mozilla:locale:es-AR:torbutton"/>
+      <RDF:Seq about="urn:mozilla:locale:ar:packages">
+        <RDF:li resource="urn:mozilla:locale:ar:torbutton"/>
       </RDF:Seq>
     </chrome:packages>
   </RDF:Description>
