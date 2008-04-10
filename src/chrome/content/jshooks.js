@@ -2,6 +2,52 @@ window.__HookObjects = function() {
   if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;
   }
+  
+
+  /* For reference/debugging only:
+  if(false && window.__tb_set_uagent===true) {
+      var tmp_oscpu = window.__tb_oscpu;
+      var tmp_platform = window.__tb_platform;
+      var tmp_productSub = window.__tb_productSub;
+
+      try {
+          if(!(window.navigator.__proto__ == null) ||
+                  typeof(window.navigator.__defineGetter__) === "function") {
+              var cE = window.navigator.cookieEnabled;
+              var lang = window.navigator.language;
+              var uA = window.navigator.userAgent;
+              var v = window.navigator.vendor;
+              var vS = window.navigator.vendorSub;
+              var jE = window.navigator.javaEnabled;
+              var pl = new Array();
+              var mT = new Object();
+              //var pl = window.navigator.plugins;
+              //var mT = window.navigator.mimeTypes;
+
+              window.navigator.__defineGetter__("appCodeName", function() { return "Mozilla";});
+              window.navigator.__defineGetter__("appName", function() { return "Netscape";});
+              window.navigator.__defineGetter__("appVersion", function() { return "5.0";});
+              window.navigator.__defineGetter__("buildID", function() { return 0;});
+              window.navigator.__defineGetter__("cookieEnabled", function() { return cE;});
+              window.navigator.__defineGetter__("language", function() { return lang;});
+              window.navigator.__defineGetter__("mimeTypes", function() { return mT;});
+              window.navigator.__defineGetter__("onLine", function() { return true;});
+              window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
+              window.navigator.__defineGetter__("platform", function() { return tmp_platform;});
+              window.navigator.__defineGetter__("plugins", function() { return pl;});
+              window.navigator.__defineGetter__("product", function() { return "Gecko";});
+              window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
+              window.navigator.__defineGetter__("securityPolicy", function() { return "";});
+              window.navigator.__defineGetter__("userAgent", function() { return uA;});
+              window.navigator.__defineGetter__("vendor", function() { return v;});
+              window.navigator.__defineGetter__("vendorSub", function() { return vS;});
+              window.navigator.__defineGetter__("javaEnabled", function() { return jE;});
+              window.navigator.__proto__ = null;
+          }
+      } catch(e) {
+      }
+  } */
+
 
   /* Hrmm.. Is it possible this breaks plugin install or other weird shit
      for non-windows OS's? */
@@ -24,6 +70,13 @@ window.__HookObjects = function() {
               var f;
               for(var i in window.navigator) {
                   tmpNav[i] = window.navigator[i];
+                  // XPCNative objects are special for some reason. So far, 
+                  // all we have are "plugins" and mimeTypes, which 
+                  // are empty anyways. Disable them.
+                  //if(tmpNav[i].toString().indexOf("XPCNative") != -1) {
+                  if(i === "plugins" || i === "mimeTypes") {
+                      tmpNav[i] = new Array();
+                  }
                   f = function() { // crazy scope hack to preserve i
                       var holder = i;
                       window.navigator.__defineGetter__(i, function() { return tmpNav[holder];});
@@ -80,6 +133,7 @@ window.__HookObjects = function() {
         var screen = scr;
       }
   }
+  
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
@@ -231,8 +285,7 @@ window.__HookObjects = function() {
   with(window) {
     var Date = newDate;
   }
-
-  // FINALLY. We got a break! WAHOO ECMA-262 compliance!
+  
   with(window) {
       XPCNativeWrapper = function(a) { return a; };
   }
@@ -242,22 +295,13 @@ window.__HookObjects = function() {
 
   // Gain access to the implict global object (which interestingly claims
   // to be a 'Window' but is not the same class as 'window'...) and 
-  // replace its __proto__ with a copy of 'window'.
-  var tmp = new Object.prototype.toSource();
-  var wintmp = window;
-  with(window.valueOf.call()) {
-      for(var i in wintmp) {
-          tmp[i] = wintmp[i];                  
-      }
-      try { // FF3 throws an exception here
-          var __proto__ = tmp;
-      } catch(e) {
-          var __proto__ = null;
-      }
+  // hide XPCNativeWrapper there.
+  // XXX: This seems no longer necessary in FF2.0.0.13+, and may break FF3?
+  with(window.valueOf.call().__proto__) {
+      XPCNativeWrapper = function(a) { return a; };
   }
 
   window.__proto__ = null; // Prevent delete from unmasking our properties.
-
   return true;
 }
 

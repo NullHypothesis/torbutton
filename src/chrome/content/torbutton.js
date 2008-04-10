@@ -1311,7 +1311,7 @@ function torbutton_do_resize(ev)
         var bWin = window.getBrowser().contentWindow;
         if(window.windowState 
                 == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
-            torbutton_log(2, "Resizing window");
+            torbutton_log(2, "Resizing window on event");
             bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
             bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
         }
@@ -1323,6 +1323,7 @@ function torbutton_do_resize(ev)
 
 function torbutton_check_round(browser) 
 {
+    // XXX: Not called???
     if(window.windowState 
                 == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
@@ -1337,7 +1338,7 @@ function torbutton_check_round(browser)
         }
 
         // Always round.
-        torbutton_log(2, "Resizing window");
+        torbutton_log(2, "Resizing window on load");
         browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
         browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
     }
