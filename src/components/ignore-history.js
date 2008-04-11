@@ -58,12 +58,15 @@ function HistoryWrapper() {
     }
     return history;
   };
+    
+  this.copyMethods(this._history());
 }
 
 HistoryWrapper.prototype =
 {
   QueryInterface: function(iid) {
-    if (iid.equals(Components.interfaces.nsISupports)) {
+    if (iid.equals(Components.interfaces.nsIClassInfo)
+        || iid.equals(Components.interfaces.nsISupports)) {
       return this;
     }
 
@@ -71,6 +74,29 @@ HistoryWrapper.prototype =
     this.copyMethods(history);
     return this;
   },
+
+  // make this an nsIClassInfo object
+  flags: Components.interfaces.nsIClassInfo.DOM_OBJECT,
+
+  // method of nsIClassInfo
+  classDescription: "@mozilla.org/browser/global-history;2",
+  contractID: "@mozilla.org/browser/global-history;2",
+  classID: kMODULE_CID,
+
+  // method of nsIClassInfo
+  getInterfaces: function(count) {
+    var interfaceList = [Components.interfaces.nsIClassInfo];
+    for (var i = 0; i < this._interfaces.length; i++) {
+      interfaceList.push(Components.interfaces[this._interfaces[i]]);
+    }
+
+    count.value = interfaceList.length;
+    return interfaceList;
+  },
+
+  // method of nsIClassInfo  
+  getHelperForLanguage: function(count) { return null; },
+
 
   /*
    * Determine whether we should hide visited links
@@ -104,11 +130,14 @@ HistoryWrapper.prototype =
           var params = [];
           params.length = wrapped[method].length;
           var x = 0;
-          var call = method + "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
+          var call;
+          if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
+          else call = "()";
           var fun = "function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);}";
           // already in scope
           //var Components = this.Components;
           newObj[method] = eval(fun);
+          //dump("wrapped: "+method+": "+fun+"\n");
       } else {
           newObj.__defineGetter__(method, function() { return wrapped[method]; });
           newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });
