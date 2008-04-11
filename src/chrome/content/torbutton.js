@@ -1227,7 +1227,9 @@ observe : function(subject, topic, data) {
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
       torbutton_check_progress(null, subject);
-  } 
+  } else if (topic == "http-on-modify-request") {
+      torbutton_eclog(3, 'Modify request: '+subject.name);
+  }
 },
 register : function() {
  var observerService =
@@ -1235,6 +1237,7 @@ register : function() {
      getService(Components.interfaces.nsIObserverService);
  torbutton_log(3, "Observer register");
 
+ observerService.addObserver(this, "http-on-modify-request", false);
  observerService.addObserver(this, "http-on-examine-response", false);
  torbutton_log(3, "Observer register");
 },
@@ -1243,6 +1246,7 @@ unregister : function() {
     Components.classes["@mozilla.org/observer-service;1"].
       getService(Components.interfaces.nsIObserverService);
 
+  observerService.removeObserver(this,"http-on-modify-request");
   observerService.removeObserver(this,"http-on-examine-response");
 }
 }
@@ -1675,12 +1679,18 @@ function torbutton_check_progress(aProgress, aRequest) {
                         torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
 
                         if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-                            torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
-                            aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
-                            DOMWindow.stop();
-                            torbutton_eclog(3, 'Stopped document: '+DOMWindow.location);
-                            DOMWindow.document.clear();
-                            torbutton_eclog(3, 'Cleared document: '+DOMWindow.location);
+                            try {
+                                torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
+                                aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
+                                DOMWindow.stop();
+                                torbutton_eclog(3, 'Stopped document: '+DOMWindow.location);
+                                DOMWindow.document.clear();
+                                torbutton_eclog(3, 'Cleared document: '+DOMWindow.location);
+                            } catch(e) { 
+                            } 
+                            torbutton_eclog(4, 'Torbutton blocked state-changed popup');
+                            DOMWindow.close();
+                            return 0;
                         }
                     }
                 }
