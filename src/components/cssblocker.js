@@ -174,7 +174,8 @@ ContentPolicy.prototype = {
             }
         } else {
             // rules based on request origin:
-            // 1) privileged schemes can access anything
+            // 1) privileged schemes can access local content but 
+            //    must be checked for network access (favicons)
             // 2) locally privileged schemes can access local content
             // 3) forbidden schemes should be blocked
             // 4) all others cannot access any (unwrapped) local content
@@ -184,10 +185,17 @@ ContentPolicy.prototype = {
             // 
             switch (requestOrigin.scheme) {
             case "chrome":
+                // privileged
+                if ((contentLocation.scheme in localSchemes) ||
+                    (contentLocation.scheme in hostFreeSchemes)) {
+                    return ok;
+                }
+                // Chrome can source favicons from non-local protocols.
+                // This needs to be checked below.
+                break;
             case "about":
             case "resource":
                 // privileged
-                // NOTE: don't log, chrome fills error console with chrome requests
                 return ok;
                 break;
             case "view-source":
