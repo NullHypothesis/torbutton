@@ -48,6 +48,8 @@ function StoreWrapper() {
     }
     return store;
   };
+
+  this.copyMethods(this._store());
 }
 
 StoreWrapper.prototype =
@@ -86,9 +88,10 @@ StoreWrapper.prototype =
           var params = [];
           params.length = wrapped[method].length;
           var x = 0;
-          var call = method + "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
+          if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
+          else call = "()";
           var fun = "function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);}";
-          // Already in scope
+          // already in scope
           //var Components = this.Components;
           newObj[method] = eval(fun);
       } else {
