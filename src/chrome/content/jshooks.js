@@ -70,12 +70,13 @@ window.__HookObjects = function() {
               var f;
               for(var i in window.navigator) {
                   tmpNav[i] = window.navigator[i];
+                  
                   // XPCNative objects are special for some reason. So far, 
                   // all we have are "plugins" and mimeTypes, which 
                   // are empty anyways. Disable them.
-                  //if(tmpNav[i].toString().indexOf("XPCNative") != -1) {
-                  if(i === "plugins" || i === "mimeTypes") {
-                      tmpNav[i] = new Array();
+                  if(tmpNav[i].toString().indexOf("XPCNative") != -1) {
+                      window.navigator[i] = tmpNav[i];
+                      continue;
                   }
                   f = function() { // crazy scope hack to preserve i
                       var holder = i;
@@ -193,7 +194,7 @@ window.__HookObjects = function() {
       }
     }
 
-    window.Date.prototype.valueOf=function(){return d.toUTCString()};
+    window.Date.prototype.valueOf=function(){return d.getTime()};
     window.Date.prototype.getTime=function(){return d.getTime();} /* UTC already */ 
     window.Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
     window.Date.prototype.getYear=function() {return d.getYear();}

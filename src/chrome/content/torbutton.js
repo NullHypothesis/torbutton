@@ -960,7 +960,7 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
             if(kill_plugins) 
                 b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
             else 
-                browser.docShell.allowPlugins = true;
+                b.docShell.allowPlugins = true;
             
             if(isolate_dyn) {
                 torbutton_check_js_tag(b, tor_enabled, js_enabled);
