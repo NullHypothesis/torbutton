@@ -1313,7 +1313,10 @@ function torbutton_do_resize(ev)
     if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
         var bWin = window.getBrowser().contentWindow;
-        if(window.windowState 
+        // only resize if outer window size has changed (ignore stuff like
+        // scrollbars and find bars)
+        if((m_tb_window_height != window.outerHeight ||
+                m_tb_window_width != window.outerWidth) && window.windowState 
                 == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
             torbutton_log(2, "Resizing window on event");
             bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
@@ -1321,8 +1324,8 @@ function torbutton_do_resize(ev)
         }
     }
 
-    m_tb_window_height = window.height;
-    m_tb_window_width = window.width;
+    m_tb_window_height = window.outerHeight;
+    m_tb_window_width = window.outerWidth;
 }
 
 function torbutton_check_round(browser) 
@@ -1337,8 +1340,8 @@ function torbutton_check_round(browser)
            Math.floor(Math.round(browser.contentWindow.innerHeight/50.0)*50))
            > 0.1) {
             torbutton_log(2, "Restoring orig window size");
-            window.height = m_tb_window_height;
-            window.width = m_tb_window_width;
+            window.outerHeight = m_tb_window_height;
+            window.outerWidth = m_tb_window_width;
         }
 
         // Always round.
@@ -1365,10 +1368,10 @@ function torbutton_new_window(event)
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
-    m_tb_window_height = window.height;
-    m_tb_window_width = window.width;
+    m_tb_window_height = window.outerHeight;
+    m_tb_window_width = window.outerWidth;
 
-    window.addEventListener("resize", torbutton_do_resize, false);
+    window.addEventListener("resize", torbutton_do_resize, true);
 }
 
 function torbutton_close_window(event) {
@@ -1406,6 +1409,7 @@ function torbutton_close_window(event) {
     }
 }
 
+// XXX: Firefox3 might not support this??
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
 getBrowser().addEventListener("TabOpen", torbutton_new_tab, false);
