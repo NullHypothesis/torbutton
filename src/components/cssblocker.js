@@ -184,6 +184,7 @@ ContentPolicy.prototype = {
             //    4b) browser chrome requests are allowed
             // 
             switch (requestOrigin.scheme) {
+            case "x-jsd": 
             case "chrome":
                 // privileged
                 if ((contentLocation.scheme in localSchemes) ||
@@ -249,8 +250,9 @@ ContentPolicy.prototype = {
                         return ok;
                     } else {
                         if (this.tor_enabled || ("torbutton" == targetHost)) {
-                            this.logger.eclog(3, "Blocking local request from: " +
-                                              requestOrigin.spec + " for: " +
+                            this.logger.eclog(3, "Blocking local request from: "
+                                              +requestOrigin.spec+" ("
+                                              +requestOrigin.scheme+") for: "+
                                               contentLocation.spec);
                             return block;
                         }
