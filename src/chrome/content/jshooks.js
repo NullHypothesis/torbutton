@@ -268,7 +268,7 @@ window.__HookObjects = function() {
      */
 
     // valueOf gets called for implicit string conversion??
-    window.Date.prototype = eval(window.Object.prototype.toSource());
+    window.Date.prototype = window.eval(window.Object.prototype.toSource());
     return d.toUTCString();
   }
 
