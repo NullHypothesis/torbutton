@@ -2,7 +2,6 @@ window.__HookObjects = function() {
   if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;
   }
-  
 
   /* For reference/debugging only:
   if(false && window.__tb_set_uagent===true) {
@@ -19,8 +18,8 @@ window.__HookObjects = function() {
               var v = window.navigator.vendor;
               var vS = window.navigator.vendorSub;
               var jE = window.navigator.javaEnabled;
-              var pl = new Array();
-              var mT = new Object();
+              var pl = new window.Array();
+              var mT = new window.Object();
               //var pl = window.navigator.plugins;
               //var mT = window.navigator.mimeTypes;
 
@@ -56,7 +55,7 @@ window.__HookObjects = function() {
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
 
-      // XXX: This is just unreasonable.. Firefox caches 
+      // This is just unreasonable.. Firefox caches 
       // window.navigator.__proto__ between same-origin loads of a document. 
       // So this means when we null it out, we lose most of the navigator 
       // object for subsequent loads. I tried doing the whole-object hooks 
@@ -66,8 +65,7 @@ window.__HookObjects = function() {
       try {
           if(!(window.navigator.__proto__ == null) ||
              typeof(window.navigator.__defineGetter__) === "function") {
-              var tmpNav = new Object();
-              var f;
+              var tmpNav = new window.Object();
               for(var i in window.navigator) {
                   tmpNav[i] = window.navigator[i];
                   
@@ -78,11 +76,10 @@ window.__HookObjects = function() {
                       window.navigator[i] = tmpNav[i];
                       continue;
                   }
-                  f = function() { // crazy scope hack to preserve i
+                  (function() { // crazy scope hack to preserve i
                       var holder = i;
                       window.navigator.__defineGetter__(i, function() { return tmpNav[holder];});
-                  };
-                  f();
+                  })();
               }
 
               window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
@@ -103,36 +100,42 @@ window.__HookObjects = function() {
       window.__proto__.__defineGetter__("pageXOffset", function() { return 0;});
       window.__proto__.__defineGetter__("pageYOffset", function() { return 0;});
 
-      // We can't define individual getters/setters for window.screen 
-      // for some reason. works in html but not in these hooks.. No idea why
-      var scr = new Object();
-      var origScr = window.screen;
-      scr.__defineGetter__("height", function() { return window.innerHeight; });
-      scr.__defineGetter__("width", function() { return window.innerWidth; });
+      // Wrap in anonymous function to protect scr variables just in case.
+      (function () {
+          // We can't define individual getters/setters for window.screen 
+          // for some reason. works in html but not in these hooks.. No idea why
 
-      scr.__defineGetter__("availTop", function() { return 0;});
-      scr.__defineGetter__("availLeft", function() { return 0;});
+          var scr = new window.Object();
+          var origScr = window.screen;
+          scr.__defineGetter__("height", function() { return window.innerHeight; });
+          scr.__defineGetter__("width", function() { return window.innerWidth; });
 
-      scr.__defineGetter__("top", function() { return 0;});
-      scr.__defineGetter__("left", function() { return 0;});
+          scr.__defineGetter__("availTop", function() { return 0;});
+          scr.__defineGetter__("availLeft", function() { return 0;});
 
-      scr.__defineGetter__("availHeight", function() { return window.innerHeight;});
-      scr.__defineGetter__("availWidth", function() { return window.innerWidth;});
+          scr.__defineGetter__("top", function() { return 0;});
+          scr.__defineGetter__("left", function() { return 0;});
 
-      scr.__defineGetter__("colorDepth", function() { return origScr.colorDepth;});
-      scr.__defineGetter__("pixelDepth", function() { return origScr.pixelDepth;});
+          scr.__defineGetter__("availHeight", function() { return window.innerHeight;});
+          scr.__defineGetter__("availWidth", function() { return window.innerWidth;});
 
-      scr.__defineGetter__("availTop", function() { return 0;});
-      scr.__defineGetter__("availLeft", function() { return 0;});
+          scr.__defineGetter__("colorDepth", function() { return origScr.colorDepth;});
+          scr.__defineGetter__("pixelDepth", function() { return origScr.pixelDepth;});
 
-      window.__defineGetter__("screen", function() { return scr; });
-      window.__defineSetter__("screen", function(a) { return; });
-      window.__proto__.__defineGetter__("screen", function() { return scr; });
+          scr.__defineGetter__("availTop", function() { return 0;});
+          scr.__defineGetter__("availLeft", function() { return 0;});
 
-      // Needed for Firefox bug 418983:
-      with(window) {
-        var screen = scr;
-      }
+          window.__defineGetter__("screen", function() { return scr; });
+          window.__defineSetter__("screen", function(a) { return; });
+          window.__proto__.__defineGetter__("screen", function() { return scr; });
+
+          // Needed for Firefox bug 418983:
+          with(window) {
+              var screen = scr;
+          }
+
+      })();
+
   }
   
 
@@ -169,7 +172,7 @@ window.__HookObjects = function() {
       }
     } 
   } 
-
+  
   var origDate = window.Date;
   var newDate = function() {
     /* DO NOT make 'd' a member! EvilCode will use it! */
@@ -194,6 +197,9 @@ window.__HookObjects = function() {
       }
     }
 
+    // XXX: the native valueOf seems to sometimes return toString and 
+    // sometimes return getTime depending on context (which we can't detect)
+    // It seems as though we can't win here..
     window.Date.prototype.valueOf=function(){return d.getTime()};
     window.Date.prototype.getTime=function(){return d.getTime();} /* UTC already */ 
     window.Date.prototype.getFullYear=function(){return d.getUTCFullYear();}  
@@ -260,18 +266,27 @@ window.__HookObjects = function() {
      * this function we modified Date.prototype to create the new methods
      * with the lexically scoped d reference.
      */
-    window.Date.prototype = new Object.prototype.toSource();
+
+    // valueOf gets called for implicit string conversion??
+    window.Date.prototype = eval(window.Object.prototype.toSource());
     return d.toUTCString();
   }
 
-  newDate.parse=function(s) {
+  // Need to do this madness so that we use the window's notion of Function
+  // for the constructor. If this is not done, then changes to Function
+  // and Object in the real window are not propogated to Date (for example,
+  // to extend the Date class with extra functions via a generic inheritance 
+  // framework added onto Object - this is done by livejournal and others)
+  var newWrappedDate = window.eval("function() { return newDate(); }");
+
+  newWrappedDate.parse=function(s) {
     var d = new origDate(s);
     if(typeof(s) == "string") reparseDate(d, s);
     return d.getTime();    
   }
 
-  newDate.now=function(){return origDate.now();}
-  newDate.UTC=function(){return origDate.apply(origDate, arguments); }
+  newWrappedDate.now=function(){return origDate.now();}
+  newWrappedDate.UTC=function(){return origDate.apply(origDate, arguments); }
 
   // d = new Date();
   // d.__proto__ === Date.prototype
@@ -284,7 +299,7 @@ window.__HookObjects = function() {
   // unmasking is violating ECMA-262 by allowing the deletion of var's 
   // (FF Bug 419598)
   with(window) {
-    var Date = newDate;
+    var Date = newWrappedDate;
   }
   
   with(window) {
@@ -297,7 +312,7 @@ window.__HookObjects = function() {
   // Gain access to the implict global object (which interestingly claims
   // to be a 'Window' but is not the same class as 'window'...) and 
   // hide XPCNativeWrapper there.
-  // XXX: This seems no longer necessary in FF2.0.0.13+, and may break FF3?
+  // This seems no longer necessary in FF2.0.0.13+, and may break FF3?
   with(window.valueOf.call().__proto__) {
       XPCNativeWrapper = function(a) { return a; };
   }
