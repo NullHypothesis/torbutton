@@ -152,7 +152,10 @@ ContentPolicy.prototype = {
         this.logger.log(1, "Cpolicy load of: "+contentLocation.spec+" from: "+
                         (( null == requestOrigin ) ? "<null>" : requestOrigin.spec));
 
-        var utmp = unwrapURL(contentLocation.spec, false);
+        var utmp = null;
+        try { utmp = unwrapURL(contentLocation.spec, false); } 
+        catch(e) { this.logger.log(5, "Exception on unwrap: "+e); }
+        
         if(utmp instanceof Ci.nsIURI) {
             utmp = utmp.QueryInterface(Ci.nsIURI);            
             contentLocation = utmp;
@@ -184,7 +187,7 @@ ContentPolicy.prototype = {
             //    4b) browser chrome requests are allowed
             // 
             switch (requestOrigin.scheme) {
-            case "x-jsd": 
+            case "x-jsd":
             case "chrome":
                 // privileged
                 if ((contentLocation.scheme in localSchemes) ||
