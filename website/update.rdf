@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}">
+    <em:updates>
+      <Seq>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.14-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.15-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.16-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.17-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.18alpha"/>
+      </Seq>
+    </em:updates>
+    
+
+    <!-- following two lines for Firefox 0.9.  Specify the most recent version here -->
+    <em:version>1.1.18alpha</em:version>
+    <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.1.18alpha.xpi</em:updateLink>
+  </Description>
+
+  <!-- version 1.1.14 -->
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.14-alpha">
+    <em:version>1.1.14-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.1.14-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:b316f9d84930ecf23b0797f93a6433334a4c38d5</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.15-alpha">
+    <em:version>1.1.15-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.1.15-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:fa0d47c98d258ba904d828bea15b140ab438eb56</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.16-alpha">
+    <em:version>1.1.16-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.1.16-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:f892dac7e5da8c63005f896c9aa1436e3f77ab4b</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.17-alpha">
+    <em:version>1.1.17-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.1.17-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:93e17f955655eb31e5a6ff9f71dfde479a5b7a6d</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.18alpha">
+    <em:version>1.1.18alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.1.18alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:6fdcebcb1e6cc694b45065c2b6df07ffb12ea164</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+  
+</RDF>
