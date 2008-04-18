@@ -1,4 +1,29 @@
-1.1.7
+1.1.18
+  17 Apr 2008
+  * bugfix: Fix Gmail exceptions involving window.navigator that made Gmail
+    unusable after recent updates by Google.
+  * bugfix: Fix an exception in the content policy that may have prevented
+    some AJAX page elements from loading.
+  * bugfix: Fix regression on cross-state favicon leak introduced in 1.1.17
+  * bugfix: Fix to make clear private data work again by fixing up history
+    hooking (may also help FF3 compatibility).
+  * bugfix: Fix Yahoo email account creation (broken due to Date.valueOf()
+    weirdness).
+  * bugfix: Fix to allow plugins if the user unchecks the plugin blocking
+    preference
+  * bugfix: Fix bug 638: eliminate cross-state history popup on session
+    restore
+  * bugfix: Only resize windows on document load. Hopefully this will make
+    the resizing code less annoying, and drift less.
+  * bugfix: Fix Object.prototype extensions involving the Date object 
+    (observed on LiveJournal)
+  * bugfix: Fix javascript debugger compatibility issues involving source
+    window display and other functionality.
+  * misc: Prevent blocked popups from opening blank, unusable windows
+  * misc: Updated firefox version to 2.0.0.14
+  * new: New translations for French, Russian, Farsi, Italian, and Spanish.
+
+1.1.17
   15 Mar 2008
   * bugfix: Improve chrome disclosure protection (patch from Greg Fleischer)
   * bugfix: Block network access from file urls to workaround Firefox 
