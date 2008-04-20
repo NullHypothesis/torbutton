@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Mar 18 2008</pubdate>
+   <pubdate>Apr 19 2008</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.1.17-alpha.
+Torbutton Firefox extension. It is current as of Torbutton 1.1.18-alpha.
 
   </para>
   <sect2 id="adversary">
@@ -308,6 +308,11 @@ MUST NOT bypass Tor proxy settings for any content.</para></listitem>
  <para>Browser state (cookies, cache, history, 'DOM storage'), accumulated in
  one Tor state MUST NOT be accessible via the network in
  another Tor state.</para></listitem>
+ <listitem id="undiscoverability"><command>Tor Undiscoverability</command><para>With
+the advent of bridge support in Tor 0.2.0.x, there are now a class of Tor
+users whose network fingerprint does not obviously betray the fact that they
+are using Tor. This should extend to the browser as well - Torbutton MUST NOT 
+reveal its presence while Tor is disabled.</para></listitem>
  <listitem id="disk"><command>Disk Avoidance</command><para>The browser SHOULD NOT write any Tor-related state to disk, or store it
  in memory beyond the duration of one Tor toggle.</para></listitem>
  <listitem id="location"><command>Location Neutrality</command><para>The browser SHOULD NOT leak location-specific information, such as
@@ -319,11 +324,6 @@ automatically via Tor. The assessment of the attacks above should make it clear
 that anonymity set reduction is a very powerful method of tracking and
 eventually identifying anonymous users.
 </para></listitem>
- <listitem id="undiscoverability"><command>Tor Undiscoverability</command><para>With
-the advent of bridge support in Tor 0.2.0.x, there are now a class of Tor
-users whose network fingerprint does not obviously betray the fact that they
-are using Tor. This should extend to the browser as well - Torbutton must not
-reveal its presence while Tor is disabled.</para></listitem>
  <listitem id="updates"><command>Update Safety</command><para>The browser SHOULD NOT perform updates, upgrades, or any other automatic
  network activity via Tor.</para></listitem>
  <listitem id="interoperate"><command>Interoperability</command><para>Torbutton SHOULD interoperate with third-party proxy switchers that
@@ -863,7 +863,7 @@ requirements.
 </para>
 </sect2>
 <sect2>
-<title>Resize window dimensions to multiples of 50px on Toggle (recommended)</title>
+<title>Resize windows to multiples of 50px during Tor usage (recommended)</title>
 
  <para>Option: <command>extensions.torbutton.resize_windows</command></para>
 
@@ -886,15 +886,17 @@ also not implementable in a foolproof way from extension land.
 
 The implementation of this setting is spread across a couple of different
 locations in the Torbutton javascript <link linkend="browseroverlay">browser
-overlay</link>. The primary place is with the rest of the Torbutton settings
-updates: <function>torbutton_update_status()</function>. However, since
-resizing minimized windows causes them to be restored, and since maximized
-windows remember their previous size to the pixel, windows must also be
-resized before every document load (at the time of browser tagging) in
-<function>torbutton_update_tags()</function>. In addition, to prevent the user
-from resizing a window to a non-50px multiple, a resize listener
+overlay</link>. Since resizing minimized windows causes them to be restored,
+and since maximized windows remember their previous size to the pixel, windows
+must be resized before every document load (at the time of browser tagging)
+via <function>torbutton_check_round()</function>, called by
+<function>torbutton_update_tags()</function>. To prevent drift, the extension
+tracks the original values of the windows and uses this to perform the
+rounding on document load. In addition, to prevent the user from resizing a
+window to a non-50px multiple, a resize listener
 (<function>torbutton_do_resize()</function>) is installed on every new browser
-window. In all cases, the browser's contentWindow.innerWidth and innerHeight
+window to record the new size and round it to a 50px multiple while Tor is
+enabled. In all cases, the browser's contentWindow.innerWidth and innerHeight
 are set. This ensures that there is no discrepancy between the 50 pixel cutoff
 and the actual renderable area of the browser (so that it is not possible to
 infer toolbar size/presence by the distance to the nearest 50 pixel roundoff).
@@ -1405,7 +1407,7 @@ It provides several options for controlling the browser user agent string:
 <command>general.useragent.override</command>,
 <command>general.useragent.vendor</command>, and
 <command>general.useragent.vendorSub</command>. If
-the torbutton preference <command>extensions.torbutton.set_uagent</command> is
+the Torbutton preference <command>extensions.torbutton.set_uagent</command> is
 true, Torbutton copies all of the other above prefs into their corresponding
 browser preferences during Tor usage.</para>
 
@@ -1416,6 +1418,15 @@ url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink
 Javascript hooks implemented in <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshooks.js">chrome/content/jshooks.js</ulink> are installed as part of the
 same mechanism that hooks the date object.
+</para>
+
+<para>
+
+It also turns out that it is possible to detect the original Firefox version
+by <ulink url="http://0x000000.com/index.php?i=523&amp;bin=1000001011">inspecting
+certain resource:// files</ulink>. These cases are handled by Torbutton's
+<link linkend="contentpolicy">content policy</link>.
+
 </para>
 
 
@@ -1488,19 +1499,29 @@ have also been gathered here for reference. In order of decreasing severity,
 they are:
    </para>
    <orderedlist>
-     <listitem><ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=418119">Bug 418119 - nsIContentPolicy not called for external DTDs of XML documents</ulink>
-      <para>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=405652">Bug 405652 - In the
+TLS ClientHello message the gmt_unix_time is incorrect</ulink>
+     <para>
 
-XML documents can source chrome and resource URLs in their DTDs without a call
-to nsIContentPolicy::shouldLoad. Enumerating chrome URLs gives websites and
-exit nodes a lot of information. They can use it to probe for vulnerable
-versions of extensions, and can also use it to build an <link
-linkend="fingerprinting">identifier for tracking purposes</link>.  This bug
-makes it impossible for extensions such as Adblock and Torbutton to prevent
-chrome inspection and enumeration.  There is no workaround for this bug as of
-yet.
+It turns out that Firefox's SSL implementation sends the machine uptime as the
+current time. This essentially is a unique identifier that can be used for
+the duration of your machine uptime. The issue has been fixed in Firefox 3.0,
+but it has as of yet not been backported to 2.0.
 
-      </para>
+     </para>
+     </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=143220">Bug 143220 - Script can get the value of a file control, including the path</ulink>
+     <para>
+
+Javascript can query the .value field of file input dialogs to retrieve
+username and sometimes hostname/workgroup information. This is obviously very
+dangerous for people who are attempting to submit files anonymously via
+webforms (ie whistleblowers and anonymous publishers). It is also fixed in
+Firefox 3.0, but has not yet been backported to 2.0.
+
+     </para>
      </listitem>
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 392274 - Timezone
@@ -1511,8 +1532,9 @@ The lack of a config or API to configure the timezone requires Torbutton to
 <link linkend="jshooks">insert client content window javascript</link> to hook
 the Date object. Additionally, a way to <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-date.html">remove the Date
-hooks</ulink> was discovered by Greg Fleischer. There is no known workaround
-for his mechanism for the Date hooks.
+hooks</ulink> was discovered by Greg Fleischer. On Windows and Linux, you can
+set the TZ environment variable to "UTC" as a workaround. Firefox will obey
+this environment variable for your Timezone on those platforms.
 
    </para>
    </listitem>
@@ -1582,6 +1604,8 @@ user's original IP address.
 
      </para>
      </listitem>
+
+
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">Bug 401296 - docShell.allowPlugins
 not honored for direct links</ulink> (Perhaps subset of <ulink
@@ -1615,6 +1639,21 @@ the others though, but it might be nice to have this API as a backup.
 
      </para>
      </listitem>
+     <listitem><ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=418119">Bug 418119 - nsIContentPolicy not called for external DTDs of XML documents</ulink>
+      <para>
+
+XML documents can source chrome and resource URLs in their DTDs without a call
+to nsIContentPolicy::shouldLoad. Enumerating chrome URLs gives websites and
+exit nodes a lot of information. They can use it to probe for vulnerable
+versions of extensions, and can also use it to build an <link
+linkend="fingerprinting">identifier for tracking purposes</link>.  This bug
+makes it impossible for extensions such as Adblock and Torbutton to prevent
+chrome inspection and enumeration.  There is no workaround for this bug as of
+yet.
+
+      </para>
+     </listitem>
+
     </orderedlist>
   </sect2>
   <sect2 id="FirefoxWishlist">
@@ -1754,7 +1793,11 @@ Flash. In addition,
 <ulink url="http://www.janusvm.com/goldy/pdf/">issues have been
 discovered</ulink> with the browsers handling of
 <ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">direct links to plugin-handled
-content</ulink> as well as meta-refreshes to plugin content.
+content</ulink> as well as meta-refreshes to plugin content. To make matters
+worse, <ulink
+url="http://www.janusvm.com/goldy/side-channels/side-channels.html">externally
+handled mime types and urls</ulink> can also cause direct non-Tor connections
+as well.
     </para>
    </sect3>
    <sect3>
