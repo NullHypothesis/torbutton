@@ -736,6 +736,11 @@ function torbutton_update_status(mode, force_update) {
             || torprefs.getBoolPref('dual_cookie_jars')) {
         torbutton_jar_cookies(mode);
     }
+
+    // XXX: make pref
+    if (true) {
+        torbutton_jar_certs(mode);
+    }
 }
 
 function torbutton_close_on_toggle(mode) {
@@ -926,6 +931,303 @@ function torbutton_jar_cookies(mode) {
         selector.clearCookies();
         selector.loadCookies("nontor", false);
     }
+}
+
+function torbutton_jar_cert_type(mode, treeView, name, type) {
+    var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
+                    .getService(Components.interfaces.nsIX509CertDB2);
+    certdb.QueryInterface(Components.interfaces.nsIX509CertDB);
+    var outFile = Components.classes["@mozilla.org/file/local;1"].
+        createInstance(Components.interfaces.nsILocalFile); 
+    var outList = [];
+    
+    torbutton_log(2, "Jaring "+name+" certificates: "+mode);
+
+    for(var i = 0; i < treeView.rowCount; i++) {
+        if(!treeView.getCert(i)) {
+            continue;
+        }
+        outList.push(treeView.getCert(i));
+    }
+
+    // Write current certs to certjar-tor
+    // clear certs
+    // load certs from certjar-nontor (if exists)
+
+    var dir = Components.classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsIFile);
+
+    if(mode) {
+        // http://developer.mozilla.org/en/docs/Code_snippets:File_I/O#Getting_special_files
+        outFile.initWithPath(dir.path);
+        outFile.append("certs-"+name+".nottor");
+    } else {
+        // http://developer.mozilla.org/en/docs/Code_snippets:File_I/O#Getting_special_files
+        outFile.initWithPath(dir.path);
+        outFile.append("certs-"+name+".tor");
+    }
+
+    // this prompts for a password..
+    //certdb.exportPKCS12File(null, outFile, outList.length, outList);
+ 
+    if(outFile.exists()) {
+        outFile.remove(false);
+    }
+
+    if(outList.length) {
+        outFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0600);
+
+        var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
+            .createInstance(Components.interfaces.nsIFileOutputStream);
+        stream.init(outFile, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+
+        var bstream = Components.classes["@mozilla.org/binaryoutputstream;1"]
+            .createInstance(Components.interfaces.nsIBinaryOutputStream);
+        bstream.setOutputStream(stream);
+
+        var binaryCerts = [];
+
+        for(var i = 0; i< outList.length; i++) {
+            if(outList[i]) {
+                var len = new Object();
+                var data = outList[i].getRawDER(len);
+                certdb.deleteCertificate(outList[i]);
+                /* Doesn't work.. db isn't updated right away..
+                 * if(outList[i].equals(
+                            certdb.findCertByDBKey(outList[i].dbKey, null))) {
+                    torbutton_log(2, "Not writing cert: "+outList[i].organization);
+                } else {
+                    binaryCerts.push(data);
+                }*/
+                binaryCerts.push(data);
+            }
+        }
+
+        bstream.write32(binaryCerts.length);
+        for(var i = 0; i < binaryCerts.length; i++) {
+            bstream.write32(binaryCerts[i].length);
+            bstream.writeByteArray(binaryCerts[i], binaryCerts[i].length);
+        }
+
+        bstream.close();
+        stream.close();
+    }
+    
+    torbutton_log(2, "Wrote "+outList.length+" "+name+" certificates to "+outFile.path);
+}
+
+function torbutton_bytearray_to_string(ba) {
+    var ret = "";
+    for(var i = 0; i < ba.length; i++) {
+        ret = ret + String.fromCharCode(ba[i]);
+    }
+    return ret;
+}
+
+function torbutton_unjar_cert_type(mode, treeView, name, type) {
+    var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
+                    .getService(Components.interfaces.nsIX509CertDB2);
+    certdb.QueryInterface(Components.interfaces.nsIX509CertDB);
+
+    var inFile = Components.classes["@mozilla.org/file/local;1"].
+        createInstance(Components.interfaces.nsILocalFile); 
+
+    var dir = Components.classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsIFile);
+
+    if(mode) {
+        inFile.initWithPath(dir.path);
+        inFile.append("certs-"+name+".tor");
+    } else {
+        inFile.initWithPath(dir.path);
+        inFile.append("certs-"+name+".nottor");
+    }
+    
+    torbutton_log(2, "Checking for certificates from "+inFile.path);
+
+    if(!inFile.exists()) {
+        return;
+    }
+    torbutton_log(2, "Reading certificates from "+inFile.path);
+
+    var istream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+        .createInstance(Components.interfaces.nsIFileInputStream);
+    istream.init(inFile, -1, -1, false);
+
+    var bstream = Components.classes["@mozilla.org/binaryinputstream;1"]
+        .createInstance(Components.interfaces.nsIBinaryInputStream);
+    bstream.setInputStream(istream);
+
+    if(bstream.available()) {
+        var certs = bstream.read32();
+        for(var i = 0; i < certs; i++) {
+            var len = bstream.read32();
+            var bytes = bstream.readByteArray(len);
+            switch(type) {
+                case Components.interfaces.nsIX509Cert.EMAIL_CERT:
+                    certdb.importEmailCertificate(bytes, bytes.length, null);
+                    break;
+                case Components.interfaces.nsIX509Cert.SERVER_CERT:
+                    certdb.importServerCertificate(bytes, bytes.length, null);
+                    break;
+                case Components.interfaces.nsIX509Cert.USER_CERT:
+                    certdb.importUserCertificate(bytes, bytes.length, null);
+                    break;
+                case Components.interfaces.nsIX509Cert.CA_CERT:
+                    try {
+                        // System-wide CA certs aren't deletable and can't be 
+                        // distinguished from user-added ones. Need to check
+                        // to see if they are still present before trying
+                        // to re-insert them. (We can't check deletable status
+                        // above because they don't get deleted immediately).
+                        var base64 = window.btoa(torbutton_bytearray_to_string(bytes));
+                        var checkCert = certdb.constructX509FromBase64(base64);
+                        torbutton_log(2, "Made Cert: "+checkCert.organization);
+
+                        if(checkCert.equals(certdb.findCertByDBKey(checkCert.dbKey, null))) {
+                            torbutton_log(2, "Skipping cert: "+checkCert.organization);
+                        } else {
+                            certdb.importCertificates(bytes, bytes.length, type, null);
+                        }
+                    } catch(e) {
+                        torbutton_log(2, "Falied to make Cert: ");
+                    }
+                    break;
+            }
+        }
+        torbutton_log(2, "Read "+certs+" "+name+" certificates from "+inFile.path);
+    }
+
+    bstream.close();
+    istream.close();
+}
+
+function torbutton_jar_certs(mode) {
+    var certCache = 
+        Components.classes["@mozilla.org/security/nsscertcache;1"]
+                    .getService(Components.interfaces.nsINSSCertCache);
+
+    var serverTreeView = 
+        Components.classes["@mozilla.org/security/nsCertTree;1"]
+         .createInstance(Components.interfaces.nsICertTree);
+    var emailTreeView = Components.classes["@mozilla.org/security/nsCertTree;1"]
+        .createInstance(Components.interfaces.nsICertTree);
+    var userTreeView = Components.classes["@mozilla.org/security/nsCertTree;1"]
+        .createInstance(Components.interfaces.nsICertTree);
+    var caTreeView = Components.classes["@mozilla.org/security/nsCertTree;1"]
+        .createInstance(Components.interfaces.nsICertTree);
+
+    torbutton_log(3, "Jaring certificates: "+mode);
+
+    // backup cert8.db just in case..
+    // XXX: Verify it actually is cert8.db on windows
+
+    var dbfile = Components.classes["@mozilla.org/file/local;1"].
+        createInstance(Components.interfaces.nsILocalFile); 
+
+    var dir = Components.classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsIFile);
+
+    dbfile.initWithPath(dir.path);
+    dbfile.append("cert8.db.bak");
+
+    if(!dbfile.exists()) {
+        torbutton_log(4, "Backing up certificates from "+dbfile.path);
+        dbfile.initWithPath(dir.path);
+        dbfile.append("cert8.db");
+        dbfile.copyTo(dir, "cert8.db.bak");
+        torbutton_log(4, "Backed up certificates to "+dbfile.path+".bak");
+    }
+
+    certCache.cacheAllCerts();
+    serverTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.SERVER_CERT);
+    emailTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.EMAIL_CERT);
+    userTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.USER_CERT);
+    caTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.CA_CERT);
+
+    torbutton_jar_cert_type(mode, caTreeView, "ca", 
+            Components.interfaces.nsIX509Cert.CA_CERT);
+    torbutton_jar_cert_type(mode, userTreeView, "user", 
+            Components.interfaces.nsIX509Cert.USER_CERT);
+    torbutton_jar_cert_type(mode, emailTreeView, "email", 
+            Components.interfaces.nsIX509Cert.EMAIL_CERT);
+    torbutton_jar_cert_type(mode, serverTreeView, "server", 
+            Components.interfaces.nsIX509Cert.SERVER_CERT);
+    
+    certCache.cacheAllCerts();
+    serverTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.SERVER_CERT);
+    if(serverTreeView.selection)
+        serverTreeView.selection.clearSelection();
+    
+    emailTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.EMAIL_CERT);
+    if(emailTreeView.selection)
+        emailTreeView.selection.clearSelection();
+    
+    userTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.USER_CERT);
+    if(userTreeView.selection)
+        userTreeView.selection.clearSelection();
+    
+    caTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.CA_CERT);
+    if(caTreeView.selection)
+        caTreeView.selection.clearSelection();
+
+    var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
+                    .getService(Components.interfaces.nsIX509CertDB2);
+    certdb.QueryInterface(Components.interfaces.nsIX509CertDB);
+
+    // This is done because a couple of rogue system-wide certs
+    // end up in the server cert pane somehow after the above. This 
+    // doesn't actually get rid of them, but hey, here's 
+    // hoping.. maybe someday :)
+    for(var i = 0; i < serverTreeView.rowCount; i++) {
+        if(serverTreeView.getCert(i)) {
+            torbutton_log(2, 
+                    "Killing cert: "+serverTreeView.getCert(i).organization);
+            certdb.deleteCertificate(serverTreeView.getCert(i));
+        }
+    }
+
+    torbutton_unjar_cert_type(mode, caTreeView, "ca", 
+            Components.interfaces.nsIX509Cert.CA_CERT);
+    torbutton_unjar_cert_type(mode, userTreeView, "user", 
+            Components.interfaces.nsIX509Cert.USER_CERT);
+    torbutton_unjar_cert_type(mode, emailTreeView, "email", 
+            Components.interfaces.nsIX509Cert.EMAIL_CERT);
+    torbutton_unjar_cert_type(mode, serverTreeView, "server", 
+            Components.interfaces.nsIX509Cert.SERVER_CERT);
+
+    certCache.cacheAllCerts();
+    serverTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.SERVER_CERT);
+    if(serverTreeView.selection)
+        serverTreeView.selection.clearSelection();
+    
+    emailTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.EMAIL_CERT);
+    if(emailTreeView.selection)
+        emailTreeView.selection.clearSelection();
+    
+    userTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.USER_CERT);
+    if(userTreeView.selection)
+        userTreeView.selection.clearSelection();
+    
+    caTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.CA_CERT);
+    if(caTreeView.selection)
+        caTreeView.selection.clearSelection();
+
 }
 
 
