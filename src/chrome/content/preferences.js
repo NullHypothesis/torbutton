@@ -215,6 +215,9 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_clearHttpAuth').checked = o_torprefs.getBoolPref('clear_http_auth');
     doc.getElementById('torbutton_blockJSHistory').checked = o_torprefs.getBoolPref('block_js_history');
     doc.getElementById('torbutton_blockFileNet').checked = o_torprefs.getBoolPref('block_file_net');
+    doc.getElementById('torbutton_jarCerts').checked = o_torprefs.getBoolPref('jar_certs');
+    // XXX: Grey this out if jar_certs is false
+    doc.getElementById('torbutton_jarCACerts').checked = o_torprefs.getBoolPref('jar_ca_certs');
 
     torbutton_prefs_set_field_attributes(doc);
 }
@@ -309,6 +312,10 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
     o_torprefs.setBoolPref('disable_referer', doc.getElementById('torbutton_noReferer').checked);
     o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
+    o_torprefs.setBoolPref('jar_certs', doc.getElementById('torbutton_jarCerts').checked);
+    o_torprefs.setBoolPref('jar_ca_certs',
+            o_torprefs.getBoolPref('jar_certs') &&
+            doc.getElementById('torbutton_jarCACerts').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();

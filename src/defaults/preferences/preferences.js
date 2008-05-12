@@ -88,3 +88,6 @@ pref("extensions.torbutton.useragent_vendor", "");
 pref("extensions.torbutton.useragent_vendorSub","");
 pref("extensions.torbutton.banned_ports","8118,8123,9050,9051");
 pref("extensions.torbutton.block_file_net",true);
+pref("extensions.torbutton.jar_certs",true);
+pref("extensions.torbutton.jar_ca_certs",true);
+pref("extensions.torbutton.asked_ca_disable",false);

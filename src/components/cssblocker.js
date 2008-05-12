@@ -373,7 +373,7 @@ ContentPolicy.prototype = {
         // Instead, related functionality has been grafted onto the 
         // webprogresslistener :(	
         // See mozilla bugs 380556, 305699, 309524
-        if(ContentLocation) {
+        if(contentLocation) {
             this.logger.log(2, "Process for "+contentLocation.spec);
         }
         return ok;

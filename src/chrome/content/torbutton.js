@@ -737,8 +737,7 @@ function torbutton_update_status(mode, force_update) {
         torbutton_jar_cookies(mode);
     }
 
-    // XXX: make pref
-    if (true) {
+    if (torprefs.getBoolPref('jar_certs')) {
         torbutton_jar_certs(mode);
     }
 }
@@ -992,6 +991,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
             if(outList[i]) {
                 var len = new Object();
                 var data = outList[i].getRawDER(len);
+                //torbutton_log(2, "Delete: "+certdb.deleteCertificate(outList[i]));
                 certdb.deleteCertificate(outList[i]);
                 /* Doesn't work.. db isn't updated right away..
                  * if(outList[i].equals(
@@ -1026,6 +1026,7 @@ function torbutton_bytearray_to_string(ba) {
 }
 
 function torbutton_unjar_cert_type(mode, treeView, name, type) {
+    var unjared_certs = 0;
     var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
                     .getService(Components.interfaces.nsIX509CertDB2);
     certdb.QueryInterface(Components.interfaces.nsIX509CertDB);
@@ -1067,12 +1068,15 @@ function torbutton_unjar_cert_type(mode, treeView, name, type) {
             var bytes = bstream.readByteArray(len);
             switch(type) {
                 case Components.interfaces.nsIX509Cert.EMAIL_CERT:
+                    unjared_certs++;
                     certdb.importEmailCertificate(bytes, bytes.length, null);
                     break;
                 case Components.interfaces.nsIX509Cert.SERVER_CERT:
+                    unjared_certs++;
                     certdb.importServerCertificate(bytes, bytes.length, null);
                     break;
                 case Components.interfaces.nsIX509Cert.USER_CERT:
+                    unjared_certs++;
                     certdb.importUserCertificate(bytes, bytes.length, null);
                     break;
                 case Components.interfaces.nsIX509Cert.CA_CERT:
@@ -1089,6 +1093,7 @@ function torbutton_unjar_cert_type(mode, treeView, name, type) {
                         if(checkCert.equals(certdb.findCertByDBKey(checkCert.dbKey, null))) {
                             torbutton_log(2, "Skipping cert: "+checkCert.organization);
                         } else {
+                            unjared_certs++;
                             certdb.importCertificates(bytes, bytes.length, type, null);
                         }
                     } catch(e) {
@@ -1097,14 +1102,17 @@ function torbutton_unjar_cert_type(mode, treeView, name, type) {
                     break;
             }
         }
-        torbutton_log(2, "Read "+certs+" "+name+" certificates from "+inFile.path);
+        torbutton_log(2, "Read "+unjared_certs+" "+name+" certificates from "+inFile.path);
     }
 
     bstream.close();
     istream.close();
+
+    return unjared_certs;
 }
 
 function torbutton_jar_certs(mode) {
+    var tot_certs = 0;
     var certCache = 
         Components.classes["@mozilla.org/security/nsscertcache;1"]
                     .getService(Components.interfaces.nsINSSCertCache);
@@ -1152,8 +1160,10 @@ function torbutton_jar_certs(mode) {
     caTreeView.loadCertsFromCache(certCache, 
             Components.interfaces.nsIX509Cert.CA_CERT);
 
-    torbutton_jar_cert_type(mode, caTreeView, "ca", 
-            Components.interfaces.nsIX509Cert.CA_CERT);
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.jar_ca_certs")) {
+        torbutton_jar_cert_type(mode, caTreeView, "ca", 
+                Components.interfaces.nsIX509Cert.CA_CERT);
+    }
     torbutton_jar_cert_type(mode, userTreeView, "user", 
             Components.interfaces.nsIX509Cert.USER_CERT);
     torbutton_jar_cert_type(mode, emailTreeView, "email", 
@@ -1198,14 +1208,30 @@ function torbutton_jar_certs(mode) {
         }
     }
 
-    torbutton_unjar_cert_type(mode, caTreeView, "ca", 
-            Components.interfaces.nsIX509Cert.CA_CERT);
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.jar_ca_certs")) {
+        if(torbutton_unjar_cert_type(mode, caTreeView, "ca", 
+                Components.interfaces.nsIX509Cert.CA_CERT) == 0) {
+            if(!m_tb_prefs.getBoolPref("extensions.torbutton.asked_ca_disable")) {
+                var o_stringbundle = torbutton_get_stringbundle();
+                var warning = o_stringbundle.GetStringFromName("torbutton.popup.confirm_ca_certs");
+                var val = window.confirm(warning);
+                torbutton_log(3, "Got response: "+val);
+                if(val) {
+                    m_tb_prefs.setBoolPref("extensions.torbutton.jar_ca_certs",
+                            false);
+                }
+                m_tb_prefs.setBoolPref("extensions.torbutton.asked_ca_disable", true);
+            }
+        }
+    }
     torbutton_unjar_cert_type(mode, userTreeView, "user", 
             Components.interfaces.nsIX509Cert.USER_CERT);
     torbutton_unjar_cert_type(mode, emailTreeView, "email", 
             Components.interfaces.nsIX509Cert.EMAIL_CERT);
     torbutton_unjar_cert_type(mode, serverTreeView, "server", 
             Components.interfaces.nsIX509Cert.SERVER_CERT);
+
+
 
     certCache.cacheAllCerts();
     serverTreeView.loadCertsFromCache(certCache, 
