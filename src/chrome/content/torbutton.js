@@ -1211,6 +1211,7 @@ function torbutton_jar_certs(mode) {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.jar_ca_certs")) {
         if(torbutton_unjar_cert_type(mode, caTreeView, "ca", 
                 Components.interfaces.nsIX509Cert.CA_CERT) == 0) {
+            /*
             if(!m_tb_prefs.getBoolPref("extensions.torbutton.asked_ca_disable")) {
                 var o_stringbundle = torbutton_get_stringbundle();
                 var warning = o_stringbundle.GetStringFromName("torbutton.popup.confirm_ca_certs");
@@ -1220,8 +1221,12 @@ function torbutton_jar_certs(mode) {
                     m_tb_prefs.setBoolPref("extensions.torbutton.jar_ca_certs",
                             false);
                 }
-                m_tb_prefs.setBoolPref("extensions.torbutton.asked_ca_disable", true);
-            }
+                m_tb_prefs.setBoolPref("extensions.torbutton.asked_ca_disable", 
+                        true);
+            }*/
+            // arma thinks this not worth even asking. He is probably right.
+            m_tb_prefs.setBoolPref("extensions.torbutton.jar_ca_certs",
+                    false);
         }
     }
     torbutton_unjar_cert_type(mode, userTreeView, "user", 
