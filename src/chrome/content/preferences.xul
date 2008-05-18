@@ -240,10 +240,12 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_spoofEnglish" label="&torbutton.prefs.spoof_english;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+<!--
           <checkbox id="torbutton_jarCerts" label="&torbutton.prefs.jar_certs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_jarCACerts" label="&torbutton.prefs.jar_ca_certs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+-->
           <checkbox id="torbutton_noReferer" label="&torbutton.prefs.disable_referer;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>

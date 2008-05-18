@@ -942,11 +942,29 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
     
     torbutton_log(2, "Jaring "+name+" certificates: "+mode);
 
+    if(type == Components.interfaces.nsIX509Cert.CA_CERT) {
+        try {
+            var bundles = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                .getService(Components.interfaces.nsIStringBundleService);
+            var pipnss_bundle = bundles.createBundle("chrome://pipnss/locale/pipnss.properties");
+            var internalToken = pipnss_bundle.GetStringFromName("InternalToken");
+        } catch(err) {
+            torbutton_log(5, "No String bundle for NSS: "+err);
+        }
+    }
+
     for(var i = 0; i < treeView.rowCount; i++) {
-        if(!treeView.getCert(i)) {
+        var cert = treeView.getCert(i);
+        // HACK alert
+        // There is no real way to differentiate user added 
+        // CA certificates from builtin ones, aside from the 
+        // token name string (which is localized) 
+        if(!cert || (type == Components.interfaces.nsIX509Cert.CA_CERT
+                && cert.tokenName != internalToken)) {
             continue;
         }
-        outList.push(treeView.getCert(i));
+
+        outList.push(cert);
     }
 
     // Write current certs to certjar-tor
@@ -986,20 +1004,29 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
         bstream.setOutputStream(stream);
 
         var binaryCerts = [];
+        var bitList = [];
 
         for(var i = 0; i< outList.length; i++) {
             if(outList[i]) {
                 var len = new Object();
                 var data = outList[i].getRawDER(len);
                 //torbutton_log(2, "Delete: "+certdb.deleteCertificate(outList[i]));
+                torbutton_log(2, "Delete: "+outList[i].organization+" "+outList[i].tokenName);
+                // Need to save trustbits somehow.. They are not saved.
+                var bits = 0;
+                if(certdb.isCertTrusted(outList[i], type, certdb.TRUSTED_SSL)) {
+                    bits |= certdb.TRUSTED_SSL;
+                }
+                if(certdb.isCertTrusted(outList[i], type, certdb.TRUSTED_EMAIL)) {
+                    bits |= certdb.TRUSTED_EMAIL;
+                }
+                if(certdb.isCertTrusted(outList[i], type, certdb.TRUSTED_OBJSIGN)) {
+                    bits |= certdb.TRUSTED_OBJSIGN;
+                }
+
                 certdb.deleteCertificate(outList[i]);
-                /* Doesn't work.. db isn't updated right away..
-                 * if(outList[i].equals(
-                            certdb.findCertByDBKey(outList[i].dbKey, null))) {
-                    torbutton_log(2, "Not writing cert: "+outList[i].organization);
-                } else {
-                    binaryCerts.push(data);
-                }*/
+
+                bitList.push(bits); 
                 binaryCerts.push(data);
             }
         }
@@ -1007,6 +1034,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
         bstream.write32(binaryCerts.length);
         for(var i = 0; i < binaryCerts.length; i++) {
             bstream.write32(binaryCerts[i].length);
+            bstream.write32(bitList[i]);
             bstream.writeByteArray(binaryCerts[i], binaryCerts[i].length);
         }
 
@@ -1063,45 +1091,52 @@ function torbutton_unjar_cert_type(mode, treeView, name, type) {
 
     if(bstream.available()) {
         var certs = bstream.read32();
+
+        if(type == Components.interfaces.nsIX509Cert.CA_CERT) {
+            m_tb_prefs.setBoolPref("extensions.torbutton.block_cert_dialogs", 
+                    true);
+        }
+
         for(var i = 0; i < certs; i++) {
             var len = bstream.read32();
+            var trustBits = bstream.read32();
             var bytes = bstream.readByteArray(len);
-            switch(type) {
-                case Components.interfaces.nsIX509Cert.EMAIL_CERT:
-                    unjared_certs++;
-                    certdb.importEmailCertificate(bytes, bytes.length, null);
-                    break;
-                case Components.interfaces.nsIX509Cert.SERVER_CERT:
-                    unjared_certs++;
-                    certdb.importServerCertificate(bytes, bytes.length, null);
-                    break;
-                case Components.interfaces.nsIX509Cert.USER_CERT:
-                    unjared_certs++;
-                    certdb.importUserCertificate(bytes, bytes.length, null);
-                    break;
-                case Components.interfaces.nsIX509Cert.CA_CERT:
-                    try {
-                        // System-wide CA certs aren't deletable and can't be 
-                        // distinguished from user-added ones. Need to check
-                        // to see if they are still present before trying
-                        // to re-insert them. (We can't check deletable status
-                        // above because they don't get deleted immediately).
-                        var base64 = window.btoa(torbutton_bytearray_to_string(bytes));
-                        var checkCert = certdb.constructX509FromBase64(base64);
-                        torbutton_log(2, "Made Cert: "+checkCert.organization);
 
-                        if(checkCert.equals(certdb.findCertByDBKey(checkCert.dbKey, null))) {
-                            torbutton_log(2, "Skipping cert: "+checkCert.organization);
-                        } else {
-                            unjared_certs++;
-                            certdb.importCertificates(bytes, bytes.length, type, null);
-                        }
-                    } catch(e) {
-                        torbutton_log(2, "Falied to make Cert: ");
-                    }
-                    break;
+            // This just for the trustBits, which seem to be lost 
+            // in the BER translation. sucks..
+            var base64 = window.btoa(torbutton_bytearray_to_string(bytes));
+            var checkCert = certdb.constructX509FromBase64(base64);
+            torbutton_log(2, "Made Cert: "+checkCert.organization);
+
+            try {
+                switch(type) {
+                    case Components.interfaces.nsIX509Cert.EMAIL_CERT:
+                        certdb.importEmailCertificate(bytes, bytes.length, null);
+                        break;
+                    case Components.interfaces.nsIX509Cert.SERVER_CERT:
+                        certdb.importServerCertificate(bytes, bytes.length, null);
+                        break;
+                    case Components.interfaces.nsIX509Cert.USER_CERT:
+                        certdb.importUserCertificate(bytes, bytes.length, null);
+                        break;
+                    case Components.interfaces.nsIX509Cert.CA_CERT:
+                        certdb.importCertificates(bytes, bytes.length, type, null);
+                        break;
+                }
+            
+                certdb.setCertTrust(checkCert, type, trustBits);
+
+            } catch(e) {
+                torbutton_log(5, "Failed to import cert: "+checkCert.organization+": "+e);
             }
+
+            unjared_certs++;
         }
+        if(type == Components.interfaces.nsIX509Cert.CA_CERT) {
+            m_tb_prefs.setBoolPref("extensions.torbutton.block_cert_dialogs", 
+                    false);
+        }
+
         torbutton_log(2, "Read "+unjared_certs+" "+name+" certificates from "+inFile.path);
     }
 
@@ -1196,34 +1231,31 @@ function torbutton_jar_certs(mode) {
                     .getService(Components.interfaces.nsIX509CertDB2);
     certdb.QueryInterface(Components.interfaces.nsIX509CertDB);
 
-    // This is done because a couple of rogue system-wide certs
-    // end up in the server cert pane somehow after the above. This 
-    // doesn't actually get rid of them, but hey, here's 
-    // hoping.. maybe someday :)
-    for(var i = 0; i < serverTreeView.rowCount; i++) {
-        if(serverTreeView.getCert(i)) {
-            torbutton_log(2, 
-                    "Killing cert: "+serverTreeView.getCert(i).organization);
-            certdb.deleteCertificate(serverTreeView.getCert(i));
-        }
-    }
+    certCache.cacheAllCerts();
+    serverTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.SERVER_CERT);
+    if(serverTreeView.selection)
+        serverTreeView.selection.clearSelection();
+    
+    emailTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.EMAIL_CERT);
+    if(emailTreeView.selection)
+        emailTreeView.selection.clearSelection();
+    
+    userTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.USER_CERT);
+    if(userTreeView.selection)
+        userTreeView.selection.clearSelection();
+    
+    caTreeView.loadCertsFromCache(certCache, 
+            Components.interfaces.nsIX509Cert.CA_CERT);
+    if(caTreeView.selection)
+        caTreeView.selection.clearSelection();
+
 
     if(m_tb_prefs.getBoolPref("extensions.torbutton.jar_ca_certs")) {
         if(torbutton_unjar_cert_type(mode, caTreeView, "ca", 
                 Components.interfaces.nsIX509Cert.CA_CERT) == 0) {
-            /*
-            if(!m_tb_prefs.getBoolPref("extensions.torbutton.asked_ca_disable")) {
-                var o_stringbundle = torbutton_get_stringbundle();
-                var warning = o_stringbundle.GetStringFromName("torbutton.popup.confirm_ca_certs");
-                var val = window.confirm(warning);
-                torbutton_log(3, "Got response: "+val);
-                if(val) {
-                    m_tb_prefs.setBoolPref("extensions.torbutton.jar_ca_certs",
-                            false);
-                }
-                m_tb_prefs.setBoolPref("extensions.torbutton.asked_ca_disable", 
-                        true);
-            }*/
             // arma thinks this not worth even asking. He is probably right.
             m_tb_prefs.setBoolPref("extensions.torbutton.jar_ca_certs",
                     false);
@@ -1235,7 +1267,6 @@ function torbutton_jar_certs(mode) {
             Components.interfaces.nsIX509Cert.EMAIL_CERT);
     torbutton_unjar_cert_type(mode, serverTreeView, "server", 
             Components.interfaces.nsIX509Cert.SERVER_CERT);
-
 
 
     certCache.cacheAllCerts();
@@ -2015,6 +2046,7 @@ function torbutton_check_progress(aProgress, aRequest) {
                         var browser = wm.getBrowserForContentWindow(DOMWindow.opener);
                         torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
 
+                        // XXX: This may block ssl popups in the first tab
                         if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
                             try {
                                 torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);

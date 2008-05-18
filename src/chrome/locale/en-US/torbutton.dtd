@@ -74,4 +74,4 @@
 <!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
 <!ENTITY torbutton.prefs.jar_certs        "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs        "Store CA certs in seperate jars for Tor/Non-Tor (recommended, slow)">
+<!ENTITY torbutton.prefs.jar_ca_certs        "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
