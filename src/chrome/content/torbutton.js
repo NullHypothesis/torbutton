@@ -97,10 +97,15 @@ var torbutton_unique_pref_observer =
             case "extensions.torbutton.dual_cookie_jars":
             case "extensions.torbutton.cookie_jars":
             case "extensions.torbutton.clear_cookies":
+                torbutton_log(2, "Got cookie pref change");
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars")
                     && !m_tb_prefs.getBoolPref("extensions.torbutton.clear_cookies")) {
+                    torbutton_log(3, "Changing lifetime");
                     m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
-                            torprefs.getIntPref("saved.cookieLifetime")); 
+                            m_tb_prefs.getIntPref("extensions.torbutton.saved.cookieLifetime")); 
+                } else if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                    torbutton_log(3, "Changing lifetime");
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2); 
                 }
                 break;
             
