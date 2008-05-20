@@ -336,6 +336,8 @@ function torbutton_prefs_reset_defaults() {
     //  2. Restore saved prefs
     //  3. Clear torbutton settings
 
+    // XXX: Some of these are torbutton state variables that should NOT
+    // be reset!
     children = o_torprefs.getChildList("" , tmpcnt);
     for(i = 0; i < children.length; i++) {
         torbutton_log(5, "Preferences reset: "+children[i]);

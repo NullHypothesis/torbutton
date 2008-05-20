@@ -92,3 +92,4 @@ pref("extensions.torbutton.jar_certs",false);
 pref("extensions.torbutton.jar_ca_certs",false);
 pref("extensions.torbutton.asked_ca_disable",false);
 pref("extensions.torbutton.block_cert_dialogs",false);
+pref("extensions.torbutton.saved_full_page_plugins","");

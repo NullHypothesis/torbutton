@@ -7,6 +7,7 @@ var m_tb_wasinited = false;
 var m_tb_prefs = false;
 var m_tb_jshooks = false;
 var m_tb_plugin_mimetypes = false;
+var m_tb_plugin_string = false;
 var m_tb_is_main_window = false;
 
 var m_tb_window_height = 0;
@@ -117,6 +118,7 @@ var torbutton_unique_pref_observer =
             case "extensions.torbutton.set_uagent":
                 // If the user turns off the pref, reset their user agent to
                 // vanilla
+                // XXX: Update this with new prefs from greg's patch.
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
                     if(m_tb_prefs.prefHasUserValue("general.appname.override"))
                         m_tb_prefs.clearUserPref("general.appname.override");
@@ -707,6 +709,27 @@ function torbutton_update_status(mode, force_update) {
 
     torbutton_log(2, "Prefs pretty much done");
     
+    if(torprefs.getBoolPref("no_tor_plugins")) {
+        if(mode) {
+            if(changed && m_tb_prefs.prefHasUserValue("plugin.disable_full_page_plugin_for_types")) {
+                // Update saved plugin pref
+                torprefs.setCharPref("saved_full_page_plugins", 
+                  m_tb_prefs.getCharPref("plugin.disable_full_page_plugin_for_types"));
+            }
+            // copy plugins array to pref
+            m_tb_prefs.setCharPref("plugin.disable_full_page_plugin_for_types",
+                    m_tb_plugin_string);
+        } else {
+            if(torprefs.prefHasUserValue("saved_full_page_plugins")) {
+                // restore saved pref
+                m_tb_prefs.setCharPref("plugin.disable_full_page_plugin_for_types",
+                        torprefs.getCharPref("saved_full_page_plugins"));
+            } else {
+                m_tb_prefs.clearUserPref("plugin.disable_full_page_plugin_for_types");
+            }
+        }
+    }
+
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
@@ -1270,6 +1293,9 @@ function torbutton_jar_certs(mode) {
             Components.interfaces.nsIX509Cert.USER_CERT);
     torbutton_unjar_cert_type(mode, emailTreeView, "email", 
             Components.interfaces.nsIX509Cert.EMAIL_CERT);
+
+    // XXX: on FF3, somehow CA certs get loaded into server pane on 
+    // reload
     torbutton_unjar_cert_type(mode, serverTreeView, "server", 
             Components.interfaces.nsIX509Cert.SERVER_CERT);
 
@@ -1653,12 +1679,15 @@ function torbutton_do_onetime_startup()
 function torbutton_get_plugin_mimetypes()
 {
     m_tb_plugin_mimetypes = { null : null };
+    var plugin_list = [];
     for(var i = 0; i < window.navigator.mimeTypes.length; ++i) {
         var mime = window.navigator.mimeTypes.item(i);
         if(mime && mime.enabledPlugin) {
             m_tb_plugin_mimetypes[mime.type] = true;
+            plugin_list.push(mime.type);
         }
     }
+    m_tb_plugin_string = plugin_list.join();
 }
 
 
