@@ -412,16 +412,20 @@ behavior are dangerous.
  Javascript, yet still allow malicious exit nodes to compromise your
  anonymity via the default whitelist (which they can spoof to inject any script they want). 
  <li>FoxyProxy</li>
- FoxyProxy faces similar problems as NoScript. Since it only loads some
- content elements through a proxy, it is possible for exit nodes or malicious
- websites to insert links to sites that are allowed to bypass your proxy
- rules, and unmask you that way. Fixing this issue is currently on the
- <a href="http://foxyproxy.mozdev.org/roadmap.html">FoxyProxy roadmap</a>.
- There is also risk of <a
+ FoxyProxy, when used in its "patterns" mode, faces similar problems as
+ NoScript. When FoxyProxy is used in this manner, only some content elements
+ are loaded through a proxy. Since it only loads some content elements through
+ a proxy in this mode, it is possible for exit nodes or malicious websites to
+ insert links to sites that are allowed to bypass your proxy rules, and unmask
+ you that way. There is also risk of <a
  href="http://foxyproxy.mozdev.org/faq.html#privacy-01">correlation and
- other</a> leaks between ad servers and the sites that host
- content. Without careful filters, it is possible for ad servers to obtain
- your real IP and have it fully correlated to your Tor usage.
+ other</a> leaks between ad servers and the sites that host content. The
+ "proxy-per-tab" mode on the <a
+ href="http://foxyproxy.mozdev.org/roadmap.html">FoxyProxy roadmap</a> would
+ avoid these issues. In addition, <a href="design/index.html#adversary">all the issues</a> 
+ with plugin proxy bypass, 
+ javascript timer-based proxy bypass, anonymity set reduction, and history 
+ disclosure also apply without Torbutton being used in tandem.
  <li>SwitchProxy, et al</li>
  In theory, Torbutton should tolerate third-party proxy switchers that behave
  sanely (ie in an all-or-nothing fashion). In practice, there are likely bugs
