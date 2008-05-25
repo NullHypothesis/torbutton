@@ -90,7 +90,7 @@ StoreWrapper.prototype =
           var x = 0;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          var fun = "function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);}";
+          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);})";
           // already in scope
           //var Components = this.Components;
           newObj[method] = eval(fun);
@@ -119,6 +119,9 @@ StoreWrapper.prototype =
 
   doRestore: function() {
     var ret = false;
+    // FIXME: This happens right after an extension upgrade too. But maybe
+    // that's what we want.
+
     // This is so lame. But the exposed API is braindead so it 
     // must be hacked around
     dump("new doRestore\n");

@@ -105,7 +105,7 @@ window.__HookObjects = function() {
           // We can't define individual getters/setters for window.screen 
           // for some reason. works in html but not in these hooks.. No idea why
 
-          var scr = new window.Object();
+          var scr = new Object();
           var origScr = window.screen;
           scr.__defineGetter__("height", function() { return window.innerHeight; });
           scr.__defineGetter__("width", function() { return window.innerWidth; });
@@ -138,6 +138,8 @@ window.__HookObjects = function() {
 
   }
   
+
+  if(window.__tb_hook_date == true) { // don't feel like indenting this
 
   /* Timezone fix for http://gemal.dk/browserspy/css.html */
   var reparseDate = function(d, str) {
@@ -301,7 +303,10 @@ window.__HookObjects = function() {
   with(window) {
     var Date = newWrappedDate;
   }
+
+  } // window.__tb_hook_date == true
   
+
   with(window) {
       XPCNativeWrapper = function(a) { return a; };
   }

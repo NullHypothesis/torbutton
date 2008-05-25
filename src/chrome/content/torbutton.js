@@ -13,6 +13,8 @@ var m_tb_is_main_window = false;
 var m_tb_window_height = 0;
 var m_tb_window_width = 0;
 
+var m_tb_ff3 = false;
+
 var torbutton_window_pref_observer =
 {
     register: function()
@@ -118,7 +120,6 @@ var torbutton_unique_pref_observer =
             case "extensions.torbutton.set_uagent":
                 // If the user turns off the pref, reset their user agent to
                 // vanilla
-                // XXX: Update this with new prefs from greg's patch.
                 if(!m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
                     if(m_tb_prefs.prefHasUserValue("general.appname.override"))
                         m_tb_prefs.clearUserPref("general.appname.override");
@@ -132,6 +133,15 @@ var torbutton_unique_pref_observer =
                         m_tb_prefs.clearUserPref("general.useragent.vendorSub");
                     if(m_tb_prefs.prefHasUserValue("general.platform.override"))
                         m_tb_prefs.clearUserPref("general.platform.override");
+                    
+                    // XXX: Is this ok on ff2?
+                    if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
+                        m_tb_prefs.clearUserPref("general.oscpu.override");
+                    if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
+                        m_tb_prefs.clearUserPref("general.buildID.override");
+                    if(m_tb_prefs.prefHasUserValue("general.productSub.override"))
+                        m_tb_prefs.clearUserPref("general.productSub.override");
+
                 } else {
                     torbutton_log(1, "Got update message, updating status");
                     torbutton_update_status(
@@ -247,6 +257,18 @@ function torbutton_init_toolbutton(event)
 
 function torbutton_init() {
     torbutton_log(3, 'called init()');
+
+    // Determine if we are firefox 3 or not.
+    var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+        .getService(Components.interfaces.nsIXULAppInfo);
+    var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+        .getService(Components.interfaces.nsIVersionComparator);
+
+    if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
+        m_tb_ff3 = true;
+    } else {
+        m_tb_ff3 = false;
+    }
     
     // initialize preferences before we start our prefs observer
     torbutton_init_prefs();
@@ -546,6 +568,16 @@ function torbutton_update_status(mode, force_update) {
 
                 m_tb_prefs.setCharPref("general.useragent.vendorSub",
                         torprefs.getCharPref("useragent_vendorSub"));
+
+                m_tb_prefs.setCharPref("general.oscpu.override",
+                        torprefs.getCharPref("oscpu_override"));
+
+                m_tb_prefs.setCharPref("general.buildID.override",
+                        torprefs.getCharPref("buildID_override"));
+
+                m_tb_prefs.setCharPref("general.productSub.override",
+                        torprefs.getCharPref("productsub_override"));
+
             } catch(e) {
                 torbutton_log(5, "Prefset error");
             }
@@ -563,6 +595,14 @@ function torbutton_update_status(mode, force_update) {
                     m_tb_prefs.clearUserPref("general.useragent.vendorSub");
                 if(m_tb_prefs.prefHasUserValue("general.platform.override"))
                     m_tb_prefs.clearUserPref("general.platform.override");
+
+                // XXX: Is this ok on ff2?
+                if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
+                    m_tb_prefs.clearUserPref("general.oscpu.override");
+                if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
+                    m_tb_prefs.clearUserPref("general.buildID.override");
+                if(m_tb_prefs.prefHasUserValue("general.productSub.override"))
+                    m_tb_prefs.clearUserPref("general.productSub.override");
             } catch (e) {
                 // This happens because we run this from time to time
                 torbutton_log(3, "Prefs already cleared");
@@ -634,9 +674,11 @@ function torbutton_update_status(mode, force_update) {
     // so no need to keep it around for someone to rifle through.
     m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
 
-    // Disable safebrowsing in Tor. It fetches some info in cleartext
-    // with no HMAC (Firefox Bug 360387)
-    m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
+    // Disable safebrowsing in Tor for FF2. It fetches some info in 
+    // cleartext with no HMAC (Firefox Bug 360387)
+    if(!m_tb_ff3) {
+        m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
+    }
 
     // I think this pref is evil (and also hidden from user configuration, 
     // which makes it extra evil) and so therefore am disabling it 
@@ -679,8 +721,17 @@ function torbutton_update_status(mode, force_update) {
     // to keep their own prefs.. Not sure what to do though..
     if(mode) {
         if(torprefs.getBoolPref('block_thwrite')) {
+            if(m_tb_ff3) {
+                m_tb_prefs.setIntPref("browser.history_expire_days", 0);
+            }
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
         } else {
+            if(m_tb_ff3) {
+                // XXX: save user value..
+                if(m_tb_prefs.prefHasUserValue("browser.history_expire_days")) {
+                    m_tb_prefs.clearUserPref("browser.history_expire_days");
+                }
+            }
             m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
         }
 
@@ -693,8 +744,17 @@ function torbutton_update_status(mode, force_update) {
         }
     } else {
         if(torprefs.getBoolPref('block_nthwrite')) {
+            if(m_tb_ff3) {
+                m_tb_prefs.setIntPref("browser.history_expire_days", 0);
+            }
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
         } else {
+            if(m_tb_ff3) {
+                // XXX: save user value..
+                if(m_tb_prefs.prefHasUserValue("browser.history_expire_days")) {
+                    m_tb_prefs.clearUserPref("browser.history_expire_days");
+                }
+            }
             m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
         }
 
@@ -713,17 +773,17 @@ function torbutton_update_status(mode, force_update) {
         if(mode) {
             if(changed && m_tb_prefs.prefHasUserValue("plugin.disable_full_page_plugin_for_types")) {
                 // Update saved plugin pref
-                torprefs.setCharPref("saved_full_page_plugins", 
+                torprefs.setCharPref("saved.full_page_plugins", 
                   m_tb_prefs.getCharPref("plugin.disable_full_page_plugin_for_types"));
             }
             // copy plugins array to pref
             m_tb_prefs.setCharPref("plugin.disable_full_page_plugin_for_types",
                     m_tb_plugin_string);
         } else {
-            if(torprefs.prefHasUserValue("saved_full_page_plugins")) {
+            if(torprefs.prefHasUserValue("saved.full_page_plugins")) {
                 // restore saved pref
                 m_tb_prefs.setCharPref("plugin.disable_full_page_plugin_for_types",
-                        torprefs.getCharPref("saved_full_page_plugins"));
+                        torprefs.getCharPref("saved.full_page_plugins"));
             } else {
                 m_tb_prefs.clearUserPref("plugin.disable_full_page_plugin_for_types");
             }
@@ -733,6 +793,31 @@ function torbutton_update_status(mode, force_update) {
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
+
+    if(mode) {
+        // Disable livemark fetching on FF3
+        // XXX: save user pref
+        m_tb_prefs.setIntPref("browser.bookmarks.livemark_refresh_seconds", 0);
+    } else {
+        if(m_tb_prefs.prefHasUserValue("plugin.disable_full_page_plugin_for_types")) {
+            m_tb_prefs.clearUserPref("browser.bookmarks.livemark_refresh_seconds");
+        }
+    }
+
+    /*
+     * XXX: Windows doesn't call tzset() automatically.. Linux and MacOS
+     * both do though.. :(
+    var environ = Components.classes["@mozilla.org/process/environment;1"]
+                   .getService(Components.interfaces.nsIEnvironment);
+
+    if(mode) {
+        torbutton_log(2, "Setting timezone to UTC");
+        environ.set("TZ", "UTC");
+    } else {
+        torbutton_log(2, "Unsetting timezone.");
+        environ.set("TZ", "PST+7:00");
+    }
+    */
 
     // This call also has to be here for 3rd party proxy changers.
     torbutton_close_on_toggle(mode);
@@ -1567,8 +1652,10 @@ observe : function(subject, topic, data) {
         if(m_tb_prefs.prefHasUserValue("browser.safebrowsing.remoteLookups"))
             m_tb_prefs.clearUserPref("browser.safebrowsing.remoteLookups");
 
-        if(m_tb_prefs.prefHasUserValue("network.security.ports.banned"))
-            m_tb_prefs.clearUserPref("network.security.ports.banned");
+        if(!m_tb_ff3) {
+            if(m_tb_prefs.prefHasUserValue("network.security.ports.banned"))
+                m_tb_prefs.clearUserPref("network.security.ports.banned");
+        }
     }
 
     if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
@@ -1995,17 +2082,30 @@ function torbutton_hookdoc(win, doc) {
     // the insertion function returning before the injected code is evaluated.
     // This code seems to do what we want.
 
-    var str2 = "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
-    str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
-    str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
-    str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
+    var str2 = "";
+    if(m_tb_ff3) {
+        str2 += "window.__tb_set_uagent=false;\r\n";
+        str2 += "window.__tb_hook_date=false;\r\n";
+    } else {
+        str2 += "window.__tb_hook_date=true;\r\n";
+        str2 += "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
+        str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
+        str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
+        str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
+    }
     str2 += m_tb_jshooks;
 
     try {
         torbutton_log(2, "Type of window: " + typeof(win));
         torbutton_log(2, "Type of wrapped window: " + typeof(win.wrappedJSObject));
         var s = new Components.utils.Sandbox(win.wrappedJSObject);
-        s.window = win.wrappedJSObject;
+        // XXX: FF3 issues 
+        // http://developer.mozilla.org/en/docs/XPConnect_wrappers#XPCSafeJSObjectWrapper
+        // http://developer.mozilla.org/en/docs/Code_snippets:Interaction_between_privileged_and_non-privileged_pages
+        s.window = win.wrappedJSObject; 
+//        s.__proto__ = win.wrappedJSObject;
+        //var result = Components.utils.evalInSandbox('var origDate = Date; window.alert(new origDate())', s);
+        //result = 23;
         var result = Components.utils.evalInSandbox(str2, s);
         if(result === 23) { // secret confirmation result code.
             torbutton_log(3, "Javascript hooks applied successfully at: " + win.location);

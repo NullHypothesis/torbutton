@@ -330,17 +330,38 @@ function torbutton_prefs_reset_defaults() {
     var tmpcnt = new Object();
     var children;
     var i;
+    var was_enabled = false;
+    
+    torbutton_log(3, "Starting Pref reset");
 
-    // FIXME: change this to handle people with non-default proxy settings
+    //  0. Disable tor
     //  1. Clear proxy settings
     //  2. Restore saved prefs
     //  3. Clear torbutton settings
+    //  4. Enable tor if was previously enabled
+
+    // Reset Tor state to disabled.
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+    var chrome = wm.getMostRecentWindow("navigator:browser");
+
+    // XXX Warning: The only reason this works is because of Firefox's 
+    // threading model. As soon as a pref is changed, all observers
+    // are notified by that same thread, immediately. Since torbutton's
+    // security state is driven by proxy pref observers, this
+    // causes everything to be reset in a linear order. If firefox 
+    // ever makes pref observers asynchonous, this will all break.
+    if(o_torprefs.getBoolPref("tor_enabled")) {
+        chrome.torbutton_disable_tor();
+        was_enabled = true;
+    }
+    
+    torbutton_log(3, "Tor disabled for pref reset");
 
     // XXX: Some of these are torbutton state variables that should NOT
     // be reset!
     children = o_torprefs.getChildList("" , tmpcnt);
     for(i = 0; i < children.length; i++) {
-        torbutton_log(5, "Preferences reset: "+children[i]);
         if(o_torprefs.prefHasUserValue(children[i]))
             o_torprefs.clearUserPref(children[i]);
     }
@@ -349,6 +370,12 @@ function torbutton_prefs_reset_defaults() {
     for(i = 0; i < children.length; i++) {
         if(o_proxyprefs.prefHasUserValue(children[i]))
             o_proxyprefs.clearUserPref(children[i]);
+    }
+    
+    torbutton_log(3, "Prefs reset");
+
+    if(was_enabled) {
+        chrome.torbutton_enable_tor();
     }
 
     torbutton_log(5, "Preferences reset to defaults");

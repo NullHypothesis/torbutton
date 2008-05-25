@@ -123,8 +123,19 @@ HistoryWrapper.prototype =
    * Copies methods from the true history object we are wrapping
    */
   copyMethods: function(wrapped) {
+    // XXX: "Not all histories implement all methods"? wtf?? It's a 
+    // damned service. how are there more than one?
+    //  - http://developer.mozilla.org/en/docs/nsIGlobalHistory3
     var mimic = function(newObj, method) {
-      if(typeof(wrapped[method]) == "function") {
+       if(method == "getURIGeckoFlags" || method == "setURIGeckoFlags") {
+          // Hack to deal with unimplemented methods.
+          // XXX: the API docs say to RETURN the not implemented error
+          // for these functions as opposed to throw.. Also,
+          // what other "histories" actually DO implement these functions?
+          // Did we just break them somehow?
+          var fun = "(function (){return Components.results.NS_ERROR_NOT_IMPLEMENTED; })";
+          newObj[method] = eval(fun);
+       } else if(typeof(wrapped[method]) == "function") {
           // Code courtesy of timeless: 
           // http://www.webwizardry.net/~timeless/windowStubs.js
           var params = [];
@@ -133,11 +144,8 @@ HistoryWrapper.prototype =
           var call;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          var fun = "function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);}";
-          // already in scope
-          //var Components = this.Components;
+          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);})";
           newObj[method] = eval(fun);
-          //dump("wrapped: "+method+": "+fun+"\n");
       } else {
           newObj.__defineGetter__(method, function() { return wrapped[method]; });
           newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });
