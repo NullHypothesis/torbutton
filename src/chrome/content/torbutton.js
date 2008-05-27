@@ -2088,7 +2088,16 @@ function torbutton_hookdoc(win, doc) {
         str2 += "window.__tb_hook_date=false;\r\n";
     } else {
         str2 += "window.__tb_hook_date=true;\r\n";
-        str2 += "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+            str2 += "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
+        } else {
+            // Abandon ship on user agent spoofing if user wants plugins.
+            // OS+platform can be obtained from plugins anyways, and complications
+            // with XPCNativeWrappers makes it hard to provide
+            // plugin information in window.navigator properly with plugins
+            // enabled.
+            str2 += "window.__tb_set_uagent=false;\r\n";
+        }
         str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
         str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
         str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";

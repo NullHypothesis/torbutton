@@ -72,9 +72,9 @@ window.__HookObjects = function() {
                   // XPCNative objects are special for some reason. So far, 
                   // all we have are "plugins" and mimeTypes, which 
                   // are empty anyways. Disable them.
-                  if(tmpNav[i].toString().indexOf("XPCNative") != -1) {
-                      window.navigator[i] = tmpNav[i];
-                      continue;
+                  //if(tmpNav[i].toString().indexOf("XPCNative") != -1) {
+                  if(i === "plugins" || i === "mimeTypes") {
+                      tmpNav[i] = new Array();
                   }
                   (function() { // crazy scope hack to preserve i
                       var holder = i;
