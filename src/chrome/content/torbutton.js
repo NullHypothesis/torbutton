@@ -10,8 +10,8 @@ var m_tb_plugin_mimetypes = false;
 var m_tb_plugin_string = false;
 var m_tb_is_main_window = false;
 
-var m_tb_window_height = 0;
-var m_tb_window_width = 0;
+var m_tb_window_height = window.outerHeight;
+var m_tb_window_width = window.outerWidth;
 
 var m_tb_ff3 = false;
 
@@ -799,7 +799,7 @@ function torbutton_update_status(mode, force_update) {
         // XXX: save user pref
         m_tb_prefs.setIntPref("browser.bookmarks.livemark_refresh_seconds", 0);
     } else {
-        if(m_tb_prefs.prefHasUserValue("plugin.disable_full_page_plugin_for_types")) {
+        if(m_tb_prefs.prefHasUserValue("browser.bookmarks.livemark_refresh_seconds")) {
             m_tb_prefs.clearUserPref("browser.bookmarks.livemark_refresh_seconds");
         }
     }
@@ -1840,6 +1840,10 @@ function torbutton_new_window(event)
 {
     torbutton_log(3, "New window");
     var browser = getBrowser(); 
+
+    m_tb_window_height = window.outerHeight;
+    m_tb_window_width = window.outerWidth;
+
     if (!m_tb_wasinited) {
         torbutton_init();
     }
@@ -1852,9 +1856,6 @@ function torbutton_new_window(event)
     torbutton_tag_new_browser(browser.browsers[0], 
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
-
-    m_tb_window_height = window.outerHeight;
-    m_tb_window_width = window.outerWidth;
 
     window.addEventListener("resize", torbutton_do_resize, true);
 }
@@ -1890,11 +1891,9 @@ function torbutton_close_window(event) {
         torbutton_unique_pref_observer.unregister();
         torbutton_uninstall_observer.unregister();
         torbutton_http_observer.unregister();
-
     }
 }
 
-// XXX: Firefox3 might not support this??
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
 getBrowser().addEventListener("TabOpen", torbutton_new_tab, false);
