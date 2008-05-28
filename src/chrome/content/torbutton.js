@@ -1100,24 +1100,62 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
         outFile.append("certs-"+name+".tor");
     }
 
+    // this prompts for a password..
+    //certdb.exportPKCS12File(null, outFile, outList.length, outList);
  
     if(outFile.exists()) {
         outFile.remove(false);
     }
 
     if(outList.length) {
-        torbutton_log(2, "Writing certificates to "+outFile.path);
-    
-        // this prompts for a password..
-        certdb.exportPKCS12File(null, outFile, outList.length, outList);
-        torbutton_log(2, "Wrote certificates to "+outFile.path);
+        outFile.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0600);
+
+        var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
+            .createInstance(Components.interfaces.nsIFileOutputStream);
+        stream.init(outFile, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+
+        var bstream = Components.classes["@mozilla.org/binaryoutputstream;1"]
+            .createInstance(Components.interfaces.nsIBinaryOutputStream);
+        bstream.setOutputStream(stream);
+
+        var binaryCerts = [];
+        var bitList = [];
+
         for(var i = outList.length-1; i>=0; i--) {
             if(outList[i]) {
+                var len = new Object();
+                var data = outList[i].getRawDER(len);
+                //torbutton_log(2, "Delete: "+certdb.deleteCertificate(outList[i]));
+                torbutton_log(2, "Delete: "+outList[i].organization+" "+outList[i].tokenName);
+                // Need to save trustbits somehow.. They are not saved.
+                var bits = 0;
+                if(certdb.isCertTrusted(outList[i], type, certdb.TRUSTED_SSL)) {
+                    bits |= certdb.TRUSTED_SSL;
+                }
+                if(certdb.isCertTrusted(outList[i], type, certdb.TRUSTED_EMAIL)) {
+                    bits |= certdb.TRUSTED_EMAIL;
+                }
+                if(certdb.isCertTrusted(outList[i], type, certdb.TRUSTED_OBJSIGN)) {
+                    bits |= certdb.TRUSTED_OBJSIGN;
+                }
+
                 treeView.removeCert(outIndexList[i]);
                 certdb.deleteCertificate(outList[i]);
+
+                bitList.push(bits); 
+                binaryCerts.push(data);
             }
         }
 
+        bstream.write32(binaryCerts.length);
+        for(var i = 0; i < binaryCerts.length; i++) {
+            bstream.write32(binaryCerts[i].length);
+            bstream.write32(bitList[i]);
+            bstream.writeByteArray(binaryCerts[i], binaryCerts[i].length);
+        }
+
+        bstream.close();
+        stream.close();
     }
     
     torbutton_log(2, "Wrote "+outList.length+" "+name+" certificates to "+outFile.path);
@@ -1159,9 +1197,69 @@ function torbutton_unjar_cert_type(mode, treeView, name, type) {
     }
     torbutton_log(2, "Reading certificates from "+inFile.path);
 
-    certdb.importPKCS12File(null, inFile);
+    var istream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+        .createInstance(Components.interfaces.nsIFileInputStream);
+    istream.init(inFile, -1, -1, false);
 
-    return 1;
+    var bstream = Components.classes["@mozilla.org/binaryinputstream;1"]
+        .createInstance(Components.interfaces.nsIBinaryInputStream);
+    bstream.setInputStream(istream);
+
+    if(bstream.available()) {
+        var certs = bstream.read32();
+
+        if(type == Components.interfaces.nsIX509Cert.CA_CERT) {
+            m_tb_prefs.setBoolPref("extensions.torbutton.block_cert_dialogs", 
+                    true);
+        }
+
+        for(var i = 0; i < certs; i++) {
+            var len = bstream.read32();
+            var trustBits = bstream.read32();
+            var bytes = bstream.readByteArray(len);
+
+            // This just for the trustBits, which seem to be lost 
+            // in the BER translation. sucks..
+            var base64 = window.btoa(torbutton_bytearray_to_string(bytes));
+            var checkCert = certdb.constructX509FromBase64(base64);
+            torbutton_log(2, "Made Cert: "+checkCert.organization);
+
+            try {
+                switch(type) {
+                    case Components.interfaces.nsIX509Cert.EMAIL_CERT:
+                        certdb.importEmailCertificate(bytes, bytes.length, null);
+                        break;
+                    case Components.interfaces.nsIX509Cert.SERVER_CERT:
+                        certdb.importServerCertificate(bytes, bytes.length, null);
+                        break;
+                    case Components.interfaces.nsIX509Cert.USER_CERT:
+                        certdb.importUserCertificate(bytes, bytes.length, null);
+                        break;
+                    case Components.interfaces.nsIX509Cert.CA_CERT:
+                        certdb.importCertificates(bytes, bytes.length, type, null);
+                        break;
+                }
+            
+                certdb.setCertTrust(checkCert, type, trustBits);
+
+            } catch(e) {
+                torbutton_log(5, "Failed to import cert: "+checkCert.organization+": "+e);
+            }
+
+            unjared_certs++;
+        }
+        if(type == Components.interfaces.nsIX509Cert.CA_CERT) {
+            m_tb_prefs.setBoolPref("extensions.torbutton.block_cert_dialogs", 
+                    false);
+        }
+
+        torbutton_log(2, "Read "+unjared_certs+" "+name+" certificates from "+inFile.path);
+    }
+
+    bstream.close();
+    istream.close();
+
+    return unjared_certs;
 }
 
 function torbutton_jar_certs(mode) {
