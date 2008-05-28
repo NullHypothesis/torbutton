@@ -1052,6 +1052,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
     var outFile = Components.classes["@mozilla.org/file/local;1"].
         createInstance(Components.interfaces.nsILocalFile); 
     var outList = [];
+    var outIndexList = [];
     
     torbutton_log(2, "Jaring "+name+" certificates: "+mode);
 
@@ -1078,6 +1079,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
         }
 
         outList.push(cert);
+        outIndexList.push(i);
     }
 
     // Write current certs to certjar-tor
@@ -1119,7 +1121,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
         var binaryCerts = [];
         var bitList = [];
 
-        for(var i = 0; i< outList.length; i++) {
+        for(var i = outList.length-1; i>=0; i--) {
             if(outList[i]) {
                 var len = new Object();
                 var data = outList[i].getRawDER(len);
@@ -1137,6 +1139,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
                     bits |= certdb.TRUSTED_OBJSIGN;
                 }
 
+                treeView.removeCert(outIndexList[i]);
                 certdb.deleteCertificate(outList[i]);
 
                 bitList.push(bits); 
