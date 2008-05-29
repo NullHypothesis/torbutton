@@ -1703,12 +1703,39 @@ unregister : function() {
 
 // This observer is to catch some additional http load events
 // to deal with firefox bug 401296
+// TODO: One of these days we should probably unify these http observers
+// with our content policy, like NoScript does.
 var torbutton_http_observer = {
 observe : function(subject, topic, data) {
   torbutton_eclog(2, 'Examine response: '+subject.name);
   if (!((subject instanceof Components.interfaces.nsIHttpChannel)
-      && (subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI)))
+      && (subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI))) {
+      // FIXME: FF3 no longer calls the contet policy for favicons. 
+      // This is the workaround. Fun fun fun.
+      if(m_tb_ff3) {
+          try {
+              var wind = subject.notificationCallbacks.QueryInterface(
+                      Components.interfaces.nsIInterfaceRequestor).getInterface(
+                          Components.interfaces.nsIDOMWindow);
+
+              if(wind instanceof Components.interfaces.nsIDOMChromeWindow) {
+                  if(wind.browserDOMWindow) {
+                      var browser = wind.getBrowser().selectedTab.linkedBrowser;
+                      // This can happen in the first request of a new state.
+                      if((typeof(browser.__tb_tor_fetched) != "undefined")
+                        && browser.__tb_tor_fetched != 
+                              m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                          subject.cancel(0x804b0002); // NS_BINDING_ABORTED
+                          torbutton_eclog(3, 'Cancelling opposing (favicon?) request: '+subject.name);
+                      }
+                  }
+              }
+          } catch(e) {
+              torbutton_eclog(2, 'Failure cancelling opposing (favicon?) request '+subject.name+': '+e);
+          }
+      }
       return;
+  }
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
       torbutton_check_progress(null, subject);
