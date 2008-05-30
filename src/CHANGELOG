@@ -1,3 +1,24 @@
+1.2.0rc1
+  30 May 2008
+  * general: FF3 should now be functional, but timezone masking is not
+    operational
+  * bugfix: Fix Places/history component hooking in FF3
+  * bugfix: Disable Places database in FF3 via browser.history_expire_days=0
+    during Tor usage if history writes are disabled.
+  * bugfix: General component hooking fixes for FF3
+  * bugfix: Block favicon leaking in FF3
+  * bugfix: Enable safebrowsing updates in FF3 (it's finally HMACd. Yay).
+  * bugfix: Properly reset cookie lifetime policy when user changes cookie
+    handling options.
+  * bugfix: Fix 'Restore defaults' button issues with custom proxy settings
+  * bugfix: navigator.oscpu hooking was broken in 1.1.18
+  * bugfix: Try to prevent alleged 0x0 windows on crash recovery
+  * bugfix: Attempt to block livemarks updates during Tor. Only partial fix.
+    Not possible to cancel existing Livemarks timer (one fetch will still
+    happen via Tor before disable). See Firefox Bug 436250
+  * misc: Set plugin.disable_full_page_plugin_for_types for all plugin
+    mimetypes just in case our custom full page blocking code fails
+
 1.1.18
   17 Apr 2008
   * bugfix: Fix Gmail exceptions involving window.navigator that made Gmail

@@ -795,9 +795,8 @@ function torbutton_update_status(mode, force_update) {
         return;
 
     if(mode) {
-        // Disable livemark fetching on FF3
-        // XXX: save user pref
-        m_tb_prefs.setIntPref("browser.bookmarks.livemark_refresh_seconds", 0);
+        // XXX: This doesn't really do what we want.. 
+        m_tb_prefs.setIntPref("browser.bookmarks.livemark_refresh_seconds", 31536000);
     } else {
         if(m_tb_prefs.prefHasUserValue("browser.bookmarks.livemark_refresh_seconds")) {
             m_tb_prefs.clearUserPref("browser.bookmarks.livemark_refresh_seconds");
@@ -1708,8 +1707,8 @@ unregister : function() {
 var torbutton_http_observer = {
 observe : function(subject, topic, data) {
   torbutton_eclog(2, 'Examine response: '+subject.name);
-  if (!((subject instanceof Components.interfaces.nsIHttpChannel)
-      && (subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI))) {
+  if (((subject instanceof Components.interfaces.nsIHttpChannel)
+      && !(subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI))) {
       // FIXME: FF3 no longer calls the contet policy for favicons. 
       // This is the workaround. Fun fun fun.
       if(m_tb_ff3) {
@@ -1736,6 +1735,10 @@ observe : function(subject, topic, data) {
       }
       return;
   }
+  if(!(subject instanceof Components.interfaces.nsIHttpChannel)) {
+      torbutton_eclog(2, 'Non-http request '+subject.name);
+  }
+
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
       torbutton_check_progress(null, subject);
