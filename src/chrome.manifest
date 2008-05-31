@@ -18,6 +18,7 @@ locale torbutton pt-BR chrome/locale/pt-BR/
 locale torbutton ru chrome/locale/ru/
 locale torbutton es chrome/locale/es/
 locale torbutton ar chrome/locale/ar/
+locale torbutton fa-IR chrome/locale/ar/
 locale torbutton sl-SI chrome/locale/sl-SI/
 locale torbutton zh-CN chrome/locale/zh-CN/
 locale torbutton zh-TW chrome/locale/zh-TW/
