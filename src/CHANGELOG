@@ -1,5 +1,5 @@
 1.2.0rc1
-  30 May 2008
+  XX May 2008
   * general: FF3 should now be functional, but timezone masking is not
     operational
   * bugfix: Fix Places/history component hooking in FF3
