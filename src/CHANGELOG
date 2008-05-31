@@ -8,6 +8,7 @@
   * bugfix: General component hooking fixes for FF3
   * bugfix: Block favicon leaking in FF3
   * bugfix: Enable safebrowsing updates in FF3 (it's finally HMACd. Yay).
+  * bugfix: Use Greg Fleischer's new useragent prefs in FF3.
   * bugfix: Properly reset cookie lifetime policy when user changes cookie
     handling options.
   * bugfix: Fix 'Restore defaults' button issues with custom proxy settings
