@@ -546,6 +546,20 @@ function torbutton_update_status(mode, force_update) {
     // history/cookie clearing
     if(!changed && !force_update) return;
 
+    if(m_tb_ff3 
+            && !m_tb_prefs.getBoolPref("extensions.torbutton.warned_ff3")
+            && mode && changed) {
+        var o_stringbundle = torbutton_get_stringbundle();
+        var warning = o_stringbundle.GetStringFromName("torbutton.popup.ff3.warning");
+        var ret = window.confirm(warning);
+
+        if(!ret) {
+            torbutton_disable_tor();
+            return;
+        }
+        m_tb_prefs.setBoolPref("extensions.torbutton.warned_ff3", true);
+    }
+
     torbutton_log(2, 'Setting user agent');
     
     if(torprefs.getBoolPref("set_uagent")) {
