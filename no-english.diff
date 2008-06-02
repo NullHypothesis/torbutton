@@ -1,7 +1,7 @@
-Index: zh-CN/torbutton.dtd
+Index: src/chrome/locale/zh-CN/torbutton.dtd
 ===================================================================
---- zh-CN/torbutton.dtd	(revision 14345)
-+++ zh-CN/torbutton.dtd	(working copy)
+--- src/chrome/locale/zh-CN/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/zh-CN/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -52,118 +52,21 @@ Index: zh-CN/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: nl-NL/torbutton.dtd
+Index: src/chrome/locale/zh-CN/torbutton.properties
 ===================================================================
---- nl-NL/torbutton.dtd	(revision 14345)
-+++ nl-NL/torbutton.dtd	(working copy)
-@@ -27,49 +27,3 @@
- <!ENTITY torbutton.context_menu.about.key "O">
- <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">
--<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
--<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
--<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
--<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
--<!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
--<!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
--<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
--<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
--<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
--<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (crucial)">
--<!ENTITY torbutton.prefs.kill_bad_js        "Hook dangerous javascript (crucial)">
--<!ENTITY torbutton.prefs.isolate_content    "Isolate dynamic content to Tor state (crucial)">
--<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
--<!ENTITY torbutton.prefs.set_uagent         "Set user agent for Tor usage (crucial)">
--<!ENTITY torbutton.prefs.dynamic              "Dynamic Content">
--<!ENTITY torbutton.prefs.cookies              "Cookies">
--<!ENTITY torbutton.prefs.cache                "Cache">
--<!ENTITY torbutton.prefs.history             "History">
--<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (recommended)">
--<!ENTITY torbutton.prefs.shutdown              "Shutdown">
--<!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
--<!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
--<!ENTITY torbutton.prefs.no_shutdown           "Do not clear my cookies at shutdown">
--<!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
--<!ENTITY torbutton.prefs.headers               "Headers">
--<!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
--<!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
--<!ENTITY torbutton.prefs.disable_domstorage    "Disable DOM Storage during Tor usage (crucial)">
--<!ENTITY torbutton.prefs.forms            "Forms">
--<!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
--<!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
--<!ENTITY torbutton.prefs.tor    "Tor">
--<!ENTITY torbutton.prefs.non_tor    "Non-Tor">
--<!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
--<!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
--<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
--<!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
--<!ENTITY torbutton.prefs.block_js_history       "Isolate access of history navigation to Tor state (crucial)">
--<!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
--<!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
--<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
--<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
--<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: hr-HR/torbutton.dtd
+--- src/chrome/locale/zh-CN/torbutton.properties	(revision 14890)
++++ src/chrome/locale/zh-CN/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor 被禁用
+ torbutton.panel.label.enabled=Tor 使用中
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton 提供一个按钮来方便的使用或禁用 Tor 代理
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/de-CH/torbutton.dtd
 ===================================================================
---- hr-HR/torbutton.dtd	(revision 14345)
-+++ hr-HR/torbutton.dtd	(working copy)
-@@ -27,49 +27,3 @@
- <!ENTITY torbutton.context_menu.about.key "O">
- <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Kliknite da biste pokrenuli Torbutton">
--<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
--<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
--<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
--<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
--<!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
--<!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
--<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
--<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
--<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
--<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (crucial)">
--<!ENTITY torbutton.prefs.kill_bad_js        "Hook dangerous javascript (crucial)">
--<!ENTITY torbutton.prefs.isolate_content    "Isolate dynamic content to Tor state (crucial)">
--<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
--<!ENTITY torbutton.prefs.set_uagent         "Set user agent for Tor usage (crucial)">
--<!ENTITY torbutton.prefs.dynamic              "Dynamic Content">
--<!ENTITY torbutton.prefs.cookies              "Cookies">
--<!ENTITY torbutton.prefs.cache                "Cache">
--<!ENTITY torbutton.prefs.history             "History">
--<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (recommended)">
--<!ENTITY torbutton.prefs.shutdown              "Shutdown">
--<!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
--<!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
--<!ENTITY torbutton.prefs.no_shutdown           "Do not clear my cookies at shutdown">
--<!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
--<!ENTITY torbutton.prefs.headers               "Headers">
--<!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
--<!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
--<!ENTITY torbutton.prefs.disable_domstorage    "Disable DOM Storage during Tor usage (crucial)">
--<!ENTITY torbutton.prefs.forms            "Forms">
--<!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
--<!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
--<!ENTITY torbutton.prefs.tor    "Tor">
--<!ENTITY torbutton.prefs.non_tor    "Non-Tor">
--<!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
--<!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
--<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
--<!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
--<!ENTITY torbutton.prefs.block_js_history       "Isolate access of history navigation to Tor state (crucial)">
--<!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
--<!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
--<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
--<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
--<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: de-CH/torbutton.dtd
-===================================================================
---- de-CH/torbutton.dtd	(revision 14345)
-+++ de-CH/torbutton.dtd	(working copy)
+--- src/chrome/locale/de-CH/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/de-CH/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -214,14 +117,25 @@ Index: de-CH/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: pt-BR/torbutton.dtd
+Index: src/chrome/locale/de-CH/torbutton.properties
 ===================================================================
---- pt-BR/torbutton.dtd	(revision 14345)
-+++ pt-BR/torbutton.dtd	(working copy)
+--- src/chrome/locale/de-CH/torbutton.properties	(revision 14890)
++++ src/chrome/locale/de-CH/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor deaktiviert
+ torbutton.panel.label.enabled=Tor aktiviert
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Dank Torbutton können Sie den Tor-Proxy mit einem Klick ein- und ausschalten
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/hr-HR/torbutton.dtd
+===================================================================
+--- src/chrome/locale/hr-HR/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/hr-HR/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
- <!ENTITY torbutton.context_menu.about.key "A">
+ <!ENTITY torbutton.context_menu.about.key "O">
  <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">
+ <!ENTITY torbutton.button.tooltip "Kliknite da biste pokrenuli Torbutton">
 -<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
 -<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
 -<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
@@ -268,10 +182,84 @@ Index: pt-BR/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: pl-PL/torbutton.dtd
+Index: src/chrome/locale/hr-HR/torbutton.properties
 ===================================================================
---- pl-PL/torbutton.dtd	(revision 14345)
-+++ pl-PL/torbutton.dtd	(working copy)
+--- src/chrome/locale/hr-HR/torbutton.properties	(revision 14890)
++++ src/chrome/locale/hr-HR/torbutton.properties	(working copy)
+@@ -7,4 +7,3 @@
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description= Torbutton omogućava gumb za lakše omogućavanje ili onemogućavanje tor proxy-a
+ torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+ torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/nl-NL/torbutton.dtd
+===================================================================
+--- src/chrome/locale/nl-NL/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/nl-NL/torbutton.dtd	(working copy)
+@@ -27,49 +27,3 @@
+ <!ENTITY torbutton.context_menu.about.key "O">
+ <!ENTITY torbutton.button.label "Torbutton">
+ <!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">
+-<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
+-<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
+-<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
+-<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (optional)">
+-<!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
+-<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
+-<!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
+-<!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
+-<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
+-<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
+-<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
+-<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (crucial)">
+-<!ENTITY torbutton.prefs.kill_bad_js        "Hook dangerous javascript (crucial)">
+-<!ENTITY torbutton.prefs.isolate_content    "Isolate dynamic content to Tor state (crucial)">
+-<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
+-<!ENTITY torbutton.prefs.set_uagent         "Set user agent for Tor usage (crucial)">
+-<!ENTITY torbutton.prefs.dynamic              "Dynamic Content">
+-<!ENTITY torbutton.prefs.cookies              "Cookies">
+-<!ENTITY torbutton.prefs.cache                "Cache">
+-<!ENTITY torbutton.prefs.history             "History">
+-<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (recommended)">
+-<!ENTITY torbutton.prefs.shutdown              "Shutdown">
+-<!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
+-<!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
+-<!ENTITY torbutton.prefs.no_shutdown           "Do not clear my cookies at shutdown">
+-<!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
+-<!ENTITY torbutton.prefs.headers               "Headers">
+-<!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
+-<!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
+-<!ENTITY torbutton.prefs.disable_domstorage    "Disable DOM Storage during Tor usage (crucial)">
+-<!ENTITY torbutton.prefs.forms            "Forms">
+-<!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
+-<!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
+-<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
+-<!ENTITY torbutton.prefs.tor    "Tor">
+-<!ENTITY torbutton.prefs.non_tor    "Non-Tor">
+-<!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
+-<!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
+-<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
+-<!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
+-<!ENTITY torbutton.prefs.block_js_history       "Isolate access of history navigation to Tor state (crucial)">
+-<!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
+-<!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
+-<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
+-<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
+-<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
+Index: src/chrome/locale/nl-NL/torbutton.properties
+===================================================================
+--- src/chrome/locale/nl-NL/torbutton.properties	(revision 14890)
++++ src/chrome/locale/nl-NL/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor uitgeschakeld
+ torbutton.panel.label.enabled=Tor ingeschakeld
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton voorziet in een knop om eenvoudig de Tor proxy in- of uit te schakelen
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/pl-PL/torbutton.dtd
+===================================================================
+--- src/chrome/locale/pl-PL/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/pl-PL/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
  <!ENTITY torbutton.context_menu.about.key "T">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -322,14 +310,25 @@ Index: pl-PL/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: it-IT/torbutton.dtd
+Index: src/chrome/locale/pl-PL/torbutton.properties
 ===================================================================
---- it-IT/torbutton.dtd	(revision 14345)
-+++ it-IT/torbutton.dtd	(working copy)
+--- src/chrome/locale/pl-PL/torbutton.properties	(revision 14890)
++++ src/chrome/locale/pl-PL/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled= Tor wyłączony
+ torbutton.panel.label.enabled= Tor włączony
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description= Rozszerzenia dostarcza przycisk do łatwego włącznia/wyłączania proxy Tor
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/pt-BR/torbutton.dtd
+===================================================================
+--- src/chrome/locale/pt-BR/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/pt-BR/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
- <!ENTITY torbutton.context_menu.about.key "I">
+ <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Fare clic per avviare Torbutton">
+ <!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">
 -<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
 -<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
 -<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
@@ -376,10 +375,39 @@ Index: it-IT/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: sl-SI/torbutton.dtd
+Index: src/chrome/locale/pt-BR/torbutton.properties
 ===================================================================
---- sl-SI/torbutton.dtd	(revision 14345)
-+++ sl-SI/torbutton.dtd	(working copy)
+--- src/chrome/locale/pt-BR/torbutton.properties	(revision 14890)
++++ src/chrome/locale/pt-BR/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor desabilitado
+ torbutton.panel.label.enabled=Tor habilitado
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton provê um ícone para habilitar ou desabilitar rapidamente o proxy Tor
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/it-IT/torbutton.properties
+===================================================================
+--- src/chrome/locale/it-IT/torbutton.properties	(revision 14890)
++++ src/chrome/locale/it-IT/torbutton.properties	(working copy)
+@@ -9,4 +9,3 @@
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=L'estensione mette a disposizione un pulsante per attivare e disattivare facilmente il proxy Tor
+ torbutton.popup.history.warning=Torbutton ha bloccato la modifica della cronologia quando cambia stato.\n\nVai alle impostazioni della cronologia per permetterlo.\n\n
+ torbutton.popup.plugin.warning=Torbutton ha bloccato l'attivazione dei plugin durante l'uso di Tor.\n\nUsa Salva Con Nome al suo posto.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/ru/torbutton.properties
+===================================================================
+--- src/chrome/locale/ru/torbutton.properties	(revision 14890)
++++ src/chrome/locale/ru/torbutton.properties	(working copy)
+@@ -7,4 +7,3 @@
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Кнопка включения/отключения доступа к Интернет через сеть Tor
+ torbutton.popup.history.warning = Torbutton заблокировал операции с журналом.\n\nСм. настройки журнала.\n\n
+ torbutton.popup.plugin.warning = Torbutton заблокировал прямую установку  плагинов через Tor.\n\nИспользуйте способ Сохранить как.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/sl-SI/torbutton.dtd
+===================================================================
+--- src/chrome/locale/sl-SI/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/sl-SI/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -430,10 +458,21 @@ Index: sl-SI/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: de-AT/torbutton.dtd
+Index: src/chrome/locale/sl-SI/torbutton.properties
 ===================================================================
---- de-AT/torbutton.dtd	(revision 14345)
-+++ de-AT/torbutton.dtd	(working copy)
+--- src/chrome/locale/sl-SI/torbutton.properties	(revision 14890)
++++ src/chrome/locale/sl-SI/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Anonimizacija izključena
+ torbutton.panel.label.enabled=Anonimizacija vključena
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton razširitev omogoča enostavno vključitev ali izključitev povezave preko anonimizacijskega omrežja Tor
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/de-AT/torbutton.dtd
+===================================================================
+--- src/chrome/locale/de-AT/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/de-AT/torbutton.dtd	(working copy)
 @@ -26,50 +26,3 @@
  <!ENTITY torbutton.context_menu.about "Über Torbutton...">
  <!ENTITY torbutton.context_menu.about.key "A">
@@ -485,10 +524,30 @@ Index: de-AT/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: el-GR/torbutton.dtd
+Index: src/chrome/locale/de-AT/torbutton.properties
 ===================================================================
---- el-GR/torbutton.dtd	(revision 14345)
-+++ el-GR/torbutton.dtd	(working copy)
+--- src/chrome/locale/de-AT/torbutton.properties	(revision 14890)
++++ src/chrome/locale/de-AT/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor deaktiviert
+ torbutton.panel.label.enabled=Tor aktiviert
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Dank Torbutton können Sie den Tor-Proxy mit einem Klick ein- und ausschalten
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/ar/torbutton.properties
+===================================================================
+--- src/chrome/locale/ar/torbutton.properties	(revision 14890)
++++ src/chrome/locale/ar/torbutton.properties	(working copy)
+@@ -10,4 +10,3 @@
+ torbutton.popup.history.warning = منع توربتن تعديل الحالة-المتغيرة للتأريخ.\n\nطالع تضبيطات التأريخ لتسمح بهذا.\n\n
+ torbutton.popup.plugin.warning = منع توربتن تحميلا مباشرا لمحتوى ملحقة.\n\nاستخدم 'احفظ باسم' بدلا عن هذا.\n\n
+ 
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/el-GR/torbutton.dtd
+===================================================================
+--- src/chrome/locale/el-GR/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/el-GR/torbutton.dtd	(working copy)
 @@ -28,48 +28,3 @@
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Κάντε κλικ για να εκκίνηση του Torbutton">
@@ -538,10 +597,30 @@ Index: el-GR/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: zh-TW/torbutton.dtd
+Index: src/chrome/locale/el-GR/torbutton.properties
 ===================================================================
---- zh-TW/torbutton.dtd	(revision 14345)
-+++ zh-TW/torbutton.dtd	(working copy)
+--- src/chrome/locale/el-GR/torbutton.properties	(revision 14890)
++++ src/chrome/locale/el-GR/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Το Tor είναι απενεργοποιημένο
+ torbutton.panel.label.enabled=Το Tor είναι ενεργοποιημένο
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Το Torbutton προσθέτει ένα κουμπί για εύκολη διαχείριση της ανακατεύθυνσης του Firefox στον διαμεσολαβητή Tor
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/es/torbutton.properties
+===================================================================
+--- src/chrome/locale/es/torbutton.properties	(revision 14890)
++++ src/chrome/locale/es/torbutton.properties	(working copy)
+@@ -7,4 +7,3 @@
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description= Torbutton provee un botón para activar y desactivar el proxy Tor de manera fácil.
+ torbutton.popup.history.warning = Torbutton bloqueó un intento de manipulación del Historial.\n\nVea las preferencias del Historial para permitirlo.\n\n
+ torbutton.popup.plugin.warning = Torbutton bloqueó la carga directa de un plugin.\n\nUse Guardar como.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/zh-TW/torbutton.dtd
+===================================================================
+--- src/chrome/locale/zh-TW/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/zh-TW/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -592,10 +671,30 @@ Index: zh-TW/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
-Index: de-DE/torbutton.dtd
+Index: src/chrome/locale/zh-TW/torbutton.properties
 ===================================================================
---- de-DE/torbutton.dtd	(revision 14345)
-+++ de-DE/torbutton.dtd	(working copy)
+--- src/chrome/locale/zh-TW/torbutton.properties	(revision 14890)
++++ src/chrome/locale/zh-TW/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor 已停用
+ torbutton.panel.label.enabled=Tor 已啟用
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton 提供一個切換啟用/停用 Proxy 的按鈕
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/fr-FR/torbutton.properties
+===================================================================
+--- src/chrome/locale/fr-FR/torbutton.properties	(revision 14890)
++++ src/chrome/locale/fr-FR/torbutton.properties	(working copy)
+@@ -9,4 +9,3 @@
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description = Torbutton comporte un bouton qui permet d'activer et de désactiver rapidement le pointage de Firefox vers le proxy de Tor.
+ torbutton.popup.history.warning = Torbutton a bloqué la manipulation de l'historique des modifications.\n\nVoir les paramètres de l'historique pour permettre la manipulation.\n\n
+ torbutton.popup.plugin.warning = Torbutton a bloqué le chargement direct par Tor de contenu de plugin.\n\nUtiliser plutôt la fonction Enregistrer sous.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
+Index: src/chrome/locale/de-DE/torbutton.dtd
+===================================================================
+--- src/chrome/locale/de-DE/torbutton.dtd	(revision 14889)
++++ src/chrome/locale/de-DE/torbutton.dtd	(working copy)
 @@ -27,49 +27,3 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -646,3 +745,14 @@ Index: de-DE/torbutton.dtd
 -<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
 -<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 -<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
+Index: src/chrome/locale/de-DE/torbutton.properties
+===================================================================
+--- src/chrome/locale/de-DE/torbutton.properties	(revision 14890)
++++ src/chrome/locale/de-DE/torbutton.properties	(working copy)
+@@ -5,6 +5,3 @@
+ torbutton.panel.label.disabled=Tor deaktiviert
+ torbutton.panel.label.enabled=Tor aktiviert
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Dank Torbutton können Sie den Tor-Proxy mit einem Klick ein- und ausschalten
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
