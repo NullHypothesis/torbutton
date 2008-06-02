@@ -87,7 +87,7 @@
     </em:targetApplication>
   </Description>
 
-  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.18alpha">
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc1">
     <em:version>1.2.0rc1</em:version>
     <em:targetApplication>
       <Description>
