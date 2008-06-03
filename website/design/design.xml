@@ -643,6 +643,7 @@ Torbutton setting. These are:
 
  <listitem><ulink
 url="http://kb.mozillazine.org/Browser.bookmarks.livemark_refresh_seconds">browser.bookmarks.livemark_refresh_seconds</ulink>
+<para>
 This pref is set in an attempt to disable the fetching of LiveBookmarks via
 Tor. Since users can potentially collect a large amount of live bookmarks to
 very personal sites (blogs of friends, wikipedia articles they maintain,
@@ -654,6 +655,7 @@ Unfortunately <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Firefox Bug
 436250</ulink> prevents this from
 functioning completely correctly.
+</para>
   </listitem>
 
  <listitem><ulink
@@ -691,10 +693,12 @@ browsing history from ending up on Google's disks.
  <listitem><ulink
 url="http://kb.mozillazine.org/Browser.safebrowsing.enabled">browser.safebrowsing.enabled</ulink>
  <para>
-Safebrowsing does some network activity in cleartext. I decided to disable it
-during Tor usage for now until someone convinces me this is acceptable and 
-safe for some reason. This helps fulfill the <link linkend="updates">Update
-Safety</link> requirement.
+Safebrowsing does <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=360387">unauthenticated
+updates under Firefox 2</ulink>, so it is disabled during Tor usage. 
+This helps fulfill the <link linkend="updates">Update
+Safety</link> requirement. Firefox 3 has the fix for that bug, and so
+safebrowsing updates are enabled during Tor usage.
  </para>
  </listitem>
  <listitem><ulink
