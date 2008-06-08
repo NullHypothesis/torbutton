@@ -1942,6 +1942,7 @@ function torbutton_close_window(event) {
         if(m_tb_is_main_window) { // main window not reset above
             // This happens on Mac OS because they allow firefox
             // to still persist without a navigator window
+            torbutton_log(3, "Last window closed. None remain.");
             m_tb_prefs.setBoolPref("extensions.torbutton.startup", true);
             m_tb_is_main_window = false;
         }
