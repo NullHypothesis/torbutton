@@ -26,10 +26,9 @@ function ContentWindowMapper() {
 
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;
-        
-
-  // This JSObject is exported directly to chrome
-  this.wrappedJSObject = this;
+    this.last_expired = Date.now();
+    // This JSObject is exported directly to chrome
+    this.wrappedJSObject = this;
 }
 
 ContentWindowMapper.prototype =
@@ -82,18 +81,19 @@ ContentWindowMapper.prototype =
   expireOldCache: function() {
       var now = Date.now();
 
+      if((now - this.last_expired) < EXPIRATION_TIME) {
+          this.logger.log(2, "Early check on: "+elem.location);
+          return;
+      }
+
       for(var elem in this.cache) {
           if((now - this.cache[elem].time) > EXPIRATION_TIME) {
               this.logger.log(2, "Deleting cached element: "+elem.location);
               delete this.cache[elem];
           }
       }
-      for(var elem in this.cache) {
-          if((now - this.cache[elem].time) > EXPIRATION_TIME) {
-              this.logger.log(4, "ELEMENT STILL REMAINS: "+elem.location);
-              delete this.cache[elem];
-          }
-      }
+
+      this.last_expired = now;
   },
 
   getBrowserForContentWindow: function(topContentWindow) {
