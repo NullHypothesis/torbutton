@@ -82,7 +82,7 @@ ContentWindowMapper.prototype =
       var now = Date.now();
 
       if((now - this.last_expired) < EXPIRATION_TIME) {
-          this.logger.log(2, "Early check on: "+elem.location);
+          this.logger.log(4, "Early check on: "+elem.location);
           return;
       }
 
