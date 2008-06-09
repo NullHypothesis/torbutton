@@ -4,7 +4,7 @@
     closed but app stays open
   * misc: Potential performance improvements when many windows+tabs are open
   * new: Add 'locked mode' pref to allow users to disable one-click toggling
-  * new: Add a pref to start Firefox with a specific Tor state.
+  * new: Add prefs to start Firefox with a specific Tor state.
 
 1.2.0rc1
   01 Jun 2008
@@ -12,7 +12,7 @@
     operational
   * bugfix: Fix Places/history component hooking in FF3
   * bugfix: Disable Places database in FF3 via browser.history_expire_days=0
-    during Tor usage if history writes are disabled.
+    if history writes are disabled.
   * bugfix: General component hooking fixes for FF3
   * bugfix: Block favicon leaking in FF3
   * bugfix: Enable safebrowsing updates in FF3 (it's finally HMACd. Yay).
