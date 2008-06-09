@@ -1,8 +1,8 @@
 Index: src/chrome/locale/zh-CN/torbutton.dtd
 ===================================================================
---- src/chrome/locale/zh-CN/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/zh-CN/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/zh-CN/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "点击初始化 Torbutton">
@@ -56,6 +56,7 @@ Index: src/chrome/locale/zh-CN/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -106,6 +107,7 @@ Index: src/chrome/locale/zh-CN/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/zh-CN/torbutton.properties
 ===================================================================
 --- src/chrome/locale/zh-CN/torbutton.properties	(revision 15071)
@@ -122,9 +124,9 @@ Index: src/chrome/locale/zh-CN/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/de-CH/torbutton.dtd
 ===================================================================
---- src/chrome/locale/de-CH/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/de-CH/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/de-CH/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Hier klicken, um Torbutton einzurichten">
@@ -178,6 +180,7 @@ Index: src/chrome/locale/de-CH/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings ""> 
 +<!ENTITY torbutton.prefs.block_thread ""> 
 +<!ENTITY torbutton.prefs.block_thwrite        "">
@@ -228,6 +231,7 @@ Index: src/chrome/locale/de-CH/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/de-CH/torbutton.properties
 ===================================================================
 --- src/chrome/locale/de-CH/torbutton.properties	(revision 15071)
@@ -244,9 +248,9 @@ Index: src/chrome/locale/de-CH/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/hr-HR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/hr-HR/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/hr-HR/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/hr-HR/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "O">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Kliknite da biste pokrenuli Torbutton">
@@ -300,6 +304,7 @@ Index: src/chrome/locale/hr-HR/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings        "">
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -350,6 +355,7 @@ Index: src/chrome/locale/hr-HR/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/hr-HR/torbutton.properties
 ===================================================================
 --- src/chrome/locale/hr-HR/torbutton.properties	(revision 15071)
@@ -366,9 +372,9 @@ Index: src/chrome/locale/hr-HR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/nl-NL/torbutton.dtd
 ===================================================================
---- src/chrome/locale/nl-NL/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/nl-NL/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/nl-NL/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "O">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">
@@ -422,6 +428,7 @@ Index: src/chrome/locale/nl-NL/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -472,6 +479,7 @@ Index: src/chrome/locale/nl-NL/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/nl-NL/torbutton.properties
 ===================================================================
 --- src/chrome/locale/nl-NL/torbutton.properties	(revision 15071)
@@ -488,9 +496,9 @@ Index: src/chrome/locale/nl-NL/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/pl-PL/torbutton.dtd
 ===================================================================
---- src/chrome/locale/pl-PL/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/pl-PL/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/pl-PL/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "T">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Kliknij tutaj, aby uruchomić Torbutton">
@@ -544,6 +552,7 @@ Index: src/chrome/locale/pl-PL/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -594,6 +603,7 @@ Index: src/chrome/locale/pl-PL/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/pl-PL/torbutton.properties
 ===================================================================
 --- src/chrome/locale/pl-PL/torbutton.properties	(revision 15071)
@@ -610,9 +620,9 @@ Index: src/chrome/locale/pl-PL/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/pt-BR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/pt-BR/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/pt-BR/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/pt-BR/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">
@@ -666,6 +676,7 @@ Index: src/chrome/locale/pt-BR/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings  "">
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -716,6 +727,7 @@ Index: src/chrome/locale/pt-BR/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/pt-BR/torbutton.properties
 ===================================================================
 --- src/chrome/locale/pt-BR/torbutton.properties	(revision 15071)
@@ -732,9 +744,9 @@ Index: src/chrome/locale/pt-BR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/ru/torbutton.dtd
 ===================================================================
---- src/chrome/locale/ru/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/ru/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/ru/torbutton.dtd	(working copy)
-@@ -73,7 +73,7 @@
+@@ -73,8 +73,8 @@
  <!ENTITY torbutton.prefs.close_nontor       "Закрывать все окна и вкладки не-Tor при переключении режимов (необяз.)">
  <!ENTITY torbutton.prefs.block_file_net     "Блокировать доступ к сети по адресам типа file:// (желательно)">
  <!ENTITY torbutton.prefs.block_links        "Блокировать щелчки по ссылкам и перезагрузку страниц из разных режимов Tor (необяз.)">
@@ -742,10 +754,12 @@ Index: src/chrome/locale/ru/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/ru/torbutton.properties
 ===================================================================
 --- src/chrome/locale/ru/torbutton.properties	(revision 15071)
@@ -758,9 +772,9 @@ Index: src/chrome/locale/ru/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/it-IT/torbutton.dtd
 ===================================================================
---- src/chrome/locale/it-IT/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/it-IT/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/it-IT/torbutton.dtd	(working copy)
-@@ -75,7 +75,7 @@
+@@ -75,8 +75,8 @@
  <!ENTITY torbutton.prefs.block_links "Blocca i clic sui link e la ricarica delle pagine da stati Tor differenti (facoltativo)">
  <!ENTITY torbutton.prefs.jar_certs "Conserva i certificati SSL in depositi separati per Tor/Non-Tor (consigliato)">
  <!ENTITY torbutton.prefs.jar_ca_certs "Conserva i certificati delle CA in depositi separati per Tor/Non-Tor (consigliato)">
@@ -768,15 +782,17 @@ Index: src/chrome/locale/it-IT/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/sl-SI/torbutton.dtd
 ===================================================================
---- src/chrome/locale/sl-SI/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/sl-SI/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/sl-SI/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Klikni za inicializiranje razširitve Torbutton">
@@ -830,6 +846,7 @@ Index: src/chrome/locale/sl-SI/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -880,6 +897,7 @@ Index: src/chrome/locale/sl-SI/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/sl-SI/torbutton.properties
 ===================================================================
 --- src/chrome/locale/sl-SI/torbutton.properties	(revision 15071)
@@ -896,9 +914,9 @@ Index: src/chrome/locale/sl-SI/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/de-AT/torbutton.dtd
 ===================================================================
---- src/chrome/locale/de-AT/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/de-AT/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/de-AT/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Hier klicken, um Torbutton einzurichten">
@@ -952,6 +970,7 @@ Index: src/chrome/locale/de-AT/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings        "">
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -1002,6 +1021,7 @@ Index: src/chrome/locale/de-AT/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/de-AT/torbutton.properties
 ===================================================================
 --- src/chrome/locale/de-AT/torbutton.properties	(revision 15071)
@@ -1018,9 +1038,9 @@ Index: src/chrome/locale/de-AT/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/fa-IR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/fa-IR/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/fa-IR/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/fa-IR/torbutton.dtd	(working copy)
-@@ -73,7 +73,7 @@
+@@ -73,8 +73,8 @@
  <!ENTITY torbutton.prefs.close_nontor       "بستن همه پنجره های غیرتُر در ضامن (اختیاری)">
  <!ENTITY torbutton.prefs.block_file_net     "بازداشتن دسترسی به شبکه از file:// نشانی های وب (توصیه شده)">
  <!ENTITY torbutton.prefs.block_links        "بازداشتن فشاردادن پیوند و بازگذاری مجدد برگه از وضعیت های مختلف تُر (اختیاری)">
@@ -1028,10 +1048,12 @@ Index: src/chrome/locale/fa-IR/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/fa-IR/torbutton.properties
 ===================================================================
 --- src/chrome/locale/fa-IR/torbutton.properties	(revision 15071)
@@ -1047,9 +1069,9 @@ Index: src/chrome/locale/fa-IR/torbutton.properties
 +torbutton.popup.ff3.warning =
 Index: src/chrome/locale/ar/torbutton.dtd
 ===================================================================
---- src/chrome/locale/ar/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/ar/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/ar/torbutton.dtd	(working copy)
-@@ -73,7 +73,7 @@
+@@ -73,8 +73,8 @@
  <!ENTITY torbutton.prefs.close_nontor       "أغلق كل نوافذ و ألسنة غير تور عند اغير الحالة (اختياري)">
  <!ENTITY torbutton.prefs.block_file_net     "امنع النفاذ إلى الشبكة من مسارات file:// (محبّذ)">
  <!ENTITY torbutton.prefs.block_links        "امنع نقر الروابط و إعادة تحميل الصفحات بين حالات تور المختلفة (اختياري)">
@@ -1057,10 +1079,12 @@ Index: src/chrome/locale/ar/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/ar/torbutton.properties
 ===================================================================
 --- src/chrome/locale/ar/torbutton.properties	(revision 15071)
@@ -1073,9 +1097,9 @@ Index: src/chrome/locale/ar/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/el-GR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/el-GR/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/el-GR/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/el-GR/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "Π">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Κάντε κλικ για να εκκίνηση του Torbutton">
@@ -1129,6 +1153,7 @@ Index: src/chrome/locale/el-GR/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -1179,6 +1204,7 @@ Index: src/chrome/locale/el-GR/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/el-GR/torbutton.properties
 ===================================================================
 --- src/chrome/locale/el-GR/torbutton.properties	(revision 15071)
@@ -1195,9 +1221,9 @@ Index: src/chrome/locale/el-GR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/es/torbutton.dtd
 ===================================================================
---- src/chrome/locale/es/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/es/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/es/torbutton.dtd	(working copy)
-@@ -73,7 +73,7 @@
+@@ -73,8 +73,8 @@
  <!ENTITY torbutton.prefs.close_nontor       "Cerrar las ventanas y pestañas que no sean de Tor al cambiar el estado (opcional)">
  <!ENTITY torbutton.prefs.block_file_net     "Bloquear el acceso a la red desde archivos en direcciones file:// (recomendado)">
  <!ENTITY torbutton.prefs.block_links        "Bloquear clicks en vínculos y recargas de páginas desde distintos estados de Tor (opcional)">
@@ -1205,10 +1231,12 @@ Index: src/chrome/locale/es/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/es/torbutton.properties
 ===================================================================
 --- src/chrome/locale/es/torbutton.properties	(revision 15071)
@@ -1221,9 +1249,9 @@ Index: src/chrome/locale/es/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/zh-TW/torbutton.dtd
 ===================================================================
---- src/chrome/locale/zh-TW/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/zh-TW/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/zh-TW/torbutton.dtd	(working copy)
-@@ -27,53 +27,53 @@
+@@ -27,54 +27,54 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "點擊以初始 Torbutton">
@@ -1277,6 +1305,7 @@ Index: src/chrome/locale/zh-TW/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -1327,6 +1356,7 @@ Index: src/chrome/locale/zh-TW/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/zh-TW/torbutton.properties
 ===================================================================
 --- src/chrome/locale/zh-TW/torbutton.properties	(revision 15071)
@@ -1343,9 +1373,9 @@ Index: src/chrome/locale/zh-TW/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/fr-FR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/fr-FR/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/fr-FR/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/fr-FR/torbutton.dtd	(working copy)
-@@ -73,7 +73,7 @@
+@@ -73,8 +73,8 @@
  <!ENTITY torbutton.prefs.close_nontor			"Fermer toutes les fenêtres et onglets Non-Tor à l'activation/désactivation (optionnel)">
  <!ENTITY torbutton.prefs.block_file_net			"Bloquer l'accès au réseau des urls de type file:// (recommendé)">
  <!ENTITY torbutton.prefs.block_links			"Bloquer les liens cliquables et le rechargement des pages depuis différents états Tor (optionnel)">
@@ -1353,10 +1383,12 @@ Index: src/chrome/locale/fr-FR/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/fr-FR/torbutton.properties
 ===================================================================
 --- src/chrome/locale/fr-FR/torbutton.properties	(revision 15071)
@@ -1369,9 +1401,9 @@ Index: src/chrome/locale/fr-FR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/de-DE/torbutton.dtd
 ===================================================================
---- src/chrome/locale/de-DE/torbutton.dtd	(revision 15072)
+--- src/chrome/locale/de-DE/torbutton.dtd	(revision 15080)
 +++ src/chrome/locale/de-DE/torbutton.dtd	(working copy)
-@@ -26,54 +26,54 @@
+@@ -26,55 +26,55 @@
  <!ENTITY torbutton.context_menu.about "Über Torbutton...">
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -1426,6 +1458,7 @@ Index: src/chrome/locale/de-DE/torbutton.dtd
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 -<!ENTITY torbutton.prefs.startup             "Startup">
+-<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 +<!ENTITY torbutton.button.tooltip ""> 
 +<!ENTITY torbutton.prefs.sec_settings        ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
@@ -1477,6 +1510,7 @@ Index: src/chrome/locale/de-DE/torbutton.dtd
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
 +<!ENTITY torbutton.prefs.startup             "">
++<!ENTITY torbutton.prefs.nonontor_sessionstore    "">
 Index: src/chrome/locale/de-DE/torbutton.properties
 ===================================================================
 --- src/chrome/locale/de-DE/torbutton.properties	(revision 15071)
