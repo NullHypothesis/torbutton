@@ -1,3 +1,11 @@
+1.2.0rc2
+  08 Jun 2008
+  * bugfix: MacOS: Fix broken Tor state/toggle issues when all windows are 
+    closed but app stays open
+  * misc: Potential performance improvements when many windows+tabs are open
+  * new: Add 'locked mode' pref to allow users to disable one-click toggling
+  * new: Add a pref to start Firefox with a specific Tor state.
+
 1.2.0rc1
   01 Jun 2008
   * general: FF3 should now be functional, but timezone masking is not
