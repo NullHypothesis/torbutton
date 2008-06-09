@@ -780,6 +780,7 @@ SessionStoreService.prototype = {
     var prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
     var bypass_tor = prefs.getBoolPref("extensions.torbutton.notor_sessionstore");
+    var bypass_nontor = prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore");
     
     for (var i = 0; i < browsers.length; i++) {
       var tabData = { entries: [], index: 0 };
@@ -791,6 +792,11 @@ SessionStoreService.prototype = {
           //tabs.push(tabData);
           continue;
       }
+      if(bypass_nontor && typeof(browser.__tb_tor_fetched) != "undefined" &&
+              !browser.__tb_tor_fetched) {
+          continue;
+      }
+
       if (!browser || !browser.currentURI) {
         // can happen when calling this function right after .addTab()
         tabs.push(tabData);

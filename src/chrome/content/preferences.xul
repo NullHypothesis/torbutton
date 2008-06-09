@@ -246,6 +246,8 @@
             </hbox>
             <checkbox class="indent" id="torbutton_noTorSessionStore" label="&torbutton.prefs.notor_sessionstore;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            <checkbox class="indent" id="torbutton_noNonTorSessionStore" label="&torbutton.prefs.nonontor_sessionstore;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
             
            </vbox>
           </tabpanel>

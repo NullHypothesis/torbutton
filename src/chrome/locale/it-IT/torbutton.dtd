@@ -79,3 +79,4 @@
 <!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 <!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 <!ENTITY torbutton.prefs.startup             "Startup">
+<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">

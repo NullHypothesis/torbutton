@@ -80,6 +80,7 @@ pref("extensions.torbutton.isolate_content",true);
 pref("extensions.torbutton.no_search",true);
 pref("extensions.torbutton.set_uagent",true);
 pref("extensions.torbutton.notor_sessionstore",true);
+pref("extensions.torbutton.nonontor_sessionstore",false);
 pref("extensions.torbutton.restore_tor",false); 
 pref("extensions.torbutton.reload_crashed_jar",true); 
 pref("extensions.torbutton.spoof_english",true);

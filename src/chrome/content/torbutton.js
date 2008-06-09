@@ -1820,7 +1820,7 @@ function torbutton_set_initial_state() {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
         var startup_state = m_tb_prefs.getIntPref("extensions.torbutton.startup_state");
         
-        torbutton_log(3, "Setting inital state to: "+startup_state);
+        torbutton_log(3, "Setting initial state to: "+startup_state);
 
         if(startup_state == 0) {
             torbutton_conditional_set(false); // must be boolean

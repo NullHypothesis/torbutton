@@ -60,7 +60,7 @@
 <!ENTITY torbutton.prefs.forms            "Forms">
 <!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
+<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor loaded tabs">
 <!ENTITY torbutton.prefs.tor    "Tor">
 <!ENTITY torbutton.prefs.non_tor    "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor   "On crash recovery or session restored startup, restore via:">
@@ -79,3 +79,4 @@
 <!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 <!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 <!ENTITY torbutton.prefs.startup             "Startup">
+<!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
