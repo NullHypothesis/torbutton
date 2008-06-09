@@ -1,8 +1,8 @@
 Index: src/chrome/locale/zh-CN/torbutton.dtd
 ===================================================================
---- src/chrome/locale/zh-CN/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/zh-CN/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/zh-CN/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "点击初始化 Torbutton">
@@ -55,6 +55,7 @@ Index: src/chrome/locale/zh-CN/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -104,9 +105,10 @@ Index: src/chrome/locale/zh-CN/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/zh-CN/torbutton.properties
 ===================================================================
---- src/chrome/locale/zh-CN/torbutton.properties	(revision 15040)
+--- src/chrome/locale/zh-CN/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/zh-CN/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled=Tor 被禁用
@@ -118,14 +120,14 @@ Index: src/chrome/locale/zh-CN/torbutton.properties
 +torbutton.popup.history.warning = 
 +torbutton.popup.plugin.warning = 
 +torbutton.popup.ff3.warning = 
-Index: src/chrome/locale/nl-NL/torbutton.dtd
+Index: src/chrome/locale/de-CH/torbutton.dtd
 ===================================================================
---- src/chrome/locale/nl-NL/torbutton.dtd	(revision 15068)
-+++ src/chrome/locale/nl-NL/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
- <!ENTITY torbutton.context_menu.about.key "O">
+--- src/chrome/locale/de-CH/torbutton.dtd	(revision 15072)
++++ src/chrome/locale/de-CH/torbutton.dtd	(working copy)
+@@ -27,53 +27,53 @@
+ <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">
+ <!ENTITY torbutton.button.tooltip "Hier klicken, um Torbutton einzurichten">
 -<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
 -<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
 -<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
@@ -175,11 +177,12 @@ Index: src/chrome/locale/nl-NL/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
-+<!ENTITY torbutton.prefs.sec_settings       ""> 
-+<!ENTITY torbutton.prefs.block_thread        ""> 
-+<!ENTITY torbutton.prefs.block_thwrite       ""> 
-+<!ENTITY torbutton.prefs.block_nthread       "">
-+<!ENTITY torbutton.prefs.block_nthwrite       "">
+-<!ENTITY torbutton.prefs.startup             "Startup">
++<!ENTITY torbutton.prefs.sec_settings ""> 
++<!ENTITY torbutton.prefs.block_thread ""> 
++<!ENTITY torbutton.prefs.block_thwrite        "">
++<!ENTITY torbutton.prefs.block_nthread        "">
++<!ENTITY torbutton.prefs.block_nthwrite      "">
 +<!ENTITY torbutton.prefs.clear_history       "">
 +<!ENTITY torbutton.prefs.clear_cache        "">
 +<!ENTITY torbutton.prefs.block_cache        "">
@@ -210,28 +213,29 @@ Index: src/chrome/locale/nl-NL/torbutton.dtd
 +<!ENTITY torbutton.prefs.block_ntforms       "">
 +<!ENTITY torbutton.prefs.notor_sessionstore    "">
 +<!ENTITY torbutton.prefs.tor    "">
-+<!ENTITY torbutton.prefs.non_tor    "">
-+<!ENTITY torbutton.prefs.restore_tor   "">
++<!ENTITY torbutton.prefs.non_tor   ""> 
++<!ENTITY torbutton.prefs.restore_tor  ""> 
 +<!ENTITY torbutton.prefs.reload_crashed_jar   "">
 +<!ENTITY torbutton.prefs.dual_cookie_jars        "">
 +<!ENTITY torbutton.prefs.clear_http_auth        "">
 +<!ENTITY torbutton.prefs.block_js_history       "">
 +<!ENTITY torbutton.prefs.resize_on_toggle       "">
 +<!ENTITY torbutton.prefs.close_tor    "">
-+<!ENTITY torbutton.prefs.close_nontor     "">  
++<!ENTITY torbutton.prefs.close_nontor       "">
 +<!ENTITY torbutton.prefs.block_file_net     "">
 +<!ENTITY torbutton.prefs.block_links        "">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
-Index: src/chrome/locale/nl-NL/torbutton.properties
++<!ENTITY torbutton.prefs.startup             "">
+Index: src/chrome/locale/de-CH/torbutton.properties
 ===================================================================
---- src/chrome/locale/nl-NL/torbutton.properties	(revision 15040)
-+++ src/chrome/locale/nl-NL/torbutton.properties	(working copy)
+--- src/chrome/locale/de-CH/torbutton.properties	(revision 15071)
++++ src/chrome/locale/de-CH/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
- torbutton.panel.label.disabled=Tor uitgeschakeld
- torbutton.panel.label.enabled=Tor ingeschakeld
- extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton voorziet in een knop om eenvoudig de Tor proxy in- of uit te schakelen
+ torbutton.panel.label.disabled=Tor deaktiviert
+ torbutton.panel.label.enabled=Tor aktiviert
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Dank Torbutton können Sie den Tor-Proxy mit einem Klick ein- und ausschalten
 -torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
 -torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
 -torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
@@ -240,9 +244,9 @@ Index: src/chrome/locale/nl-NL/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/hr-HR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/hr-HR/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/hr-HR/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/hr-HR/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "O">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Kliknite da biste pokrenuli Torbutton">
@@ -295,6 +299,7 @@ Index: src/chrome/locale/hr-HR/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings        "">
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -344,9 +349,10 @@ Index: src/chrome/locale/hr-HR/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/hr-HR/torbutton.properties
 ===================================================================
---- src/chrome/locale/hr-HR/torbutton.properties	(revision 15040)
+--- src/chrome/locale/hr-HR/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/hr-HR/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled= Tor onemogućen
@@ -358,14 +364,14 @@ Index: src/chrome/locale/hr-HR/torbutton.properties
 +torbutton.popup.history.warning = 
 +torbutton.popup.plugin.warning = 
 +torbutton.popup.ff3.warning = 
-Index: src/chrome/locale/de-CH/torbutton.dtd
+Index: src/chrome/locale/nl-NL/torbutton.dtd
 ===================================================================
---- src/chrome/locale/de-CH/torbutton.dtd	(revision 15068)
-+++ src/chrome/locale/de-CH/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
- <!ENTITY torbutton.context_menu.about.key "A">
+--- src/chrome/locale/nl-NL/torbutton.dtd	(revision 15072)
++++ src/chrome/locale/nl-NL/torbutton.dtd	(working copy)
+@@ -27,53 +27,53 @@
+ <!ENTITY torbutton.context_menu.about.key "O">
  <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Hier klicken, um Torbutton einzurichten">
+ <!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">
 -<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
 -<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
 -<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
@@ -415,131 +421,12 @@ Index: src/chrome/locale/de-CH/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
-+<!ENTITY torbutton.prefs.sec_settings ""> 
-+<!ENTITY torbutton.prefs.block_thread ""> 
-+<!ENTITY torbutton.prefs.block_thwrite        "">
-+<!ENTITY torbutton.prefs.block_nthread        "">
-+<!ENTITY torbutton.prefs.block_nthwrite      "">
-+<!ENTITY torbutton.prefs.clear_history       "">
-+<!ENTITY torbutton.prefs.clear_cache        "">
-+<!ENTITY torbutton.prefs.block_cache        "">
-+<!ENTITY torbutton.prefs.cookie_jars        "">
-+<!ENTITY torbutton.prefs.mmm_cookies        "">
-+<!ENTITY torbutton.prefs.clear_cookies      "">
-+<!ENTITY torbutton.prefs.disable_plugins    "">
-+<!ENTITY torbutton.prefs.kill_bad_js        "">
-+<!ENTITY torbutton.prefs.isolate_content    "">
-+<!ENTITY torbutton.prefs.no_updates         "">
-+<!ENTITY torbutton.prefs.set_uagent         "">
-+<!ENTITY torbutton.prefs.dynamic              "">
-+<!ENTITY torbutton.prefs.cookies              "">
-+<!ENTITY torbutton.prefs.cache                "">
-+<!ENTITY torbutton.prefs.history             "">
-+<!ENTITY torbutton.prefs.no_search           "">
-+<!ENTITY torbutton.prefs.shutdown              "">
-+<!ENTITY torbutton.prefs.tor_shutdown          "">
-+<!ENTITY torbutton.prefs.all_shutdown          "">
-+<!ENTITY torbutton.prefs.no_shutdown           "">
-+<!ENTITY torbutton.prefs.disable_sessionstore  "">
-+<!ENTITY torbutton.prefs.headers               "">
-+<!ENTITY torbutton.prefs.spoof_english         "">
-+<!ENTITY torbutton.prefs.disable_referer       "">
-+<!ENTITY torbutton.prefs.disable_domstorage    "">
-+<!ENTITY torbutton.prefs.forms            "">
-+<!ENTITY torbutton.prefs.block_tforms       "">
-+<!ENTITY torbutton.prefs.block_ntforms       "">
-+<!ENTITY torbutton.prefs.notor_sessionstore    "">
-+<!ENTITY torbutton.prefs.tor    "">
-+<!ENTITY torbutton.prefs.non_tor   ""> 
-+<!ENTITY torbutton.prefs.restore_tor  ""> 
-+<!ENTITY torbutton.prefs.reload_crashed_jar   "">
-+<!ENTITY torbutton.prefs.dual_cookie_jars        "">
-+<!ENTITY torbutton.prefs.clear_http_auth        "">
-+<!ENTITY torbutton.prefs.block_js_history       "">
-+<!ENTITY torbutton.prefs.resize_on_toggle       "">
-+<!ENTITY torbutton.prefs.close_tor    "">
-+<!ENTITY torbutton.prefs.close_nontor       "">
-+<!ENTITY torbutton.prefs.block_file_net     "">
-+<!ENTITY torbutton.prefs.block_links        "">
-+<!ENTITY torbutton.prefs.locked_mode        "">
-+<!ENTITY torbutton.prefs.startup_state      "">
-+<!ENTITY torbutton.prefs.shutdown_state      "">
-Index: src/chrome/locale/de-CH/torbutton.properties
-===================================================================
---- src/chrome/locale/de-CH/torbutton.properties	(revision 15040)
-+++ src/chrome/locale/de-CH/torbutton.properties	(working copy)
-@@ -5,6 +5,6 @@
- torbutton.panel.label.disabled=Tor deaktiviert
- torbutton.panel.label.enabled=Tor aktiviert
- extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Dank Torbutton können Sie den Tor-Proxy mit einem Klick ein- und ausschalten
--torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
--torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
--torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
-+torbutton.popup.history.warning = 
-+torbutton.popup.plugin.warning = 
-+torbutton.popup.ff3.warning = 
-Index: src/chrome/locale/pt-BR/torbutton.dtd
-===================================================================
---- src/chrome/locale/pt-BR/torbutton.dtd	(revision 15068)
-+++ src/chrome/locale/pt-BR/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
- <!ENTITY torbutton.context_menu.about.key "A">
- <!ENTITY torbutton.button.label "Torbutton">
- <!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">
--<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
--<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
--<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
--<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
--<!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
--<!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
--<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
--<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
--<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
--<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (crucial)">
--<!ENTITY torbutton.prefs.kill_bad_js        "Hook dangerous javascript (crucial)">
--<!ENTITY torbutton.prefs.isolate_content    "Isolate dynamic content to Tor state (crucial)">
--<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
--<!ENTITY torbutton.prefs.set_uagent         "Set user agent for Tor usage (crucial)">
--<!ENTITY torbutton.prefs.dynamic              "Dynamic Content">
--<!ENTITY torbutton.prefs.cookies              "Cookies">
--<!ENTITY torbutton.prefs.cache                "Cache">
--<!ENTITY torbutton.prefs.history             "History">
--<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (recommended)">
--<!ENTITY torbutton.prefs.shutdown              "Shutdown">
--<!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
--<!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
--<!ENTITY torbutton.prefs.no_shutdown           "Do not clear my cookies at shutdown">
--<!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
--<!ENTITY torbutton.prefs.headers               "Headers">
--<!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
--<!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
--<!ENTITY torbutton.prefs.disable_domstorage    "Disable DOM Storage during Tor usage (crucial)">
--<!ENTITY torbutton.prefs.forms            "Forms">
--<!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
--<!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
--<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
--<!ENTITY torbutton.prefs.tor    "Tor">
--<!ENTITY torbutton.prefs.non_tor    "Non-Tor">
--<!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
--<!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
--<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
--<!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
--<!ENTITY torbutton.prefs.block_js_history       "Isolate access of history navigation to Tor state (crucial)">
--<!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
--<!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
--<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
--<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
--<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
--<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
--<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
--<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
-+<!ENTITY torbutton.prefs.sec_settings  "">
-+<!ENTITY torbutton.prefs.block_thread        "">
-+<!ENTITY torbutton.prefs.block_thwrite       "">
+-<!ENTITY torbutton.prefs.startup             "Startup">
++<!ENTITY torbutton.prefs.sec_settings       ""> 
++<!ENTITY torbutton.prefs.block_thread        ""> 
++<!ENTITY torbutton.prefs.block_thwrite       ""> 
 +<!ENTITY torbutton.prefs.block_nthread       "">
-+<!ENTITY torbutton.prefs.block_nthwrite      "">
++<!ENTITY torbutton.prefs.block_nthwrite       "">
 +<!ENTITY torbutton.prefs.clear_history       "">
 +<!ENTITY torbutton.prefs.clear_cache        "">
 +<!ENTITY torbutton.prefs.block_cache        "">
@@ -578,20 +465,21 @@ Index: src/chrome/locale/pt-BR/torbutton.dtd
 +<!ENTITY torbutton.prefs.block_js_history       "">
 +<!ENTITY torbutton.prefs.resize_on_toggle       "">
 +<!ENTITY torbutton.prefs.close_tor    "">
-+<!ENTITY torbutton.prefs.close_nontor       "">
++<!ENTITY torbutton.prefs.close_nontor     "">  
 +<!ENTITY torbutton.prefs.block_file_net     "">
 +<!ENTITY torbutton.prefs.block_links        "">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
-Index: src/chrome/locale/pt-BR/torbutton.properties
++<!ENTITY torbutton.prefs.startup             "">
+Index: src/chrome/locale/nl-NL/torbutton.properties
 ===================================================================
---- src/chrome/locale/pt-BR/torbutton.properties	(revision 15040)
-+++ src/chrome/locale/pt-BR/torbutton.properties	(working copy)
+--- src/chrome/locale/nl-NL/torbutton.properties	(revision 15071)
++++ src/chrome/locale/nl-NL/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
- torbutton.panel.label.disabled=Tor desabilitado
- torbutton.panel.label.enabled=Tor habilitado
- extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton provê um ícone para habilitar ou desabilitar rapidamente o proxy Tor
+ torbutton.panel.label.disabled=Tor uitgeschakeld
+ torbutton.panel.label.enabled=Tor ingeschakeld
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton voorziet in een knop om eenvoudig de Tor proxy in- of uit te schakelen
 -torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
 -torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
 -torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
@@ -600,9 +488,9 @@ Index: src/chrome/locale/pt-BR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/pl-PL/torbutton.dtd
 ===================================================================
---- src/chrome/locale/pl-PL/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/pl-PL/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/pl-PL/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "T">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Kliknij tutaj, aby uruchomić Torbutton">
@@ -655,6 +543,7 @@ Index: src/chrome/locale/pl-PL/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -704,9 +593,10 @@ Index: src/chrome/locale/pl-PL/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/pl-PL/torbutton.properties
 ===================================================================
---- src/chrome/locale/pl-PL/torbutton.properties	(revision 15040)
+--- src/chrome/locale/pl-PL/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/pl-PL/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled= Tor wyłączony
@@ -718,23 +608,147 @@ Index: src/chrome/locale/pl-PL/torbutton.properties
 +torbutton.popup.history.warning = 
 +torbutton.popup.plugin.warning = 
 +torbutton.popup.ff3.warning = 
+Index: src/chrome/locale/pt-BR/torbutton.dtd
+===================================================================
+--- src/chrome/locale/pt-BR/torbutton.dtd	(revision 15072)
++++ src/chrome/locale/pt-BR/torbutton.dtd	(working copy)
+@@ -27,53 +27,53 @@
+ <!ENTITY torbutton.context_menu.about.key "A">
+ <!ENTITY torbutton.button.label "Torbutton">
+ <!ENTITY torbutton.button.tooltip "Clique para iniciar Torbutton">
+-<!ENTITY torbutton.prefs.sec_settings        "Security Settings">
+-<!ENTITY torbutton.prefs.block_thread        "Block history reads during Tor (crucial)">
+-<!ENTITY torbutton.prefs.block_thwrite       "Block history writes during Tor (recommended)">
+-<!ENTITY torbutton.prefs.block_nthread       "Block history reads during Non-Tor (optional)">
+-<!ENTITY torbutton.prefs.block_nthwrite      "Block history writes during Non-Tor (optional)">
+-<!ENTITY torbutton.prefs.clear_history       "Clear history on Tor toggle (optional)">
+-<!ENTITY torbutton.prefs.clear_cache        "Block Tor disk cache and clear all cache on Tor toggle">
+-<!ENTITY torbutton.prefs.block_cache        "Block disk and memory cache access during Tor">
+-<!ENTITY torbutton.prefs.cookie_jars        "Store Non-Tor cookies in a protected jar">
+-<!ENTITY torbutton.prefs.mmm_cookies        "I will manually manage my cookies (dangerous)">
+-<!ENTITY torbutton.prefs.clear_cookies      "Clear cookies on Tor toggle">
+-<!ENTITY torbutton.prefs.disable_plugins    "Disable plugins during Tor usage (crucial)">
+-<!ENTITY torbutton.prefs.kill_bad_js        "Hook dangerous javascript (crucial)">
+-<!ENTITY torbutton.prefs.isolate_content    "Isolate dynamic content to Tor state (crucial)">
+-<!ENTITY torbutton.prefs.no_updates         "Disable updates during Tor usage (recommended)">
+-<!ENTITY torbutton.prefs.set_uagent         "Set user agent for Tor usage (crucial)">
+-<!ENTITY torbutton.prefs.dynamic              "Dynamic Content">
+-<!ENTITY torbutton.prefs.cookies              "Cookies">
+-<!ENTITY torbutton.prefs.cache                "Cache">
+-<!ENTITY torbutton.prefs.history             "History">
+-<!ENTITY torbutton.prefs.no_search           "Disable search suggestions during Tor (recommended)">
+-<!ENTITY torbutton.prefs.shutdown              "Shutdown">
+-<!ENTITY torbutton.prefs.tor_shutdown          "Clear Tor cookies during Tor-enabled browser shutdown">
+-<!ENTITY torbutton.prefs.all_shutdown          "Clear cookies during any browser shutdown">
+-<!ENTITY torbutton.prefs.no_shutdown           "Do not clear my cookies at shutdown">
+-<!ENTITY torbutton.prefs.disable_sessionstore  "Disable Session Saving (recommended)">
+-<!ENTITY torbutton.prefs.headers               "Headers">
+-<!ENTITY torbutton.prefs.spoof_english         "Spoof US English Browser">
+-<!ENTITY torbutton.prefs.disable_referer       "Don't send referer during Tor usage (may break some sites)">
+-<!ENTITY torbutton.prefs.disable_domstorage    "Disable DOM Storage during Tor usage (crucial)">
+-<!ENTITY torbutton.prefs.forms            "Forms">
+-<!ENTITY torbutton.prefs.block_tforms       "Block password+form saving during Tor (recommended)">
+-<!ENTITY torbutton.prefs.block_ntforms       "Block password+form saving during Non-Tor (optional)">
+-<!ENTITY torbutton.prefs.notor_sessionstore    "Prevent session store from saving Tor-loaded tabs (recommended)">
+-<!ENTITY torbutton.prefs.tor    "Tor">
+-<!ENTITY torbutton.prefs.non_tor    "Non-Tor">
+-<!ENTITY torbutton.prefs.restore_tor   "After a crash, restore saved session via:">
+-<!ENTITY torbutton.prefs.reload_crashed_jar   "Reload cookie jar/clear cookies on Firefox crash (recommended)">
+-<!ENTITY torbutton.prefs.dual_cookie_jars        "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
+-<!ENTITY torbutton.prefs.clear_http_auth        "Clear HTTP auth sessions (recommended)">
+-<!ENTITY torbutton.prefs.block_js_history       "Isolate access of history navigation to Tor state (crucial)">
+-<!ENTITY torbutton.prefs.resize_on_toggle       "Resize window dimensions to multiples of 40px on toggle (recommended)">
+-<!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
+-<!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
+-<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
+-<!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
+-<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
+-<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
+-<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
++<!ENTITY torbutton.prefs.sec_settings  "">
++<!ENTITY torbutton.prefs.block_thread        "">
++<!ENTITY torbutton.prefs.block_thwrite       "">
++<!ENTITY torbutton.prefs.block_nthread       "">
++<!ENTITY torbutton.prefs.block_nthwrite      "">
++<!ENTITY torbutton.prefs.clear_history       "">
++<!ENTITY torbutton.prefs.clear_cache        "">
++<!ENTITY torbutton.prefs.block_cache        "">
++<!ENTITY torbutton.prefs.cookie_jars        "">
++<!ENTITY torbutton.prefs.mmm_cookies        "">
++<!ENTITY torbutton.prefs.clear_cookies      "">
++<!ENTITY torbutton.prefs.disable_plugins    "">
++<!ENTITY torbutton.prefs.kill_bad_js        "">
++<!ENTITY torbutton.prefs.isolate_content    "">
++<!ENTITY torbutton.prefs.no_updates         "">
++<!ENTITY torbutton.prefs.set_uagent         "">
++<!ENTITY torbutton.prefs.dynamic              "">
++<!ENTITY torbutton.prefs.cookies              "">
++<!ENTITY torbutton.prefs.cache                "">
++<!ENTITY torbutton.prefs.history             "">
++<!ENTITY torbutton.prefs.no_search           "">
++<!ENTITY torbutton.prefs.shutdown              "">
++<!ENTITY torbutton.prefs.tor_shutdown          "">
++<!ENTITY torbutton.prefs.all_shutdown          "">
++<!ENTITY torbutton.prefs.no_shutdown           "">
++<!ENTITY torbutton.prefs.disable_sessionstore  "">
++<!ENTITY torbutton.prefs.headers               "">
++<!ENTITY torbutton.prefs.spoof_english         "">
++<!ENTITY torbutton.prefs.disable_referer       "">
++<!ENTITY torbutton.prefs.disable_domstorage    "">
++<!ENTITY torbutton.prefs.forms            "">
++<!ENTITY torbutton.prefs.block_tforms       "">
++<!ENTITY torbutton.prefs.block_ntforms       "">
++<!ENTITY torbutton.prefs.notor_sessionstore    "">
++<!ENTITY torbutton.prefs.tor    "">
++<!ENTITY torbutton.prefs.non_tor    "">
++<!ENTITY torbutton.prefs.restore_tor   "">
++<!ENTITY torbutton.prefs.reload_crashed_jar   "">
++<!ENTITY torbutton.prefs.dual_cookie_jars        "">
++<!ENTITY torbutton.prefs.clear_http_auth        "">
++<!ENTITY torbutton.prefs.block_js_history       "">
++<!ENTITY torbutton.prefs.resize_on_toggle       "">
++<!ENTITY torbutton.prefs.close_tor    "">
++<!ENTITY torbutton.prefs.close_nontor       "">
++<!ENTITY torbutton.prefs.block_file_net     "">
++<!ENTITY torbutton.prefs.block_links        "">
++<!ENTITY torbutton.prefs.locked_mode        "">
++<!ENTITY torbutton.prefs.startup_state      "">
++<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
+Index: src/chrome/locale/pt-BR/torbutton.properties
+===================================================================
+--- src/chrome/locale/pt-BR/torbutton.properties	(revision 15071)
++++ src/chrome/locale/pt-BR/torbutton.properties	(working copy)
+@@ -5,6 +5,6 @@
+ torbutton.panel.label.disabled=Tor desabilitado
+ torbutton.panel.label.enabled=Tor habilitado
+ extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Torbutton provê um ícone para habilitar ou desabilitar rapidamente o proxy Tor
+-torbutton.popup.history.warning = Torbutton blocked changed-state history manipulation.\n\nSee history settings to allow.\n\n
+-torbutton.popup.plugin.warning = Torbutton blocked direct Tor load of plugin content.\n\nUse Save-As instead.\n\n
+-torbutton.popup.ff3.warning = Warning!\n\nTorbutton on Firefox 3 is known to leak your timezone and livemark feeds during Tor usage. In addition, it has not been as extensively tested for Tor security and usability as Firefox 2.\n\nDo you wish to continue anyway?
++torbutton.popup.history.warning = 
++torbutton.popup.plugin.warning = 
++torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/ru/torbutton.dtd
 ===================================================================
---- src/chrome/locale/ru/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/ru/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/ru/torbutton.dtd	(working copy)
-@@ -73,6 +73,6 @@
+@@ -73,7 +73,7 @@
  <!ENTITY torbutton.prefs.close_nontor       "Закрывать все окна и вкладки не-Tor при переключении режимов (необяз.)">
  <!ENTITY torbutton.prefs.block_file_net     "Блокировать доступ к сети по адресам типа file:// (желательно)">
  <!ENTITY torbutton.prefs.block_links        "Блокировать щелчки по ссылкам и перезагрузку страниц из разных режимов Tor (необяз.)">
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/ru/torbutton.properties
 ===================================================================
---- src/chrome/locale/ru/torbutton.properties	(revision 15040)
+--- src/chrome/locale/ru/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/ru/torbutton.properties	(working copy)
 @@ -7,4 +7,4 @@
  extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description=Кнопка включения/отключения доступа к Интернет через сеть Tor
@@ -744,23 +758,25 @@ Index: src/chrome/locale/ru/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/it-IT/torbutton.dtd
 ===================================================================
---- src/chrome/locale/it-IT/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/it-IT/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/it-IT/torbutton.dtd	(working copy)
-@@ -75,6 +75,6 @@
+@@ -75,7 +75,7 @@
  <!ENTITY torbutton.prefs.block_links "Blocca i clic sui link e la ricarica delle pagine da stati Tor differenti (facoltativo)">
  <!ENTITY torbutton.prefs.jar_certs "Conserva i certificati SSL in depositi separati per Tor/Non-Tor (consigliato)">
  <!ENTITY torbutton.prefs.jar_ca_certs "Conserva i certificati delle CA in depositi separati per Tor/Non-Tor (consigliato)">
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/sl-SI/torbutton.dtd
 ===================================================================
---- src/chrome/locale/sl-SI/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/sl-SI/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/sl-SI/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Klikni za inicializiranje razširitve Torbutton">
@@ -813,6 +829,7 @@ Index: src/chrome/locale/sl-SI/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -862,9 +879,10 @@ Index: src/chrome/locale/sl-SI/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/sl-SI/torbutton.properties
 ===================================================================
---- src/chrome/locale/sl-SI/torbutton.properties	(revision 15040)
+--- src/chrome/locale/sl-SI/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/sl-SI/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled=Anonimizacija izključena
@@ -878,9 +896,9 @@ Index: src/chrome/locale/sl-SI/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/de-AT/torbutton.dtd
 ===================================================================
---- src/chrome/locale/de-AT/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/de-AT/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/de-AT/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Hier klicken, um Torbutton einzurichten">
@@ -933,6 +951,7 @@ Index: src/chrome/locale/de-AT/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings        "">
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -982,9 +1001,10 @@ Index: src/chrome/locale/de-AT/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/de-AT/torbutton.properties
 ===================================================================
---- src/chrome/locale/de-AT/torbutton.properties	(revision 15040)
+--- src/chrome/locale/de-AT/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/de-AT/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled=Tor deaktiviert
@@ -998,21 +1018,23 @@ Index: src/chrome/locale/de-AT/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/fa-IR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/fa-IR/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/fa-IR/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/fa-IR/torbutton.dtd	(working copy)
-@@ -73,6 +73,6 @@
+@@ -73,7 +73,7 @@
  <!ENTITY torbutton.prefs.close_nontor       "بستن همه پنجره های غیرتُر در ضامن (اختیاری)">
  <!ENTITY torbutton.prefs.block_file_net     "بازداشتن دسترسی به شبکه از file:// نشانی های وب (توصیه شده)">
  <!ENTITY torbutton.prefs.block_links        "بازداشتن فشاردادن پیوند و بازگذاری مجدد برگه از وضعیت های مختلف تُر (اختیاری)">
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/fa-IR/torbutton.properties
 ===================================================================
---- src/chrome/locale/fa-IR/torbutton.properties	(revision 15040)
+--- src/chrome/locale/fa-IR/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/fa-IR/torbutton.properties	(working copy)
 @@ -5,5 +5,6 @@
  torbutton.panel.label.disabled = تُر غیرفعال شد
@@ -1025,21 +1047,23 @@ Index: src/chrome/locale/fa-IR/torbutton.properties
 +torbutton.popup.ff3.warning =
 Index: src/chrome/locale/ar/torbutton.dtd
 ===================================================================
---- src/chrome/locale/ar/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/ar/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/ar/torbutton.dtd	(working copy)
-@@ -73,6 +73,6 @@
+@@ -73,7 +73,7 @@
  <!ENTITY torbutton.prefs.close_nontor       "أغلق كل نوافذ و ألسنة غير تور عند اغير الحالة (اختياري)">
  <!ENTITY torbutton.prefs.block_file_net     "امنع النفاذ إلى الشبكة من مسارات file:// (محبّذ)">
  <!ENTITY torbutton.prefs.block_links        "امنع نقر الروابط و إعادة تحميل الصفحات بين حالات تور المختلفة (اختياري)">
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/ar/torbutton.properties
 ===================================================================
---- src/chrome/locale/ar/torbutton.properties	(revision 15040)
+--- src/chrome/locale/ar/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/ar/torbutton.properties	(working copy)
 @@ -10,4 +10,4 @@
  torbutton.popup.history.warning = منع توربتن تعديل الحالة-المتغيرة للتأريخ.\n\nطالع تضبيطات التأريخ لتسمح بهذا.\n\n
@@ -1049,9 +1073,9 @@ Index: src/chrome/locale/ar/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/el-GR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/el-GR/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/el-GR/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/el-GR/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "Π">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "Κάντε κλικ για να εκκίνηση του Torbutton">
@@ -1104,6 +1128,7 @@ Index: src/chrome/locale/el-GR/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        "">
 +<!ENTITY torbutton.prefs.block_thwrite       "">
@@ -1153,9 +1178,10 @@ Index: src/chrome/locale/el-GR/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/el-GR/torbutton.properties
 ===================================================================
---- src/chrome/locale/el-GR/torbutton.properties	(revision 15040)
+--- src/chrome/locale/el-GR/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/el-GR/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled=Το Tor είναι απενεργοποιημένο
@@ -1169,21 +1195,23 @@ Index: src/chrome/locale/el-GR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/es/torbutton.dtd
 ===================================================================
---- src/chrome/locale/es/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/es/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/es/torbutton.dtd	(working copy)
-@@ -73,6 +73,6 @@
+@@ -73,7 +73,7 @@
  <!ENTITY torbutton.prefs.close_nontor       "Cerrar las ventanas y pestañas que no sean de Tor al cambiar el estado (opcional)">
  <!ENTITY torbutton.prefs.block_file_net     "Bloquear el acceso a la red desde archivos en direcciones file:// (recomendado)">
  <!ENTITY torbutton.prefs.block_links        "Bloquear clicks en vínculos y recargas de páginas desde distintos estados de Tor (opcional)">
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/es/torbutton.properties
 ===================================================================
---- src/chrome/locale/es/torbutton.properties	(revision 15040)
+--- src/chrome/locale/es/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/es/torbutton.properties	(working copy)
 @@ -7,4 +7,4 @@
  extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description= Torbutton provee un botón para activar y desactivar el proxy Tor de manera fácil.
@@ -1193,9 +1221,9 @@ Index: src/chrome/locale/es/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/zh-TW/torbutton.dtd
 ===================================================================
---- src/chrome/locale/zh-TW/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/zh-TW/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/zh-TW/torbutton.dtd	(working copy)
-@@ -27,52 +27,52 @@
+@@ -27,53 +27,53 @@
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
  <!ENTITY torbutton.button.tooltip "點擊以初始 Torbutton">
@@ -1248,6 +1276,7 @@ Index: src/chrome/locale/zh-TW/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.sec_settings       ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
 +<!ENTITY torbutton.prefs.block_thwrite       ""> 
@@ -1297,9 +1326,10 @@ Index: src/chrome/locale/zh-TW/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/zh-TW/torbutton.properties
 ===================================================================
---- src/chrome/locale/zh-TW/torbutton.properties	(revision 15040)
+--- src/chrome/locale/zh-TW/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/zh-TW/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled=Tor 已停用
@@ -1313,21 +1343,23 @@ Index: src/chrome/locale/zh-TW/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/fr-FR/torbutton.dtd
 ===================================================================
---- src/chrome/locale/fr-FR/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/fr-FR/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/fr-FR/torbutton.dtd	(working copy)
-@@ -73,6 +73,6 @@
+@@ -73,7 +73,7 @@
  <!ENTITY torbutton.prefs.close_nontor			"Fermer toutes les fenêtres et onglets Non-Tor à l'activation/désactivation (optionnel)">
  <!ENTITY torbutton.prefs.block_file_net			"Bloquer l'accès au réseau des urls de type file:// (recommendé)">
  <!ENTITY torbutton.prefs.block_links			"Bloquer les liens cliquables et le rechargement des pages depuis différents états Tor (optionnel)">
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/fr-FR/torbutton.properties
 ===================================================================
---- src/chrome/locale/fr-FR/torbutton.properties	(revision 15040)
+--- src/chrome/locale/fr-FR/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/fr-FR/torbutton.properties	(working copy)
 @@ -9,4 +9,4 @@
  extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description = Torbutton comporte un bouton qui permet d'activer et de désactiver rapidement le pointage de Firefox vers le proxy de Tor.
@@ -1337,9 +1369,9 @@ Index: src/chrome/locale/fr-FR/torbutton.properties
 +torbutton.popup.ff3.warning = 
 Index: src/chrome/locale/de-DE/torbutton.dtd
 ===================================================================
---- src/chrome/locale/de-DE/torbutton.dtd	(revision 15068)
+--- src/chrome/locale/de-DE/torbutton.dtd	(revision 15072)
 +++ src/chrome/locale/de-DE/torbutton.dtd	(working copy)
-@@ -26,53 +26,53 @@
+@@ -26,54 +26,54 @@
  <!ENTITY torbutton.context_menu.about "Über Torbutton...">
  <!ENTITY torbutton.context_menu.about.key "A">
  <!ENTITY torbutton.button.label "Torbutton">
@@ -1393,6 +1425,7 @@ Index: src/chrome/locale/de-DE/torbutton.dtd
 -<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 -<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 -<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+-<!ENTITY torbutton.prefs.startup             "Startup">
 +<!ENTITY torbutton.button.tooltip ""> 
 +<!ENTITY torbutton.prefs.sec_settings        ""> 
 +<!ENTITY torbutton.prefs.block_thread        ""> 
@@ -1443,9 +1476,10 @@ Index: src/chrome/locale/de-DE/torbutton.dtd
 +<!ENTITY torbutton.prefs.locked_mode        "">
 +<!ENTITY torbutton.prefs.startup_state      "">
 +<!ENTITY torbutton.prefs.shutdown_state      "">
++<!ENTITY torbutton.prefs.startup             "">
 Index: src/chrome/locale/de-DE/torbutton.properties
 ===================================================================
---- src/chrome/locale/de-DE/torbutton.properties	(revision 15040)
+--- src/chrome/locale/de-DE/torbutton.properties	(revision 15071)
 +++ src/chrome/locale/de-DE/torbutton.properties	(working copy)
 @@ -5,6 +5,6 @@
  torbutton.panel.label.disabled=Tor deaktiviert
