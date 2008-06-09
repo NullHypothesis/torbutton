@@ -76,3 +76,4 @@
 <!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
 <!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
 <!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
+<!ENTITY torbutton.prefs.startup             "Startup">
