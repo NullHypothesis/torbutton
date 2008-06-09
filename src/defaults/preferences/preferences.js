@@ -21,6 +21,7 @@ pref("extensions.torbutton.gopher_proxy","");
 pref("extensions.torbutton.gopher_port",0);
 pref("extensions.torbutton.socks_host","");
 pref("extensions.torbutton.socks_port",0);
+pref("extensions.torbutton.locked_mode",false);
 
 // XXX: wtf prefs? These seem not actually connected, but govern
 // if user wants own tor proxy settings
@@ -97,6 +98,7 @@ pref("extensions.torbutton.banned_ports","8118,8123,9050,9051");
 pref("extensions.torbutton.block_file_net",true);
 pref("extensions.torbutton.jar_certs",false);
 pref("extensions.torbutton.jar_ca_certs",false);
+pref("extensions.torbutton.startup_state", 2); // 0=non-tor, 1=tor, 2=last
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");

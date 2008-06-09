@@ -6,6 +6,7 @@
 
 <overlay id="torbutton-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/x-javascript" src="chrome://torbutton/content/torbutton_util.js" />
     <script type="application/x-javascript" src="chrome://torbutton/content/torbutton.js" />
     <script language="JavaScript">
         //onLoad Hander
@@ -23,7 +24,7 @@
             label="Torbutton"
             tooltiptext="&torbutton.button.tooltip;" 
             context="torbutton-context-menu"
-            oncommand="torbutton_toggle();" />
+            oncommand="torbutton_toggle(false);" />
     </toolbarpalette>
 
     <toolbarpalette id="MsgComposeToolbarPalette">
@@ -33,11 +34,11 @@
             label="Torbutton"
             tooltiptext="&torbutton.button.tooltip;" 
             context="torbutton-context-menu"
-            oncommand="torbutton_toggle();" />
+            oncommand="torbutton_toggle(false);" />
     </toolbarpalette>
 
     <commandset id="mainCommandSet">
-        <command id="torbutton-toggle-cmd" oncommand="torbutton_toggle();"/>
+        <command id="torbutton-toggle-cmd" oncommand="torbutton_toggle(false);"/>
     </commandset>
 
     <keyset id="mainKeyset">
@@ -49,7 +50,7 @@
         <statusbarpanel id="torbutton-panel"
             insertbefore="statusbar-updates"
                         context="torbutton-context-menu"
-            onclick="if (event.button == 0) torbutton_toggle()"/>
+            onclick="if (event.button == 0) torbutton_toggle(false)"/>
 
         <popup id="torbutton-context-menu"/>
    </statusbar>

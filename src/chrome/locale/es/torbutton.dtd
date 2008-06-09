@@ -73,3 +73,6 @@
 <!ENTITY torbutton.prefs.close_nontor       "Cerrar las ventanas y pestañas que no sean de Tor al cambiar el estado (opcional)">
 <!ENTITY torbutton.prefs.block_file_net     "Bloquear el acceso a la red desde archivos en direcciones file:// (recomendado)">
 <!ENTITY torbutton.prefs.block_links        "Bloquear clicks en vínculos y recargas de páginas desde distintos estados de Tor (opcional)">
+<!ENTITY torbutton.prefs.locked_mode        "Disable Button and Hotkeys to prevent accidental toggle">
+<!ENTITY torbutton.prefs.startup_state      "On normal startup, set Tor state to:">
+<!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">

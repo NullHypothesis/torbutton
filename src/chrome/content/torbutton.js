@@ -200,8 +200,14 @@ function torbutton_set_panel_style() {
     o_statuspanel.setAttribute('class','statusbarpanel-' + panel_style);
 }
 
-function torbutton_toggle() {
+function torbutton_toggle(force) {
     var o_toolbutton = false;
+
+    // Only toggle if lock mode is set if the user goes out of their way.
+    if(!force && m_tb_prefs.getBoolPref("extensions.torbutton.locked_mode")) {
+        return;
+    }
+
     o_toolbutton = torbutton_get_toolbutton();
 
     torbutton_log(3, 'called toggle()');
@@ -658,6 +664,8 @@ function torbutton_update_status(mode, force_update) {
         }
     }
 
+    // XXX: All updates are now required to be authenticated on FF3.. 
+    // Perhaps this should be a diff pref.. or default to off?
     if (torprefs.getBoolPref("no_updates")) {
         m_tb_prefs.setBoolPref("extensions.update.enabled", !mode);
         m_tb_prefs.setBoolPref("app.update.enabled", !mode);
@@ -1631,6 +1639,7 @@ function torbutton_crash_recover()
             torbutton_conditional_set(false);
         m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
     }
+
     torbutton_log(3, "End crash recover check");
 }
 
@@ -1807,6 +1816,16 @@ function torbutton_do_onetime_startup()
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
         torbutton_do_main_window_startup();
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
+
+        if(!m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
+            var startup_state = m_tb_pref.getIntPref("extensions.torbutton.tor_startup");
+
+            if(startup_state == 0) {
+                torbutton_conditional_set(false); // must be boolean
+            } else if(startup_state == 1) {
+                torbutton_conditional_set(true);
+            } // 2 means leave it as it was
+        }
     }
 }
 

@@ -24,6 +24,7 @@
      </tabs>
      <tabpanels>
     <tabpanel>
+        <vbox>
         <radiogroup id="torbutton_settingsMethod">
             <radio value="recommended" id="torbutton_useRecommendedSettings"
                    label="&torbutton.prefs.recommended_settings;"
@@ -97,6 +98,11 @@
                 </rows>
             </grid>
         </radiogroup>
+
+        <checkbox id="torbutton_lockedMode"
+        label="&torbutton.prefs.locked_mode;"
+        oncommand="torbutton_prefs_set_field_attributes(document)"/>
+       </vbox>
 <!--
         <label value="&torbutton.prefs.non_socks;" control="nonsocks_proxy"/>
         <textbox id="nonsocks_proxy"/>
@@ -205,7 +211,7 @@
           </tabpanel>
           <tabpanel id="shutdown">
            <vbox>
-            <radiogroup id="torbutton_shutdownGroup">
+            <radiogroup align="start" flex="1" id="torbutton_shutdownGroup">
              <radio id="torbutton_noShutdown" 
                    label="&torbutton.prefs.no_shutdown;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
@@ -216,14 +222,31 @@
                    label="&torbutton.prefs.all_shutdown;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
             </radiogroup>
+            <!-- 
+            This shouldn't be a user-changeable pref. Unless something is broken,
+            it should always be true        
             <checkbox id="torbutton_reloadCrashedJar" label="&torbutton.prefs.reload_crashed_jar;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
-             
-            <checkbox id="torbutton_noTorSessionStore" label="&torbutton.prefs.notor_sessionstore;" 
+             -->
+            <vbox flex="1">
+            <hbox>
+             <label value="&torbutton.prefs.startup_state;" control="torbutton_startupStateGroup"/>
+             <radiogroup orient="horizontal" id="torbutton_startupStateGroup">
+              <radio id="torbutton_startTor" 
+                   label="&torbutton.prefs.tor;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
-            <hbox align="center" flex="1">
-             <label align="center" value="&torbutton.prefs.restore_tor;" control="torbutton_restoreTorGroup"/>
-             <radiogroup align="center" orient="horizontal" id="torbutton_restoreTorGroup">
+              <radio id="torbutton_startNonTor" 
+                   label="&torbutton.prefs.non_tor;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              <radio id="torbutton_startPrevious" 
+                   label="&torbutton.prefs.shutdown_state;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+             </radiogroup>
+            </hbox>
+
+            <hbox>
+             <label value="&torbutton.prefs.restore_tor;" control="torbutton_restoreTorGroup"/>
+             <radiogroup orient="horizontal" id="torbutton_restoreTorGroup">
               <radio id="torbutton_restoreTor" 
                    label="&torbutton.prefs.tor;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
@@ -231,7 +254,11 @@
                    label="&torbutton.prefs.non_tor;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
              </radiogroup>
-             </hbox>
+            </hbox>
+            <checkbox class="indent" id="torbutton_noTorSessionStore" label="&torbutton.prefs.notor_sessionstore;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            
+            </vbox>
            </vbox>
           </tabpanel>
           <tabpanel id="headers">
