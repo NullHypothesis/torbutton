@@ -1818,7 +1818,7 @@ function torbutton_do_onetime_startup()
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
 
         if(!m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
-            var startup_state = m_tb_pref.getIntPref("extensions.torbutton.tor_startup");
+            var startup_state = m_tb_pref.getIntPref("extensions.torbutton.startup_state");
 
             if(startup_state == 0) {
                 torbutton_conditional_set(false); // must be boolean
