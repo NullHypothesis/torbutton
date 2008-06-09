@@ -126,8 +126,13 @@ StoreWrapper.prototype =
     // must be hacked around
     dump("new doRestore\n");
     this.logger.log(3, "Got doRestore");
-    if((ret = this._store().doRestore()) && this._startup) {
-        this._prefs.setBoolPref("extensions.torbutton.crashed", true);
+    ret = this._store().doRestore();
+    if(this._startup) {
+        if(ret) {
+           this._prefs.setBoolPref("extensions.torbutton.crashed", true);
+        } else {
+           this._prefs.setBoolPref("extensions.torbutton.noncrashed", true);
+        }
     } 
     this._startup = false;
     return ret;

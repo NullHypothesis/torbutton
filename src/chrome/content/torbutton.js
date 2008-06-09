@@ -111,11 +111,16 @@ var torbutton_unique_pref_observer =
                     m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2); 
                 }
                 break;
-            
+
             case "extensions.torbutton.crashed":
                 // can we say ghetto hack, boys and girls?
                 torbutton_crash_recover();
                 break;
+
+            case "extensions.torbutton.noncrashed":
+               // can we say ghetto hack, boys and girls?
+               torbutton_set_initial_state();
+               break;
 
             case "extensions.torbutton.set_uagent":
                 // If the user turns off the pref, reset their user agent to
@@ -1811,21 +1816,27 @@ function torbutton_do_main_window_startup()
     torbutton_http_observer.register();
 }
 
+function torbutton_set_initial_state() {
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
+        var startup_state = m_tb_prefs.getIntPref("extensions.torbutton.startup_state");
+        
+        torbutton_log(3, "Setting inital state to: "+startup_state);
+
+        if(startup_state == 0) {
+            torbutton_conditional_set(false); // must be boolean
+        } else if(startup_state == 1) {
+            torbutton_conditional_set(true);
+        } // 2 means leave it as it was
+
+        m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
+    }
+}
+
 function torbutton_do_onetime_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
         torbutton_do_main_window_startup();
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
-
-        if(!m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
-            var startup_state = m_tb_pref.getIntPref("extensions.torbutton.startup_state");
-
-            if(startup_state == 0) {
-                torbutton_conditional_set(false); // must be boolean
-            } else if(startup_state == 1) {
-                torbutton_conditional_set(true);
-            } // 2 means leave it as it was
-        }
     }
 }
 

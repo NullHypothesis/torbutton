@@ -56,6 +56,7 @@ pref("extensions.torbutton.saved.full_page_plugins","");
 pref("extensions.torbutton.tor_enabled",false);
 pref("extensions.torbutton.startup",false);
 pref("extensions.torbutton.crashed",false);
+pref("extensions.torbutton.noncrashed",false);
 pref("extensions.torbutton.block_cert_dialogs",false);
 pref("extensions.torbutton.asked_ca_disable",false);
 pref("extensions.torbutton.warned_ff3",false);
