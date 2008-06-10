@@ -1836,6 +1836,19 @@ function torbutton_do_onetime_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
         torbutton_do_main_window_startup();
+
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.block_remoting")) {
+            var appSupport = Cc["@mozilla.org/toolkit/native-app-support;1"]
+                .getService(Ci.nsINativeAppSupport);
+            if(!appSupport.stop()) {
+                torbutton_log(5, "Remoting stop() failed. Forcing quit");
+                // We really want this thing gone.
+                appSupport.quit();
+            } else {
+                torbutton_log(3, "Remoting window closed.");
+            }
+        }
+        
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
 }
