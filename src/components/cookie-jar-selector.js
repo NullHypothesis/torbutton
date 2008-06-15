@@ -20,6 +20,9 @@ function CookieJarSelector() {
   var Cc = Components.classes;
   var Ci = Components.interfaces;
 
+  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+      .getService(Components.interfaces.nsISupports).wrappedJSObject;
+
   var getProfileFile = function(filename) {
     var loc = "ProfD";  // profile directory
     var file = 
@@ -70,7 +73,7 @@ function CookieJarSelector() {
     cookieManager.observe(this, "profile-before-change", "");
     // Tell the cookie manager to reload cookies from disk
     cookieManager.observe(this, "profile-do-change", "");
-    copyProfileFile("cookies.txt", "cookies-" + name + ".txt");
+    copyProfileFile("cookies"+this.extn, "cookies-" + name + this.extn);
   };
 
   this.loadCookies = function(name, deleteSavedCookieJar) {
@@ -85,11 +88,27 @@ function CookieJarSelector() {
 
     // Replace the cookies.txt file with the loaded data
     var fn = deleteSavedCookieJar ? moveProfileFile : copyProfileFile;
-    fn("cookies-" + name + ".txt", "cookies.txt");
+    fn("cookies-"+name+this.extn, "cookies"+this.extn);
 
     // Tell the cookie manager to reload cookies from disk
     cookieManager.observe(this, "profile-do-change", context);
+    this.logger.log(2, "Cookies reloaded");
   };
+
+  // Check firefox version to know filename
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
+
+  if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
+      this.is_ff3 = true;
+      this.extn = ".sqlite";
+  } else {
+      this.is_ff3 = false;
+      this.extn = ".txt";
+  }
+
 
   // This JSObject is exported directly to chrome
   this.wrappedJSObject = this;
