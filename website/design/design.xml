@@ -1699,6 +1699,19 @@ The following bugs impact Torbutton and similar extensions' functionality.
 
     <orderedlist>
    <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=439384">Bug 439384 -
+"profile-do-change" event does not cause cookie table reload</ulink>
+   <para>
+
+In Firefox 3, the change to the new sqlite database for cookie storage has a
+bug that prevents Torbutton's cookie jaring from working properly. The
+"profile-do-change" observer event no longer properly causes a reload of the
+cookie database from disk after it is copied into place. This potentially has
+affects on profile switching extensions as well.
+
+   </para>
+   </listitem>
+   <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=417869">Bug 417869 -
 Browser context is difficult to obtain from many XPCOM callbacks</ulink>
    <para>
