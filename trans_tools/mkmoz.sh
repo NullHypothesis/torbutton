@@ -1,10 +1,10 @@
 #!/bin/bash -x
 #
 
-LOCALEDIR="../src/chrome/locale/"
+LOCALEDIR="../src/chrome/locale"
 
 directories="ar de-DE es hr-HR nl-NL pt-BR sl-SI de-AT el-GR fa-IR it-IT pl-PL zh-CN de-CH fr-FR ru zh-TW"
-poDir="po" 
+poDir="pootle" 
 mozDir="moz"
 input="en-US"
 template="torbutton.dtd"
