@@ -52,6 +52,13 @@ const nsIClassInfo = Components.interfaces.nsIClassInfo;
 const nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;
 const nsIObserverService = Components.interfaces.nsIObserverService;
 
+const logString = { 1:"VERB", 2:"DBUG", 3: "INFO", 4:"NOTE", 5:"WARN" };
+
+function padInt(i)
+{
+    return (i < 10) ? '0' + i : i;
+}
+
 TorbuttonLogger.prototype =
 {
   QueryInterface: function(iid)
@@ -82,41 +89,43 @@ TorbuttonLogger.prototype =
   // method of nsIClassInfo
   getHelperForLanguage: function(count) { return null; },
 
+  formatLog: function(str, level) {
+      var d = new Date();
+      var now = padInt(d.getUTCMonth()+1)+"-"+padInt(d.getUTCDate())+" "+padInt(d.getUTCHours())+":"+padInt(d.getUTCMinutes())+":"+padInt(d.getUTCSeconds());
+      return "["+now+"] Torbutton("+logString[level]+"): "+str;
+  },
+
   // error console log
   eclog: function(level, str) {
-      var now = Date.now();
-      str = "["+now+"] ("+level+"): "+str;
       switch(this.logmethod) {
           case 0: // stderr
-              if(this.loglevel <= level) 
-                  dump(str+"\n");
+              if(this.loglevel <= level)
+                  dump(this.formatLog(str, level)+"\n");
               break;
           default: // errorconsole
               if(this.loglevel <= level)
-                  this._console.logStringMessage(str);
+                  this._console.logStringMessage(this.formatLog(str,level));
               break;
       }
   },
 
   log: function(level, str) {
-      var now = Date.now();
-      str = "["+now+"] ("+level+"): "+str;
       switch(this.logmethod) {
           case 2: // debuglogger
               if(this._debuglog) {
-                  this._debuglog.log((6-level), str);
+                  this._debuglog.log((6-level), this.formatLog(str,level));
                   break;
               }
               // fallthrough
           case 0: // stderr
               if(this.loglevel <= level) 
-                  dump(str+"\n");
+                  dump(this.formatLog(str,level)+"\n");
               break;
           default:
               dump("Bad log method: "+this.logmethod);
           case 1: // errorconsole
               if(this.loglevel <= level)
-                  this._console.logStringMessage(str);
+                  this._console.logStringMessage(this.formatLog(str,level));
               break;
       }
   },
