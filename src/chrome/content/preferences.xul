@@ -141,7 +141,9 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noSearch" label="&torbutton.prefs.no_search;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-        <checkbox id="torbutton_blockFileNet" label="&torbutton.prefs.block_file_net;" 
+        <checkbox id="torbutton_blockTorFileNet" label="&torbutton.prefs.block_tor_file_net;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_blockNonTorFileNet" label="&torbutton.prefs.block_nontor_file_net;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_closeTor" label="&torbutton.prefs.close_tor;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>

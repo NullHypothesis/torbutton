@@ -71,7 +71,6 @@
 <!ENTITY torbutton.prefs.resize_on_toggle       "Resize windows to multiples of 50px during Tor usage (recommended)">
 <!ENTITY torbutton.prefs.close_tor    "Close all Tor windows and tabs on toggle (optional)">
 <!ENTITY torbutton.prefs.close_nontor       "Close all Non-Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.block_file_net     "Block access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_links        "Block link clicks and page reloads from different Tor states (optional)">
 <!ENTITY torbutton.prefs.jar_certs        "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.jar_ca_certs        "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
@@ -80,3 +79,6 @@
 <!ENTITY torbutton.prefs.shutdown_state      "Shutdown state">
 <!ENTITY torbutton.prefs.startup             "Startup">
 <!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
+<!ENTITY torbutton.prefs.block_tor_file_net     "Block Tor access to network from file:// urls (recommended)">
+<!ENTITY torbutton.prefs.block_nontor_file_net     "Block Non-Tor access to network from file:// urls">
+

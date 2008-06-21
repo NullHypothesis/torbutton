@@ -119,7 +119,8 @@ function ContentPolicy() {
 
     this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
     this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
-    this.block_file_net = this._prefs.getBoolPref("extensions.torbutton.block_file_net");
+    this.block_tor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_tor_file_net");
+    this.block_nontor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_nontor_file_net");
     this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
     return;
@@ -212,8 +213,9 @@ ContentPolicy.prototype = {
                                       contentLocation.spec);
                     return ok;
                 } else {
-                    if (this.block_file_net) {
-                        this.logger.eclog(3, "Blocking remote request from: " +
+                    if (this.block_tor_file_net && this.tor_enabled ||
+                            this.block_nontor_file_net && !this.tor_enabled) {
+                        this.logger.eclog(4, "Blocking remote request from: " +
                                           requestOrigin.spec + " for: " +
                                           contentLocation.spec);
                         return block;
@@ -363,7 +365,7 @@ ContentPolicy.prototype = {
         if(browser.__tb_tor_fetched == tor_state) {
             return ok;
         } else {
-            this.logger.log(4, "Blocking: "+contentLocation.spec);
+            this.logger.log(4, "Blocking cross state load of: "+contentLocation.spec);
             return block;
         }
 	},
@@ -394,8 +396,11 @@ ContentPolicy.prototype = {
             case "extensions.torbutton.tor_enabled":
                 this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
                 break;
-            case "extensions.torbutton.block_file_net":
-                this.block_file_net = this._prefs.getBoolPref("extensions.torbutton.block_file_net");
+            case "extensions.torbutton.block_tor_file_net":
+                this.block_tor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_tor_file_net");
+                break;
+            case "extensions.torbutton.block_nontor_file_net":
+                this.block_nontor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_nontor_file_net");
                 break;
             case "extensions.torbutton.no_tor_plugins":
                 this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");

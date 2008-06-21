@@ -97,7 +97,8 @@ pref("extensions.torbutton.close_nontor",false);
 pref("extensions.torbutton.block_js_history",true);
 pref("extensions.torbutton.resize_on_toggle",true);
 pref("extensions.torbutton.banned_ports","8118,8123,9050,9051");
-pref("extensions.torbutton.block_file_net",true);
+pref("extensions.torbutton.block_tor_file_net",true);
+pref("extensions.torbutton.block_nontor_file_net",false);
 pref("extensions.torbutton.jar_certs",false);
 pref("extensions.torbutton.jar_ca_certs",false);
 pref("extensions.torbutton.startup_state", 2); // 0=non-tor, 1=tor, 2=last
