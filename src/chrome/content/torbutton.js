@@ -101,14 +101,15 @@ var torbutton_unique_pref_observer =
             case "extensions.torbutton.cookie_jars":
             case "extensions.torbutton.clear_cookies":
                 torbutton_log(2, "Got cookie pref change");
-                if(!m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars")
-                    && !m_tb_prefs.getBoolPref("extensions.torbutton.clear_cookies")) {
-                    torbutton_log(3, "Changing lifetime");
-                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
-                            m_tb_prefs.getIntPref("extensions.torbutton.saved.cookieLifetime")); 
-                } else if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-                    torbutton_log(3, "Changing lifetime");
-                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2); 
+                if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+                } else if(m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars')) {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 
+                            m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled") ? 2 : 0);
+                } else if(m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars")) {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
+                } else {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
                 }
                 break;
 
@@ -139,7 +140,6 @@ var torbutton_unique_pref_observer =
                     if(m_tb_prefs.prefHasUserValue("general.platform.override"))
                         m_tb_prefs.clearUserPref("general.platform.override");
                     
-                    // XXX: Is this ok on ff2?
                     if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
                         m_tb_prefs.clearUserPref("general.oscpu.override");
                     if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
@@ -155,20 +155,34 @@ var torbutton_unique_pref_observer =
                 }
                 break;
 
-            case "extensions.torbutton.disable_referer":
-                if(!m_tb_prefs.getBoolPref("extensions.torbutton.disable_referer")) {
-                    m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", true);
-                    m_tb_prefs.setIntPref("network.http.sendRefererHeader", 2);
-                }
             case "extensions.torbutton.no_tor_plugins":
+                torbutton_update_status(
+                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
+                        true);
+            case "extensions.torbutton.disable_referer":
+            case "extensions.torbutton.disable_domstorage":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
+            case "extensions.torbutton.block_tforms":
             case "extensions.torbutton.block_cache":
-            case "extensions.torbutton.block_nthwrite":
             case "extensions.torbutton.block_thwrite":
-            case "extensions.torbutton.shutdown_method":
+                if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                    var o_stringbundle = torbutton_get_stringbundle();
+                    var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
+                    window.alert(warning);
+                }
+                break;
+
+            case "extensions.torbutton.block_nthwrite":
+            case "extensions.torbutton.block_ntforms":
+                if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                    var o_stringbundle = torbutton_get_stringbundle();
+                    var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
+                    window.alert(warning);
+                }
+                break;
+
             case "extensions.torbutton.spoof_english":
-            case "extensions.torbutton.resize_on_toggle":
                 torbutton_log(1, "Got update message, updating status");
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
@@ -537,6 +551,68 @@ function torbutton_update_statusbar(mode)
     }
 }
 
+function torbutton_setIntPref(pref, save, val, mode, changed) {
+    if(!changed) return; // Handle the pref change cases via observers
+    if(mode) {
+        if(m_tb_prefs.prefHasUserValue(pref)) {
+            m_tb_prefs.setIntPref("extensions.torbutton.saved."+save,
+                    m_tb_prefs.getIntPref(pref));
+        } else if(m_tb_prefs.prefHasUserValue("extensions.torbutton.saved."+save)) {
+            m_tb_prefs.clearUserPref("extensions.torbutton.saved."+save);
+        }
+        m_tb_prefs.setIntPref(pref, val);
+    } else {
+        if(m_tb_prefs.prefHasUserValue("extensions.torbutton.saved."+save)) {
+            m_tb_prefs.setIntPref(pref, 
+                    m_tb_prefs.getIntPref("extensions.torbutton.saved."+save));
+        } else if(m_tb_prefs.prefHasUserValue(pref)) {
+            m_tb_prefs.clearUserPref(pref);
+        }
+    }
+}
+
+function torbutton_setCharPref(pref, save, val, mode, changed) {
+    if(!changed) return; // Handle the pref change cases via observers
+    if(mode) {
+        if(m_tb_prefs.prefHasUserValue(pref)) {
+            m_tb_prefs.setCharPref("extensions.torbutton.saved."+save,
+                    m_tb_prefs.getCharPref(pref));
+        } else if(m_tb_prefs.prefHasUserValue("extensions.torbutton.saved."+save)) {
+            m_tb_prefs.clearUserPref("extensions.torbutton.saved."+save);
+        }
+        m_tb_prefs.setCharPref(pref, val);
+    } else {
+        if(m_tb_prefs.prefHasUserValue("extensions.torbutton.saved."+save)) {
+            m_tb_prefs.setCharPref(pref, 
+                    m_tb_prefs.getCharPref("extensions.torbutton.saved."+save));
+        } else if(m_tb_prefs.prefHasUserValue(pref)) {
+            m_tb_prefs.clearUserPref(pref);
+        }
+    }
+}
+
+function torbutton_setBoolPref(pref, save, val, mode, changed) {
+    if(!changed) return; // Handle the pref change cases via observers
+    if(mode) {
+        if(m_tb_prefs.prefHasUserValue(pref)) {
+            m_tb_prefs.setBoolPref("extensions.torbutton.saved."+save,
+                    m_tb_prefs.getBoolPref(pref));
+        } else if(m_tb_prefs.prefHasUserValue("extensions.torbutton.saved."+save)) {
+            m_tb_prefs.clearUserPref("extensions.torbutton.saved."+save);
+        }
+        m_tb_prefs.setBoolPref(pref, val);
+    } else {
+        if(m_tb_prefs.prefHasUserValue("extensions.torbutton.saved."+save)) {
+            m_tb_prefs.setBoolPref(pref, 
+                    m_tb_prefs.getBoolPref("extensions.torbutton.saved."+save));
+        } else if(m_tb_prefs.prefHasUserValue(pref)) {
+            m_tb_prefs.clearUserPref(pref);
+        }
+    }
+}
+
+// NOTE: If you touch any additional prefs in here, be sure to update
+// the list in torbutton_util.js::torbutton_reset_browser_prefs()
 function torbutton_update_status(mode, force_update) {
     var o_toolbutton = false;
     var o_statuspanel = false;
@@ -647,12 +723,23 @@ function torbutton_update_status(mode, force_update) {
     // FIXME: This is not ideal, but the refspoof method is not compatible
     // with FF2.0
     if(torprefs.getBoolPref("disable_referer")) {
-        m_tb_prefs.setBoolPref("network.http.sendSecureXSiteReferrer", !mode);
-        m_tb_prefs.setIntPref("network.http.sendRefererHeader", mode ? 0 : 2);
+        torbutton_setBoolPref("network.http.sendSecureXSiteReferrer", 
+                "sendSecureXSiteReferrer", !mode, mode, changed);
+        torbutton_setIntPref("network.http.sendRefererHeader", 
+                "sendRefererHeader", mode?0:2, mode, changed);
+    } else {
+        torbutton_setBoolPref("network.http.sendSecureXSiteReferrer", 
+                "sendSecureXSiteReferrer", true, mode, changed);
+        torbutton_setIntPref("network.http.sendRefererHeader", 
+                "sendRefererHeader", 2, mode, changed);
     }
 
     if(torprefs.getBoolPref("disable_domstorage")) {
-        m_tb_prefs.setBoolPref("dom.storage.enabled", !mode);
+        torbutton_setBoolPref("dom.storage.enabled", 
+                "dom_storage", !mode, mode, changed);
+    } else {
+        torbutton_setBoolPref("dom.storage.enabled", 
+                "dom_storage", true, mode, changed);
     }
 
     if(torprefs.getBoolPref("spoof_english") && mode) {
@@ -679,15 +766,35 @@ function torbutton_update_status(mode, force_update) {
     // XXX: All updates are now required to be authenticated on FF3.. 
     // Perhaps this should be a diff pref.. or default to off?
     if (torprefs.getBoolPref("no_updates")) {
-        m_tb_prefs.setBoolPref("extensions.update.enabled", !mode);
-        m_tb_prefs.setBoolPref("app.update.enabled", !mode);
-        m_tb_prefs.setBoolPref("app.update.auto", !mode);
-        m_tb_prefs.setBoolPref("browser.search.update", !mode);
+        torbutton_setBoolPref("extensions.update.enabled", "extension_update",
+                !mode, mode, changed);
+        torbutton_setBoolPref("app.update.enabled", "app_update",
+                !mode, mode, changed);
+        torbutton_setBoolPref("app.update.auto", "auto_update",
+                !mode, mode, changed);
+        torbutton_setBoolPref("browser.search.update", "search_update",
+                !mode, mode, changed);
+    } else {
+        torbutton_setBoolPref("extensions.update.enabled", "extension_update",
+                true, mode, changed);
+        torbutton_setBoolPref("app.update.enabled", "app_update",
+                true, mode, changed);
+        torbutton_setBoolPref("app.update.auto", "auto_update",
+                true, mode, changed);
+        torbutton_setBoolPref("browser.search.update", "search_update",
+                true, mode, changed);
     }
 
     if (torprefs.getBoolPref('block_cache')) {
-        m_tb_prefs.setBoolPref("browser.cache.memory.enable", !mode);
-        m_tb_prefs.setBoolPref("network.http.use-cache", !mode);
+        torbutton_setBoolPref("browser.cache.memory.enable", 
+                "mem_cache", !mode, mode, changed);
+        torbutton_setBoolPref("network.http.use-cache", 
+                "http_cache", !mode, mode, changed);
+    } else {
+        torbutton_setBoolPref("browser.cache.memory.enable", 
+                "mem_cache", true, mode, changed);
+        torbutton_setBoolPref("network.http.use-cache", 
+                "http_cache", true, mode, changed);
     }
 
     var children = m_tb_prefs.getChildList("network.protocol-handler.warn-external", 
@@ -703,15 +810,16 @@ function torbutton_update_status(mode, force_update) {
         }
     }
     
-
     // Always block disk cache during Tor. We clear it on toggle, 
     // so no need to keep it around for someone to rifle through.
-    m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
+    torbutton_setBoolPref("browser.cache.disk.enable", "disk_cache", !mode, 
+            mode, changed);
 
     // Disable safebrowsing in Tor for FF2. It fetches some info in 
     // cleartext with no HMAC (Firefox Bug 360387)
     if(!m_tb_ff3) {
-        m_tb_prefs.setBoolPref("browser.safebrowsing.enabled", !mode);
+        torbutton_setBoolPref("browser.safebrowsing.enabled", "safebrowsing", 
+                !mode, mode, changed);
     }
 
     // I think this pref is evil (and also hidden from user configuration, 
@@ -728,110 +836,85 @@ function torbutton_update_status(mode, force_update) {
     m_tb_prefs.setCharPref("network.security.ports.banned", 
             m_tb_prefs.getCharPref("extensions.torbutton.banned_ports"));
    
-    if (torprefs.getBoolPref("no_search")) {
-        m_tb_prefs.setBoolPref("browser.search.suggest.enabled", !mode);
+    if (m_tb_prefs.getBoolPref("extensions.torbutton.no_search")) {
+        torbutton_setBoolPref("browser.search.suggest.enabled", 
+                "search_suggest", !mode, mode, changed);
+    } else {
+        torbutton_setBoolPref("browser.search.suggest.enabled", 
+                "search_suggest", true, mode, changed);
     }
         
-    if(torprefs.getBoolPref("no_tor_plugins")) {
-        m_tb_prefs.setBoolPref("security.enable_java", !mode);
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+        torbutton_setBoolPref("security.enable_java", "enable_java", !mode, 
+                mode, changed);
+    } else {
+        torbutton_setBoolPref("security.enable_java", "enable_java", true,
+                mode, changed);
     }
 
-
-    if (torprefs.getBoolPref('clear_cache')) {
+    if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cache')) {
         var cache = Components.classes["@mozilla.org/network/cache-service;1"].
         getService(Components.interfaces.nsICacheService);
         cache.evictEntries(0);
     }
 
-    if (torprefs.getBoolPref('clear_history')) {
+    if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_history')) {
         torbutton_clear_history();
     }
 
-    // FIXME: This is kind of not so user friendly to people who like
-    // to keep their own prefs.. Not sure what to do though..
     if(mode) {
-        if(torprefs.getBoolPref('block_thwrite')) {
-            if(m_tb_ff3) {
-                m_tb_prefs.setIntPref("browser.history_expire_days", 0);
-            }
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
-        } else {
-            if(m_tb_ff3) {
-                // XXX: save user value..
-                if(m_tb_prefs.prefHasUserValue("browser.history_expire_days")) {
-                    m_tb_prefs.clearUserPref("browser.history_expire_days");
-                }
-            }
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
-        }
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
+            torbutton_setIntPref("browser.history_expire_days", 
+                    "expire_history", 0, mode, changed);
+            torbutton_setIntPref("browser.download.manager.retention", 
+                    "download_retention", 0, mode, changed);
+        } 
 
-        if(torprefs.getBoolPref('block_tforms')) {
-            m_tb_prefs.setBoolPref("browser.formfill.enable", false);
-            m_tb_prefs.setBoolPref("signon.rememberSignons", false);
-        } else {
-            m_tb_prefs.setBoolPref("browser.formfill.enable", true);
-            m_tb_prefs.setBoolPref("signon.rememberSignons", true);
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
+            torbutton_setBoolPref("browser.formfill.enable", "formfill",
+                    false, mode, changed);
+            torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
+                    false, mode, changed);
         }
     } else {
-        if(torprefs.getBoolPref('block_nthwrite')) {
-            if(m_tb_ff3) {
-                m_tb_prefs.setIntPref("browser.history_expire_days", 0);
-            }
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
+            m_tb_prefs.setBoolPref("browser.history_expire_days", 0);
+            m_tb_prefs.setBoolPref("browser.download.manager.retention", 0);
         } else {
-            if(m_tb_ff3) {
-                // XXX: save user value..
-                if(m_tb_prefs.prefHasUserValue("browser.history_expire_days")) {
-                    m_tb_prefs.clearUserPref("browser.history_expire_days");
-                }
-            }
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
+            torbutton_setIntPref("browser.history_expire_days", 
+                    "expire_history", 0, mode, changed);
+            torbutton_setIntPref("browser.download.manager.retention", 
+                    "download_retention", 0, mode, changed);
         }
 
-        if(torprefs.getBoolPref('block_ntforms')) {
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_ntforms')) {
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
         } else {
-            m_tb_prefs.setBoolPref("browser.formfill.enable", true);
-            m_tb_prefs.setBoolPref("signon.rememberSignons", true);
+            torbutton_setBoolPref("browser.formfill.enable", "formfill", 
+                    false, mode, changed);
+            torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
+                    false, mode, changed);
         }
     }
 
     torbutton_log(2, "Prefs pretty much done");
     
-    if(torprefs.getBoolPref("no_tor_plugins")) {
-        if(mode) {
-            if(changed && m_tb_prefs.prefHasUserValue("plugin.disable_full_page_plugin_for_types")) {
-                // Update saved plugin pref
-                torprefs.setCharPref("saved.full_page_plugins", 
-                  m_tb_prefs.getCharPref("plugin.disable_full_page_plugin_for_types"));
-            }
-            // copy plugins array to pref
-            m_tb_prefs.setCharPref("plugin.disable_full_page_plugin_for_types",
-                    m_tb_plugin_string);
-        } else {
-            if(torprefs.prefHasUserValue("saved.full_page_plugins")) {
-                // restore saved pref
-                m_tb_prefs.setCharPref("plugin.disable_full_page_plugin_for_types",
-                        torprefs.getCharPref("saved.full_page_plugins"));
-            } else {
-                m_tb_prefs.clearUserPref("plugin.disable_full_page_plugin_for_types");
-            }
-        }
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
+        torbutton_setCharPref("plugin.disable_full_page_plugin_for_types",
+                "full_page_plugins", m_tb_plugin_string, mode, changed);
+    } else {
+        torbutton_setCharPref("plugin.disable_full_page_plugin_for_types",
+                "full_page_plugins", m_tb_plugin_string, false, changed);
     }
 
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
 
-    if(mode) {
-        // XXX: This doesn't really do what we want.. 
-        m_tb_prefs.setIntPref("browser.bookmarks.livemark_refresh_seconds", 31536000);
-    } else {
-        if(m_tb_prefs.prefHasUserValue("browser.bookmarks.livemark_refresh_seconds")) {
-            m_tb_prefs.clearUserPref("browser.bookmarks.livemark_refresh_seconds");
-        }
-    }
+    // XXX: Pref for this?
+    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds", 
+            "livemark_refresh", 31536000, mode, changed);
 
     /*
      * XXX: Windows doesn't call tzset() automatically.. Linux and MacOS
@@ -851,35 +934,28 @@ function torbutton_update_status(mode, force_update) {
     // This call also has to be here for 3rd party proxy changers.
     torbutton_close_on_toggle(mode);
 
-    if(torprefs.getBoolPref('clear_http_auth')) {
+    if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
         var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
         getService(Components.interfaces.nsIHttpAuthManager);
         auth.clearAll();
     }
 
-    // Prevent tor cookies from being written to disk
-    if(torprefs.getBoolPref('clear_cookies') 
-            || torprefs.getBoolPref('cookie_jars')) {
-        torbutton_log(2, "Changing cookie lifetime");
-        if(mode) {
-            torprefs.setIntPref("saved.cookieLifetime", 
-                    m_tb_prefs.getIntPref("network.cookie.lifetimePolicy"));
-            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
-        } else {
-            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy",
-                    torprefs.getIntPref("saved.cookieLifetime")); 
-        }
-        torbutton_log(2, "Cookie lifetime changed");
+    if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+    } else if(m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars')) {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", mode ? 2 : 0);
+    } else if(m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars")) {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
     }
 
-    if (torprefs.getBoolPref('clear_cookies')) {
+    if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
         torbutton_clear_cookies();
-    } else if (torprefs.getBoolPref('cookie_jars') 
-            || torprefs.getBoolPref('dual_cookie_jars')) {
+    } else if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars') 
+            || m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
         torbutton_jar_cookies(mode);
     }
 
-    if (torprefs.getBoolPref('jar_certs')) {
+    if (m_tb_prefs.getBoolPref('extensions.torbutton.jar_certs')) {
         torbutton_jar_certs(mode);
     }
 }
@@ -1678,7 +1754,14 @@ observe : function(subject, topic, data) {
         // Still called by pref observer:
         // torbutton_update_status(false, false);
 
-        // Clear out prefs set regardless of Tor state 
+        // Reset all browser prefs that torbutton touches just in case
+        // they get horked. Better everything gets set back to default
+        // than some arcane pref gets wedged with no clear way to do it.
+        // Technical users who tuned these by themselves will be able to fix it.
+        // It's the non-technical ones we should make it easy for
+        torbutton_reset_browser_prefs();
+
+        /*
         if(m_tb_prefs.prefHasUserValue("browser.send_pings"))
             m_tb_prefs.clearUserPref("browser.send_pings");
 
@@ -1688,7 +1771,7 @@ observe : function(subject, topic, data) {
         if(!m_tb_ff3) {
             if(m_tb_prefs.prefHasUserValue("network.security.ports.banned"))
                 m_tb_prefs.clearUserPref("network.security.ports.banned");
-        }
+        }*/
     }
 
     if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 

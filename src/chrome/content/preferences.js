@@ -392,8 +392,6 @@ function torbutton_prefs_reset_defaults() {
     
     torbutton_log(3, "Tor disabled for pref reset");
 
-    // XXX: Some of these are torbutton state variables that should NOT
-    // be reset!
     children = o_torprefs.getChildList("" , tmpcnt);
     for(i = 0; i < children.length; i++) {
         if(o_torprefs.prefHasUserValue(children[i]))
@@ -406,12 +404,21 @@ function torbutton_prefs_reset_defaults() {
             o_proxyprefs.clearUserPref(children[i]);
     }
     
+    torbutton_log(3, "Resetting browser prefs");
+
+    // Reset browser prefs that torbutton touches just in case
+    // they get horked. Better everything gets set back to default
+    // than some arcane pref gets wedged with no clear way to do it.
+    // Technical users who tuned these by themselves will be able to fix it.
+    // It's the non-technical ones we should make it easy for
+    torbutton_reset_browser_prefs();
+
     torbutton_log(3, "Prefs reset");
 
     if(was_enabled) {
         chrome.torbutton_enable_tor();
     }
 
-    torbutton_log(5, "Preferences reset to defaults");
+    torbutton_log(4, "Preferences reset to defaults");
     torbutton_prefs_init(window.document);
 }

@@ -41,6 +41,27 @@ function torbutton_get_prefbranch(branch_name) {
     return o_branch;
 }
 
+function torbutton_reset_browser_prefs() {
+    var o_all_prefs = torbutton_get_prefbranch('');
+    var prefs = ["network.http.sendSecureXSiteReferrer", 
+        "network.http.sendRefererHeader", "dom.storage.enabled", 
+        "extensions.update.enabled", "app.update.enabled",
+        "app.update.auto", "browser.search.update", 
+        "browser.cache.memory.enable", "network.http.use-cache", 
+        "browser.cache.disk.enable", "browser.safebrowsing.enabled",
+        "browser.send_pings", "browser.safebrowsing.remoteLookups",
+        "network.security.ports.banned", "browser.search.suggest.enabled",
+        "security.enable_java", "browser.history_expire_days",
+        "browser.download.manager.retention", "browser.formfill.enable",
+        "signon.rememberSignons", "plugin.disable_full_page_plugin_for_types",
+        "browser.bookmarks.livemark_refresh_seconds", 
+        "network.cookie.lifetimePolicy" ];
+    for(var i = 0; i < prefs.length; i++) {
+        if(o_all_prefs.prefHasUserValue(prefs[i]))
+            o_all_prefs.clearUserPref(prefs[i]);
+    }
+}
+
 // check if the socks_remote_dns preference exists
 function torbutton_check_socks_remote_dns()
 {

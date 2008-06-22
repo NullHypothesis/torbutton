@@ -38,7 +38,7 @@ function StoreWrapper() {
 
   this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
       .getService(Components.interfaces.nsISupports).wrappedJSObject;
-  dump("New crash observer\n");
+  //dump("New crash observer\n");
   this.logger.log(3, "New StoreWrapper");
 
   this._store = function() {
@@ -62,7 +62,7 @@ StoreWrapper.prototype =
 
     if(iid.equals(Components.interfaces.nsIClassInfo)) {
       var ret = this._store().QueryInterface(iid);
-      dump("classInfo: "+ret.classID);
+      //dump("classInfo: "+ret.classID);
       return ret;
     }
 
@@ -70,7 +70,7 @@ StoreWrapper.prototype =
         var store = this._store().QueryInterface(iid);
         if (store) this.copyMethods(store);
     } catch(e) {
-        dump("Exception on QI for crash detector\n");
+        //dump("Exception on QI for crash detector\n");
         Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
         return null;
     }
@@ -106,7 +106,7 @@ StoreWrapper.prototype =
 
   observe: function(aSubject, aTopic, aData) {
     if(aTopic == "app-startup") {
-      dump("App startup\n");
+      //dump("App startup\n");
       this.logger.log(3, "Got app-startup");
       this._startup = true;
       var observerService = Cc["@mozilla.org/observer-service;1"].
@@ -124,7 +124,7 @@ StoreWrapper.prototype =
 
     // This is so lame. But the exposed API is braindead so it 
     // must be hacked around
-    dump("new doRestore\n");
+    //dump("new doRestore\n");
     this.logger.log(3, "Got doRestore");
     ret = this._store().doRestore();
     if(this._startup) {
@@ -183,7 +183,7 @@ function (compMgr, fileSpec, location, type){
                                   fileSpec, 
                                   location, 
                                   type);
-  dump("Registered crash observer\n");
+  //dump("Registered crash observer\n");
 };
 
 StoreWrapperModule.getClassObject = function (compMgr, cid, iid)

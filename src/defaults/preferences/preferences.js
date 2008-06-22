@@ -49,8 +49,27 @@ pref("extensions.torbutton.saved.gopher_port",0);
 pref("extensions.torbutton.saved.socks_host","");
 pref("extensions.torbutton.saved.socks_version",0);
 pref("extensions.torbutton.saved.socks_port",0);
+
 pref("extensions.torbutton.saved.cookieLifetime",0);
 pref("extensions.torbutton.saved.full_page_plugins","");
+pref("extensions.torbutton.saved.disk_cache",true);
+pref("extensions.torbutton.saved.safebrowsing",true);
+pref("extensions.torbutton.saved.search_suggest",true);
+pref("extensions.torbutton.saved.enable_java", true);
+pref("extensions.torbutton.saved.expire_history", 9);
+pref("extensions.torbutton.saved.download_retention", 2);
+pref("extensions.torbutton.saved.formfill", true);
+pref("extensions.torbutton.saved.remember_signons", true);
+pref("extensions.torbutton.saved.livemark_refresh", true);
+pref("extensions.torbutton.saved.sendSecureXSiteReferrer", true);
+pref("extensions.torbutton.saved.sendRefererHeader", 2);
+pref("extensions.torbutton.saved.dom_storage", true);
+pref("extensions.torbutton.saved.mem_cache", true);
+pref("extensions.torbutton.saved.http_cache", true);
+pref("extensions.torbutton.saved.extension_update", true);
+pref("extensions.torbutton.saved.app_update", true);
+pref("extensions.torbutton.saved.auto_update", true);
+pref("extensions.torbutton.saved.search_update", true);
 
 // State prefs:
 pref("extensions.torbutton.tor_enabled",false);
