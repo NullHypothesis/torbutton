@@ -570,6 +570,14 @@ function torbutton_update_status(mode, force_update) {
         }
         m_tb_prefs.setBoolPref("extensions.torbutton.warned_ff3", true);
     }
+    
+    // Toggle JS state early, since content window JS runs in a different
+    // thread
+    torbutton_log(2, 'Toggling JS state');
+
+    torbutton_toggle_jsplugins(mode, 
+            changed && torprefs.getBoolPref("isolate_content"),
+            torprefs.getBoolPref("no_tor_plugins"));
 
     torbutton_log(2, 'Setting user agent');
     
@@ -621,7 +629,6 @@ function torbutton_update_status(mode, force_update) {
                 if(m_tb_prefs.prefHasUserValue("general.platform.override"))
                     m_tb_prefs.clearUserPref("general.platform.override");
 
-                // XXX: Is this ok on ff2?
                 if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
                     m_tb_prefs.clearUserPref("general.oscpu.override");
                 if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
@@ -728,10 +735,6 @@ function torbutton_update_status(mode, force_update) {
     if(torprefs.getBoolPref("no_tor_plugins")) {
         m_tb_prefs.setBoolPref("security.enable_java", !mode);
     }
-
-    torbutton_toggle_jsplugins(mode, 
-            changed && torprefs.getBoolPref("isolate_content"),
-            torprefs.getBoolPref("no_tor_plugins"));
 
 
     if (torprefs.getBoolPref('clear_cache')) {
