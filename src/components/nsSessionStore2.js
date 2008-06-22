@@ -2213,7 +2213,16 @@ const NoModule = {
 function NSGetModule(aComMgr, aFileSpec) {
   var prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
-  if(prefs.getBoolPref("extensions.torbutton.notor_sessionstore")) {
+  
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
+
+  // Only hook the sessionstore if the pref is enabled and we're firefox 2.
+  if((prefs.getBoolPref("extensions.torbutton.notor_sessionstore") 
+        || prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"))
+      && versionChecker.compare(appInfo.version, "3.0a1") <= 0) {
     return SessionStoreModule;
   } else {
     return NoModule;
