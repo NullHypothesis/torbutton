@@ -1,27 +1,33 @@
---- /usr/lib/firefox-2.0.0.7/components/nsSessionStore.js	2007-09-18 11:08:22.000000000 -0700
-+++ ./nsSessionStore.js	2007-10-01 01:14:40.000000000 -0700
-@@ -777,11 +777,20 @@
+--- nsSessionStore2.js	2008-04-16 12:02:47.000000000 -0700
++++ nsSessionStore2.js	2008-06-22 02:34:05.000000000 -0700
+@@ -777,11 +777,26 @@
      var browsers = tabbrowser.browsers;
      var tabs = this._windows[aWindow.__SSi].tabs = [];
      this._windows[aWindow.__SSi].selected = 0;
 +    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
 +        .getService(Components.interfaces.nsIPrefBranch);
 +    var bypass_tor = prefs.getBoolPref("extensions.torbutton.notor_sessionstore");
++    var bypass_nontor = prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore");
      
      for (var i = 0; i < browsers.length; i++) {
        var tabData = { entries: [], index: 0 };
        
        var browser = browsers[i];
-+      if(bypass_tor && typeof(browser.__tb_js_state) != "undefined" && 
-+              !browser.__tb_js_state) {
++      if(bypass_tor && typeof(browser.__tb_tor_fetched) != "undefined" && 
++              browser.__tb_tor_fetched) {
 +          //dump("bypassing tor tab\n");
 +          //tabs.push(tabData);
 +          continue;
 +      }
++      if(bypass_nontor && typeof(browser.__tb_tor_fetched) != "undefined" &&
++              !browser.__tb_tor_fetched) {
++          continue;
++      }
++
        if (!browser || !browser.currentURI) {
          // can happen when calling this function right after .addTab()
          tabs.push(tabData);
-@@ -796,6 +805,7 @@
+@@ -801,6 +816,7 @@
        
        if (history && browser.parentNode.__SS_data && browser.parentNode.__SS_data.entries[history.index]) {
          tabData = browser.parentNode.__SS_data;
@@ -29,16 +35,16 @@
          tabData.index = history.index + 1;
        }
        else if (history && history.count > 0) {
-@@ -979,7 +989,7 @@
+@@ -991,7 +1007,7 @@
      Array.forEach(aWindow.getBrowser().browsers, function(aBrowser, aIx) {
        try {
          var tabData = this._windows[aWindow.__SSi].tabs[aIx];
--        if (tabData.entries.length == 0)
-+        if (!tabData || tabData.entries.length == 0)
+-        if (tabData.entries.length == 0 ||
++        if (!tabData || tabData.entries.length == 0 ||
+             aBrowser.parentNode.__SS_data && aBrowser.parentNode.__SS_data._tab)
            return; // ignore incompletely initialized tabs
          
-         var text = [];
-@@ -2146,6 +2156,23 @@
+@@ -2183,6 +2199,23 @@
    }
  };
  
