@@ -73,6 +73,8 @@ pref("extensions.torbutton.saved.search_update", true);
 
 // State prefs:
 pref("extensions.torbutton.tor_enabled",false);
+pref("extensions.torbutton.proxies_applied",false);
+pref("extensions.torbutton.settings_applied",false);
 pref("extensions.torbutton.startup",false);
 pref("extensions.torbutton.crashed",false);
 pref("extensions.torbutton.noncrashed",false);

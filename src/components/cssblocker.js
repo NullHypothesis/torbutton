@@ -119,6 +119,8 @@ function ContentPolicy() {
 
     this.isolate_content = this._prefs.getBoolPref("extensions.torbutton.isolate_content");
     this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    this.settings_applied = this._prefs.getBoolPref("extensions.torbutton.settings_applied");
+    this.tor_enabling = this.tor_enabled || this.settings_applied; // Catch transition edge cases
     this.block_tor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_tor_file_net");
     this.block_nontor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_nontor_file_net");
     this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
@@ -165,7 +167,7 @@ ContentPolicy.prototype = {
         }
 
         if (!requestOrigin || !requestOrigin.scheme) {
-            if (this.tor_enabled) {
+            if (this.tor_enabling) {
                 // in FF3, at startup requestOrigin is not set
                 if (("chrome" == contentLocation.scheme) && (contentLocation.host in browserSources)) {
                     this.logger.eclog(1, "Allowing browser chrome request from: " +
@@ -213,8 +215,8 @@ ContentPolicy.prototype = {
                                       contentLocation.spec);
                     return ok;
                 } else {
-                    if (this.block_tor_file_net && this.tor_enabled ||
-                            this.block_nontor_file_net && !this.tor_enabled) {
+                    if (this.block_tor_file_net && this.tor_enabling ||
+                            this.block_nontor_file_net && !this.tor_enabling) {
                         this.logger.eclog(4, "Blocking remote request from: " +
                                           requestOrigin.spec + " for: " +
                                           contentLocation.spec);
@@ -224,9 +226,8 @@ ContentPolicy.prototype = {
                 break;
             case "moz-nullprincipal":
                 // forbidden
-                // XXX: 
-                if (this.tor_enabled) {
-                    this.logger.eclog(3, "Blocking request from: " +
+                if (this.tor_enabling) {
+                    this.logger.eclog(4, "Blocking request from: " +
                                       requestOrigin.spec + " for: " +
                                       contentLocation.spec);
                     return block;
@@ -254,8 +255,8 @@ ContentPolicy.prototype = {
                                           contentLocation.spec);
                         return ok;
                     } else {
-                        if (this.tor_enabled || ("torbutton" == targetHost)) {
-                            this.logger.eclog(3, "Blocking local request from: "
+                        if (this.tor_enabling || ("torbutton" == targetHost)) {
+                            this.logger.eclog(4, "Blocking local request from: "
                                               +requestOrigin.spec+" ("
                                               +requestOrigin.scheme+") for: "+
                                               contentLocation.spec);
@@ -275,13 +276,11 @@ ContentPolicy.prototype = {
 			wind = node;
 		}
 
-        var tor_state = this.tor_enabled;
-
         if (contentType == 5) { // Object
             // Never seems to happen.. But it would be nice if we 
             // could handle it either here or shouldProcess, instead of in 
             // the webprogresslistener
-            if(this.tor_enabled && this.no_tor_plugins) {
+            if(this.tor_enabling && this.no_tor_plugins) {
                 this.logger.log(4, "Blocking object at "+contentLocation.spec);
                 return block;
             }
@@ -316,7 +315,7 @@ ContentPolicy.prototype = {
 
         // For javascript links (and others?) the normal http events
         // for the weblistener in torbutton.js are suppressed
-        if(tor_state && node instanceof Ci.nsIDOMWindow) {
+        if(this.tor_enabling && node instanceof Ci.nsIDOMWindow) {
             var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
                          .getService(Components.interfaces.nsIWindowMediator);
             var chrome = wm.getMostRecentWindow("navigator:browser");
@@ -350,7 +349,8 @@ ContentPolicy.prototype = {
                             this.logger.log(3, "Untagged window for redirect "+contentLocation.spec);
                             return ok;
                         }
-                        if(browser.__tb_tor_fetched == tor_state) {
+                        if(browser.__tb_tor_fetched == this.tor_enabled
+                                && browser.__tb_tor_fetched == this.settings_applied) {
                             return ok;
                         } else {
                             this.logger.log(4, "Blocking redirect: "+contentLocation.spec);
@@ -362,7 +362,8 @@ ContentPolicy.prototype = {
             }
         }
 
-        if(browser.__tb_tor_fetched == tor_state) {
+        if(browser.__tb_tor_fetched == this.tor_enabled
+                && browser.__tb_tor_fetched == this.settings_applied) {
             return ok;
         } else {
             this.logger.log(4, "Blocking cross state load of: "+contentLocation.spec);
@@ -395,6 +396,11 @@ ContentPolicy.prototype = {
                 break;
             case "extensions.torbutton.tor_enabled":
                 this.tor_enabled = this._prefs.getBoolPref("extensions.torbutton.tor_enabled");
+                this.tor_enabling = this.tor_enabled || this.settings_applied; // Catch transition edge cases
+                break;
+            case "extensions.torbutton.settings_applied":
+                this.settings_applied = this._prefs.getBoolPref("extensions.torbutton.settings_applied");
+                this.tor_enabling = this.tor_enabled || this.settings_applied; // Catch transition edge cases
                 break;
             case "extensions.torbutton.block_tor_file_net":
                 this.block_tor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_tor_file_net");

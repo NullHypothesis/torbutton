@@ -45,8 +45,11 @@ var torbutton_window_pref_observer =
             case "extensions.torbutton.panel_style":
                 torbutton_set_panel_style();
                 break;
-            case "extensions.torbutton.tor_enabled":
-                var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+
+            // FIXME: Maybe make a intermediate state with a yellow 
+            // icon?
+            case "extensions.torbutton.settings_applied":
+                var mode = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
                 torbutton_update_toolbutton(mode);
                 torbutton_update_statusbar(mode);
                 break;
@@ -246,12 +249,41 @@ function torbutton_toggle(force) {
 }
 
 function torbutton_set_status() {
+    var state = false;
     if (torbutton_check_status()) {
-        torbutton_log(3,'status: tor is enabled');
-        torbutton_update_status(true, false);
+        state = true;
+        try {
+            torbutton_update_status(true, false);
+        } catch(e) {
+            // This should never happen.. 
+            // FIXME: Do we need to translate it? I'm guessing not.
+            window.alert("Please file bug report! Error applying Tor settings: "+e);
+            torbutton_log(5,'Error applying tor settings: '+e);
+            // Setting these prefs should avoid ininite recursion
+            // because torbutton_update_status should return immediately
+            // on the next call.
+            m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", false);
+            m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", false);
+            m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", false);
+            torbutton_disable_tor();
+        }
     } else {
-        torbutton_log(3,'status: tor is disabled');
-        torbutton_update_status(false, false);
+        state = false;
+        try {
+            torbutton_update_status(false, false);
+        } catch(e) {
+            // This should never happen.. 
+            // FIXME: Do we need to translate it? I'm guessing not.
+            window.alert("Please file bug report! Error applying Non-Tor settings: "+e);
+            torbutton_log(5,'Error applying nontor settings: '+e);
+            // Setting these prefs should avoid ininite recursion
+            // because torbutton_update_status should return immediately
+            // on the next call.
+            m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", true);
+            m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", true);
+            m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", true);
+            torbutton_enable_tor();
+        }
     }
 }
 
@@ -474,6 +506,8 @@ function torbutton_restore_nontor_settings()
   }
 
   torbutton_log(2, 'restoring nontor settings');
+
+  m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", false);
   liveprefs.setIntPref('type',          savprefs.getIntPref('type'));
   liveprefs.setCharPref('http',         savprefs.getCharPref('http_proxy'));
   liveprefs.setIntPref('http_port',     savprefs.getIntPref('http_port'));
@@ -494,6 +528,13 @@ function torbutton_restore_nontor_settings()
   torbutton_log(1, 'almost there');
   if (torbutton_check_socks_remote_dns())
     liveprefs.setBoolPref('socks_remote_dns',     savprefs.getBoolPref('socks_remote_dns'));
+
+  // This is needed for torbrowser and other cases where the 
+  // proxy prefs are actually the same..
+  if(torbutton_check_status()) {
+      m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", true);
+  }
+
   torbutton_log(2, 'settings restored');
 }
 
@@ -620,18 +661,22 @@ function torbutton_update_status(mode, force_update) {
     var sPrefix;
     var label;
     var tooltip;
-    
+   
     var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-    var changed = (torprefs.getBoolPref('tor_enabled') != mode);
-    torprefs.setBoolPref('tor_enabled', mode);
+    var changed = (torprefs.getBoolPref('proxies_applied') != mode);
 
-    torbutton_log(2, 'called update_status: '+mode);
-    torbutton_log(2, 'Changed: '+changed);
+    torbutton_log(2, 'called update_status: '+mode+","+changed);
 
     // this function is called every time there is a new window! Alot of this
     // stuff expects to be called on toggle only.. like the cookie jars and
     // history/cookie clearing
     if(!changed && !force_update) return;
+
+    torprefs.setBoolPref('proxies_applied', mode);
+    if(torprefs.getBoolPref("tor_enabled") != mode) {
+        torbutton_log(3, 'Got external update for: '+mode);
+        torprefs.setBoolPref("tor_enabled", mode);
+    }
 
     if(m_tb_ff3 
             && !m_tb_prefs.getBoolPref("extensions.torbutton.warned_ff3")
@@ -958,6 +1003,9 @@ function torbutton_update_status(mode, force_update) {
     if (m_tb_prefs.getBoolPref('extensions.torbutton.jar_certs')) {
         torbutton_jar_certs(mode);
     }
+
+    m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", mode);
+    torbutton_log(3, "Settings applied for mode: "+mode);
 }
 
 function torbutton_close_on_toggle(mode) {
@@ -1581,7 +1629,9 @@ function tbHistoryListener(browser) {
     var warning = o_stringbundle.GetStringFromName("torbutton.popup.history.warning");
 
     this.f1 = function() {
-        if(this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+        // Block everything unless we've reached steady state
+        if((this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
+                || (this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied"))
                 && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
             torbutton_log(3, "Blocking history manipulation");
             window.alert(warning);
@@ -1707,8 +1757,26 @@ function torbutton_crash_recover()
     // Crash detection code (works w/ components/crash-observer.js)
     if(m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
         torbutton_log(4, "Crash detected, attempting recovery");
-        m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", 
-                torbutton_check_status());
+        var state = torbutton_check_status();
+        if(state != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                || state != m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")
+                || state != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")) {
+            var te = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+            var pa = m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
+            var sa = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
+            // XXX: It is likely this will happen.. prefs may get out of 
+            // sync if not written to disk properly.. Needs testing
+            window.alert("Crash state conflict! Please file bug report with these four values: "
+                    +state+","+te+","+pa+","+sa);
+            torbutton_log(5, "Crash state conflict: "+state+","
+                    +te+","+pa+","+sa);
+        }
+
+        // FIXME: consider trying to check these to see what work we may 
+        // need to redo?
+        m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", state);
+        m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", state);
+        m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", state);
        
         // Do the restore cookies first because we potentially save
         // cookies by toggling tor state in the next pref. If we
@@ -1751,8 +1819,6 @@ observe : function(subject, topic, data) {
   } else if (topic == "quit-application-granted") {
     if (this._uninstall) {
         torbutton_disable_tor();
-        // Still called by pref observer:
-        // torbutton_update_status(false, false);
 
         // Reset all browser prefs that torbutton touches just in case
         // they get horked. Better everything gets set back to default
@@ -1835,9 +1901,11 @@ observe : function(subject, topic, data) {
                   if(wind.browserDOMWindow) {
                       var browser = wind.getBrowser().selectedTab.linkedBrowser;
                       // This can happen in the first request of a new state.
+                      // block favicons till we've reach steady state
                       if((typeof(browser.__tb_tor_fetched) != "undefined")
-                        && browser.__tb_tor_fetched != 
-                              m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                        && (browser.__tb_tor_fetched != 
+                              m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                              || browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied"))) {
                           subject.cancel(0x804b0002); // NS_BINDING_ABORTED
                           torbutton_eclog(3, 'Cancelling opposing (favicon?) request: '+subject.name);
                       }
@@ -1958,6 +2026,7 @@ function torbutton_new_tab(event)
 { 
     // listening for new tabs
     torbutton_log(2, "New tab");
+
     var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
     var browser = event.currentTarget;
@@ -2168,7 +2237,9 @@ function torbutton_update_tags(win) {
     torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
             + win.location + ", under: "+win.top.location);
 
-    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    // Base this tag off of proxies_applied, since we want to go
+    // by whatever the actual load proxy was
+    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
@@ -2373,7 +2444,9 @@ function torbutton_check_progress(aProgress, aRequest) {
                         torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
 
                         // XXX: This may block ssl popups in the first tab
-                        if(browser && browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                        if(browser && 
+                                (browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                                 || browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied"))) {
                             try {
                                 torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
                                 aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED

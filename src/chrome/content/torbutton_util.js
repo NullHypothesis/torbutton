@@ -146,6 +146,7 @@ function torbutton_activate_tor_settings()
   }
 
   torbutton_log(2, 'Activate tor settings');
+  torprefs.setBoolPref("tor_enabled", true);
   liveprefs.setCharPref('http',         torprefs.getCharPref('http_proxy'));
   liveprefs.setIntPref('http_port',     torprefs.getIntPref('http_port'));
   liveprefs.setCharPref('ssl',          torprefs.getCharPref('https_proxy'));

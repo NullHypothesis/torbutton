@@ -365,6 +365,8 @@ function torbutton_prefs_reset_defaults() {
     var children;
     var i;
     var was_enabled = false;
+    var loglevel = o_torprefs.getIntPref("loglevel");
+    var loglmthd = o_torprefs.getIntPref("logmethod");
     
     torbutton_log(3, "Starting Pref reset");
 
@@ -398,6 +400,10 @@ function torbutton_prefs_reset_defaults() {
             o_torprefs.clearUserPref(children[i]);
     }
 
+    // Keep logging the same.
+    o_torprefs.setIntPref("loglevel", loglevel);
+    o_torprefs.setIntPref("logmethod", logmthd);
+
     children = o_proxyprefs.getChildList("" , tmpcnt);
     for(i = 0; i < children.length; i++) {
         if(o_proxyprefs.prefHasUserValue(children[i]))
@@ -413,10 +419,18 @@ function torbutton_prefs_reset_defaults() {
     // It's the non-technical ones we should make it easy for
     torbutton_reset_browser_prefs();
 
+    chrome.torbutton_init_prefs();
     torbutton_log(3, "Prefs reset");
 
     if(was_enabled) {
-        chrome.torbutton_enable_tor();
+        // Hack for torbrowser/others where tor proxies are the same
+        // as non-tor.
+        if(chrome.torbutton_check_status()) {
+            torbutton_log(4, "Tor still enabled after reset. Attempting to restore sanity");
+            chrome.torbutton_set_status();
+        } else {
+            chrome.torbutton_enable_tor();
+        }
     }
 
     torbutton_log(4, "Preferences reset to defaults");
