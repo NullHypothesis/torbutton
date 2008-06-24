@@ -92,7 +92,7 @@ TorbuttonLogger.prototype =
   formatLog: function(str, level) {
       var d = new Date();
       var now = padInt(d.getUTCMonth()+1)+"-"+padInt(d.getUTCDate())+" "+padInt(d.getUTCHours())+":"+padInt(d.getUTCMinutes())+":"+padInt(d.getUTCSeconds());
-      return "["+now+"] Torbutton("+logString[level]+"): "+str;
+      return "["+now+"] Torbutton "+logString[level]+": "+str;
   },
 
   // error console log

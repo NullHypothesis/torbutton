@@ -81,4 +81,7 @@
 <!ENTITY torbutton.prefs.nonontor_sessionstore    "Prevent session store from saving Non-Tor loaded tabs">
 <!ENTITY torbutton.prefs.block_tor_file_net     "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net     "Block Non-Tor access to network from file:// urls">
-
+<!ENTITY torbutton.prefs.restore_defaults             "Restore Defaults">
+<!ENTITY torbutton.prefs.test_settings             "Test Settings">
+<!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">

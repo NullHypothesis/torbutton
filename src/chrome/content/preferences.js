@@ -358,6 +358,59 @@ function torbutton_prefs_save(doc) {
     if (tor_enabled) torbutton_activate_tor_settings();
 }
 
+function torbutton_prefs_test_settings() {
+
+    // Reset Tor state to disabled.
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+    var chrome = wm.getMostRecentWindow("navigator:browser");
+
+    var strings = torbutton_get_stringbundle();
+    if(chrome.m_tb_ff3) {
+        // FIXME: This is kind of ghetto.. can we make a progress 
+        // bar or a window that updates itself?
+        var warning = strings.GetStringFromName("torbutton.popup.test.ff3_notice");
+        window.alert(warning);
+    }
+    var ret = chrome.torbutton_test_settings();
+    // Strange errors are not worth translating. Our english users will
+    // tell us they happen and we will (presumably) make them not happen.
+    if(ret < 0) {
+        ret = -ret;
+        window.alert("Tor proxy test: HTTP error for check.torproject.org: "+ret);
+        return;
+    }
+            
+    switch(ret) {
+        case 0:
+            window.alert("Tor proxy test: Internal error");
+            break;
+        case 1:
+            window.alert("Tor proxy test: Result not mimetype text/xml");
+            break;
+        case 3: // Can't seem to happen
+            window.alert("Tor proxy test: Can't find result target!");
+            break;
+        case 2:
+            window.alert("Tor proxy test: No TorCheckResult id found (response not valid XHTML)");
+            break;
+        case 4:
+            var warning = strings.GetStringFromName("torbutton.popup.test.success");
+            window.alert(warning);
+            break;
+        case 5:
+            var warning = strings.GetStringFromName("torbutton.popup.test.failure");
+            window.alert(warning);
+            break;
+        case 6:
+            window.alert("Tor proxy test: TorDNSEL failure. Results unknown.");
+            break;
+        case 7:
+            window.alert("Tor proxy test: check.torproject.org returned bad result");
+            break;
+    }
+}
+
 function torbutton_prefs_reset_defaults() {
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     var o_proxyprefs = torbutton_get_prefbranch('network.proxy.');
@@ -366,7 +419,7 @@ function torbutton_prefs_reset_defaults() {
     var i;
     var was_enabled = false;
     var loglevel = o_torprefs.getIntPref("loglevel");
-    var loglmthd = o_torprefs.getIntPref("logmethod");
+    var logmthd = o_torprefs.getIntPref("logmethod");
     
     torbutton_log(3, "Starting Pref reset");
 
@@ -414,7 +467,7 @@ function torbutton_prefs_reset_defaults() {
 
     // Reset browser prefs that torbutton touches just in case
     // they get horked. Better everything gets set back to default
-    // than some arcane pref gets wedged with no clear way to do it.
+    // than some arcane pref gets wedged with no clear way to fix it.
     // Technical users who tuned these by themselves will be able to fix it.
     // It's the non-technical ones we should make it easy for
     torbutton_reset_browser_prefs();
@@ -429,7 +482,7 @@ function torbutton_prefs_reset_defaults() {
             torbutton_log(4, "Tor still enabled after reset. Attempting to restore sanity");
             chrome.torbutton_set_status();
         } else {
-            chrome.torbutton_enable_tor();
+            chrome.torbutton_enable_tor(true);
         }
     }
 

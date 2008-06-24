@@ -167,3 +167,22 @@ function torbutton_activate_tor_settings()
   torbutton_log(2, 'Done activating tor settings');
 }
 
+// load localization strings
+function torbutton_get_stringbundle()
+{
+    var o_stringbundle = false;
+
+    try {
+        var oBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                                .getService(Components.interfaces.nsIStringBundleService);
+        o_stringbundle = oBundle.createBundle("chrome://torbutton/locale/torbutton.properties");
+    } catch(err) {
+        o_stringbundle = false;
+    }
+    if (!o_stringbundle) {
+        torbutton_log(5, 'ERROR (init): failed to find torbutton-bundle');
+    }
+
+    return o_stringbundle;
+}
+

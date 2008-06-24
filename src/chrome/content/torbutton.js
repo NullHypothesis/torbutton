@@ -244,7 +244,7 @@ function torbutton_toggle(force) {
         torbutton_disable_tor();
     } else {
         torbutton_close_on_toggle(true);
-        torbutton_enable_tor();
+        torbutton_enable_tor(false);
     }
 }
 
@@ -282,28 +282,9 @@ function torbutton_set_status() {
             m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", true);
             m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", true);
             m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", true);
-            torbutton_enable_tor();
+            torbutton_enable_tor(true);
         }
     }
-}
-
-// load localization strings
-function torbutton_get_stringbundle()
-{
-    var o_stringbundle = false;
-
-    try {
-        var oBundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                                .getService(Components.interfaces.nsIStringBundleService);
-        o_stringbundle = oBundle.createBundle("chrome://torbutton/locale/torbutton.properties");
-    } catch(err) {
-        o_stringbundle = false;
-    }
-    if (!o_stringbundle) {
-        torbutton_log(5, 'ERROR (init): failed to find torbutton-bundle');
-    }
-
-    return o_stringbundle;
 }
 
 function torbutton_init_toolbutton(event)
@@ -538,15 +519,94 @@ function torbutton_restore_nontor_settings()
   torbutton_log(2, 'settings restored');
 }
 
+function torbutton_test_settings() {
+    var wasEnabled = true;
+    var ret = 0;
+    if(!torbutton_check_status()) {
+        wasEnabled = false;
+        torbutton_enable_tor(true);
+    }
+            
+    torbutton_log(3, "Testing Tor settings");
+
+    m_tb_prefs.setBoolPref("extensions.torbutton.test_failed", true);
+    try {
+        var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+                                .createInstance(Components.interfaces.nsIXMLHttpRequest);
+        //var req = new XMLHttpRequest(); Blocked by content policy
+        var url = m_tb_prefs.getCharPref("extensions.torbutton.test_url");
+        req.open('GET', url, false);
+        req.overrideMimeType("text/xml");
+        req.send(null);
+    } catch(e) {
+        // XXX: This happens if this function is called from a browser
+        // window with tor disabled because the content policy will block us.
+        // Right now the check works because we get called from the 
+        // preference window. Sort of makes automatic testing a bit trickier..
+        if(!wasEnabled) torbutton_disable_tor();
+        torbutton_log(5, "Test failed! Tor internal error: "+e);
+        return 0;
+    }
+    if(req.status == 200) {
+        if(!req.responseXML) {
+            if(!wasEnabled) torbutton_disable_tor();
+            torbutton_log(5, "Test failed! Not text/xml!");
+            return 1;
+        }
+
+        var result = req.responseXML.getElementById('TorCheckResult');
+
+        if(result===null) {
+            torbutton_log(5, "Test failed! No TorCheckResult element");
+            ret = 2;
+        } else if(typeof(result.target) == 'undefined' 
+                || result.target === null) {
+            torbutton_log(5, "Test failed! No target");
+            ret = 3;
+        } else if(result.target === "success") {
+            torbutton_log(3, "Test Successful");
+            m_tb_prefs.setBoolPref("extensions.torbutton.test_failed", false);
+            ret = 4;
+        } else if(result.target === "failure") {
+            torbutton_log(5, "Tor test failed!");
+            ret = 5;
+        } else if(result.target === "unknown") {
+            torbutton_log(5, "Tor test failed. TorDNSEL Failure?");
+            ret = 6;
+        } else {
+            // XXX: Probably wise to remove this log message if it doesn't
+            // happen..
+            torbutton_log(5, "Tor test failed. Strange target: "+result.target);
+            ret = 7;
+        }
+    } else {
+        torbutton_log(5, "Tor test failed. HTTP Error: "+req.status);
+        ret = -req.status;
+    }
+    
+    torbutton_log(3, "Done testing Tor settings. Result: "+ret);
+        
+    if(!wasEnabled) torbutton_disable_tor();
+    return ret;
+}
+
 function torbutton_disable_tor()
 {
   torbutton_log(3, 'called disable_tor()');
   torbutton_restore_nontor_settings();
 }
 
-function torbutton_enable_tor()
+function torbutton_enable_tor(force)
 {
   torbutton_log(3, 'called enable_tor()');
+
+  if(!force && m_tb_prefs.getBoolPref("extensions.torbutton.test_failed")) {
+      var strings = torbutton_get_stringbundle();
+      var warning = strings.GetStringFromName("torbutton.popup.test.confirm_toggle");
+      if(!window.confirm(warning)) {
+          return;
+      }
+  }
 
   torbutton_save_nontor_settings();
   torbutton_activate_tor_settings();
@@ -1722,7 +1782,7 @@ function torbutton_conditional_set(state) {
     torbutton_log(4, "Restoring tor state");
     if (torbutton_check_status() == state) return;
     
-    if(state) torbutton_enable_tor();
+    if(state) torbutton_enable_tor(true);
     else  torbutton_disable_tor();
 }
 
@@ -1822,7 +1882,7 @@ observe : function(subject, topic, data) {
 
         // Reset all browser prefs that torbutton touches just in case
         // they get horked. Better everything gets set back to default
-        // than some arcane pref gets wedged with no clear way to do it.
+        // than some arcane pref gets wedged with no clear way to fix it.
         // Technical users who tuned these by themselves will be able to fix it.
         // It's the non-technical ones we should make it easy for
         torbutton_reset_browser_prefs();
