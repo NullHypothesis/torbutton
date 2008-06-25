@@ -85,3 +85,4 @@
 <!ENTITY torbutton.prefs.test_settings             "Test Settings">
 <!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
+<!ENTITY torbutton.prefs.block_links            "Disable links after Tor toggle (optional)">

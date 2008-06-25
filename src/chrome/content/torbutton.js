@@ -1951,7 +1951,7 @@ observe : function(subject, topic, data) {
       && !(subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI))) {
       // FIXME: FF3 no longer calls the contet policy for favicons. 
       // This is the workaround. Fun fun fun.
-      if(m_tb_ff3) {
+      if(m_tb_ff3 && subject.notificationCallbacks) {
           try {
               var wind = subject.notificationCallbacks.QueryInterface(
                       Components.interfaces.nsIInterfaceRequestor).getInterface(
@@ -2463,9 +2463,11 @@ function torbutton_check_progress(aProgress, aRequest) {
         DOMWindow = aProgress.DOMWindow;
     } else {
         try {
-            DOMWindow = aRequest.notificationCallbacks.QueryInterface(
-                    Components.interfaces.nsIInterfaceRequestor).getInterface(
-                        Components.interfaces.nsIDOMWindow);
+            if(aRequest.notificationCallbacks) {
+                DOMWindow = aRequest.notificationCallbacks.QueryInterface(
+                        Components.interfaces.nsIInterfaceRequestor).getInterface(
+                            Components.interfaces.nsIDOMWindow);
+            }
         } catch(e) { }
     }
     
