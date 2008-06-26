@@ -130,27 +130,27 @@ ContentWindowMapper.prototype =
           }
       }
 
-      // FIXME: SpeedDial and other extensions can create their 
+      // SpeedDial, google notebook and other extensions can create their 
       // own "<browser>" tag elements. AFAICT, there is no way to enumerate
       // these... Just punt and return the most recently used browser
       try {
           if(topContentWindow.name != "speedDialLoaderBrowser") {
               if(topContentWindow && topContentWindow.location)
-                  this.logger.log(5, "No browser found: "+topContentWindow.location);
+                  this.logger.log(4, "No browser found: "+topContentWindow.location);
               else
-                  this.logger.log(5, "No browser found: "+topContentWindow.name);
+                  this.logger.log(4, "No browser found: "+topContentWindow.name);
           } else {
               this.logger.log(3, "SpeedDial browser found: "+topContentWindow.name);
           }
       } catch(e) {
-          this.logger.log(5, "No browser found.");
+          this.logger.log(4, "No browser found.");
       }
 
       // Punt..
       var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].
           getService(Components.interfaces.nsIWindowMediator);
       var recentWindow = wm.getMostRecentWindow("navigator:browser");
-      return recentWindow ? recentWindow.getBrowser() : null;
+      return recentWindow ? recentWindow.getBrowser().selectedTab.linkedBrowser : null;
   }
 }
 
