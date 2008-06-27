@@ -78,14 +78,14 @@ function install (aEvent)
 <body>
 
 <h1>Torbutton Development Branch</h1>
-<strong>Current version:</strong> 1.2.0rc2 (8 Jun 2008)<br/>
+<strong>Current version:</strong> 1.2.0rc3 (27 Jun 2008)<br/>
 <br/>
 <strong>Authors:</strong> Scott Squires &amp; Mike Perry<br>
 <strong>Email:</strong> squires at freehaven dot net, mikeperry (o) fscked/org<br/>
 <br/>
 <strong>Install:</strong> 
 <a href="http://torbutton.torproject.org/dev/torbutton-current.xpi"
-  hash="sha1:f0d6e121e2b0fbd4d1db7c3f333b8d7ab5c1d906"
+  hash="sha1:184294b480119bb7b943ede116345c52ee7772fc"
   onclick="return install(event);">Local (Javascript verified)</a><br/>
 <strong>Past Releases:</strong> <a href="releases/">Local (non-https)</a><br/>
 <strong>Developer Documentation:</strong> <a href="design/">Torbutton Design Document</a> and <a href="design/MozillaBrownBag.pdf">Slides (Not actively updated)</a><br/>
