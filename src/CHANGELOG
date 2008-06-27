@@ -9,7 +9,7 @@
     Non-Tor mode. 
   * bugfix: Be better about saving all sorts of Firefox prefs that we touch
     so that users' Non-Tor preferences are remembered.
-  * bugfix: Fix potential issues with FF3 sessionstore by updating component.
+  * bugfix: Fix potential issues with FF3 sessionstore by updating component,
     and performing version detection.
   * bugfix: Separate toggle into a 3 stage process to eliminate potential 
     race conditions and issues with javascript and other functionality 
