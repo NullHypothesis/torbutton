@@ -1,4 +1,12 @@
-1.2.0rc3:
+1.2.0rc4
+  27 Jun 2008
+  * misc: Refuse to jar cookies under Firefox 3. Lame workaround for Firefox
+    Bug 439384, but it's the best we can do. At least we won't destroy
+    cookies anymore.
+  * misc: Some strings were present twice in the en-US locale. Didn't seem
+    to cause any problems, but probably should be fixed.
+
+1.2.0rc3
   27 Jun 2008
   * bugfix: Lots of compatibility updates with other extensions. Issues
     with SpeedDial, Google Notebook, TabMixPlus, and others have been fixed.
