@@ -136,7 +136,7 @@
          <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
          <em:minVersion>0.9</em:minVersion>
          <em:maxVersion>3.1a1pre</em:maxVersion>
-         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.2.0rc3.xpi</em:updateLink>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.2.0rc4.xpi</em:updateLink>
 		 <em:updateHash>sha1:23df6a12c7140b5817338136da1cd7737412bbbb</em:updateHash>
       </Description>
     </em:targetApplication>
