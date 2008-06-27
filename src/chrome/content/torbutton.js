@@ -1245,6 +1245,14 @@ function torbutton_jar_cookies(mode) {
           Components.classes["@stanford.edu/cookie-jar-selector;1"]
                     .getService(Components.interfaces.nsISupports)
                     .wrappedJSObject;
+
+    if(m_tb_ff3) {
+        var o_stringbundle = torbutton_get_stringbundle();
+        var warning = o_stringbundle.GetStringFromName("torbutton.popup.ff3.cookie_warning");
+        window.alert(warning);
+        return;
+    }
+
     if(mode) {
         selector.saveCookies("nontor");
         selector.clearCookies();
