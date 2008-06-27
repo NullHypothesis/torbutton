@@ -1,3 +1,24 @@
+1.2.0rc3:
+  27 Jun 2008
+  * bugfix: Lots of compatibility updates with other extensions. Issues
+    with SpeedDial, Google Notebook, TabMixPlus, and others have been fixed.
+  * bugfix: Fix bug with first window/tab after restart being partially 
+    prevented from performing network activity and/or history access.
+  * bugfix: Add an additional pref for blocking Non-Tor file url network
+    activity. Off by default. This should fix issues with Sage addon in
+    Non-Tor mode. 
+  * bugfix: Be better about saving all sorts of Firefox prefs that we touch
+    so that users' Non-Tor preferences are remembered.
+  * bugfix: Fix potential issues with FF3 sessionstore by updating component.
+    and performing version detection.
+  * bugfix: Separate toggle into a 3 stage process to eliminate potential 
+    race conditions and issues with javascript and other functionality 
+    not working after Tor toggle.
+  * new: Added 'Test Settings' button to Proxy Preferences that uses 
+    check.torproject.org to verify Tor status.
+  * misc: Improve 'Restore Defaults' to reset all prefs that we touch.
+  * misc: Fix logging system to be more user-legible.
+
 1.2.0rc2
   08 Jun 2008
   * bugfix: MacOS: Fix broken Tor state/toggle issues when all windows are 
