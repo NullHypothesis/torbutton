@@ -1226,8 +1226,10 @@ function torbutton_clear_history() {
         for (var i = 0; i < browsers.length; ++i) {
             var b = browser.browsers[i];
 
-            b.webNavigation.sessionHistory.PurgeHistory(
-                    b.webNavigation.sessionHistory.count);
+            if(b.webNavigation.sessionHistory.count) {
+                b.webNavigation.sessionHistory.PurgeHistory(
+                        b.webNavigation.sessionHistory.count);
+            }
         }
     }
 }
