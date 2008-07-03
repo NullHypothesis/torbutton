@@ -38,10 +38,21 @@ function CookieJarSelector() {
     var srcfile = getProfileFile(src);    
     var destfile = getProfileFile(dest);
     if (srcfile.exists()) {
-      if (destfile.exists()) {
-        destfile.remove(false);
+      // XXX: Permissions issue with Vista roaming profiles? 
+      // Maybe file locking?
+      // XXX: Hrmm... how to alert user?? They may never notice these messages..
+      try {
+          if (destfile.exists()) {
+              destfile.remove(false);
+          }
+      } catch(e) {
+          this.logger.log(4, "Cookie file deletion exception: "+e);
       }
-      srcfile.copyTo(null, dest);
+      try {
+          srcfile.copyTo(null, dest);
+      } catch(e) {
+          this.logger.log(5, "Cookie file copy exception: "+e);
+      }
     }
   };
 
