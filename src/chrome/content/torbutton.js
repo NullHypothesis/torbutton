@@ -983,8 +983,8 @@ function torbutton_update_status(mode, force_update) {
         }
     } else {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
-            m_tb_prefs.setBoolPref("browser.history_expire_days", 0);
-            m_tb_prefs.setBoolPref("browser.download.manager.retention", 0);
+            m_tb_prefs.setIntPref("browser.history_expire_days", 0);
+            m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
         } else {
             torbutton_setIntPref("browser.history_expire_days", 
                     "expire_history", 0, mode, changed);
