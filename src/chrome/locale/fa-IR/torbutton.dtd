@@ -40,7 +40,7 @@
 <!ENTITY torbutton.prefs.clear_cookies "پاک کردن کوکی ها در ضامن تُر">
 <!ENTITY torbutton.prefs.disable_plugins "غیرفعال کردن پلاگین ها هنگام استفاده تُر (بسیار مهم)">
 <!ENTITY torbutton.prefs.kill_bad_js "گیرانداختن جاوااسکریپت خطرناک (بسیار مهم)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
+<!ENTITY torbutton.prefs.isolate_content "مجزاکردن محتوی پویا وضعیت تُر (بسیار مهم)">
 <!ENTITY torbutton.prefs.no_updates "غیرفعال کردن بروزرسانی ها هنگام استفاده تُر (توصیه شده)">
 <!ENTITY torbutton.prefs.set_uagent "نشاندن عامل کاربر برای استفاده تُر (بسیار مهم)">
 <!ENTITY torbutton.prefs.dynamic "محتوای پویا">
@@ -49,39 +49,39 @@
 <!ENTITY torbutton.prefs.history "تاریخچه">
 <!ENTITY torbutton.prefs.no_search "غیرفعال کردن پیشنهادهای جستجو هنگام تُر (توصیه شده)">
 <!ENTITY torbutton.prefs.shutdown "بستن">
-<!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
+<!ENTITY torbutton.prefs.tor_shutdown "پاک کردن کوکی های تُر هنگام بسته شدن مرورگر قادر تُر">
 <!ENTITY torbutton.prefs.all_shutdown "پاک کردن کوکی ها هنگام بستن مرورگر">
 <!ENTITY torbutton.prefs.no_shutdown "پاک نکردن کوکی ها هنگام بستن">
 <!ENTITY torbutton.prefs.disable_sessionstore "غیرفعال کردن ذخیره نشست (توصیه شده)">
 <!ENTITY torbutton.prefs.headers "سرآیندها">
-<!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">
+<!ENTITY torbutton.prefs.spoof_english "پیروی کردن از یک مرورگر آمریکایی (انگلیسی آمریکا)">
 <!ENTITY torbutton.prefs.disable_referer "Don't send referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.disable_domstorage "غیرغعال کردن ذخیره گاه DOM هنگام استفاده تُر (بسیار مهم)">
 <!ENTITY torbutton.prefs.forms "فرم ها">
 <!ENTITY torbutton.prefs.block_tforms "بازداشتن ذخیره اسم رمز + فرم هنگام تُر (توصیه شده)">
 <!ENTITY torbutton.prefs.block_ntforms "بازداشتن ذخیره اسم رمز + فرم هنگام غیر تُر (اختیاری)">
-<!ENTITY torbutton.prefs.notor_sessionstore "Prevent session store from saving Tor loaded tabs">
+<!ENTITY torbutton.prefs.notor_sessionstore "جلوگیری از ذخیره نشست بواسطه ذخیره پنجره های تُر (توصیه شده)">
 <!ENTITY torbutton.prefs.tor "تُر">
 <!ENTITY torbutton.prefs.non_tor "غیرتُر">
 <!ENTITY torbutton.prefs.restore_tor "پس از فروپاشی, بازگرداندن نشست ذخیره شده از راه:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "بازگذاری مجدد کوکی jar/پاک کردن کوکی ها در فروپاشی فایرفاکس (توصیه شده)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "ذخیره کوکی های تُر و غیرتُر در jarهای حفاظت شده (خطرناک)">
-<!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
+<!ENTITY torbutton.prefs.clear_http_auth "پاک کردن نشست های احرازهویت HTTP (توصیه شده)">
+<!ENTITY torbutton.prefs.block_js_history "مجزاکردن دسترسی به تاریخچه ناوش وضعیت تُر (بسیار مهم)">
 <!ENTITY torbutton.prefs.resize_on_toggle "تغییراندازه ابعاد پنجره با مضربهای 40 تصویر دانه در ضامن (توصیه شده)">
 <!ENTITY torbutton.prefs.close_tor "بستن همه پنجره های تُر در ضامن (اختیاری)">
 <!ENTITY torbutton.prefs.close_nontor "بستن همه پنجره های غیرتُر در ضامن (اختیاری)">
 <!ENTITY torbutton.prefs.block_links "بازداشتن فشاردادن پیوند و بازگذاری مجدد برگه از وضعیت های مختلف تُر (اختیاری)">
-<!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
+<!ENTITY torbutton.prefs.jar_certs "ذخیره کردن گواهی های SSL در فایل های jar مجزا برای تُر/غیر تُر (توصیه شده)">
+<!ENTITY torbutton.prefs.jar_ca_certs "ذخیره کردن گواهی های CA در فایل های jar مجزا برای تُر/غیر تُر (توصیه شده)">
 <!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
 <!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
 <!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
 <!ENTITY torbutton.prefs.startup "Startup">
 <!ENTITY torbutton.prefs.nonontor_sessionstore "Prevent session store from saving Non-Tor loaded tabs">
-<!ENTITY torbutton.prefs.block_tor_file_net     "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net     "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults             "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings             "Test Settings">
-<!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
-<!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
+<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
+<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
+<!ENTITY torbutton.prefs.test_settings "Test Settings">
+<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
