@@ -67,6 +67,42 @@ function CookieJarSelector() {
     }
   };
 
+  var loadCookiesFromFile = function(aFile) {
+      var storageService = Cc["@mozilla.org/storage/service;1"]
+          .getService(Ci.mozIStorageService);
+      try {
+          var mDBConn = storageService.openDatabase(aFile);
+      } catch(e) {
+          this.logger.log(5, "Cookie file open exception: "+e);
+          return;
+      }
+      if (!mDBConn.tableExists("moz_cookies")) { // Should not happen
+          this.logger.log(5, "No cookies table!");
+          return;
+      }
+      if (mDBConn.schemaVersion != 2) { // Should not happen
+          this.logger.log(5, "Cookies table version mismatch");
+          return;
+      } 
+      
+      var cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager);
+ 
+      var stmt = mDBConn.createStatement("SELECT id, name, value, host, path, expiry, lastAccessed, isSecure, isHttpOnly FROM moz_cookies");
+
+      while (stmt.executeStep()) {
+          var name = stmt.getUTF8String(1);
+          var value = stmt.getUTF8String(2);
+          var host = stmt.getUTF8String(3);
+          var path = stmt.getUTF8String(4);
+          var expiry = stmt.getInt64(5);
+          var lastAccessed = stmt.getInt64(6);
+          var isSecure = (stmt.getInt32(7) != 0);
+          var isHttpOnly = (stmt.getInt32(8) != 0);
+          cookieManager.QueryInterface(Ci.nsICookieManager2).add(host, path, name, value, isSecure, isHttpOnly, false, expiry);
+      }
+      stmt.reset();
+  };
+
   this.clearCookies = function() {
     Cc["@mozilla.org/cookiemanager;1"]
     .getService(Ci.nsICookieManager)
@@ -90,19 +126,36 @@ function CookieJarSelector() {
   this.loadCookies = function(name, deleteSavedCookieJar) {
     var cookieManager =
       Cc["@mozilla.org/cookiemanager;1"]
-      .getService(Ci.nsICookieManager);
-    cookieManager.QueryInterface(Ci.nsIObserver);
+      .getService(Ci.nsIObserver);
 
     // Tell the cookie manager to unload cookies from memory and disk
     var context = "shutdown-cleanse"; 
     cookieManager.observe(this, "profile-before-change", context);
 
-    // Replace the cookies.txt file with the loaded data
     var fn = deleteSavedCookieJar ? moveProfileFile : copyProfileFile;
-    fn("cookies-"+name+this.extn, "cookies"+this.extn);
 
     // Tell the cookie manager to reload cookies from disk
-    cookieManager.observe(this, "profile-do-change", context);
+    if (this.is_ff3) {
+        var cookieFile = getProfileFile("cookies-"+name+this.extn);
+        // Workaround for Firefox bug 439384:
+        loadCookiesFromFile(cookieFile);
+        // Tell the cookie manager to unload cookies from memory 
+        // and sync to disk.
+        cookieManager.observe(this, "profile-before-change", "");
+        // Tell the cookie manager to reload cookies from disk
+        cookieManager.observe(this, "profile-do-change", "");
+
+        // Following fails b/c of FF Bug 439384. It is the alternative
+        // to the above lines.
+        // Replace the cookies.sqlite file with the loaded data
+        // fn("cookies-"+name+this.extn, "cookies"+this.extn);
+        // still notify cookieManager to call initDB, and reset mDBConn
+        //cookieManager.observe(this, "profile-do-change", context);
+    } else {
+        // Replace the cookies.txt file with the loaded data
+        fn("cookies-"+name+this.extn, "cookies"+this.extn);
+        cookieManager.observe(this, "profile-do-change", context);
+    }
     this.logger.log(2, "Cookies reloaded");
   };
 
