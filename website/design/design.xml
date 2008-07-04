@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>June 3 2008</pubdate>
+   <pubdate>July 4 2008</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.2.0rc1.
+Torbutton Firefox extension. It is current as of Torbutton 1.2.0rc5.
 
   </para>
   <sect2 id="adversary">
@@ -383,24 +383,27 @@ first.</para>
  <title><ulink
 url="http://developer.mozilla.org/en/docs/nsISessionStore">@mozilla.org/browser/sessionstore;1</ulink> -
 <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore.js">components/nsSessionStore.js</ulink></title>
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore2.js">components/nsSessionStore2.js</ulink>
+and <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.js">components/nsSessionStore3.js</ulink></title>
 
-<para>This component addresses the <link linkend="disk">Disk Avoidance</link>
+<para>These components address the <link linkend="disk">Disk Avoidance</link>
 requirements of Torbutton. As stated in the requirements, Torbutton needs to
 prevent Tor tabs from being written to disk by the Firefox session store for a
 number of reasons, primary among them is the fact that Firefox can crash at
 any time, and a restart can cause you to fetch tabs in the incorrect Tor
 state.</para>
 
-<para>This component illustrates a complication with Firefox hooking: you can
+<para>These components illustrate a complication with Firefox hooking: you can
 only hook member functions of a class if they are published in an
 interface that the class implements. Unfortunately, the sessionstore has no
 published interface that is amenable to disabling the writing out of Tor tabs
 in specific. As such, Torbutton had to include the <emphasis>entire</emphasis>
-nsSessionStore from the Firefox distribution as one of its components, but
+nsSessionStore from both Firefox 2 and Firefox 3, 
 with a couple of modifications to prevent tabs that were loaded with Tor
-enabled from being written to disk. The <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore.diff">diff against the original session
+enabled from being written to disk, and some version detection code to
+determine which component to load. The <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.diff">diff against the original session
 store</ulink> is included in the SVN repository.</para>
 </sect3>
 <sect3>
@@ -416,7 +419,8 @@ sessions</ulink>. The wrapper's only job is to intercept the
 <function>doRestore()</function> function, which is called by Firefox if it is determined that the
 browser crashed and the session needs to be restored. The wrapper notifies the
 Torbutton chrome that the browser crashed by setting the pref
-<command>extensions.torbutton.crashed</command>. The Torbutton Chrome <ulink
+<command>extensions.torbutton.crashed</command>, or that it is a normal
+startup via the pref <command>extensions.torbutton.noncrashed</command>. The Torbutton Chrome <ulink
 url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIPrefBranch2.html#method_addObserver">listens for a
 preference change</ulink> for this value and then does the appropriate cleanup. This
 includes setting the Tor state to the one the user selected for crash recovery
@@ -544,6 +548,21 @@ Isolation</link> requirements of Torbutton.
 versions and existence of extension chrome</ulink> while Tor is enabled, and
 also masks the presence of Torbutton to website javascript while Tor is
 disabled. </para>
+
+<para>
+
+Finally, some of the work that logically belongs to the content policy is
+instead handled by the <command>torbutton_http_observer</command> and
+<command>torbutton_weblistener</command> in <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink>. These two objects handle blocking of
+Firefox 3 favicon loads, popups, and full page plugins, which for whatever
+reason are not passed to the Firefox content policy itself (see Firefox Bugs 
+<ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=437014">437014</ulink> and 
+<ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">401296</ulink>).
+
+</para>
 
 <!-- 
 FIXME: Hrmm, the content policy doesn't really lend itself well to display 
@@ -732,6 +751,93 @@ the status bar, the toolbutton, and the about page.</para>
 
 </sect2>
 </sect1>
+
+<sect1>
+ <title>Toggle Code Path</title>
+ <para>
+
+The act of toggling is connected to <function>torbutton_toggle()</function>
+via the <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.xul">torbutton.xul</ulink>
+and <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/popup.xul">popup.xul</ulink>
+overlay files. Most of the work in the toggling process is present in <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink> 
+
+</para>
+<para>
+
+Toggling is a 3 stage process: Button Click, Proxy Update, and
+Settings Update. These stages are reflected in the prefs
+<command>extensions.torbutton.tor_enabled</command>,
+<command>extensions.torbutton.proxies_applied</command>, and
+<command>extensions.torbutton.settings_applied</command>. The reason for the
+three stage preference update is to ensure immediate enforcement of <link
+linkend="isolation">Network Isolation</link> via the <link
+linkend="contentpolicy">content policy</link>. Since the content window
+javascript runs on a different thread than the chrome javascript, it is
+important to properly convey the stages to the content policy to avoid race
+conditions and leakage, especially with <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Firefox Bug 
+409737</ulink> unfixed. The content policy does not allow any network activity
+whatsoever during this three stage transition.
+
+ </para>
+ <sect2>
+  <title>Button Click</title>
+  <para>
+
+This is the first step in the toggling process. When the user clicks the
+toggle button or the toolbar, <function>torbutton_toggle()</function> is
+called. This function checks the current Tor status by comparing the current
+proxy settings to the selected Tor settings, and then sets the proxy settings
+to the opposite state, and sets the pref
+<command>extensions.torbutton.tor_enabled</command> to reflect the new state.
+It is this proxy pref update that gives notification via the <ulink
+url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIPrefBranch2.html#method_addObserver">pref
+observer</ulink>
+<command>torbutton_unique_pref_observer</command> to perform the rest of the
+toggle.
+
+  </para>
+ </sect2>
+ <sect2>
+  <title>Proxy Update</title>
+  <para>
+
+When Torbutton receives any proxy change notifications via its
+<command>torbutton_unique_pref_observer</command>, it calls
+<function>torbutton_set_status()</function> which checks against the Tor
+settings to see if the Tor proxy settings match the current settings. If so,
+it calls <function>torbutton_update_status()</function>, which determines if
+the Tor state has actually changed, and sets
+<command>extensions.torbutton.proxies_applied</command> to the appropriate Tor
+state value, and ensures that
+<command>extensions.torbutton.tor_enabled</command> is also set to the correct
+value. This is decoupled from the button click functionalty via the pref
+observer so that other addons (such as SwitchProxy) can switch the proxy
+settings between multiple proxies.
+
+  </para>
+ </sect2>
+ <sect2>
+  <title>Settings Update</title>
+  <para>
+
+The next stage is also handled by
+<function>torbutton_update_status()</function>. This function sets scores of
+Firefox preferences, saving the original values to prefs under
+<command>extensions.torbutton.saved.*</command>, and performs the history
+clearing, cookie jaring, and ssl certificate jaring work of Torbutton. At the
+end of its work, it sets
+<command>extensions.torbutton.settings_applied</command>, which signifies the
+completion of the toggle operation to the <link
+linkend="contentpolicy">content policy</link>.
+
+  </para>
+ </sect2>
+</sect1>
+
 <sect1>
  <title>Description of Options</title>
 
@@ -739,6 +845,25 @@ the status bar, the toolbutton, and the about page.</para>
 option is presented as the string from the preferences window, a summary, the
 preferences it touches, and the effect this has on the components, chrome, and
 browser properties.</para>
+ <sect2>
+  <title>Test Settings</title>
+  <para>
+This button under the Proxy Settings tab provides a way to verify that the 
+proxy settings are correct, and actually do route through the Tor network. It
+performs this check by issuing an <ulink
+url="http://developer.mozilla.org/en/docs/XMLHttpRequest">XMLHTTPRequest</ulink>
+for <ulink
+url="https://check.torproject.org/?TorButton=True">https://check.torproject.org/?Torbutton=True</ulink>.
+This is a special page that returns very simple, yet well-formed XHTML that
+Torbutton can easily inspect for a hidden link with an id of
+<command>TorCheckResult</command> and a target of <command>success</command>
+or <command>failure</command> to indicate if the
+user hit the page from a Tor IP, a non-Tor IP. This check is handled in
+<function>torbutton_test_settings()</function> in <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink>.
+
+  </para>
+ </sect2>
  <sect2 id="plugins">
   <title>Disable plugins on Tor Usage (crucial)</title>
 
@@ -971,22 +1096,26 @@ for Tor usage.
 </para>
 </sect2>
 <sect2>
-<title>Block access to network from file:// urls (recommended)</title>
-  <para>Option: <command>extensions.torbutton.block_file_net</command></para>
+<title>Block Tor/Non-Tor access to network from file:// urls (recommended)</title>
+  <para>Option:
+   <simplelist>
+   <member><command>extensions.torbutton.block_tor_file_net</command></member>
+   <member><command>extensions.torbutton.block_nontor_file_net</command></member>
+   </simplelist>
+  </para>
 
 <para>
 
-This setting prevents file urls from performing network operations. Firefox
-2's implementation of same origin policy allows file urls to read and <ulink
+These settings prevent file urls from performing network operations during the
+respective Tor states. Firefox 2's implementation of same origin policy allows
+file urls to read and <ulink
 url="http://www.gnucitizen.org/blog/content-disposition-hacking/">submit
-arbitrary files from the local filesystem</ulink> to arbitrary websites. To make
-matters worse, the 'Content-Disposition' header can be injected arbitrarily by
-exit nodes to trick users into running arbitrary html files in the local
-context. This preference causes the <link linkend="contentpolicy">content 
-policy</link> to block access to any
-network resources from File urls, and because a user can save a file during
-Tor usage and access it later, this preference affects both Tor and Non-Tor
-usage.
+arbitrary files from the local filesystem</ulink> to arbitrary websites. To
+make matters worse, the 'Content-Disposition' header can be injected
+arbitrarily by exit nodes to trick users into running arbitrary html files in
+the local context. These preferences cause the <link
+linkend="contentpolicy">content policy</link> to block access to any network
+resources from File urls during the appropriate Tor state.
 
 </para>
 <para>
@@ -1352,7 +1481,7 @@ linkend="state">State Separation</link> requirement.
 </sect2>
 <sect2>
 
-  <title>Reload cookie jar/clear cookies on Firefox crash (recommended)</title>
+  <title>Reload cookie jar/clear cookies on Firefox crash</title>
   <para>Options:
   <simplelist>
     <member><command>extensions.torbutton.reload_crashed_jar</command></member>
@@ -1360,9 +1489,10 @@ linkend="state">State Separation</link> requirement.
   </simplelist>
   </para>
 
-  <para>If this option is enabled, the Torbutton <ulink
+  <para>This is no longer a user visible option, and is enabled by default. In
+the event of a crash, the Torbutton <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">components/crash-observer.js</ulink> 
-  component notifies the Chrome in the event of a crash (via the
+  component will notify the Chrome (via the
   <command>extensions.torbutton.crashed</command> pref and a <ulink
 url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIPrefBranch2.html#method_addObserver">pref
 observer</ulink> in
@@ -1378,26 +1508,10 @@ crashes.
 </para>
 
 </sect2>
+
+
 <sect2>
-  <title>Prevent session store from saving Tor-loaded tabs (recommended)</title>
-
-  <para>Option: <command>extensions.torbutton.notor_sessionstore</command></para>
-
-  <para>If this option is enabled, the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">replacement nsSessionStore.js</ulink>
-  component checks the <command>__tb_tor_fetched</command> tag of tabs before writing them
-  out. If the tag is from a Tor-load, the tab is not written to disk.
-  </para>
-<para>
-This setting helps to satisfy the <link linkend="disk">Disk Avoidance</link>
-requirement, and also helps to satisfy the <link
-linkend="state">State Separation</link> requirement in the event of Firefox
-crashes.
-</para>
-
-</sect2>
-<sect2>
-  <title>After a crash, restore saved session via: Tor/Non-Tor</title>
+  <title>On crash recovery or session restored startup, restore via: Tor, Non-Tor</title>
   <para>Options:
   <simplelist>
    <member><command>extensions.torbutton.restore_tor</command></member>
@@ -1405,17 +1519,63 @@ crashes.
   </simplelist>
   </para>
 
-  <para>This option also works with the Torbutton <ulink
+  <para>This option works with the Torbutton <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
   to set the Tor state after a crash is detected (via the 
   <command>extensions.torbutton.crashed</command> pref)</para>
 <para>
-This setting helps to satisfy the <link
-linkend="state">State Separation</link> requirement in the event of Firefox
-crashes.
+
+Since the Tor state after a Firefox crash is unknown/indeterminate, this
+setting helps to satisfy the <link linkend="state">State Separation</link>
+requirement in the event of Firefox crashes by ensuring all cookies,
+settings and saved sessions are reloaded from a fixed Tor state.
+ 
 </para>
 </sect2>
 <sect2>
+
+<sect2>
+  <title>On Normal Startup, set state to: Tor, Non-Tor, Shutdown State</title>
+
+  <para>Options:
+  <simplelist>
+   <member><command>extensions.torbutton.startup_state</command></member>
+  <member><command>extensions.torbutton.noncrashed</command></member>
+  </simplelist>
+  </para>
+
+  <para>This option also works with the Torbutton <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
+  to set the Tor state after a normal startup is detected (via the 
+  <command>extensions.torbutton.noncrashed</command> pref)</para>
+
+</sect2>
+
+<sect2>
+  <title>Prevent session store from saving Non-Tor/Tor-loaded tabs (recommended)</title>
+
+  <para>Options: 
+  <simplelist>
+    <member><command>extensions.torbutton.nonontor_sessionstore</command></member>
+    <member><command>extensions.torbutton.notor_sessionstore</command></member>
+  </simplelist>
+  </para>
+
+  <para>If these options are enabled, the <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.js">replacement nsSessionStore.js</ulink>
+  component checks the <command>__tb_tor_fetched</command> tag of tabs before writing them
+  out. If the tag is from a blocked Tor state, the tab is not written to disk.
+  </para>
+<para>
+This setting helps to satisfy the <link linkend="disk">Disk Avoidance</link>
+requirement, and also helps to satisfy the <link
+linkend="state">State Separation</link> requirement in the event of Firefox
+crashes.
+
+</para>
+
+</sect2>
+
   
   <title>Set user agent during Tor usage (crucial)</title>
   <para>Options:
@@ -1552,7 +1712,7 @@ specific SSL sites to query if a user has a certain certificate,
 this setting helps to satisfy the <link linkend="state">State
 Separation</link> requirement of Torbutton. Unfortunately, <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=435159">Firefox Bug
-435149</ulink> prevents it from functioning correctly in the event of rapid Tor toggle, so it
+435159</ulink> prevents it from functioning correctly in the event of rapid Tor toggle, so it
 is currently not exposed via the preferences UI.
 
 </para>
@@ -1705,9 +1865,10 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=439384">Bug 439384 -
 
 In Firefox 3, the change to the new sqlite database for cookie storage has a
 bug that prevents Torbutton's cookie jaring from working properly. The
-"profile-do-change" observer event no longer properly causes a reload of the
-cookie database from disk after it is copied into place. This potentially has
-affects on profile switching extensions as well.
+"profile-do-change" observer event no longer properly causes either a sync or
+reload of the cookie database from disk after it is copied into place.
+Torbutton currently works around this by issuing the SQLLite queries manually
+to store and rebuild the cookie database.
 
    </para>
    </listitem>
