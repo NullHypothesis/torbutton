@@ -71,7 +71,6 @@
 <!ENTITY torbutton.prefs.resize_on_toggle "Масштабировать окна с множителем 40px при переключении Tor (желательно)">
 <!ENTITY torbutton.prefs.close_tor "Закрывать все окна и вкладки Tor при переключении режимов (необяз.)">
 <!ENTITY torbutton.prefs.close_nontor "Закрывать все окна и вкладки не-Tor при переключении режимов (необяз.)">
-<!ENTITY torbutton.prefs.block_file_net "Блокировать доступ к сети по адресам типа file:// (желательно)">
 <!ENTITY torbutton.prefs.block_links "Блокировать щелчки по ссылкам и перезагрузку страниц из разных режимов Tor (необяз.)">
 <!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
@@ -86,4 +85,3 @@
 <!ENTITY torbutton.prefs.test_settings             "Test Settings">
 <!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.block_links            "Disable links after Tor toggle (optional)">

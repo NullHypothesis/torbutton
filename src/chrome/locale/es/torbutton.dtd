@@ -71,7 +71,6 @@
 <!ENTITY torbutton.prefs.resize_on_toggle "Redimensionar ventanas a múltiplos de 40px al cambiar el estado de Tor (recomendado)">
 <!ENTITY torbutton.prefs.close_tor "Cerrar las ventanas y pestañas de Tor al cambiar su estado (opcional)">
 <!ENTITY torbutton.prefs.close_nontor "Cerrar las ventanas y pestañas que no sean de Tor al cambiar el estado (opcional)">
-<!ENTITY torbutton.prefs.block_file_net "Bloquear el acceso a la red desde archivos en direcciones file:// (recomendado)">
 <!ENTITY torbutton.prefs.block_links "Bloquear clicks en vínculos y recargas de páginas desde distintos estados de Tor (opcional)">
 <!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
@@ -86,4 +85,3 @@
 <!ENTITY torbutton.prefs.test_settings             "Test Settings">
 <!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.block_links            "Disable links after Tor toggle (optional)">

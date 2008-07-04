@@ -71,7 +71,6 @@
 <!ENTITY torbutton.prefs.resize_on_toggle "Ridimensiona la finestra a multipli di 40px all&apos;attivazione (consigliato)">
 <!ENTITY torbutton.prefs.close_tor "Chiudi tutte le finestre e schede Tor alla disattivazione (facoltativo)">
 <!ENTITY torbutton.prefs.close_nontor "Chiudi tutte le finestre e schede Non-Tor all&apos; attivazione (facoltativo)">
-<!ENTITY torbutton.prefs.block_file_net "Blocca l&apos;accesso alla rete da indirizzi file:// (consigliato)">
 <!ENTITY torbutton.prefs.block_links "Blocca i clic sui link e la ricarica delle pagine da stati Tor differenti (facoltativo)">
 <!ENTITY torbutton.prefs.jar_certs "Conserva i certificati SSL in depositi separati per Tor/Non-Tor (consigliato)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Conserva i certificati delle CA in depositi separati per Tor/Non-Tor (consigliato)">
@@ -86,4 +85,3 @@
 <!ENTITY torbutton.prefs.test_settings             "Test Settings">
 <!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.block_links            "Disable links after Tor toggle (optional)">

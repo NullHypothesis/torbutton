@@ -71,7 +71,6 @@
 <!ENTITY torbutton.prefs.resize_on_toggle "أعد تحجيم النوافذ إلى مضاعفات 50 عنصورة عند تغير الحالة (محبذ)">
 <!ENTITY torbutton.prefs.close_tor "أغلق كل نوافذ و ألسنة تور عند اغير الحالة (اختياري)">
 <!ENTITY torbutton.prefs.close_nontor "أغلق كل نوافذ و ألسنة غير تور عند اغير الحالة (اختياري)">
-<!ENTITY torbutton.prefs.block_file_net "امنع النفاذ إلى الشبكة من مسارات file:// (محبّذ)">
 <!ENTITY torbutton.prefs.block_links "امنع نقر الروابط و إعادة تحميل الصفحات بين حالات تور المختلفة (اختياري)">
 <!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
@@ -86,4 +85,3 @@
 <!ENTITY torbutton.prefs.test_settings             "Test Settings">
 <!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.block_links            "Disable links after Tor toggle (optional)">
