@@ -498,7 +498,7 @@ change the loglevel on the fly by changing
 <command>extensions.torbutton.loglevel</command> (1-5, 1 is most verbose).
 </para>
 </sect3>
-<sect3>
+<sect3 id="windowmapper">
 
 <title><ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/window-mapper.js">@torproject.org/content-window-mapper;1
@@ -536,7 +536,8 @@ When an nsIContentPolicy is registered, Firefox checks every attempted network
 request against its <ulink
 url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIContentPolicy.html#method_shouldLoad">shouldLoad</ulink>
 member function to determine if the load should proceed. In Torbutton's case,
-the content policy looks up the appropriate browser tab using the window mapper,
+the content policy looks up the appropriate browser tab using the <link
+linkend="windowmapper">window mapper</link>,
 and checks that tab's load tag against the current Tor state. If the tab was
 loaded in a different state than the current state, the fetch is denied.
 Otherwise, it is allowed.</para> This helps to achieve the <link
