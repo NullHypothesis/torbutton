@@ -862,6 +862,11 @@ or <command>failure</command> to indicate if the
 user hit the page from a Tor IP, a non-Tor IP. This check is handled in
 <function>torbutton_test_settings()</function> in <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink>.
+Presenting the results to the user is handled by the <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/preferences.xul">preferences
+window</ulink>
+callback <function>torbutton_prefs_test_settings()</function> in <ulink
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/preferences.js">preferences.js</ulink>.  
 
   </para>
  </sect2>
@@ -1415,6 +1420,33 @@ cookie prefs all to false.</para>
 </sect2>
 <sect2>
 
+<sect2>
+  <title>Do not write Tor/Non-Tor cookies to disk</title>
+  <para>Options:
+  <simplelist>
+  <member><command>extensions.torbutton.tor_memory_jar</command></member>
+  <member><command>extensions.torbutton.nontor_memory_jar</command></member>
+  </simplelist>
+  </para>
+
+<para>
+These settings (contributed by arno) cause Torbutton to set <ulink
+url="http://kb.mozillazine.org/Network.cookie.lifetimePolicy">network.cookie.lifetimePolicy</ulink>
+to 2 during the appropriate Tor state, and to store cookies acquired in that
+state into a Javascript
+<ulink
+url="http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Processing_XML_with_E4X">E4X</ulink>
+object as opposed to writing them to disk.
+</para>
+
+<para>
+This allows Torbutton to provide an option to preserve a user's 
+cookies while still satisfying the <link linkend="disk">Disk Avoidance</link>
+requirement.
+</para>
+</sect2>
+
+
   <title>Disable DOM Storage during Tor usage (crucial)</title>
 
 <para>Option: <command>extensions.torbutton.disable_domstorage</command>
@@ -1435,28 +1467,21 @@ linkend="state">State Separation</link> requirement.
 </sect2>
 
 <sect2>
-
   <title>Clear HTTP Auth on Tor Toggle (recommended)</title>
-
 <para>Option: <command>extensions.torbutton.clear_http_auth</command>
   </para>
 
 <para>
-
 This setting causes Torbutton to call <ulink
 url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIHttpAuthManager.html#method_clearAll">nsIHttpAuthManager.clearAll()</ulink>
 every time Tor is toggled.
-
 </para>
 
 <para>
 This setting helps to satisfy the <link
 linkend="state">State Separation</link> requirement.
 </para>
-
-
 </sect2>
-
 
 <sect2>
 
@@ -1533,10 +1558,9 @@ settings and saved sessions are reloaded from a fixed Tor state.
  
 </para>
 </sect2>
-<sect2>
 
 <sect2>
-  <title>On Normal Startup, set state to: Tor, Non-Tor, Shutdown State</title>
+  <title>On normal startup, set state to: Tor, Non-Tor, Shutdown State</title>
 
   <para>Options:
   <simplelist>
@@ -1553,7 +1577,7 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-obse
 </sect2>
 
 <sect2>
-  <title>Prevent session store from saving Non-Tor/Tor-loaded tabs (recommended)</title>
+  <title>Prevent session store from saving Non-Tor/Tor-loaded tabs</title>
 
   <para>Options: 
   <simplelist>
@@ -1577,6 +1601,7 @@ crashes.
 
 </sect2>
 
+<sect2>
   
   <title>Set user agent during Tor usage (crucial)</title>
   <para>Options:
