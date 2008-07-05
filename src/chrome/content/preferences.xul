@@ -197,20 +197,28 @@
           </tabpanel>
           <tabpanel id="cookies">
            <vbox>
-            <radiogroup id="torbutton_cookieGroup">
+            <radiogroup onselect="torbutton_cookie_update(document)" id="torbutton_cookieGroup">
              <radio id="torbutton_clearCookies"
                     label="&torbutton.prefs.clear_cookies;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/>             
             <radio id="torbutton_cookieJars"
                     label="&torbutton.prefs.cookie_jars;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/>
+
             <radio id="torbutton_dualCookieJars"
                     label="&torbutton.prefs.dual_cookie_jars;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/>
+
             <radio id="torbutton_mmmCookies"
                     label="&torbutton.prefs.mmm_cookies;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/> 
             </radiogroup>
+            <checkbox id="torbutton_torMemoryJar" 
+                   label="&torbutton.prefs.tor_memory_jar;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            <checkbox id="torbutton_nonTorMemoryJar" 
+                   label="&torbutton.prefs.nontor_memory_jar;" 
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
             <checkbox id="torbutton_noDomStorage" 
                    label="&torbutton.prefs.disable_domstorage;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
@@ -300,7 +308,9 @@
         <label class="indent" control="torbutton_panelStyle" value="&torbutton.prefs.panel_format;"/>
         <radiogroup class="indent" id="torbutton_panelStyle">
             <radio value="text" id="torbutton_panelStyleText" label="&torbutton.prefs.panel_text_format;"/>
+
             <radio value="iconic" id="torbutton_panelStyleIcon" label="&torbutton.prefs.panel_icon_format;"/>
+
         </radiogroup>
         <checkbox id="torbutton_displayStatusPanel" label="&torbutton.prefs.display_panel;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>

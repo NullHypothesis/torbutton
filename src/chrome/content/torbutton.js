@@ -100,20 +100,34 @@ var torbutton_unique_pref_observer =
                 torbutton_set_status();
                 break;
 
+            case "extensions.torbutton.tor_memory_jar":
+            case "extensions.torbutton.nontor_memory_jar":
             case "extensions.torbutton.dual_cookie_jars":
             case "extensions.torbutton.cookie_jars":
             case "extensions.torbutton.clear_cookies":
                 torbutton_log(2, "Got cookie pref change");
+                var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+
                 if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
                     m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
                 } else if(m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars')) {
-                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 
-                            m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled") ? 2 : 0);
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", tor_mode ? 2 : 0);
                 } else if(m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars")) {
                     m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
                 } else {
                     m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
                 }
+
+                if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar') 
+                        && tor_mode) {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+                }
+
+                if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar') 
+                        && !tor_mode) {
+                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+                }
+
                 break;
 
             case "extensions.torbutton.crashed":
@@ -1052,6 +1066,17 @@ function torbutton_update_status(mode, force_update) {
     } else if(m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars")) {
         m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
     }
+
+    /* Don't write cookies to disk no matter what if memory jars are enabled
+     * for this mode. */
+    if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar') && mode) {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+    }
+
+    if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar') && !mode) {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+    }
+
 
     if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
         torbutton_clear_cookies();

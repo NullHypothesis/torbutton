@@ -135,7 +135,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_clearHistory').checked = o_torprefs.getBoolPref('clear_history');
     doc.getElementById('torbutton_killBadJS').checked = o_torprefs.getBoolPref('kill_bad_js');
     doc.getElementById('torbutton_resizeOnToggle').checked = o_torprefs.getBoolPref('resize_on_toggle');
-    
+   
     if(o_torprefs.getBoolPref('clear_cache')) {
         doc.getElementById('torbutton_cacheGroup').selectedItem =
             doc.getElementById('torbutton_clearCache');
@@ -146,32 +146,53 @@ function torbutton_prefs_init(doc) {
         o_torprefs.setBoolPref('block_cache', true);
         o_torprefs.setBoolPref('clear_cache', false);
     }
-        
+
     if(o_torprefs.getBoolPref('clear_cookies')) {
         doc.getElementById('torbutton_cookieGroup').selectedItem = 
             doc.getElementById('torbutton_clearCookies');
         o_torprefs.setBoolPref('cookie_jars', false);
         o_torprefs.setBoolPref('dual_cookie_jars', false);
         o_torprefs.setBoolPref('clear_cookies', true); 
+
+        o_torprefs.setBoolPref('tor_memory_jar', true);
+        o_torprefs.setBoolPref('nontor_memory_jar', true);
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
     } else if(o_torprefs.getBoolPref('cookie_jars')) {
         doc.getElementById('torbutton_cookieGroup').selectedItem =
             doc.getElementById('torbutton_cookieJars');
         o_torprefs.setBoolPref('cookie_jars', true);
         o_torprefs.setBoolPref('dual_cookie_jars', false);
-        o_torprefs.setBoolPref('clear_cookies', false); 
+        o_torprefs.setBoolPref('clear_cookies', false);
+
+        o_torprefs.setBoolPref('tor_memory_jar', false);
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
     } else if(o_torprefs.getBoolPref('dual_cookie_jars')) {
         doc.getElementById('torbutton_cookieGroup').selectedItem =
             doc.getElementById('torbutton_dualCookieJars');
         o_torprefs.setBoolPref('cookie_jars', false);
         o_torprefs.setBoolPref('dual_cookie_jars', true);
         o_torprefs.setBoolPref('clear_cookies', false); 
+
+        doc.getElementById('torbutton_torMemoryJar').disabled = false;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
     } else {
         doc.getElementById('torbutton_cookieGroup').selectedItem =
             doc.getElementById('torbutton_mmmCookies');
         o_torprefs.setBoolPref('cookie_jars', false);
         o_torprefs.setBoolPref('dual_cookie_jars', false);
         o_torprefs.setBoolPref('clear_cookies', false); 
+
+        o_torprefs.setBoolPref('tor_memory_jar', false);
+        o_torprefs.setBoolPref('nontor_memory_jar', false);
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
     }
+
+    doc.getElementById('torbutton_torMemoryJar').checked = o_torprefs.getBoolPref('tor_memory_jar');
+    doc.getElementById('torbutton_nonTorMemoryJar').checked = o_torprefs.getBoolPref('nontor_memory_jar');
+
     doc.getElementById('torbutton_noDomStorage').checked = 
         o_torprefs.getBoolPref('disable_domstorage');
     
@@ -243,6 +264,35 @@ function torbutton_prefs_init(doc) {
     torbutton_prefs_set_field_attributes(doc);
 }
 
+function torbutton_cookie_update(doc) {
+    var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+    doc.getElementById('torbutton_torMemoryJar').checked = o_torprefs.getBoolPref('tor_memory_jar');
+    doc.getElementById('torbutton_nonTorMemoryJar').checked = o_torprefs.getBoolPref('nontor_memory_jar');
+
+    if(doc.getElementById('torbutton_cookieGroup').selectedItem 
+            == doc.getElementById('torbutton_clearCookies')) {
+        doc.getElementById('torbutton_torMemoryJar').checked = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').checked = true;
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
+    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
+            == doc.getElementById('torbutton_cookieJars')) {
+        doc.getElementById('torbutton_torMemoryJar').checked = true;
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
+    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
+            == doc.getElementById('torbutton_dualCookieJars')) {
+        doc.getElementById('torbutton_torMemoryJar').disabled = false;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
+    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
+            == doc.getElementById('torbutton_mmmCookies')) {
+        doc.getElementById('torbutton_torMemoryJar').checked = false;
+        doc.getElementById('torbutton_nonTorMemoryJar').checked = false;
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
+    }
+}
+
 function torbutton_prefs_save(doc) {
     torbutton_log(2, "called prefs_save()");
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
@@ -293,6 +343,9 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('block_js_history', doc.getElementById('torbutton_blockJSHistory').checked);
     o_torprefs.setBoolPref('block_tor_file_net', doc.getElementById('torbutton_blockTorFileNet').checked);
     o_torprefs.setBoolPref('block_nontor_file_net', doc.getElementById('torbutton_blockNonTorFileNet').checked);
+    
+    o_torprefs.setBoolPref('tor_memory_jar', doc.getElementById('torbutton_torMemoryJar').checked);
+    o_torprefs.setBoolPref('nontor_memory_jar', doc.getElementById('torbutton_nonTorMemoryJar').checked);
 
     if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
             doc.getElementById('torbutton_noShutdown')) {

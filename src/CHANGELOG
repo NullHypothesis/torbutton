@@ -1,3 +1,12 @@
+1.2.0rc5
+  XX Jul 2008
+  * bugfix: bug 734: Fix exception with clearing history on toggle
+  * bugfix: bug 735: Fix exception with blocking Non-Tor history writes
+  * bugfix: Workaround to get cookie jars functional on FF3 by arno
+  * misc: translation updates
+  * misc: demote "mapper check" log message to info
+  * new: Added ability to not write cookies and cookie jars to disk
+
 1.2.0rc4
   27 Jun 2008
   * misc: Refuse to jar cookies under Firefox 3. Lame workaround for Firefox

@@ -85,3 +85,5 @@
 <!ENTITY torbutton.prefs.test_settings             "Test Settings">
 <!ENTITY torbutton.prefs.test_auto             "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks             "Disable livemarks updates during Tor usage">
+<!ENTITY torbutton.prefs.tor_memory_jar          "Do not write Tor cookies to disk">
+<!ENTITY torbutton.prefs.nontor_memory_jar       "Do not write Non-Tor cookies to disk">
