@@ -90,6 +90,7 @@ function CookieJarSelector() {
     while (cookiesEnum.hasMoreElements()) {
         var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie2);
         var xml = <cookie>{cookie.value}</cookie>;
+        //this.logger.log(2, "Saving cookie: "+cookie.host+":"+cookie.name+" until: "+cookie.expiry);
         xml.@name = cookie.name;
         xml.@host = cookie.host;
         xml.@path = cookie.path;
@@ -118,19 +119,23 @@ function CookieJarSelector() {
         for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
             var xml = cookiesAsXml.cookie[i];
             var value = xml.toString();
-            var name = xml.@name;
+            var cname = xml.@name; 
             var host = xml.@host;
             var path = xml.@path;
             var expiry = xml.@expiry;
             var isSecure = (xml.@isSecure == 1);
             var isSession = (xml.@isSession == 1);
             var isHttpOnly = (xml.@isHttpOnly == 1);
+            //this.logger.log(2, "Loading cookie: "+host+":"+cname+" until: "+expiry);
             try {
-                cookieManager.add(host, path, name, value, isSecure, isSession, expiry);
+                cookieManager.add(host, path, cname, value, isSecure, isSession,
+                        expiry);
             } catch(e) {
                 // Api changed to add httpOnly cookies support. see mozilla bug #379408
-                if (e.result == Cr.NS_ERROR_XPC_NOT_ENOUGH_ARGS)
-                    cookieManager.add(host, path, name, value, isSecure, isHttpOnly, isSession, expiry);
+                if (e.result == Cr.NS_ERROR_XPC_NOT_ENOUGH_ARGS) {
+                    cookieManager.add(host, path, cname, value, isSecure, 
+                            isHttpOnly, isSession, expiry);
+                } 
             }
         }
   }
@@ -166,7 +171,7 @@ function CookieJarSelector() {
       sstream.close();
       fstream.close();
       try {
-        var ret = XML(data);
+          var ret = XML(data);
       } catch(e) { // file has been corrupted; XXX: handle error differently
           file.remove(false); //XXX: is it necessary to remove it ?
           var ret = null;
@@ -175,7 +180,6 @@ function CookieJarSelector() {
   }
 
   this.saveCookies = function(name) {
-
     // transition removes old tor-style cookie file
     var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
     if (oldCookieFile.exists()) {
@@ -248,6 +252,8 @@ function CookieJarSelector() {
 
     // load cookies from xml object
     this._loadCookiesFromXml(name);
+    
+    // XXX: send a profile-do-change event?
 
     // ok, everything's fine
     this.logger.log(2, "Cookies reloaded");
@@ -270,8 +276,12 @@ function CookieJarSelector() {
   // This JSObject is exported directly to chrome
   this.wrappedJSObject = this;
 
+  // This timer is done so that in the event of a crash, we at least
+  // have recent cookies in a jar to reload from.
   var jarThis = this;
   this.timerCallback = {
+    cookie_changed: false,
+
     QueryInterface: function(iid) {
        if (!iid.equals(Component.interfaces.nsISupports) &&
            !iid.equals(Component.interfaces.nsITimer)) {
@@ -283,7 +293,11 @@ function CookieJarSelector() {
     notify: function() {
        // this refers to timerCallback object. use jarThis to reference
        // CookieJarSelector object.
-       jarThis.logger.log(2, "Got timer update. Saving cookies");
+       if(!this.cookie_changed) {
+           jarThis.logger.log(2, "Got timer update, but no cookie change.");
+           return;
+       }
+       jarThis.logger.log(3, "Got timer update. Saving changed cookies to jar.");
        var tor_enabled = 
            jarThis.prefs.getBoolPref("extensions.torbutton.tor_enabled");
 
@@ -292,6 +306,8 @@ function CookieJarSelector() {
            jarThis.logger.log(3, "Neat. Timer fired during transition.");
            return;
        }
+       
+       this.cookie_changed = false;
 
        if(tor_enabled) {
            jarThis.saveCookies("tor");
@@ -352,18 +368,20 @@ CookieJarSelector.prototype =
   // method of nsIObserver
   observe : function(aSubject, aTopic, aData) {
        switch(aTopic) { 
+        case "cookie-changed":
+            this.timerCallback.cookie_changed = true;
+            break;
         case "app-startup": 
             var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(nsIObserverService);
             obsSvc.addObserver(this, "profile-after-change", false); 
             obsSvc.addObserver(this, "quit-application", false); 
-        break;
-
+            obsSvc.addObserver(this, "cookie-changed", false); 
+            break;
         case "profile-after-change": 
             // after profil loading, initialize a timer to call timerCallback
             // at a specified interval
             this.timer.initWithCallback(this.timerCallback, 60 * 1000, nsITimer.TYPE_REPEATING_SLACK); // 1 minute
-        break;
-
+            break;
         // put some stuff you want applied at firefox shutdown
         case "quit-application":
         break;
