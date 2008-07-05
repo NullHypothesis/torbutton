@@ -22,6 +22,8 @@ function CookieJarSelector() {
 
   this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
       .getService(Components.interfaces.nsISupports).wrappedJSObject;
+    
+  this.prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
 
   var getProfileFile = function(filename) {
     var loc = "ProfD";  // profile directory
@@ -67,95 +69,187 @@ function CookieJarSelector() {
     }
   };
 
-  var loadCookiesFromFile = function(aFile) {
-      var storageService = Cc["@mozilla.org/storage/service;1"]
-          .getService(Ci.mozIStorageService);
-      try {
-          var mDBConn = storageService.openDatabase(aFile);
-      } catch(e) {
-          this.logger.log(5, "Cookie file open exception: "+e);
-          return;
-      }
-      if (!mDBConn.tableExists("moz_cookies")) { // Should not happen
-          this.logger.log(5, "No cookies table!");
-          return;
-      }
-      if (mDBConn.schemaVersion != 2) { // Should not happen
-          this.logger.log(5, "Cookies table version mismatch");
-          return;
-      } 
-      
-      var cookieManager = Cc["@mozilla.org/cookiemanager;1"].getService(Ci.nsICookieManager);
- 
-      var stmt = mDBConn.createStatement("SELECT id, name, value, host, path, expiry, lastAccessed, isSecure, isHttpOnly FROM moz_cookies");
-
-      while (stmt.executeStep()) {
-          var name = stmt.getUTF8String(1);
-          var value = stmt.getUTF8String(2);
-          var host = stmt.getUTF8String(3);
-          var path = stmt.getUTF8String(4);
-          var expiry = stmt.getInt64(5);
-          var lastAccessed = stmt.getInt64(6);
-          var isSecure = (stmt.getInt32(7) != 0);
-          var isHttpOnly = (stmt.getInt32(8) != 0);
-          cookieManager.QueryInterface(Ci.nsICookieManager2).add(host, path, name, value, isSecure, isHttpOnly, false, expiry);
-      }
-      stmt.reset();
-  };
-
   this.clearCookies = function() {
     Cc["@mozilla.org/cookiemanager;1"]
     .getService(Ci.nsICookieManager)
     .removeAll();
   }
 
+  // json would be a fine alternative to e4x, but is only available from
+  // gecko1.9
+  //
+  // see http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Processing_XML_with_E4X
+  // and http://developer.mozilla.org/en/docs/E4X
+  // for information about e4x
+  this._cookiesToXml = function(saveSession) {
+    var cookieManager =
+      Cc["@mozilla.org/cookiemanager;1"]
+      .getService(Ci.nsICookieManager);
+    var cookiesEnum = cookieManager.enumerator;
+    var cookiesAsXml = new XML('<cookies/>');
+    while (cookiesEnum.hasMoreElements()) {
+        var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie2);
+        var xml = <cookie>{cookie.value}</cookie>;
+        xml.@name = cookie.name;
+        xml.@host = cookie.host;
+        xml.@path = cookie.path;
+        xml.@expiry = cookie.expiry;
+        if (cookie.isSecure)
+            xml.@isSecure = 1;
+        if (cookie.isSession)
+            xml.@isSession = 1;
+        if (cookie.isHttpOnly)
+            xml.@isHttpOnly = 1;
+        if(!cookie.isSession || saveSession)
+            cookiesAsXml.appendChild(xml);
+    }
+    return cookiesAsXml;
+  }
+
+  this._loadCookiesFromXml = function(name) {
+        var cookiesAsXml = this["cookiesobj-" + name];
+        if (!cookiesAsXml)
+            return;
+
+        var cookieManager =
+            Cc["@mozilla.org/cookiemanager;1"]
+            .getService(Ci.nsICookieManager2);
+
+        for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
+            var xml = cookiesAsXml.cookie[i];
+            var value = xml.toString();
+            var name = xml.@name;
+            var host = xml.@host;
+            var path = xml.@path;
+            var expiry = xml.@expiry;
+            var isSecure = (xml.@isSecure == 1);
+            var isSession = (xml.@isSession == 1);
+            var isHttpOnly = (xml.@isHttpOnly == 1);
+            try {
+                cookieManager.add(host, path, name, value, isSecure, isSession, expiry);
+            } catch(e) {
+                // Api changed to add httpOnly cookies support. see mozilla bug #379408
+                if (e.result == Cr.NS_ERROR_XPC_NOT_ENOUGH_ARGS)
+                    cookieManager.add(host, path, name, value, isSecure, isHttpOnly, isSession, expiry);
+            }
+        }
+  }
+
+  this._cookiesToFile = function(name) {
+      var file = getProfileFile("cookies-" + name + ".xml");
+      var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
+            .createInstance(Ci.nsIFileOutputStream);
+      foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
+      var data = this["cookiesobj-" + name].toString();
+      foStream.write(data, data.length);
+      foStream.close();
+  }
+
+  this._cookiesFromFile = function(name) {
+      var file = getProfileFile("cookies-" + name + ".xml");
+      if (!file.exists())
+          return null;
+      var data = "";
+      var fstream = Cc["@mozilla.org/network/file-input-stream;1"]
+          .createInstance(Ci.nsIFileInputStream);
+      var sstream = Cc["@mozilla.org/scriptableinputstream;1"]
+          .createInstance(Ci.nsIScriptableInputStream);
+      fstream.init(file, -1, 0, 0);
+      sstream.init(fstream); 
+
+      var str = sstream.read(4096);
+      while (str.length > 0) {
+          data += str;
+          str = sstream.read(4096);
+      }
+
+      sstream.close();
+      fstream.close();
+      try {
+        var ret = XML(data);
+      } catch(e) { // file has been corrupted; XXX: handle error differently
+          file.remove(false); //XXX: is it necessary to remove it ?
+          var ret = null;
+      }
+      return ret;
+  }
+
   this.saveCookies = function(name) {
+
+    // transition removes old tor-style cookie file
+    var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
+    if (oldCookieFile.exists()) {
+        oldCookieFile.remove(false);
+    }
+
+    if (!this.prefs.getBoolPref("extensions.torbutton." + name + "_memory_jar")) {
+        // save cookies to xml object
+        this["cookiesobj-" + name] = this._cookiesToXml(false);
+        // save cookies to file
+        this._cookiesToFile(name);
+    } else {
+        // save cookies to xml object
+        this["cookiesobj-" + name] = this._cookiesToXml(true);
+        var file = getProfileFile("cookies-" + name + ".xml");
+        if (file.exists()) {
+            file.remove(false)
+        }
+    }
+    
+    // ok, everything's fine
+    this.logger.log(2, "Cookies saved");
+  };
+
+  this._oldLoadCookies = function(name, deleteSavedCookieJar) {
     var cookieManager =
       Cc["@mozilla.org/cookiemanager;1"]
       .getService(Ci.nsICookieManager);
     cookieManager.QueryInterface(Ci.nsIObserver);
 
-    // Tell the cookie manager to unload cookies from memory 
-    // and sync to disk.
-    cookieManager.observe(this, "profile-before-change", "");
-    // Tell the cookie manager to reload cookies from disk
-    cookieManager.observe(this, "profile-do-change", "");
-    copyProfileFile("cookies"+this.extn, "cookies-" + name + this.extn);
-  };
-
-  this.loadCookies = function(name, deleteSavedCookieJar) {
-    var cookieManager =
-      Cc["@mozilla.org/cookiemanager;1"]
-      .getService(Ci.nsIObserver);
-
     // Tell the cookie manager to unload cookies from memory and disk
     var context = "shutdown-cleanse"; 
     cookieManager.observe(this, "profile-before-change", context);
 
+    // Replace the cookies.txt file with the loaded data
     var fn = deleteSavedCookieJar ? moveProfileFile : copyProfileFile;
+    fn("cookies-"+name+this.extn, "cookies"+this.extn);
 
     // Tell the cookie manager to reload cookies from disk
-    if (this.is_ff3) {
-        var cookieFile = getProfileFile("cookies-"+name+this.extn);
-        // Workaround for Firefox bug 439384:
-        loadCookiesFromFile(cookieFile);
-        // Tell the cookie manager to unload cookies from memory 
-        // and sync to disk.
-        cookieManager.observe(this, "profile-before-change", "");
-        // Tell the cookie manager to reload cookies from disk
-        cookieManager.observe(this, "profile-do-change", "");
+    cookieManager.observe(this, "profile-do-change", context);
+    this.logger.log(2, "Cookies reloaded");
+  };
 
-        // Following fails b/c of FF Bug 439384. It is the alternative
-        // to the above lines.
-        // Replace the cookies.sqlite file with the loaded data
-        // fn("cookies-"+name+this.extn, "cookies"+this.extn);
-        // still notify cookieManager to call initDB, and reset mDBConn
-        //cookieManager.observe(this, "profile-do-change", context);
-    } else {
-        // Replace the cookies.txt file with the loaded data
-        fn("cookies-"+name+this.extn, "cookies"+this.extn);
-        cookieManager.observe(this, "profile-do-change", context);
+  this.loadCookies = function(name, deleteSavedCookieJar) {
+    // remove cookies before loading old ones
+    this.clearCookies();
+
+    /* transition code from old jars */
+    if (!this.is_ff3) {
+        var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
+        if (oldCookieFile.exists()) {
+            this._oldLoadCookies(name, deleteSavedCookieJar);
+            if (oldCookieFile.exists()) {
+                oldCookieFile.remove(false);
+            }
+        }
     }
+
+    if (!this.prefs.getBoolPref("extensions.torbutton." + name + "_memory_jar")) {
+        // load cookies from file
+        this["cookiesobj-" + name] = this._cookiesFromFile(name);
+    }
+
+    //delete file if needed
+    if (deleteSavedCookieJar) { 
+        var file = getProfileFile("cookies-" + name + ".xml");
+        if (file.exists())
+            file.remove(false);
+    }
+
+    // load cookies from xml object
+    this._loadCookiesFromXml(name);
+
+    // ok, everything's fine
     this.logger.log(2, "Cookies reloaded");
   };
 
@@ -173,9 +267,41 @@ function CookieJarSelector() {
       this.extn = ".txt";
   }
 
-
   // This JSObject is exported directly to chrome
   this.wrappedJSObject = this;
+
+  var jarThis = this;
+  this.timerCallback = {
+    QueryInterface: function(iid) {
+       if (!iid.equals(Component.interfaces.nsISupports) &&
+           !iid.equals(Component.interfaces.nsITimer)) {
+         Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
+         return null;
+       }
+       return this;
+    },
+    notify: function() {
+       // this refers to timerCallback object. use jarThis to reference
+       // CookieJarSelector object.
+       jarThis.logger.log(2, "Got timer update. Saving cookies");
+       var tor_enabled = 
+           jarThis.prefs.getBoolPref("extensions.torbutton.tor_enabled");
+
+       if(tor_enabled !=
+           jarThis.prefs.getBoolPref("extensions.torbutton.settings_applied")) {
+           jarThis.logger.log(3, "Neat. Timer fired during transition.");
+           return;
+       }
+
+       if(tor_enabled) {
+           jarThis.saveCookies("tor");
+       } else {
+           jarThis.saveCookies("nontor");
+       }
+       jarThis.logger.log(2, "Timer done. Cookies saved");
+    }
+  }
+
 }
 
 /**
@@ -186,14 +312,18 @@ function CookieJarSelector() {
 
 const nsISupports = Components.interfaces.nsISupports;
 const nsIClassInfo = Components.interfaces.nsIClassInfo;
+const nsIObserver = Components.interfaces.nsIObserver;
+const nsITimer = Components.interfaces.nsITimer;
 const nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;
 const nsIObserverService = Components.interfaces.nsIObserverService;
+const nsICategoryManager = Components.interfaces.nsICategoryManager;
 
 CookieJarSelector.prototype =
 {
   QueryInterface: function(iid)
   {
     if (!iid.equals(nsIClassInfo) &&
+        !iid.equals(nsIObserver) &&
         !iid.equals(nsISupports)) {
       Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
       return null;
@@ -219,6 +349,29 @@ CookieJarSelector.prototype =
   // method of nsIClassInfo
   getHelperForLanguage: function(count) { return null; },
 
+  // method of nsIObserver
+  observe : function(aSubject, aTopic, aData) {
+       switch(aTopic) { 
+        case "app-startup": 
+            var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(nsIObserverService);
+            obsSvc.addObserver(this, "profile-after-change", false); 
+            obsSvc.addObserver(this, "quit-application", false); 
+        break;
+
+        case "profile-after-change": 
+            // after profil loading, initialize a timer to call timerCallback
+            // at a specified interval
+            this.timer.initWithCallback(this.timerCallback, 60 * 1000, nsITimer.TYPE_REPEATING_SLACK); // 1 minute
+        break;
+
+        // put some stuff you want applied at firefox shutdown
+        case "quit-application":
+        break;
+       }
+  },
+
+  timer:  Components.classes["@mozilla.org/timer;1"].createInstance(nsITimer),
+
 }
 
 var CookieJarSelectorFactory = new Object();
@@ -230,6 +383,7 @@ CookieJarSelectorFactory.createInstance = function (outer, iid)
     return null;
   }
   if (!iid.equals(nsIClassInfo) &&
+      !iid.equals(nsIObserver) &&
       !iid.equals(nsISupports)) {
     Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
     return null;
@@ -249,6 +403,18 @@ function (compMgr, fileSpec, location, type)
                                   fileSpec, 
                                   location, 
                                   type);
+   var catman = Components.classes['@mozilla.org/categorymanager;1'].getService(nsICategoryManager);
+   catman.addCategoryEntry("app-startup", kMODULE_NAME, kMODULE_CONTRACTID, true, true);
+}
+
+CookieJarSelectorModule.unregisterSelf = 
+function (compMgr, fileSpec, location, type)
+{
+   var catman = Components.classes['@mozilla.org/categorymanager;1'].getService(nsICategoryManager);
+   catman.deleteCategoryEntry("app-startup", kMODULE_NAME, true);
+  compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
+  compMgr.unregisterFactoryLocation(kMODULE_CID,
+                                  fileSpec);
 }
 
 CookieJarSelectorModule.getClassObject = function (compMgr, cid, iid)
