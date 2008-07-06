@@ -51,7 +51,7 @@
 <!ENTITY torbutton.prefs.shutdown "Shutdown">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
-<!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
+<!ENTITY torbutton.prefs.no_shutdown "Não limpar meus cookies ao desligar">
 <!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
 <!ENTITY torbutton.prefs.headers "Headers">
 <!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">

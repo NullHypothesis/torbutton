@@ -1,11 +1,11 @@
 1.2.0rc5
-  XX Jul 2008
+  06 Jul 2008
   * bugfix: bug 734: Fix exception with clearing history on toggle
   * bugfix: bug 735: Fix exception with blocking Non-Tor history writes
   * bugfix: bug 720: FF3 cookie jar fix submitted by arno
   * misc: translation updates for French, Farsi, and others
   * misc: demote "mapper check" log message to info
-  * new: Option to not write cookies and jars to disk submitted by arno
+  * new: Option to not write cookie jars to disk submitted by arno
 
 1.2.0rc4
   27 Jun 2008
