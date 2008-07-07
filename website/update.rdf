@@ -15,13 +15,14 @@
         <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc2"/>
         <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc3"/>
         <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc4"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc5"/>
       </Seq>
     </em:updates>
     
 
     <!-- following two lines for Firefox 0.9.  Specify the most recent version here -->
-    <em:version>1.2.0rc4</em:version>
-    <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.2.0rc4.xpi</em:updateLink>
+    <em:version>1.2.0rc5</em:version>
+    <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.2.0rc5.xpi</em:updateLink>
   </Description>
 
   <!-- version 1.1.14 -->
@@ -142,5 +143,17 @@
     </em:targetApplication>
   </Description>
   
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc5">
+    <em:version>1.2.0rc5</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://torbutton.torproject.org/dev/releases/torbutton-1.2.0rc5.xpi</em:updateLink>
+		 <em:updateHash>sha1:050925e2c02e61f2f0ceb4683600fc0c58a835bb</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
   
 </RDF>
