@@ -42,7 +42,6 @@ function CookieJarSelector() {
     if (srcfile.exists()) {
       // XXX: Permissions issue with Vista roaming profiles? 
       // Maybe file locking?
-      // XXX: Hrmm... how to alert user?? They may never notice these messages..
       try {
           if (destfile.exists()) {
               destfile.remove(false);
@@ -173,17 +172,26 @@ function CookieJarSelector() {
       try {
           var ret = XML(data);
       } catch(e) { // file has been corrupted; XXX: handle error differently
-          file.remove(false); //XXX: is it necessary to remove it ?
-          var ret = null;
+          this.logger.log(5, "Cookies corrupted: "+e);
+          try {
+              file.remove(false); //XXX: is it necessary to remove it ?
+              var ret = null;
+          } catch(e2) {
+              this.logger.log(5, "Can't remove file "+e);
+          }
       }
       return ret;
   }
 
   this.saveCookies = function(name) {
     // transition removes old tor-style cookie file
-    var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
-    if (oldCookieFile.exists()) {
-        oldCookieFile.remove(false);
+    try {
+        var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
+        if (oldCookieFile.exists()) {
+            oldCookieFile.remove(false);
+        }
+    } catch(e) {
+        this.logger.log(5, "Can't remove old "+name+" file "+e);
     }
 
     if (!this.prefs.getBoolPref("extensions.torbutton." + name + "_memory_jar")) {
@@ -194,9 +202,13 @@ function CookieJarSelector() {
     } else {
         // save cookies to xml object
         this["cookiesobj-" + name] = this._cookiesToXml(true);
-        var file = getProfileFile("cookies-" + name + ".xml");
-        if (file.exists()) {
-            file.remove(false)
+        try {
+            var file = getProfileFile("cookies-" + name + ".xml");
+            if (file.exists()) {
+                file.remove(false)
+            }
+        } catch(e) {
+            this.logger.log(5, "Can't remove "+name+" cookie file "+e);
         }
     }
     
@@ -229,12 +241,16 @@ function CookieJarSelector() {
 
     /* transition code from old jars */
     if (!this.is_ff3) {
-        var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
-        if (oldCookieFile.exists()) {
-            this._oldLoadCookies(name, deleteSavedCookieJar);
+        try {
+            var oldCookieFile = getProfileFile("cookies-"+name+this.extn);
             if (oldCookieFile.exists()) {
-                oldCookieFile.remove(false);
+                this._oldLoadCookies(name, deleteSavedCookieJar);
+                if (oldCookieFile.exists()) {
+                    oldCookieFile.remove(false);
+                }
             }
+        } catch(e) {
+            this.logger.log(5, "Can't remove old "+name+" file "+e);
         }
     }
 
@@ -245,9 +261,13 @@ function CookieJarSelector() {
 
     //delete file if needed
     if (deleteSavedCookieJar) { 
-        var file = getProfileFile("cookies-" + name + ".xml");
-        if (file.exists())
-            file.remove(false);
+        try {
+            var file = getProfileFile("cookies-" + name + ".xml");
+            if (file.exists())
+                file.remove(false);
+        } catch(e) {
+            this.logger.log(5, "Can't remove saved "+name+" file "+e);
+        }
     }
 
     // load cookies from xml object
