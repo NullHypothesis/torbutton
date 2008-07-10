@@ -974,7 +974,12 @@ function torbutton_update_status(mode, force_update) {
     if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cache')) {
         var cache = Components.classes["@mozilla.org/network/cache-service;1"].
         getService(Components.interfaces.nsICacheService);
-        cache.evictEntries(0);
+        // Throws exception on FF3 sometimes.. who knows why. FF3 bug?
+        try {
+            cache.evictEntries(0);
+        } catch(e) {
+            torbutton_log(3, "Exception on cache clearing: "+e);
+        }
     }
 
     if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_history')) {
@@ -2165,9 +2170,14 @@ function torbutton_check_round(browser)
         if(Math.abs(browser.contentWindow.innerHeight - 
            Math.floor(Math.round(browser.contentWindow.innerHeight/50.0)*50))
            > 0.1) {
-            torbutton_log(2, "Restoring orig window size");
-            window.outerHeight = m_tb_window_height;
-            window.outerWidth = m_tb_window_width;
+            if(m_tb_window_height < 100 && m_tb_window_width < 100) {
+                torbutton_log(4, "Window size damn near zero: ("+
+                        m_tb_window_height+", "+m_tb_window_width+")");
+            } else {
+                torbutton_log(3, "Restoring orig window size");
+                window.outerHeight = m_tb_window_height;
+                window.outerWidth = m_tb_window_width;
+            }
         }
 
         // Always round.
