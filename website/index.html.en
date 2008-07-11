@@ -104,7 +104,7 @@ Google search plugins for
 -->
 <strong>Source:</strong> You can <a href="https://tor-svn.freehaven.net/svn/torbutton/trunk/">browse the repository</a> or simply unzip the xpi.
 <br/>
-<strong>Bug Reports:</strong> <a href="http://bugs.noreply.org/flyspray/index.php?tasks=all&project=5">Flyspray at noreply.org</a><br/>
+<strong>Bug Reports:</strong> <a href="https://bugs.torproject.org/flyspray/index.php?tasks=all&project=5">Torproject flyspray</a><br/>
 <strong>Documents:</strong> <b>[</b> <a href="#FAQ">FAQ</a> <b>|</b> <a href="CHANGELOG">changelog</a> <b>|</b> <a href="LICENSE">license</a> <b>|</b> <a href="CREDITS">credits</a> <b>]</b><br/>
 <h2>About</h2>
 <p>
@@ -134,6 +134,19 @@ link, and open it in a new tab or window. The tab or window won't load
 automatically, but you can hit enter in the URL bar, and it will begin
 loading. Hitting enter in the URL bar will also reload the page without
 clicking the reload button.
+
+</p>
+
+<strong>My browser is in some weird state where nothing works right!</strong>
+<p>
+
+Try to disable Tor by clicking on the button, and then open a new window. If
+that doesn't fix the issue, go to the preferences page and hit 'Restore
+Defaults'. This should reset the extension and Firefox to a known good
+configuration.  If you can manage to reproduce whatever issue gets your
+Firefox wedged, please file details at <a
+href="https://bugs.torproject.org/flyspray/index.php?tasks=all&project=5">the
+bug tracker</a>.
 
 </p>
 
