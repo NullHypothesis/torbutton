@@ -882,8 +882,6 @@ function torbutton_update_status(mode, force_update) {
         }
     }
 
-    // XXX: All updates are now required to be authenticated on FF3.. 
-    // Perhaps this should be a diff pref.. or default to off?
     if (torprefs.getBoolPref("no_updates")) {
         torbutton_setBoolPref("extensions.update.enabled", "extension_update",
                 !mode, mode, changed);
@@ -2087,11 +2085,29 @@ function torbutton_set_initial_state() {
     }
 }
 
-function torbutton_do_onetime_startup()
+function torbutton_do_fresh_install() 
+{
+    if(m_tb_prefs.getBoolPref("extensions.torbutton.fresh_install")) {
+        if(m_tb_ff3) {
+            // Perform updates if FF3. They are secure now.
+            m_tb_prefs.setBoolPref("extensions.torbutton.no_updates", false);
+        }
+        m_tb_prefs.setBoolPref("extensions.torbutton.fresh_install", false);
+    }
+}
+
+function torbutton_do_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
+        // Do this before the unique pref observer is registered
+        // in torbutton_do_main_window_startup to avoid
+        // popup notification.
+        torbutton_do_fresh_install();
+       
         torbutton_do_main_window_startup();
 
+        // XXX: This is probably better done by reimplementing the 
+        // component.
         if(m_tb_prefs.getBoolPref("extensions.torbutton.block_remoting")) {
             var appSupport = Cc["@mozilla.org/toolkit/native-app-support;1"]
                 .getService(Ci.nsINativeAppSupport);
@@ -2199,7 +2215,7 @@ function torbutton_new_window(event)
         torbutton_init();
     }
     
-    torbutton_do_onetime_startup();
+    torbutton_do_startup();
     torbutton_crash_recover();
 
     torbutton_get_plugin_mimetypes();

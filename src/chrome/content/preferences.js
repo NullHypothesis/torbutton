@@ -526,6 +526,7 @@ function torbutton_prefs_reset_defaults() {
     torbutton_reset_browser_prefs();
 
     chrome.torbutton_init_prefs();
+    chrome.torbutton_do_fresh_install();
     torbutton_log(3, "Prefs reset");
 
     if(was_enabled) {

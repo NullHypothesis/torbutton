@@ -144,13 +144,13 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_resizeOnToggle" label="&torbutton.prefs.resize_on_toggle;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-        <checkbox id="torbutton_noUpdates" label="&torbutton.prefs.no_updates;" 
-                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noSearch" label="&torbutton.prefs.no_search;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_blockTorFileNet" label="&torbutton.prefs.block_tor_file_net;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_blockNonTorFileNet" label="&torbutton.prefs.block_nontor_file_net;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_noUpdates" label="&torbutton.prefs.no_updates;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_closeTor" label="&torbutton.prefs.close_tor;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>

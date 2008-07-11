@@ -84,6 +84,7 @@ pref("extensions.torbutton.noncrashed",false);
 pref("extensions.torbutton.block_cert_dialogs",false);
 pref("extensions.torbutton.asked_ca_disable",false);
 pref("extensions.torbutton.warned_ff3",false);
+pref("extensions.torbutton.fresh_install",true);
 
 // Security prefs:
 pref("extensions.torbutton.no_tor_plugins",true);
