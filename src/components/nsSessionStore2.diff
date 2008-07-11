@@ -1,5 +1,5 @@
---- nsSessionStore2.js	2008-04-16 12:02:47.000000000 -0700
-+++ nsSessionStore2.js	2008-06-22 02:34:05.000000000 -0700
+--- ./nsSessionStore2-ff.js	2008-07-10 13:31:04.000000000 -0700
++++ nsSessionStore2.js	2008-06-22 03:35:58.000000000 -0700
 @@ -777,11 +777,26 @@
      var browsers = tabbrowser.browsers;
      var tabs = this._windows[aWindow.__SSi].tabs = [];
@@ -44,7 +44,7 @@
              aBrowser.parentNode.__SS_data && aBrowser.parentNode.__SS_data._tab)
            return; // ignore incompletely initialized tabs
          
-@@ -2183,6 +2199,23 @@
+@@ -2183,6 +2199,32 @@
    }
  };
  
@@ -63,7 +63,16 @@
 -  return SessionStoreModule;
 +  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
 +        .getService(Components.interfaces.nsIPrefBranch);
-+  if(prefs.getBoolPref("extensions.torbutton.notor_sessionstore")) {
++  
++  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
++      .getService(Components.interfaces.nsIXULAppInfo);
++  var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
++      .getService(Components.interfaces.nsIVersionComparator);
++
++  // Only hook the sessionstore if the pref is enabled and we're firefox 2.
++  if((prefs.getBoolPref("extensions.torbutton.notor_sessionstore") 
++        || prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"))
++      && versionChecker.compare(appInfo.version, "3.0a1") <= 0) {
 +    return SessionStoreModule;
 +  } else {
 +    return NoModule;
