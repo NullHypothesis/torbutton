@@ -69,9 +69,13 @@ function CookieJarSelector() {
   };
 
   this.clearCookies = function() {
-    Cc["@mozilla.org/cookiemanager;1"]
-    .getService(Ci.nsICookieManager)
-    .removeAll();
+    try {
+        Cc["@mozilla.org/cookiemanager;1"]
+            .getService(Ci.nsICookieManager)
+            .removeAll();
+    } catch(e) {
+        this.logger.log(4, "Cookie clearing exception: "+e);
+    }
   }
 
   // json would be a fine alternative to e4x, but is only available from
