@@ -2384,11 +2384,18 @@ function torbutton_update_tags(win) {
 
         browser.__tb_tor_fetched = !tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
-        browser.docShell.allowJavascript = js_enabled;
-
-        // We need to do the resize here as well in case the window
-        // was minimized during toggle...
-        torbutton_check_round(browser);
+        if(browser.docShell.allowJavascript != js_enabled) {
+            torbutton_log(3, "Javascript changed to: "+js_enabled);
+            browser.docShell.allowJavascript = js_enabled;
+            torbutton_check_round(browser);
+            // JS was not fully enabled for some page elements. 
+            // Need to reload
+            browser.reload(); 
+        } else {
+            // We need to do the resize here as well in case the window
+            // was minimized during toggle...
+            torbutton_check_round(browser);
+        }
     }
 
     torbutton_log(2, "Tags updated.");
