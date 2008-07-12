@@ -2088,11 +2088,29 @@ function torbutton_set_initial_state() {
 function torbutton_do_fresh_install() 
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.fresh_install")) {
-        if(m_tb_ff3) {
-            // Perform updates if FF3. They are secure now.
-            m_tb_prefs.setBoolPref("extensions.torbutton.no_updates", false);
+        if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+            // Make our cookie prefs more closely match the user's 
+            // so we don't change people's settings on install.
+            if(m_tb_prefs.getIntPref("network.cookie.lifetimePolicy") == 2) {
+                m_tb_prefs.setBoolPref("extensions.torbutton.nontor_memory_jar", 
+                        true);
+            }
+            // perform updates in ff3 if the user's non-tor prefs allow it
+            if(m_tb_ff3 && m_tb_prefs.getBoolPref("app.update.auto")
+                    && m_tb_prefs.getBoolPref("extensions.update.enabled")) {
+                m_tb_prefs.setBoolPref("extensions.torbutton.no_updates", false);
+            }
+        } else {
+            // Punt. Allow updates via Tor now.
+            if(m_tb_ff3) {
+                // Perform updates if FF3. They are secure now.
+                m_tb_prefs.setBoolPref("extensions.torbutton.no_updates", false);
+            }
         }
+
         m_tb_prefs.setBoolPref("extensions.torbutton.fresh_install", false);
+
+        torbutton_log(4, "First time startup completed");
     }
 }
 
