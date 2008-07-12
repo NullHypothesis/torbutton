@@ -1914,13 +1914,6 @@ observe : function(subject, topic, data) {
     if (this._uninstall) {
         torbutton_disable_tor();
 
-        // Reset all browser prefs that torbutton touches just in case
-        // they get horked. Better everything gets set back to default
-        // than some arcane pref gets wedged with no clear way to fix it.
-        // Technical users who tuned these by themselves will be able to fix it.
-        // It's the non-technical ones we should make it easy for
-        torbutton_reset_browser_prefs();
-
         /*
         if(m_tb_prefs.prefHasUserValue("browser.send_pings"))
             m_tb_prefs.clearUserPref("browser.send_pings");
