@@ -41,7 +41,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
 <!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage (recommended)">
+<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
 <!ENTITY torbutton.prefs.dynamic "Dynamic Content">
 <!ENTITY torbutton.prefs.cookies "Cookies">
