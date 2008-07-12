@@ -1,3 +1,15 @@
+1.2.0rc6:
+  12 Jul 2008
+  * bugfix: Fix bug causing Firefox history to get cleared in some situations
+  * bugfix: bug 753: Fix exception thrown during Tor toggle in some instances
+  * bugfix: bug 758: Fix resize issue where 0x0 windows could be created
+  * bugfix: Fix some potential permission denied issues with cookie jars
+  * bugfix: bug 520: Fix issue where Javascript stayed disabled in some tabs
+  * bugfix: Apply cookie lifetime settings to Tor settings on first install.
+  * bugfix: Apply cookie lifetime settings to Tor settings on first install.
+  * misc: Allow automatic updates in FF3 by default. They are secure now.
+  * misc: Translation updates
+   
 1.2.0rc5
   06 Jul 2008
   * bugfix: bug 734: Fix exception with clearing history on toggle
