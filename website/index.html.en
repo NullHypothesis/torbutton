@@ -128,8 +128,8 @@ be blocked, but unfortunately they are indistinguishable from normal user
 interactions with the page (such as clicking on links, opening them in new
 tabs/windows, or using the history buttons), and so those are blocked as a
 side effect. Once that Firefox bug is fixed, this degree of isolation will
-become optional for people who do not want to accidentally click on links and
-give away information via referrers. A workaround is to right click on the
+become optional (for people who do not want to accidentally click on links and
+give away information via referrers). A workaround is to right click on the
 link, and open it in a new tab or window. The tab or window won't load
 automatically, but you can hit enter in the URL bar, and it will begin
 loading. Hitting enter in the URL bar will also reload the page without
@@ -276,6 +276,16 @@ Variable</a> for TZ via My Computer's properties. In MacOS, the situation is
 href="http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/EnvironmentVars.html#//apple_ref/doc/uid/20002093-BCIJIJBH">a
 lot more complicated</a>, unfortunately.
 
+</p>
+
+<p>
+
+In addition, RSS readers such as Firefox Livemarks can perform
+periodic fetches. Due to <a
+href="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Firefox Bug
+436250</a>, there is no way to disable Livemark fetches during Tor. This can
+be a problem if you have a lot of custom Livemark urls that can give away
+information about your identity.
 
 </p>
 
