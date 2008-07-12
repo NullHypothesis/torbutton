@@ -6,7 +6,7 @@
   * bugfix: Fix some potential permission denied issues with cookie jars
   * bugfix: bug 520: Fix issue where Javascript stayed disabled in some tabs
   * bugfix: Apply cookie lifetime settings to Tor settings on first install.
-  * bugfix: Apply cookie lifetime settings to Tor settings on first install.
+  * bugfix: Don't disable Firefox preferences when Torbutton is unstalled
   * misc: Allow automatic updates in FF3 by default. They are secure now.
   * misc: Translation updates
    
