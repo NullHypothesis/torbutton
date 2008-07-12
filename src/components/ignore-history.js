@@ -33,6 +33,14 @@ const kHistoryInterfaces3 = [ "nsIBrowserHistory", "nsIGlobalHistory2",
 
 const Cr = Components.results;
 
+var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+                .getService(Components.interfaces.nsIXULAppInfo);
+var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+                       .getService(Components.interfaces.nsIVersionComparator);
+var is_ff3 = (versionChecker.compare(appInfo.version, "3.0a1") >= 0);
+
+
+
 function HistoryWrapper() {
   // assuming we're running under Firefox
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
@@ -146,7 +154,7 @@ HistoryWrapper.prototype =
           else call = "()";
           var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);})";
           newObj[method] = eval(fun);
-      } else {
+       } else {
           newObj.__defineGetter__(method, function() { return wrapped[method]; });
           newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });
       }
@@ -180,8 +188,59 @@ HistoryWrapper.prototype =
       this._history().setPageTitle(URI, title);
   },
 
+  markPageAsTyped: function(aUri) {
+      if(this.blockWriteHistory()) {
+          return;
+      }
+      return this._history().markPageAsTyped(aUri);
+  },
+
+  addPageWithDetails: function(aUri, aTitle, aVisited) { 
+      if(this.blockWriteHistory()) {
+          return;
+      }
+      return this._history().addPageWithDetails(aUri, aTitle, aVisited);
+  },
+
+  setPageTitle: function(aUri, aTitle) {
+      if(this.blockWriteHistory()) {
+          return;
+      }
+      return this._history().setPageTitle(aUri, aTitle);
+  },
+
   count getter: function() { return this._history().count; },
 };
+
+// Block firefox3 history writes..
+if(is_ff3) {
+    // addDocumentRedirect() - currently not needed. It does not touch the DB
+
+
+    // XXX: hrmm...
+    HistoryWrapper.prototype.setPageDetails = function(aUri, aTitle, aVisitCnt, aHidden, aTyped) {
+        if(this.blockWriteHistory()) {
+            return;
+        }
+        return this._history().setPageDetails(aUri, aTitle, aVisitCnt, aHidden, aTyped);
+    };
+
+    HistoryWrapper.prototype.markPageAsFollowedBookmark = function(aUri) {
+        if(this.blockWriteHistory()) {
+            return;
+        }
+        return this._history().markPageAsFollowedBookmark(aUri);
+    };
+
+    // This gets addVisited
+    HistoryWrapper.prototype.canAddURI = function(aUri) {
+        if(this.blockWriteHistory()) {
+            return false;
+        }
+        return this._history().canAddURI(aUri);
+    };
+
+}
  
 var HistoryWrapperSingleton = null;
 var HistoryWrapperFactory = new Object();
@@ -218,7 +277,7 @@ HistoryWrapperFactory.createInstance = function (outer, iid)
 var HistoryWrapperModule = new Object();
 
 HistoryWrapperModule.registerSelf = 
-function (compMgr, fileSpec, location, type){
+function (compMgr, fileSpec, location, type) {
   var nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;
   compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
   compMgr.registerFactoryLocation(kMODULE_CID,
