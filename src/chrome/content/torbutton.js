@@ -2183,7 +2183,7 @@ function torbutton_do_resize(ev)
         if((m_tb_window_height != window.outerHeight ||
                 m_tb_window_width != window.outerWidth) && window.windowState 
                 == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
-            torbutton_log(2, "Resizing window on event");
+            torbutton_log(2, "Resizing window on event: "+window.windowState);
             bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
             bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
         }
@@ -2205,17 +2205,19 @@ function torbutton_check_round(browser)
            Math.floor(Math.round(browser.contentWindow.innerHeight/50.0)*50))
            > 0.1) {
             if(m_tb_window_height < 100 && m_tb_window_width < 100) {
-                torbutton_log(4, "Window size damn near zero: ("+
+                torbutton_log(3, "Window size damn near zero: ("+
                         m_tb_window_height+", "+m_tb_window_width+")");
+                m_tb_window_height = window.outerHeight;
+                m_tb_window_width = window.outerWidth;
             } else {
-                torbutton_log(3, "Restoring orig window size");
+                torbutton_log(3, "Restoring orig window size: "+window.windowState);
                 window.outerHeight = m_tb_window_height;
                 window.outerWidth = m_tb_window_width;
             }
         }
 
         // Always round.
-        torbutton_log(2, "Resizing window on load");
+        torbutton_log(2, "Resizing window on load: "+window.windowState);
         browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
         browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
     }
