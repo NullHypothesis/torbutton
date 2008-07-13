@@ -242,7 +242,7 @@ question</a> on the FoxyProxy FAQ for more information.
 <strong>Which Firefox extensions do you recommend?</strong>
 <p>
 <ol>
- <li><a href="https://addons.mozilla.org/en-US/firefox/addon/953">RefContorl</a></li>
+ <li><a href="https://addons.mozilla.org/en-US/firefox/addon/953">RefControl</a></li>
  Mentioned above, this extension allows more fine-grained referrer spoofing
 than Torbutton currently provides. It should break less sites than Torbutton's
 referrer spoofing option.
