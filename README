@@ -114,7 +114,7 @@ your version of Firefox.
 
 6. Which Firefox extensions do you recommend?
 
-    1. RefContorl Mentioned above, this extension allows more
+    1. RefControl Mentioned above, this extension allows more
        fine-grained referrer spoofing than Torbutton currently provides. It
        should break less sites than Torbutton's referrer spoofing option.
     2. SafeCache If you use Tor excessively, and rarely disable it, you

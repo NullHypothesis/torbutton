@@ -13,7 +13,7 @@ You should see:
 This is to work around the fact that an xpi requires empty strings for
 incomplete translations or the formatting of various dialogs will be broken.
 Furthermore, Babelzilla doesn't know an english string from a Japanese string
-and simply records translations as matching strings. The XPI resulting the from
+and simply records translations as matching strings. The XPI resulting from
 the above build process will be ready for Babelzilla but should not be used by
 anyone else.
 
