@@ -862,16 +862,12 @@ function torbutton_update_status(mode, force_update) {
     }
 
     if(torprefs.getBoolPref("spoof_english") && mode) {
-        m_tb_prefs.setCharPref("general.useragent.locale", 
-                torprefs.getCharPref("spoof_locale"));
         m_tb_prefs.setCharPref("intl.accept_charsets", 
                 torprefs.getCharPref("spoof_charset"));
         m_tb_prefs.setCharPref("intl.accept_languages",
                 torprefs.getCharPref("spoof_language"));
     } else {
         try {
-            if(m_tb_prefs.prefHasUserValue("general.useragent.locale"))
-                m_tb_prefs.clearUserPref("general.useragent.locale");
             if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
                 m_tb_prefs.clearUserPref("intl.accept_charsets");
             if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
@@ -1663,10 +1659,15 @@ function torbutton_jar_certs(mode) {
 
 function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
-        // FIXME: the error console is still a navigator:browser
-        // and triggers this.
-        // Is there any way to otherwise detect it?
-        torbutton_log(5, "UNTAGGED WINDOW!!!!!!!!!");
+        try {
+            torbutton_log(5, "UNTAGGED WINDOW at: "+browser.src);
+        } catch(e) {
+            torbutton_log(5, "UNTAGGED WINDOW: "+e);
+        }
+        // Defensive programming to tag this window here to 
+        // an alternate tor state. It wil lmake this window totally
+        // useless, but that is better than some undefined state
+        browser.__tb_tor_fetched = !tor_enabled;
     }
 
     if(browser.__tb_tor_fetched == tor_enabled) { // States match, js ok 
@@ -2379,7 +2380,12 @@ function torbutton_update_tags(win) {
 
         if(typeof(browser.__tb_tor_fetched) == "undefined") {
             torbutton_log(5, "Untagged browser at: "+win.location);
-        } else if(browser.__tb_tor_fetched != !tor_tag) {
+            // Defensive programming to tag this window here to 
+            // an alternate tor state. It wil lmake this window totally
+            // useless, but that is better than some undefined state
+            browser.__tb_tor_fetched = tor_tag;
+        } 
+        if(browser.__tb_tor_fetched != !tor_tag) {
             // Purge session history every time we fetch a new doc 
             // in a new tor state
             torbutton_log(2, "Purging session history");
@@ -2488,6 +2494,11 @@ function torbutton_hookdoc(win, doc) {
             // plugin information in window.navigator properly with plugins
             // enabled.
             str2 += "window.__tb_set_uagent=false;\r\n";
+        }
+        if(torprefs.getBoolPref("spoof_english")) {
+            str2 += "window.__tb_locale=\""+m_tb_prefs.getCharPref('extensions.torbutton.spoof_locale')+"\";\r\n";
+        } else {
+            str2 += "window.__tb_locale=false;\r\n";
         }
         str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
         str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
@@ -2657,7 +2668,11 @@ function torbutton_check_progress(aProgress, aRequest) {
                 torbutton_hookdoc(DOMWindow.window, doc);
             }
         } catch(e) {
-            torbutton_eclog(3, "Hit about:plugins? "+doc.location);
+            if(doc.location != "about:plugins") {
+                torbutton_eclog(4, "Exception on tag application at "+doc.location+": "+e);
+            } else {
+                torbutton_eclog(3, "Hit about:plugins");
+            }
         }        
     } else {
         torbutton_eclog(3, "No aProgress for location!");

@@ -115,6 +115,12 @@ ContentWindowMapper.prototype =
           return cached;
       }
 
+      try {
+          this.logger.log(3, "Cache failed for: "+topContentWindow.location);
+      } catch(e) {
+          this.logger.log(3, "Cache failed for unknown location?");
+      }
+
       var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
           .getService(Components.interfaces.nsIWindowMediator);
       var enumerator = wm.getEnumerator("navigator:browser");

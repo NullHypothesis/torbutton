@@ -54,6 +54,7 @@ window.__HookObjects = function() {
       var tmp_oscpu = window.__tb_oscpu;
       var tmp_platform = window.__tb_platform;
       var tmp_productSub = window.__tb_productSub;
+      var tmp_locale = window.__tb_locale;
 
       // This is just unreasonable.. Firefox caches 
       // window.navigator.__proto__ between same-origin loads of a document. 
@@ -82,6 +83,9 @@ window.__HookObjects = function() {
                   })();
               }
 
+              if(tmp_locale != false) {
+                  window.navigator.__defineGetter__("language", function() { return tmp_locale;});
+              }
               window.navigator.__defineGetter__("oscpu", function() { return tmp_oscpu;});
               window.navigator.__defineGetter__("productSub", function() { return tmp_productSub;});
               window.navigator.__defineGetter__("buildID", function() { return 0;});
