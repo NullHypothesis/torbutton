@@ -779,8 +779,17 @@ function torbutton_update_status(mode, force_update) {
     if(torprefs.getBoolPref("set_uagent")) {
         if(mode) {
             try {
-                m_tb_prefs.setCharPref("general.appname.override", 
-                        torprefs.getCharPref("appname_override"));
+                var lang = new RegExp("LANG", "gm");
+                var appname = torprefs.getCharPref("appname_override");
+                if(torprefs.getBoolPref("spoof_english")) {
+                    appname = appname.replace(lang, 
+                            torprefs.getCharPref("spoof_locale"));
+                } else {
+                    appname = appname.replace(lang, 
+                            m_tb_prefs.getCharPref("general.useragent.locale"));
+                }
+
+                m_tb_prefs.setCharPref("general.appname.override", appname);
 
                 m_tb_prefs.setCharPref("general.appversion.override",
                         torprefs.getCharPref("appversion_override"));
@@ -788,8 +797,15 @@ function torbutton_update_status(mode, force_update) {
                 m_tb_prefs.setCharPref("general.platform.override",
                         torprefs.getCharPref("platform_override"));
 
-                m_tb_prefs.setCharPref("general.useragent.override",
-                        torprefs.getCharPref("useragent_override"));
+                var agent = torprefs.getCharPref("useragent_override");
+                if(torprefs.getBoolPref("spoof_english")) {
+                    agent = agent.replace(lang,
+                            torprefs.getCharPref("spoof_locale"));
+                } else {
+                    agent = agent.replace(lang,
+                            m_tb_prefs.getCharPref("general.useragent.locale"));
+                }
+                m_tb_prefs.setCharPref("general.useragent.override", agent);
 
                 m_tb_prefs.setCharPref("general.useragent.vendor",
                         torprefs.getCharPref("useragent_vendor"));
