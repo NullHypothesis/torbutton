@@ -18,8 +18,8 @@ cd ../..
 # create .xpi
 echo ---------- create $APP_NAME.xpi ----------
 cd src
-echo zip -X -9r ../pkg/$XPI_NAME ./ -x "chrome/*" -x "*.diff" -x "*.svn/*"
-zip -X -9r ../pkg/$XPI_NAME ./ -x "*.svn/*" -x "*.diff" #-x "chrome/*"
+echo zip -X -9r ../pkg/$XPI_NAME ./ -x "certDialogsOverride.js" -x "chrome/*" -x "*.diff" -x "*.svn/*"
+zip -X -9r ../pkg/$XPI_NAME ./ -x "certDialogsOverride.js" -x "*.svn/*" -x "*.diff" #-x "chrome/*"
 #mv ../$APP_NAME.jar ./chrome
 #zip -9m ../pkg/$XPI_NAME chrome/$APP_NAME.jar
 cd ..
