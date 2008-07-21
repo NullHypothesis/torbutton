@@ -2684,10 +2684,16 @@ function torbutton_check_progress(aProgress, aRequest) {
                 torbutton_hookdoc(DOMWindow.window, doc);
             }
         } catch(e) {
-            if(doc.location != "about:plugins") {
-                torbutton_eclog(4, "Exception on tag application at "+doc.location+": "+e);
-            } else {
-                torbutton_eclog(3, "Hit about:plugins");
+            try {
+                if(doc && doc.location && 
+                  (doc.location.href.indexOf("about:") != 0 &&
+                   doc.location.href.indexOf("chrome:") != 0)) {
+                    torbutton_eclog(4, "Exception on tag application at "+doc.location+": "+e);
+                } else {
+                    torbutton_eclog(3, "Got an about url: "+e);
+                }
+            } catch(e1) {
+                torbutton_eclog(3, "Got odd url "+e);
             }
         }        
     } else {
