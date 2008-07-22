@@ -130,13 +130,13 @@ var torbutton_unique_pref_observer =
 
                 break;
 
+            // These two are set from the Torbutton crash-observer component
+            // (which itself just wrappes the sessionstartup firefox
+            // component to get doRestore notification)
             case "extensions.torbutton.crashed":
-                // can we say ghetto hack, boys and girls?
                 torbutton_crash_recover();
                 break;
-
             case "extensions.torbutton.noncrashed":
-               // can we say ghetto hack, boys and girls?
                torbutton_set_initial_state();
                break;
 
@@ -588,9 +588,7 @@ function torbutton_test_settings() {
             torbutton_log(5, "Tor test failed. TorDNSEL Failure?");
             ret = 6;
         } else {
-            // XXX: Probably wise to remove this log message if it doesn't
-            // happen..
-            torbutton_log(5, "Tor test failed. Strange target: "+result.target);
+            torbutton_log(5, "Tor test failed. Strange target.");
             ret = 7;
         }
     } else {
@@ -1041,7 +1039,7 @@ function torbutton_update_status(mode, force_update) {
     if(!changed && force_update)
         return;
 
-    // XXX: Pref for this?
+    // XXX: Pref for this? Hrmm.. It's broken anyways
     torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds", 
             "livemark_refresh", 31536000, mode, changed);
 
@@ -1112,7 +1110,7 @@ function torbutton_close_on_toggle(mode) {
         return;
     }
 
-    // XXX: muck around with browser.tabs.warnOnClose
+    // TODO: muck around with browser.tabs.warnOnClose.. maybe..
     torbutton_log(3, "Closing tabs");
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
         .getService(Components.interfaces.nsIWindowMediator);
@@ -1867,6 +1865,19 @@ function torbutton_crash_recover()
 
     // Crash detection code (works w/ components/crash-observer.js)
     if(m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
+        // This may run on first install and wipe the user's cookies
+        // It may also run on upgrade
+        try {
+            if(m_tb_prefs.getBoolPref("extensions.torbutton.normal_exit")) {
+                m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
+                m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
+                torbutton_log(3, "False positive crash recovery averted");
+                return;
+            }
+        } catch(e) {
+            torbutton_log(4, "Exception on crash check: "+e);
+        }
+
         torbutton_log(4, "Crash detected, attempting recovery");
         var state = torbutton_check_status();
         if(state != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
@@ -1888,7 +1899,7 @@ function torbutton_crash_recover()
         m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", state);
         m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", state);
         m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", state);
-       
+      
         // Do the restore cookies first because we potentially save
         // cookies by toggling tor state in the next pref. If we
         // do this first, we can be sure we have the 'right' cookies
@@ -1927,22 +1938,18 @@ observe : function(subject, topic, data) {
         this._uninstall = false;
       }
     }
+
   } else if (topic == "quit-application-granted") {
     if (this._uninstall) {
         torbutton_disable_tor();
-
-        /*
-        if(m_tb_prefs.prefHasUserValue("browser.send_pings"))
-            m_tb_prefs.clearUserPref("browser.send_pings");
-
-        if(m_tb_prefs.prefHasUserValue("browser.safebrowsing.remoteLookups"))
-            m_tb_prefs.clearUserPref("browser.safebrowsing.remoteLookups");
-
-        if(!m_tb_ff3) {
-            if(m_tb_prefs.prefHasUserValue("network.security.ports.banned"))
-                m_tb_prefs.clearUserPref("network.security.ports.banned");
-        }*/
     }
+
+    // Set pref in case this is just an upgrade (So we don't
+    // mess with cookies)
+    torbutton_log(2, "Torbutton normal exit");
+    m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", true);
+    m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
+    m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
 
     if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
@@ -2076,6 +2083,16 @@ function torbutton_do_main_window_startup()
 
 function torbutton_set_initial_state() {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
+        try {
+            if(m_tb_prefs.getBoolPref("extensions.torbutton.normal_exit")) {
+                m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
+            } else {
+                torbutton_log(4, "Conflict between noncrashed and normal_exit states?");
+            }
+        } catch(e) {
+            torbutton_log(4, "Exception on noncrashed check: "+e);
+        }
+
         var startup_state = m_tb_prefs.getIntPref("extensions.torbutton.startup_state");
         
         torbutton_log(3, "Setting initial state to: "+startup_state);
@@ -2511,7 +2528,7 @@ function torbutton_hookdoc(win, doc) {
             // enabled.
             str2 += "window.__tb_set_uagent=false;\r\n";
         }
-        if(torprefs.getBoolPref("spoof_english")) {
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.spoof_english")) {
             str2 += "window.__tb_locale=\""+m_tb_prefs.getCharPref('extensions.torbutton.spoof_locale')+"\";\r\n";
         } else {
             str2 += "window.__tb_locale=false;\r\n";
