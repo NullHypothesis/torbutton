@@ -2110,6 +2110,10 @@ function torbutton_set_initial_state() {
 function torbutton_do_fresh_install() 
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.fresh_install")) {
+        // Set normal_exit, because the session store will soon run and
+        // cause us to think a crash happened
+        m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", true);
+
         if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
             // Make our cookie prefs more closely match the user's 
             // so we don't change people's settings on install.
