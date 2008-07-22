@@ -84,7 +84,7 @@ function CookieJarSelector() {
   // see http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Processing_XML_with_E4X
   // and http://developer.mozilla.org/en/docs/E4X
   // for information about e4x
-  this._cookiesToXml = function(saveSession) {
+  this._cookiesToXml = function(getSession) {
     var cookieManager =
       Cc["@mozilla.org/cookiemanager;1"]
       .getService(Ci.nsICookieManager);
@@ -97,22 +97,29 @@ function CookieJarSelector() {
         xml.@name = cookie.name;
         xml.@host = cookie.host;
         xml.@path = cookie.path;
-        xml.@expiry = cookie.expiry;
         if (cookie.isSecure)
             xml.@isSecure = 1;
-        if (cookie.isSession)
+        if (cookie.isSession) {
             xml.@isSession = 1;
+            // session cookies get fucked up expiry. Give it 1yr if
+            // the user wants to save their session cookies
+            xml.@expiry = Date.now()/1000 + 365*24*60*60;
+        } else {
+            xml.@expiry = cookie.expiry; 
+        }
         if (cookie.isHttpOnly)
             xml.@isHttpOnly = 1;
-        if(!cookie.isSession || saveSession)
+
+        // Save either session or non-session cookies this time around:
+        if (cookie.isSession && getSession ||
+                !cookie.isSession && !getSession)
             cookiesAsXml.appendChild(xml);
     }
     return cookiesAsXml;
   }
 
-  this._loadCookiesFromXml = function(name) {
-        var cookiesAsXml = this["cookiesobj-" + name];
-        if (!cookiesAsXml)
+  this._loadCookiesFromXml = function(cookiesAsXml) {
+        if (typeof(cookiesAsXml) == "undefined" || !cookiesAsXml)
             return;
 
         var cookieManager =
@@ -198,18 +205,18 @@ function CookieJarSelector() {
         this.logger.log(5, "Can't remove old "+name+" file "+e);
     }
 
+    // save cookies to xml objects
+    this["session-cookiesobj-" + name] = this._cookiesToXml(true);
+    this["cookiesobj-" + name] = this._cookiesToXml(false);
+
     if (!this.prefs.getBoolPref("extensions.torbutton." + name + "_memory_jar")) {
-        // save cookies to xml object
-        this["cookiesobj-" + name] = this._cookiesToXml(false);
         // save cookies to file
         this._cookiesToFile(name);
     } else {
-        // save cookies to xml object
-        this["cookiesobj-" + name] = this._cookiesToXml(true);
         try {
             var file = getProfileFile("cookies-" + name + ".xml");
             if (file.exists()) {
-                file.remove(false)
+                file.remove(false);
             }
         } catch(e) {
             this.logger.log(5, "Can't remove "+name+" cookie file "+e);
@@ -274,8 +281,9 @@ function CookieJarSelector() {
         }
     }
 
-    // load cookies from xml object
-    this._loadCookiesFromXml(name);
+    // load cookies from xml objects
+    this._loadCookiesFromXml(this["cookiesobj-"+name]);
+    this._loadCookiesFromXml(this["session-cookiesobj-"+name]);
     
     // XXX: send a profile-do-change event?
 
