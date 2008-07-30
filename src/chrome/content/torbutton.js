@@ -2087,7 +2087,13 @@ function torbutton_set_initial_state() {
             if(m_tb_prefs.getBoolPref("extensions.torbutton.normal_exit")) {
                 m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
             } else {
-                torbutton_log(4, "Conflict between noncrashed and normal_exit states?");
+                // This happens if user decline to restore sessions after crashes
+                torbutton_log(4, "Conflict between noncrashed and normal_exit states.. Assuming crash but no session restore..");
+                m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
+
+                // This will cause torbutton_crash_recover to get called:
+                m_tb_prefs.setBoolPref("extensions.torbutton.crashed", true);
+                return;
             }
         } catch(e) {
             torbutton_log(4, "Exception on noncrashed check: "+e);
