@@ -271,7 +271,7 @@ function torbutton_set_status() {
         } catch(e) {
             // This should never happen.. 
             // FIXME: Do we need to translate it? I'm guessing not.
-            window.alert("Please file bug report! Error applying Tor settings: "+e);
+            window.alert("Torbutton: Please file bug report! Error applying Tor settings: "+e);
             torbutton_log(5,'Error applying tor settings: '+e);
             // Setting these prefs should avoid ininite recursion
             // because torbutton_update_status should return immediately
@@ -288,7 +288,7 @@ function torbutton_set_status() {
         } catch(e) {
             // This should never happen.. 
             // FIXME: Do we need to translate it? I'm guessing not.
-            window.alert("Please file bug report! Error applying Non-Tor settings: "+e);
+            window.alert("Torbutton: Please file bug report! Error applying Non-Tor settings: "+e);
             torbutton_log(5,'Error applying nontor settings: '+e);
             // Setting these prefs should avoid ininite recursion
             // because torbutton_update_status should return immediately
@@ -1886,9 +1886,10 @@ function torbutton_crash_recover()
             var te = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
             var pa = m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
             var sa = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
-            // XXX: It is likely this will happen.. prefs may get out of 
-            // sync if not written to disk properly.. Needs testing
-            window.alert("Crash state conflict! Please file bug report with these four values: "
+            // XXX: This did happen once in the wild. We should
+            // probably write some code to carefully recover user's
+            // prefs that were touched by Tor.
+            window.alert("Torbutton crash state conflict! Please file bug report with these four values: "
                     +state+","+te+","+pa+","+sa);
             torbutton_log(5, "Crash state conflict: "+state+","
                     +te+","+pa+","+sa);
@@ -2566,11 +2567,11 @@ function torbutton_hookdoc(win, doc) {
         } else if(result === 13) {
             torbutton_log(3, "Double-hook at: " + win.location);
         } else {
-            window.alert("Sandbox evaluation failed. Date hooks not applied!");
+            window.alert("Torbutton Sandbox evaluation failed. Date hooks not applied!");
             torbutton_log(5, "Hook evaluation failure at " + win.location);
         }
     } catch (e) {
-        window.alert("Exception in sandbox evaluation. Date hooks not applied:\n"+e);
+        window.alert("Torbutton Exception in sandbox evaluation. Date hooks not applied:\n"+e);
         torbutton_log(5, "Hook exception at: "+win.location+", "+e);
     }
 
