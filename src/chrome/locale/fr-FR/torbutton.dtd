@@ -85,5 +85,5 @@
 <!ENTITY torbutton.prefs.test_settings "Tester les paramètres">
 <!ENTITY torbutton.prefs.test_auto "Tester mes paramètres Tor lors de la première activation/désactivation suivant chaque démarrage de Firefox">
 <!ENTITY torbutton.prefs.disable_livemarks "Désactiver les marques-pages dynamiques durant l'utilisation de Tor">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
+<!ENTITY torbutton.prefs.tor_memory_jar "Ne pas écrire les cookies de Tor sur le disque">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Ne pas écrire les cookies Non-Tor sur le disque">
