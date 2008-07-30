@@ -1,5 +1,5 @@
 1.2.0
-  29 Jul 2008
+  30 Jul 2008
   * bugfix: bug 777: Fix issue with locale spoofing breaking translations.
   * bugfix: bug 778: Preserve locale in spoofed version if user does not want
     locale spoofing.
