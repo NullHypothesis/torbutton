@@ -133,19 +133,29 @@ general suspicion.
    <sect3 id="attacks">
     <title>Adversary Capabilities - Attacks</title>
     <para>
+
 The adversary can perform the following attacks from a number of different 
-positions to accomplish various aspects of their goals.
+positions to accomplish various aspects of their goals. It should be noted
+that many of these attacks (especially those involving IP address leakage) are
+often performed by accident by websites that simply have Javascript, dynamic 
+CSS elements, and plugins. Others are performed by adservers seeking to
+correlate users' activity across different IP addresses, and still others are
+performed by malicious agents on the Tor network and at national firewalls.
+
     </para>
     <orderedlist>
      <listitem><command>Inserting Javascript</command>
      <para>
-Javascript allows the adversary the opportunity to accomplish a number of
-their goals. If not properly disabled, Javascript event handlers and timers
+If not properly disabled, Javascript event handlers and timers
 can cause the browser to perform network activity after Tor has been disabled,
-thus allowing the adversary to correlate Tor and Non-Tor activity. Javascript
+thus allowing the adversary to correlate Tor and Non-Tor activity and reveal
+a user's non-Tor IP address. Javascript
 also allows the adversary to execute <ulink
 url="http://gemal.dk/browserspy/css.html">history disclosure attacks</ulink>:
-to query the history via the different attributes of 'visited' links. Finally,
+to query the history via the different attributes of 'visited' links to search
+for particular google queries, sites, or even to <ulink
+url="http://www.mikeonads.com/2008/07/13/using-your-browser-url-history-estimate-gender/">profile
+users based on gender and other classifications</ulink>. Finally,
 Javascript can be used to query the user's timezone via the
 <function>Date()</function> object, and to reduce the anonymity set by querying
 the <function>navigator</function> object for operating system, CPU, locale, 
@@ -160,7 +170,11 @@ Plugins are abysmal at obeying the proxy settings of the browser. Every plugin
 capable of performing network activity that the author has
 investigated is also capable of performing network activity independent of
 browser proxy settings - and often independent of its own proxy settings.
-In addition, plugins can be used to store unique identifiers that are more
+Sites that have plugin content don't even have to be malicious to obtain a
+user's
+Non-Tor IP (it usually leaks by itself), though <ulink
+url="http://www.metasploit.com/research/projects/decloak/">plenty of active
+exploits</ulink> are possible as well. In addition, plugins can be used to store unique identifiers that are more
 difficult to clear than standard cookies. 
 <ulink url="http://epic.org/privacy/cookies/flash.html">Flash-based
 cookies</ulink> fall into this category, but there are likely numerous other
@@ -171,7 +185,8 @@ examples.
      <listitem><command>Inserting CSS</command>
      <para>
 
-CSS can also be used to correlate Tor and Non-Tor activity, via the usage of
+CSS can also be used to correlate Tor and Non-Tor activity and reveal a user's
+Non-Tor IP address, via the usage of
 <ulink url="http://www.tjkdesign.com/articles/css%20pop%20ups/">CSS
 popups</ulink> - essentially CSS-based event handlers that fetch content via
 CSS's onmouseover attribute. If these popups are allowed to perform network
@@ -2228,7 +2243,8 @@ As <link linkend="plugins">mentioned above</link>, Java and plugins <ulink
 url="http://java.sun.com/j2se/1.5.0/docs/api/java/net/class-use/NetworkInterface.html">can query</ulink> the <ulink
 url="http://www.rgagnon.com/javadetails/java-0095.html">local IP
 address</ulink> and report it back to the
-remote site. They can also <ulink url="http://metasploit.com/research/misc/decloak/index.htm">bypass proxy settings</ulink> and directly connect to a
+remote site. They can also <ulink
+url="http://www.metasploit.com/research/projects/decloak/">bypass proxy settings</ulink> and directly connect to a
 remote site without Tor. Every browser plugin we have tested with Firefox has
 some form of network capability, and every one ignores proxy settings or worse - only
 partially obeys them. This includes but is not limited to:
