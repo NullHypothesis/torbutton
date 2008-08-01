@@ -1878,7 +1878,9 @@ TLS sites that can be used to link activity. This is particularly troublesome
 now that we have certificate verification in place in Firefox 3: The OCSP
 server can use this Session ID to build a history of TLS sites someone visits,
 and also correlate their activity as users move from network to network (such
-as home to work to coffee shop, etc), inside and outside of Tor.
+as home to work to coffee shop, etc), inside and outside of Tor.  This
+interferes with Torbutton's ability to fulfill its <link linkend="state">State
+Separation</link> requirement.
 
      </para>
      </listitem>
