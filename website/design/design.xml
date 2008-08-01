@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>July 4 2008</pubdate>
+   <pubdate>July 31 2008</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.2.0rc5.
+Torbutton Firefox extension. It is current as of Torbutton 1.2.0.
 
   </para>
   <sect2 id="adversary">
@@ -31,7 +31,7 @@ types that can be used to guide us towards a set of requirements for the
 Torbutton extension. Let's start with the goals.
 
    </para>
-   <sect3>
+   <sect3 id="adversarygoals">
     <title>Adversary Goals</title>
     <orderedlist>
 <!-- These aren't really commands.. But it's the closest I could find in an
@@ -88,7 +88,7 @@ data are the primary goals here.
     </orderedlist>
    </sect3>
 
-   <sect3>
+   <sect3 id="adversarypositioning">
     <title>Adversary Capabilities - Positioning</title>
     <para>
 The adversary can position themselves at a number of different locations in
@@ -130,7 +130,7 @@ general suspicion.
     </orderedlist>
    </sect3>
 
-   <sect3>
+   <sect3 id="attacks">
     <title>Adversary Capabilities - Attacks</title>
     <para>
 The adversary can perform the following attacks from a number of different 
@@ -148,8 +148,8 @@ url="http://gemal.dk/browserspy/css.html">history disclosure attacks</ulink>:
 to query the history via the different attributes of 'visited' links. Finally,
 Javascript can be used to query the user's timezone via the
 <function>Date()</function> object, and to reduce the anonymity set by querying
-the <function>navigator</function> object for operating system, CPU, and user
-agent information.
+the <function>navigator</function> object for operating system, CPU, locale, 
+and user agent information.
      </para>
      </listitem>
 
@@ -1061,7 +1061,7 @@ linkend="setpreservation">Anonymity Set Preservation</link> requirements.
 </para>
 </sect2>
 <sect2>
-<title>Disable Updates During Tor (recommended)</title>
+<title>Disable Updates During Tor</title>
 
   <para>Option: <command>extensions.torbutton.no_updates</command></para>
 
@@ -1229,22 +1229,20 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/ignore-his
 history blocker component mentioned above. By hooking the browser's view of
 the history itself via the <ulink
 url="http://www.xulplanet.com/references/xpcomref/comps/c_browserglobalhistory2.html">mozilla.org/browser/global-history;2</ulink>
-component, this mechanism defeats all document-based <ulink
+and <ulink
+url="http://www.xulplanet.com/references/xpcomref/comps/c_browsernavhistoryservice1.html">@mozilla.org/browser/nav-history-service;1</ulink>
+components, this mechanism defeats all document-based <ulink
 url="http://gemal.dk/browserspy/css.html">history disclosure
 attacks</ulink>, including <ulink
 url="http://ha.ckers.org/weird/CSS-history.cgi">CSS-only attacks</ulink>.
-</para>
-<para>
 
-On Firefox 3, the history write settings also govern if Torbutton sets
-<command>browser.history_expire_days</command> to 0 on the appropriate Tor
-state, which <ulink
-url="http://developer.mozilla.org/en/docs/index.php?title=nsINavHistoryService#Attributes">should
-disable</ulink> all <ulink
-url="http://developer.mozilla.org/en/docs/Places">Places</ulink> database
-writes.
+The component also hooks functions involved in writing history to disk via
+both the <ulink
+url="http://developer.mozilla.org/en/docs/Places_migration_guide#History">Places
+Database</ulink> and the older Firefox 2 mechanisms.
 
 </para>
+
 <para>
 This setting helps to satisfy the <link
 linkend="state">State Separation</link> and <link
@@ -1541,14 +1539,20 @@ crashes.
   <para>Options:
   <simplelist>
    <member><command>extensions.torbutton.restore_tor</command></member>
-  <member><command>extensions.torbutton.crashed</command></member>
+   <member><command>extensions.torbutton.crashed</command></member>
+   <member><command>extensions.torbutton.normal_exit</command></member>
   </simplelist>
   </para>
 
   <para>This option works with the Torbutton <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
   to set the Tor state after a crash is detected (via the 
-  <command>extensions.torbutton.crashed</command> pref)</para>
+  <command>extensions.torbutton.crashed</command> pref). To confirm for
+false positives (such as session restore failures, upgrade, normal
+session restore, etc), Torbutton also sets the pref
+extensions.torbutton.normal_exit in torbutton_uninstall_observer() during 
+Firefox exit and checks this value as well during startup.  
+</para>
 <para>
 
 Since the Tor state after a Firefox crash is unknown/indeterminate, this
@@ -1566,13 +1570,20 @@ settings and saved sessions are reloaded from a fixed Tor state.
   <simplelist>
    <member><command>extensions.torbutton.startup_state</command></member>
   <member><command>extensions.torbutton.noncrashed</command></member>
+   <member><command>extensions.torbutton.normal_exit</command></member>
   </simplelist>
   </para>
 
   <para>This option also works with the Torbutton <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
   to set the Tor state after a normal startup is detected (via the 
-  <command>extensions.torbutton.noncrashed</command> pref)</para>
+  <command>extensions.torbutton.noncrashed</command> pref). To confirm for
+false positives
+(such as session restore failures, etc), Torbutton also sets the pref
+extensions.torbutton.normal_exit in torbutton_uninstall_observer() during
+Firefox exit and checks this value as well during startup.
+  
+</para>
 
 </sect2>
 
@@ -1668,12 +1679,14 @@ linkend="setpreservation">Anonymity Set Preservation</link> requirement.
 </para>
 
 <para> This option causes Torbutton to set
-<command>general.useragent.locale</command>,
-<command>intl.accept_charsets</command> and
+<command>general.useragent.locale</command>
 <command>intl.accept_languages</command> to the value specified in
 <command>extensions.torbutton.spoof_locale</command>,
 <command>extensions.torbutton.spoof_charset</command> and
-<command>extensions.torbutton.spoof_language</command> during Tor usage.  </para>
+<command>extensions.torbutton.spoof_language</command> during Tor usage, as
+well as hooking <command>navigator.language</command> via its <link
+linkend="jshooks">javascript hooks</link>.
+ </para>
 <para>
 This setting helps to satisfy the <link
 linkend="setpreservation">Anonymity Set Preservation</link> and <link
@@ -1777,7 +1790,11 @@ javascript sandboxing prevents most of the javascript hooks from being
 installed, including the Date hooks. On Windows and Linux, you can set the TZ
 environment variable to "UTC" as a workaround. Firefox will obey this
 environment variable for your Timezone on those platforms, but on Windows this
-does not take effect until browser restart. 
+does not take effect until browser restart. The lack of an easy way to reliably
+spoof the timezone interferes with Torbutton's ability to fulfill its
+<link linkend="location">Location Neutrality</link> requirement.
+
+
    </para>
    </listitem>
 
@@ -1791,7 +1808,9 @@ by the pref <command>browser.bookmarks.livemark_refresh_seconds</command>.
 However, changing this preference does not cancel any pending timers, which
 means that at least one livemarks pref fetch will happen over Tor, and once
 this pref is set to disable livemarks for Tor, changing it back will never
-cause the service to start back up again.
+cause the service to start back up again. The
+leakage of Livemarks interferes with Torbutton's ability to fulfill
+the <link linkend="isolation">Network Isolation</link> requirement.
 
       </para>
      </listitem>
@@ -1834,8 +1853,6 @@ user's original IP address.
 
      </para>
      </listitem>
-
-
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=405652">Bug 405652 - In the
 TLS ClientHello message the gmt_unix_time is incorrect</ulink>
@@ -1845,6 +1862,40 @@ It turns out that Firefox's SSL implementation sends the machine uptime as the
 current time. This essentially is a unique identifier that can be used for
 the duration of your machine uptime. The issue has been fixed in Firefox 3.0,
 but it has as of yet not been backported to 2.0.
+This interferes with Torbutton's ability to fulfill
+its <link linkend="state">State Separation</link> requirement on Firefox 2.
+
+     </para>
+     </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=448747">Bug 448747 -
+Provide Mechanism to clear TLS Session IDs</ulink>
+     <para>
+
+In comments on the above bug, it was mentioned that TLS Session IDs can
+persist for an indefinite duration, providing an identifier that is sent to
+TLS sites that can be used to link activity. This is particularly troublesome
+now that we have certificate verification in place in Firefox 3: The OCSP
+server can use this Session ID to build a history of TLS sites someone visits,
+and also correlate their activity as users move from network to network (such
+as home to work to coffee shop, etc), inside and outside of Tor.
+
+     </para>
+     </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=448743">Bug 448743 -
+Decouple general.useragent.locale from spoofing of navigator.language</ulink>
+     <para>
+
+Currently, Torbutton spoofs the <command>navigator.language</command>
+attribute via <link linkend="jshooks">Javascript hooks</link>. Unfortunately,
+these do not work on Firefox 3. It would be ideal to have
+a pref to set this value (something like a
+<command>general.useragent.override.locale</command>),
+to avoid fragmenting the anonymity set of users of foreign locales. This issue
+impedes Torbutton from fully meeting its <link
+linkend="setpreservation">Anonymity Set Preservation</link>
+requirement on Firefox 3.
 
      </para>
      </listitem>
@@ -1856,7 +1907,10 @@ Javascript can query the .value field of file input dialogs to retrieve
 username and sometimes hostname/workgroup information. This is obviously very
 dangerous for people who are attempting to submit files anonymously via
 webforms (ie whistleblowers and anonymous publishers). It is also fixed in
-Firefox 3.0, but has not yet been backported to 2.0.
+Firefox 3.0, but has not yet been backported to 2.0. This interferes with
+Torbutton's ability to fulfill its <link linkend="state">State
+Separation</link> and <link linkend="setpreservation">Anonymity Set
+Preservation</link> requirements on Firefox 2.0.
 
      </para>
      </listitem>
@@ -1869,8 +1923,11 @@ exit nodes a lot of information. They can use it to probe for vulnerable
 versions of extensions, and can also use it to build an <link
 linkend="fingerprinting">identifier for tracking purposes</link>.  This bug
 makes it impossible for extensions such as Adblock and Torbutton to prevent
-chrome inspection and enumeration.  There is no workaround for this bug as of
-yet.
+chrome inspection and enumeration. It is also fixed in Firefox 3.0, but has not yet been backported to 2.0. This
+impedes upon Torbutton's ability to fulfill its <link
+linkend="undiscoverability">Tor Undiscoverability</link> and
+<link linkend="setpreservation">Anonymity Set Preservation</link> requirements
+on Firefox 2.0.
 
       </para>
      </listitem>
@@ -1885,16 +1942,27 @@ The following bugs impact Torbutton and similar extensions' functionality.
 
     <orderedlist>
    <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=439384">Bug 439384 -
-"profile-do-change" event does not cause cookie table reload</ulink>
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=445696">Bug 445696 -
+Extensions cannot determine if firefox is fullScreen</ulink>
    <para>
 
-In Firefox 3, the change to the new sqlite database for cookie storage has a
-bug that prevents Torbutton's cookie jaring from working properly. The
-"profile-do-change" observer event no longer properly causes either a sync or
-reload of the cookie database from disk after it is copied into place.
-Torbutton currently works around this by issuing the SQLLite queries manually
-to store and rebuild the cookie database.
+The windowState property of <ulink
+url="http://www.xulplanet.com/references/objref/ChromeWindow.html">ChromeWindows</ulink> does not accurately reflect the true
+state of the window in some cases on Linux. This causes Torbutton to attempt
+to resize maximized and minimized windows when it should not.
+
+   </para>
+   </listitem>
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=290456">Bug 290456 -
+Block/clear Flash MX "cookies" as well</ulink>
+   <para>
+
+Today, it is possible to allow plugins if you have a transparent proxy such as
+<ulink url="http://anonymityanywhere.com/incognito/">Incognito</ulink> to prevent proxy bypass. However, flash cookies can still be used to
+link your Tor and Non-Tor activity, and this reveal your IP to an adversary
+that does so. This can be solved by manually removing your flash cookies, but
+it would be nice if there was a standard way to do this from a Firefox API. 
 
    </para>
    </listitem>
@@ -1924,6 +1992,53 @@ some of them involve disabling functionality during Tor usage.
 
    </para>
    </listitem>
+
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=448741">Bug 448741 -
+nsISessionStore uses private methods and is not extensible</ulink>
+   <para>
+
+Similar to the above bug, in the specific case of the sessionstore component,
+the API is not amenable to Contract ID hooking, and this requires that
+Torbutton include modified copies of this component for Firefox 2 and 3, which
+has <ulink
+url="https://bugs.torproject.org/flyspray/index.php?do=details&amp;id=722">raised
+objections</ulink> from some developers.
+
+   </para>
+   </listitem>
+
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=439384">Bug 439384 -
+"profile-do-change" event does not cause cookie table reload</ulink>
+   <para>
+
+In Firefox 3, the change to the new SQLlite database for cookie storage has a
+bug that prevents Torbutton's cookie jaring from working properly. The
+"profile-do-change" observer event no longer properly causes either a sync or
+reload of the cookie database from disk after it is copied into place.
+Torbutton currently works around this by issuing the SQLLite queries manually
+to store and rebuild the cookie database.
+
+   </para>
+   </listitem>
+
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=248970">Bug 248970 (PrivateBrowsing) - Private Browsing mode (global toggle for
+saving/caching everything)</ulink>
+   <para>
+
+This bug catalogs the discussion of a 'Private Mode' in Firefox that would
+perform many, but not all, of the activities of Torbutton. It would be useful
+to leverage the resulting setting to simplify Torbutton. This bug is listed so
+we can track this progress and ensure that it doesn't end up defining
+behaviors contrary to and incompatible with Torbutton's requirements (though a
+subset of the <link linkend="requirements">requirements</link> is of course fine).
+
+   </para>
+   </listitem>
+
+
 
   </orderedlist>
   </sect2>
@@ -2024,21 +2139,6 @@ Williams.
 
      </para>
      </listitem>
-
-   <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=418983">Bug 41893 - Scoping
-issues with window.__defineGetter__()</ulink>
-   <para>
-
-For some reason, defining getters off of window seems to mess with the
-implicit window scoping in some documents. There is a workaround for this bug,
-so it is barely relevant. It would be far more useful to eliminate the need
-for Javascript hooking in the first place by addressing the above bugs. This
-bug is just listed for completeness.
-
-   </para>
-   </listitem>
-
 
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=419598">Bug 419598 - 'var
