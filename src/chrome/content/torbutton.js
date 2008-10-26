@@ -2360,7 +2360,12 @@ function torbutton_set_flag(obj, flag) {
 }
 
 function torbutton_check_flag(obj, flag) {
-    return (typeof(obj[flag]) != 'undefined');
+    try {
+        return (typeof(obj[flag]) != 'undefined');
+    } catch(e) {
+        torbutton_log(5, "Exception on flag "+flag+" check: "+e); 
+        return true;
+    }
 }
 
 function torbutton_is_same_origin(source, target) { // unused.
