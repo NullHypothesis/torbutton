@@ -1083,8 +1083,13 @@ SessionStoreService.prototype = {
                             aTextarea.name;
     if (!id
       || !(aTextarea instanceof Ci.nsIDOMHTMLTextAreaElement 
-      || aTextarea instanceof Ci.nsIDOMHTMLInputElement)) {
+      || aTextarea instanceof Ci.nsIDOMHTMLInputElement &&
+         aTextarea.type != "password" && aTextarea.type != "file")) {
       return false; // nothing to save
+    }
+    if (/^(?:\d+\|)+/.test(id)) {
+      // text could be restored into a subframe, so skip it (see bug 463206)
+      return false;
     }
     
     if (!aPanel.__SS_text) {
@@ -1397,16 +1402,6 @@ SessionStoreService.prototype = {
    *        bool this isn't the restoration of the first window
    */
   restoreWindow: function sss_restoreWindow(aWindow, aState, aOverwriteTabs, aFollowUp) {
-    if (this._restoreCount) {
-      this._restoreCount--;
-      if (this._restoreCount == 0) {
-        // This was the last window restored at startup, notify observers.
-        var observerService = Cc["@mozilla.org/observer-service;1"].
-                              getService(Ci.nsIObserverService);
-        observerService.notifyObservers(null, NOTIFY_WINDOWS_RESTORED, "");
-      }
-    }
-
     if (!aFollowUp) {
       this.windowToFocus = aWindow;
     }
@@ -1417,11 +1412,13 @@ SessionStoreService.prototype = {
     try {
       var root = typeof aState == "string" ? this._safeEval(aState) : aState;
       if (!root.windows[0]) {
+        this._notifyIfAllWindowsRestored();
         return; // nothing to restore
       }
     }
     catch (ex) { // invalid state object - don't restore anything 
       debug(ex);
+      this._notifyIfAllWindowsRestored();
       return;
     }
     
@@ -1482,6 +1479,8 @@ SessionStoreService.prototype = {
     
     this.restoreHistoryPrecursor(aWindow, winData.tabs, (aOverwriteTabs ?
       (parseInt(winData.selected) || 1) : 0), 0, 0);
+
+    this._notifyIfAllWindowsRestored();
   },
 
   /**
@@ -1724,13 +1723,18 @@ SessionStoreService.prototype = {
       return;
     }
     
+    // XSS note: always call this before injecting content into a document!
+    function hasExpectedURL(aDocument, aURL)
+      !aURL || aURL.replace(/#.*/, "") == aDocument.location.href.replace(/#.*/, "");
+    
     var textArray = this.__SS_restore_text ? this.__SS_restore_text.split(" ") : [];
-    function restoreTextData(aContent, aPrefix) {
+    function restoreTextData(aContent, aPrefix, aURL) {
       textArray.forEach(function(aEntry) {
-        if (/^((?:\d+\|)*)(#?)([^\s=]+)=(.*)$/.test(aEntry) && (!RegExp.$1 || RegExp.$1 == aPrefix)) {
+        if (/^((?:\d+\|)*)(#?)([^\s=]+)=(.*)$/.test(aEntry) &&
+            RegExp.$1 == aPrefix && hasExpectedURL(aContent.document, aURL)) {
           var document = aContent.document;
           var node = RegExp.$2 ? document.getElementById(RegExp.$3) : document.getElementsByName(RegExp.$3)[0] || null;
-          if (node && "value" in node) {
+          if (node && "value" in node && node.type != "file") {
             node.value = decodeURI(RegExp.$4);
             
             var event = document.createEvent("UIEvents");
@@ -1741,28 +1745,37 @@ SessionStoreService.prototype = {
       });
     }
     
+    let window = this.ownerDocument.defaultView;
     function restoreTextDataAndScrolling(aContent, aData, aPrefix) {
-      restoreTextData(aContent, aPrefix);
+      restoreTextData(aContent, aPrefix, aData.url);
       if (aData.innerHTML) {
-        aContent.setTimeout(function(aHTML) { if (this.document.designMode == "on") { this.document.body.innerHTML = aHTML; } }, 0, aData.innerHTML);
+        window.setTimeout(function() {
+          if (aContent.document.designMode == "on" &&
+              hasExpectedURL(aContent.document, aData.url)) {
+            aContent.document.body.innerHTML = aData.innerHTML;
+          }
+        }, 0);
       }
       if (aData.scroll && /(\d+),(\d+)/.test(aData.scroll)) {
         aContent.scrollTo(RegExp.$1, RegExp.$2);
       }
       for (var i = 0; i < aContent.frames.length; i++) {
-        if (aData.children && aData.children[i]) {
-          restoreTextDataAndScrolling(aContent.frames[i], aData.children[i], i + "|" + aPrefix);
+        if (aData.children && aData.children[i] &&
+          hasExpectedURL(aContent.document, aData.url)) {
+          restoreTextDataAndScrolling(aContent.frames[i], aData.children[i], aPrefix + i + "|");
         }
       }
     }
     
-    var content = aEvent.originalTarget.defaultView;
-    if (this.currentURI.spec == "about:config") {
-      // unwrap the document for about:config because otherwise the properties
-      // of the XBL bindings - as the textbox - aren't accessible (see bug 350718)
-      content = content.wrappedJSObject;
+    if (hasExpectedURL(aEvent.originalTarget, this.__SS_restore_data.url)) {
+      var content = aEvent.originalTarget.defaultView;
+      if (this.currentURI.spec == "about:config") {
+        // unwrap the document for about:config because otherwise the properties
+        // of the XBL bindings - as the textbox - aren't accessible (see bug 350718)
+        content = content.wrappedJSObject;
+      }
+      restoreTextDataAndScrolling(content, this.__SS_restore_data, "");
     }
-    restoreTextDataAndScrolling(content, this.__SS_restore_data, "");
     
     // notify the tabbrowser that this document has been completely restored
     var event = this.ownerDocument.createEvent("Events");
@@ -1838,7 +1851,7 @@ SessionStoreService.prototype = {
     // since resizing/moving a window brings it to the foreground,
     // we might want to re-focus the last focused window
     if (this.windowToFocus) {
-      this.windowToFocus.focus();
+      this.windowToFocus.content.focus();
     }
   },
 
@@ -2150,6 +2163,19 @@ SessionStoreService.prototype = {
     
     return str;
   },
+
+  _notifyIfAllWindowsRestored: function sss_notifyIfAllWindowsRestored() {
+    if (this._restoreCount) {
+      this._restoreCount--;
+      if (this._restoreCount == 0) {
+        // This was the last window restored at startup, notify observers.
+        var observerService = Cc["@mozilla.org/observer-service;1"].
+                              getService(Ci.nsIObserverService);
+        observerService.notifyObservers(null, NOTIFY_WINDOWS_RESTORED, "");
+      }
+    }
+  },
+
 
 /* ........ Storage API .............. */
 

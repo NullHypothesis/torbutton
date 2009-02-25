@@ -1,5 +1,5 @@
---- nsSessionStore3.js	2008-05-29 13:21:21.000000000 -0700
-+++ nsSessionStore3.js	2008-06-22 03:35:48.000000000 -0700
+--- nsSessionStore3.js	2009-02-25 02:14:54.000000000 -0800
++++ nsSessionStore3.js	2009-02-25 02:24:04.000000000 -0800
 @@ -99,9 +99,21 @@
    "Subframes", "Plugins", "Javascript", "MetaRedirects", "Images"
  ];
@@ -60,7 +60,7 @@
        tabData.index = history.index + 1;
      }
      else if (history && history.count > 0) {
-@@ -1104,7 +1131,7 @@
+@@ -1109,7 +1136,7 @@
      for (var i = 0; i < browsers.length; i++) {
        try {
          var tabData = this._windows[aWindow.__SSi].tabs[i];
@@ -69,7 +69,7 @@
              browsers[i].parentNode.__SS_data && browsers[i].parentNode.__SS_data._tab)
            continue; // ignore incompletely initialized tabs
          this._updateTextAndScrollDataForTab(aWindow, browsers[i], tabData);
-@@ -2156,5 +2183,24 @@
+@@ -2182,5 +2209,24 @@
    }
  };
  
