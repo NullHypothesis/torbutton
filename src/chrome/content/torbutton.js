@@ -1871,7 +1871,11 @@ function torbutton_crash_recover()
             if(m_tb_prefs.getBoolPref("extensions.torbutton.normal_exit")) {
                 m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
                 m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
-                torbutton_log(3, "False positive crash recovery averted");
+                torbutton_log(3, "False positive crash recovery. Setting tor state");
+                if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
+                    torbutton_conditional_set(true);
+                else
+                    torbutton_conditional_set(false);
                 return;
             }
         } catch(e) {

@@ -124,6 +124,9 @@ function debug(aMsg) {
 /* :::::::: The Service ::::::::::::::: */
 
 function SessionStoreService() {
+  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+      .getService(Components.interfaces.nsISupports).wrappedJSObject;
+  this.logger.log(3, "Component Load: New SessionStoreService @mozilla.org/browser/sessionstore;1");
 }
 
 SessionStoreService.prototype = {
@@ -877,12 +880,15 @@ SessionStoreService.prototype = {
     for (var i = 0; i < tabs.length; i++) {
       if(typeof(tabs[i].linkedBrowser.__tb_tor_fetched) != "undefined") {
           if(bypass_tor && tabs[i].linkedBrowser.__tb_tor_fetched) {
+              this.logger.log(2, "Skipping saving tor tab: "+tabs[i].linkedBrowser.currentURI.spec);
               continue; 
           }
           if(bypass_nontor && !tabs[i].linkedBrowser.__tb_tor_fetched) {
+              this.logger.log(2, "Skipping saving non-tor tab: "+tabs[i].linkedBrowser.currentURI.spec);
               continue; 
           }
       }
+      this.logger.log(2, "Saving tab: "+tabs[i].linkedBrowser.currentURI.spec);
       var tabData = this._collectTabData(tabs[i]);
       if(tabData) tabsData.push(tabData);
     }
@@ -2223,8 +2229,7 @@ const NoModule = {
 function NSGetModule(aComMgr, aFileSpec) {
   var prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
-  if(is_FF3 && (prefs.getBoolPref("extensions.torbutton.notor_sessionstore") 
-        || prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"))) {
+  if(is_FF3) {
       return XPCOMUtils.generateModule([SessionStoreService]);
   } else {
       return NoModule;

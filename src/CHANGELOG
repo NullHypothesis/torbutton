@@ -1,3 +1,7 @@
+1.2.1
+  ?? Mar 2008
+  * bugfix: bug 834: Fix session saving and startup issues
+
 1.2.0
   30 Jul 2008
   * bugfix: bug 777: Fix issue with locale spoofing breaking translations.

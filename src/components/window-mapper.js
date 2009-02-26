@@ -26,6 +26,7 @@ function ContentWindowMapper() {
 
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;
+    this.logger.log(3, "Component Load 2: Content window mapper online: "+kMODULE_CONTRACTID);
     this.last_expired = Date.now();
     // This JSObject is exported directly to chrome
     this.wrappedJSObject = this;

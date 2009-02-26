@@ -33,13 +33,12 @@ var StartupObserver = {
 };
 
 function StoreWrapper() {
-  this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
-      .getService(Components.interfaces.nsIPrefBranch);
-
   this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
       .getService(Components.interfaces.nsISupports).wrappedJSObject;
-  //dump("New crash observer\n");
-  this.logger.log(3, "New StoreWrapper");
+  this.logger.log(3, "Component Load 4: New StoreWrapper "+kMODULE_CONTRACTID);
+
+  this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefBranch);
 
   this._store = function() {
     var store = kREAL_STORE.getService();

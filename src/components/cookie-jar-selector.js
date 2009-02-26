@@ -22,7 +22,9 @@ function CookieJarSelector() {
 
   this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
       .getService(Components.interfaces.nsISupports).wrappedJSObject;
-    
+
+  this.logger.log(3, "Component Load 5: New CookieJarSelector "+kMODULE_CONTRACTID);
+
   this.prefs = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
 
   var getProfileFile = function(filename) {

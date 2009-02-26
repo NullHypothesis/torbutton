@@ -1,5 +1,5 @@
---- nsSessionStore3.js	2009-02-25 02:14:54.000000000 -0800
-+++ nsSessionStore3.js	2009-02-25 02:24:04.000000000 -0800
+--- nsSessionStore3.js.orig	2009-02-25 02:23:59.000000000 -0800
++++ nsSessionStore3.js	2009-02-26 07:01:10.000000000 -0800
 @@ -99,9 +99,21 @@
    "Subframes", "Plugins", "Javascript", "MetaRedirects", "Images"
  ];
@@ -25,7 +25,17 @@
  
  function debug(aMsg) {
    aMsg = ("SessionStore: " + aMsg).replace(/\S{80}/g, "$&\n");
-@@ -857,9 +869,23 @@
+@@ -112,6 +124,9 @@
+ /* :::::::: The Service ::::::::::::::: */
+ 
+ function SessionStoreService() {
++  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
++      .getService(Components.interfaces.nsISupports).wrappedJSObject;
++  this.logger.log(3, "Component Load: New SessionStoreService @mozilla.org/browser/sessionstore;1");
+ }
+ 
+ SessionStoreService.prototype = {
+@@ -857,9 +872,26 @@
      var tabbrowser = aWindow.getBrowser();
      var tabs = tabbrowser.mTabs;
      var tabsData = this._windows[aWindow.__SSi].tabs = [];
@@ -40,19 +50,22 @@
 +    for (var i = 0; i < tabs.length; i++) {
 +      if(typeof(tabs[i].linkedBrowser.__tb_tor_fetched) != "undefined") {
 +          if(bypass_tor && tabs[i].linkedBrowser.__tb_tor_fetched) {
++              this.logger.log(2, "Skipping saving tor tab: "+tabs[i].linkedBrowser.currentURI.spec);
 +              continue; 
 +          }
 +          if(bypass_nontor && !tabs[i].linkedBrowser.__tb_tor_fetched) {
++              this.logger.log(2, "Skipping saving non-tor tab: "+tabs[i].linkedBrowser.currentURI.spec);
 +              continue; 
 +          }
 +      }
++      this.logger.log(2, "Saving tab: "+tabs[i].linkedBrowser.currentURI.spec);
 +      var tabData = this._collectTabData(tabs[i]);
 +      if(tabData) tabsData.push(tabData);
 +    }
      
      this._windows[aWindow.__SSi].selected = tabbrowser.mTabBox.selectedIndex + 1;
    },
-@@ -892,6 +918,7 @@
+@@ -892,6 +924,7 @@
      if (history && browser.parentNode.__SS_data &&
          browser.parentNode.__SS_data.entries[history.index] && !aFullData) {
        tabData = browser.parentNode.__SS_data;
@@ -60,7 +73,7 @@
        tabData.index = history.index + 1;
      }
      else if (history && history.count > 0) {
-@@ -1109,7 +1136,7 @@
+@@ -1109,7 +1142,7 @@
      for (var i = 0; i < browsers.length; i++) {
        try {
          var tabData = this._windows[aWindow.__SSi].tabs[i];
@@ -69,7 +82,7 @@
              browsers[i].parentNode.__SS_data && browsers[i].parentNode.__SS_data._tab)
            continue; // ignore incompletely initialized tabs
          this._updateTextAndScrollDataForTab(aWindow, browsers[i], tabData);
-@@ -2182,5 +2209,24 @@
+@@ -2182,5 +2215,23 @@
    }
  };
  
@@ -89,8 +102,7 @@
 +function NSGetModule(aComMgr, aFileSpec) {
 +  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
 +        .getService(Components.interfaces.nsIPrefBranch);
-+  if(is_FF3 && (prefs.getBoolPref("extensions.torbutton.notor_sessionstore") 
-+        || prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"))) {
++  if(is_FF3) {
 +      return XPCOMUtils.generateModule([SessionStoreService]);
 +  } else {
 +      return NoModule;

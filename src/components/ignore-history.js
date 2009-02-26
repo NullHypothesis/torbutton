@@ -42,6 +42,10 @@ var is_ff3 = (versionChecker.compare(appInfo.version, "3.0a1") >= 0);
 
 
 function HistoryWrapper() {
+  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+      .getService(Components.interfaces.nsISupports).wrappedJSObject;
+  this.logger.log(3, "Component Load 3: New HistoryWrapper "+kMODULE_CONTRACTID3);
+
   // assuming we're running under Firefox
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
       .getService(Components.interfaces.nsIXULAppInfo);

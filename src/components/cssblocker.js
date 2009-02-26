@@ -102,14 +102,15 @@ var hostFreeSchemes = { "resource":true, "data":true, "cid":true,
      "file":true, "view-source":true, "about":true};
 
 function ContentPolicy() {
+    this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+        .getService(Components.interfaces.nsISupports).wrappedJSObject;
+    this.logger.log(3, "Component Load 1: New ContentPolicy ("+CSSB_CONTRACTID+")");
+
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
     this.wm = Components.classes["@torproject.org/content-window-mapper;1"]
         .getService(Components.interfaces.nsISupports)
         .wrappedJSObject;
-    
-    this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
-        .getService(Components.interfaces.nsISupports).wrappedJSObject;
 
     // Register observer: 
     var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
