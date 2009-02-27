@@ -779,18 +779,22 @@ function torbutton_update_status(mode, force_update) {
             try {
                 var lang = new RegExp("LANG", "gm");
                 var appname = torprefs.getCharPref("appname_override");
+                var appvers = torprefs.getCharPref("appversion_override");
                 if(torprefs.getBoolPref("spoof_english")) {
                     appname = appname.replace(lang, 
                             torprefs.getCharPref("spoof_locale"));
+                    appvers = appvers.replace(lang, 
+                            torprefs.getCharPref("spoof_locale"));
                 } else {
                     appname = appname.replace(lang, 
+                            m_tb_prefs.getCharPref("general.useragent.locale"));
+                    appvers = appvers.replace(lang, 
                             m_tb_prefs.getCharPref("general.useragent.locale"));
                 }
 
                 m_tb_prefs.setCharPref("general.appname.override", appname);
 
-                m_tb_prefs.setCharPref("general.appversion.override",
-                        torprefs.getCharPref("appversion_override"));
+                m_tb_prefs.setCharPref("general.appversion.override", appvers);
 
                 m_tb_prefs.setCharPref("general.platform.override",
                         torprefs.getCharPref("platform_override"));
