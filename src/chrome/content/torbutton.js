@@ -2471,8 +2471,12 @@ function torbutton_update_tags(win) {
 
         browser.__tb_tor_fetched = !tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
-        if(browser.docShell.allowJavascript != js_enabled) {
-            torbutton_log(3, "Javascript changed to: "+js_enabled);
+        if(js_enabled && !browser.docShell.allowJavascript) {
+            // Only care about re-enabling javascript. 
+            // The js engine obeys the pref over the docshell attribute
+            // for disabling js, and this is the source of a conflict with
+            // NoScript
+            torbutton_log(3, "Javascript changed from "+browser.docShell.allowJavascript+" to: "+js_enabled);
             browser.docShell.allowJavascript = js_enabled;
             torbutton_check_round(browser);
             // JS was not fully enabled for some page elements. 
