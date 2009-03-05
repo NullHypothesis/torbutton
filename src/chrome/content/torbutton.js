@@ -724,6 +724,70 @@ function torbutton_setBoolPref(pref, save, val, mode, changed) {
     }
 }
 
+function torbutton_set_timezone(mode, startup) {
+    /*
+     * XXX: Windows doesn't call tzset() automatically.. Linux and MacOS
+     * both do though.. :(
+     */
+    // XXX: Test: 
+    //  1. odd timezones like IST and IST+13:30
+    //  2. negative offsets
+    //  3. Windows-style spaced names
+    var environ = Components.classes["@mozilla.org/process/environment;1"]
+                   .getService(Components.interfaces.nsIEnvironment);
+        
+    torbutton_log(3, "Setting timezone at "+startup+" for mode "+mode);
+
+    // For TZ info, see:
+    // http://www-01.ibm.com/support/docview.wss?rs=0&uid=swg21150296
+    // and 
+    // http://msdn.microsoft.com/en-us/library/90s5c885.aspx
+    if(startup) {
+        // Save Date() string to pref
+        var d = new Date();
+        var offset = d.getTimezoneOffset();
+        var offStr = "";
+        if(d.getTimezoneOffset() < 0) {
+            offset = -offset;
+            offStr = "-";
+        } else {
+            offStr = "+";
+        }
+        
+        if(offset/60 < 10) {
+            offStr += "0";
+        }
+        offStr += (offset/60)+":";
+        if((offset%60) < 10) {
+            offStr += "0";
+        }
+        offStr += (offset%60);
+
+        // Regex match for 3 letter code
+        var re = new RegExp('\\((\\S+)\\)', "gm");
+        match = re.exec(d.toString());
+        // Parse parens. If parseable, use. Otherwise set TZ=""
+        var set = ""
+        if(match) {
+            set = match[1]+offStr;
+        } else {
+            torbutton_log(3, "Skipping timezone storage");
+        }
+        m_tb_prefs.setCharPref("extensions.torbutton.tz_string", set);
+    }
+
+    if(mode) {
+        torbutton_log(2, "Setting timezone to UTC");
+        environ.set("TZ", "UTC");
+    } else {
+        // 1. If startup TZ string, reset.
+        torbutton_log(2, "Unsetting timezone.");
+        // FIXME: Tears.. This will not update during daylight switch for linux+mac users
+        // Windows users will be fine though, because tz_string should be empty for them
+        environ.set("TZ", m_tb_prefs.getCharPref("extensions.torbutton.tz_string"));
+    }
+}
+
 // NOTE: If you touch any additional prefs in here, be sure to update
 // the list in torbutton_util.js::torbutton_reset_browser_prefs()
 function torbutton_update_status(mode, force_update) {
@@ -750,6 +814,7 @@ function torbutton_update_status(mode, force_update) {
         torprefs.setBoolPref("tor_enabled", mode);
     }
 
+    /*
     if(m_tb_ff3 
             && !m_tb_prefs.getBoolPref("extensions.torbutton.warned_ff3")
             && mode && changed) {
@@ -762,7 +827,7 @@ function torbutton_update_status(mode, force_update) {
             return;
         }
         m_tb_prefs.setBoolPref("extensions.torbutton.warned_ff3", true);
-    }
+    }*/
     
     // Toggle JS state early, since content window JS runs in a different
     // thread
@@ -1047,20 +1112,7 @@ function torbutton_update_status(mode, force_update) {
     torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds", 
             "livemark_refresh", 31536000, mode, changed);
 
-    /*
-     * XXX: Windows doesn't call tzset() automatically.. Linux and MacOS
-     * both do though.. :(
-    var environ = Components.classes["@mozilla.org/process/environment;1"]
-                   .getService(Components.interfaces.nsIEnvironment);
-
-    if(mode) {
-        torbutton_log(2, "Setting timezone to UTC");
-        environ.set("TZ", "UTC");
-    } else {
-        torbutton_log(2, "Unsetting timezone.");
-        environ.set("TZ", "PST+7:00");
-    }
-    */
+    torbutton_set_timezone(mode, false);
 
     // This call also has to be here for 3rd party proxy changers.
     torbutton_close_on_toggle(mode);
@@ -2164,6 +2216,8 @@ function torbutton_do_startup()
         torbutton_do_fresh_install();
        
         torbutton_do_main_window_startup();
+
+        torbutton_set_timezone(torbutton_check_status(), true);
 
         // XXX: This is probably better done by reimplementing the 
         // component.

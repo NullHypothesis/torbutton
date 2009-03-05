@@ -131,6 +131,7 @@ pref("extensions.torbutton.startup_state", 2); // 0=non-tor, 1=tor, 2=last
 pref("extensions.torbutton.block_remoting",false);
 pref("extensions.torbutton.tor_memory_jar",false);
 pref("extensions.torbutton.nontor_memory_jar",false);
+pref("extensions.torbutton.tz_string","");
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");
