@@ -6,7 +6,7 @@
         <em:name>Torbutton</em:name>
         <em:creator>Mike Perry &amp; Scott Squires</em:creator>
         <em:id>{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}</em:id>
-        <em:version>1.2.0</em:version>
+        <em:version>1.2.0-dev</em:version>
         <em:homepageURL>https://torbutton.torproject.org/dev/</em:homepageURL>
         <em:optionsURL>chrome://torbutton/content/preferences.xul</em:optionsURL>
         <em:iconURL>chrome://torbutton/skin/tor.png</em:iconURL>
@@ -18,7 +18,7 @@
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                 <em:minVersion>2.0</em:minVersion>
-                <em:maxVersion>3.1a1pre</em:maxVersion>
+                <em:maxVersion>3.2a1pre</em:maxVersion>
             </Description>
         </em:targetApplication>
 
