@@ -261,10 +261,13 @@
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
              </radiogroup>
             </hbox>
-            <checkbox class="indent" id="torbutton_noTorSessionStore" label="&torbutton.prefs.notor_sessionstore;" 
+            <vbox>
+             <label value="&torbutton.prefs.session_restore;" control="torbutton_restoreTorGroup"/>
+             <checkbox class="indent" id="torbutton_torSessionStore" label="&torbutton.prefs.tor_tabs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
-            <checkbox class="indent" id="torbutton_noNonTorSessionStore" label="&torbutton.prefs.nonontor_sessionstore;" 
+             <checkbox class="indent" id="torbutton_nonTorSessionStore" label="&torbutton.prefs.nontor_tabs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+            </vbox>
             
            </vbox>
           </tabpanel>

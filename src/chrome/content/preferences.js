@@ -231,8 +231,8 @@ function torbutton_prefs_init(doc) {
             break;
     }
 
-    doc.getElementById('torbutton_noTorSessionStore').checked = o_torprefs.getBoolPref('notor_sessionstore');
-    doc.getElementById('torbutton_noNonTorSessionStore').checked = o_torprefs.getBoolPref('nonontor_sessionstore');
+    doc.getElementById('torbutton_torSessionStore').checked = !o_torprefs.getBoolPref('notor_sessionstore');
+    doc.getElementById('torbutton_nonTorSessionStore').checked = !o_torprefs.getBoolPref('nonontor_sessionstore');
 
     //doc.getElementById('torbutton_reloadCrashedJar').checked = o_torprefs.getBoolPref('reload_crashed_jar');
     
@@ -381,8 +381,8 @@ function torbutton_prefs_save(doc) {
         o_torprefs.setIntPref('startup_state', 2);
     }
 
-    o_torprefs.setBoolPref('notor_sessionstore', doc.getElementById('torbutton_noTorSessionStore').checked);
-    o_torprefs.setBoolPref('nonontor_sessionstore', doc.getElementById('torbutton_noNonTorSessionStore').checked);
+    o_torprefs.setBoolPref('notor_sessionstore', !doc.getElementById('torbutton_torSessionStore').checked);
+    o_torprefs.setBoolPref('nonontor_sessionstore', !doc.getElementById('torbutton_nonTorSessionStore').checked);
     //o_torprefs.setBoolPref('reload_crashed_jar', doc.getElementById('torbutton_reloadCrashedJar').checked);
     o_torprefs.setBoolPref('block_thread', doc.getElementById('torbutton_blockTorHRead').checked);
     o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);
