@@ -60,7 +60,6 @@
 <!ENTITY torbutton.prefs.forms "Formulaires">
 <!ENTITY torbutton.prefs.block_tforms "Bloquer la sauvegarde de mot de passe+formulaire pendant l'utilisation de Tor (recommandé)">
 <!ENTITY torbutton.prefs.block_ntforms "Bloquer la sauvegarde de mot de passe+formulaire en mode non-Tor (facultatif)">
-<!ENTITY torbutton.prefs.notor_sessionstore "Empêcher la sauvegarde des onglets chargés par Tor">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Lors d'un plantage ou de la récupération d'un session, récupérez avec:">
@@ -78,12 +77,14 @@
 <!ENTITY torbutton.prefs.startup_state "Au démarrage, mettre Tor dans l'état:">
 <!ENTITY torbutton.prefs.shutdown_state "Ne pas lancer Tor">
 <!ENTITY torbutton.prefs.startup "Démarrage">
-<!ENTITY torbutton.prefs.nonontor_sessionstore "Empêcher l'enregistrement des onglets non-Tor par la sauvegarde de session">
 <!ENTITY torbutton.prefs.block_tor_file_net "Bloquer l'accès Tor au réseau à partir d'urls file:// (recommandé)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Bloquer l'accès non-Tor au réseau à partir d'urls file://">
 <!ENTITY torbutton.prefs.restore_defaults "Valeurs par défaut">
 <!ENTITY torbutton.prefs.test_settings "Tester les paramètres">
 <!ENTITY torbutton.prefs.test_auto "Tester mes paramètres Tor lors de la première activation/désactivation suivant chaque démarrage de Firefox">
 <!ENTITY torbutton.prefs.disable_livemarks "Désactiver les marques-pages dynamiques durant l'utilisation de Tor">
-<!ENTITY torbutton.prefs.tor_memory_jar "Ne pas écrire les cookies de Tor sur le disque">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Ne pas écrire les cookies Non-Tor sur le disque">
+<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
+<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
+<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
+<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">

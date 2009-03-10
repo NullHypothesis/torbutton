@@ -60,7 +60,6 @@
 <!ENTITY torbutton.prefs.forms "Moduli">
 <!ENTITY torbutton.prefs.block_tforms "Blocca il salvataggio di password nei moduli usando Tor (consigliato)">
 <!ENTITY torbutton.prefs.block_ntforms "Blocca il salvataggio di password nei moduli quando non si usa Tor (facoltativo)">
-<!ENTITY torbutton.prefs.notor_sessionstore "Impedisci il salvataggio di schede aperte con Tor in una sessione (consigliato)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Ripristina una sessione dopo un crash con:">
@@ -78,7 +77,6 @@
 <!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
 <!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
 <!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.nonontor_sessionstore "Prevent session store from saving Non-Tor loaded tabs">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
@@ -87,3 +85,6 @@
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
 <!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
+<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
+<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
+<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">

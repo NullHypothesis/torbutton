@@ -27,58 +27,56 @@
 <!ENTITY torbutton.context_menu.about.key "T">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Kliknij tutaj, aby uruchomić Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
-<!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
-<!ENTITY torbutton.prefs.dynamic "Dynamic Content">
-<!ENTITY torbutton.prefs.cookies "Cookies">
-<!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
-<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
-<!ENTITY torbutton.prefs.shutdown "Shutdown">
-<!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
-<!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
-<!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
-<!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
-<!ENTITY torbutton.prefs.headers "Headers">
-<!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">
-<!ENTITY torbutton.prefs.disable_referer "Don't send referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.disable_domstorage "Disable DOM Storage during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.forms "Forms">
-<!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.notor_sessionstore "Prevent session store from saving Tor loaded tabs">
+<!ENTITY torbutton.prefs.sec_settings "Ustawienia bezpieczeństwa">
+<!ENTITY torbutton.prefs.block_thread "Blokuj odczyt historii gdy Tor jest włączony (krytyczne)">
+<!ENTITY torbutton.prefs.block_thwrite "Blokuj zapis do historii gdy Tor jest włączony (zalecane)">
+<!ENTITY torbutton.prefs.block_nthread "Blokuj odczyt historii gdy Tor jest wyłączony (opcjonalnie)">
+<!ENTITY torbutton.prefs.block_nthwrite "Blokuj zapis do historii gdy Tor jest wyłączony (opcjonalnie)">
+<!ENTITY torbutton.prefs.clear_history "Czyść historię przy wł/wył Tora (opcjonalnie)">
+<!ENTITY torbutton.prefs.clear_cache "Blokuj pamięć podręczną Tora i wyczyść ją przy wł/wył Tora">
+<!ENTITY torbutton.prefs.block_cache "Blokuj dostęp do pamięci podręcznej (dysk/pamięć) gdy Tor jest włączony">
+<!ENTITY torbutton.prefs.cookie_jars "Zapamiętuj ciasteczka z trybu zwykłego w zabezpieczonych magazynach">
+<!ENTITY torbutton.prefs.mmm_cookies "Będę sam zarządzał ciasteczkami (niebezpieczne)">
+<!ENTITY torbutton.prefs.clear_cookies "Czyść ciasteczka przy zmianie trybu Tor">
+<!ENTITY torbutton.prefs.disable_plugins "Wyłącz wtyczki podczas użycia Tor (krytyczne)">
+<!ENTITY torbutton.prefs.kill_bad_js "Nadzoruj niebezpieczne skrypty (krytyczne)">
+<!ENTITY torbutton.prefs.isolate_content "Izoluj treść dynamiczną (krytyczne)">
+<!ENTITY torbutton.prefs.no_updates "Zablokuj aktualizacje podczas używania Tora (zalecane)">
+<!ENTITY torbutton.prefs.set_uagent "Ustaw identyfikację przeglądarki podczas używania Tora (ważne)">
+<!ENTITY torbutton.prefs.dynamic "Zawartość dynamiczna">
+<!ENTITY torbutton.prefs.cookies "Ciasteczka">
+<!ENTITY torbutton.prefs.cache "Pamięć podręczna">
+<!ENTITY torbutton.prefs.history "Historia">
+<!ENTITY torbutton.prefs.no_search "Wyłącz sugestie przy wyszukiwaniu podczas trybu Tor (zalecane)">
+<!ENTITY torbutton.prefs.shutdown "Wyłączenie">
+<!ENTITY torbutton.prefs.tor_shutdown "Usuń ciasteczka Tora gdy następuje wyłączenie w trybie z włączonym Torem">
+<!ENTITY torbutton.prefs.all_shutdown "Usuń ciasteczka zawsze przy wyłączaniu przeglądarki">
+<!ENTITY torbutton.prefs.no_shutdown "Nie usuwaj ciasteczek przy wyłączaniu">
+<!ENTITY torbutton.prefs.disable_sessionstore "Blokuj zapisywanie sesji przeglądarki (zalecane)">
+<!ENTITY torbutton.prefs.headers "Nagłówki">
+<!ENTITY torbutton.prefs.spoof_english "Udawaj przeglądarkę z USA">
+<!ENTITY torbutton.prefs.disable_referer "Nie wysyłaj adresu polecającego podczas używania Tora (niektóre strony mogą nie działać)">
+<!ENTITY torbutton.prefs.disable_domstorage "Blokuj zapisywanie DOM podczas używania Tora (krytyczne)">
+<!ENTITY torbutton.prefs.forms "Formularze">
+<!ENTITY torbutton.prefs.block_tforms "Blokuj zapamiętywanie haseł z formularzy (zalecane)">
+<!ENTITY torbutton.prefs.block_ntforms "Blokuj zapamiętywanie haseł z formularzy gdy Tor nieaktywny (opcjonalnie)">
 <!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "Non-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On crash recovery or session restored startup, restore via:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Reload cookie jar/clear cookies on Firefox crash (recommended)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
-<!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.close_tor "Close all Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.close_nontor "Close all Non-Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
-<!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
+<!ENTITY torbutton.prefs.non_tor "bez Tora">
+<!ENTITY torbutton.prefs.restore_tor "Po nieoczekiwanym zamknięciu, odzyskaj zapisaną sesję poprzez:">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Usuń ciasteczka z magazynów przy nieoczekiwanym zamknięciu Firefoxa (zalecane)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "Zapisuj wszystkie ciasteczka w zabezpieczonych magazynach(niebezpieczne)">
+<!ENTITY torbutton.prefs.clear_http_auth "Czyść sesje autentykacji HTTP (zalecane)">
+<!ENTITY torbutton.prefs.block_js_history "Zabroń dostępu do historii przeglądania gdy tryb Tor był aktywny (krytyczne)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Skaluj okna do wielokrotności 50px podczas używania Tora (zalecane)">
+<!ENTITY torbutton.prefs.close_tor "Zamykaj wszystkie karty i okna podczas zmiany trybu Tora (opcjonalne)">
+<!ENTITY torbutton.prefs.close_nontor "Zamykaj wszystkie okna i karty nie przeglądane w trybie Tor  podczas zmiany trybu (opcjonalnie)">
+<!ENTITY torbutton.prefs.block_links "Blokuj klikanie na łącza i przeładowania strony gdy zmienił się status Tora (opcjonalnie)">
+<!ENTITY torbutton.prefs.jar_certs "Zapisuj cetryfikaty SSL w osobnych magazynach, w każdym trybie (zalecane)">
+<!ENTITY torbutton.prefs.jar_ca_certs "Zapisuj certyfikaty CA w osobnych magazynach, w każdym trybie (zalecane)">
 <!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
 <!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
 <!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
 <!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.nonontor_sessionstore "Prevent session store from saving Non-Tor loaded tabs">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
@@ -87,3 +85,6 @@
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
 <!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
+<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
+<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
+<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
