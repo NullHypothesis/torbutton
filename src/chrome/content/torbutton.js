@@ -1958,8 +1958,19 @@ function torbutton_conditional_set(state) {
             var b = browser.browsers[i];
 
             if (!state && no_plugins) {
-                b.docShell.allowPlugins = false;
-            } 
+                if(b && b.docShell){
+                    b.docShell.allowPlugins = false;
+                } else {
+                    try {
+                        if (b && b.currentURI) 
+                            torbutton_log(5, "Initial docShell is null for: "+b.currentURI.spec);
+                        else 
+                            torbutton_log(5, "Initial docShell is null for unknown URL");
+                    } catch(e) {
+                        torbutton_log(5, "Initial docShell is null for unparsable URL: "+e);
+                    }
+                } 
+            }
             b.__tb_tor_fetched = state;
         }
     }
