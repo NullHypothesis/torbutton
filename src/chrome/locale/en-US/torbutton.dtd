@@ -88,3 +88,5 @@
 <!ENTITY torbutton.prefs.session_restore   "Have the session store save and restore these tabs:">
 <!ENTITY torbutton.prefs.nontor_tabs   "Tabs loaded in Non-Tor">
 <!ENTITY torbutton.prefs.tor_tabs   "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.socks_vfour   "SOCKS v4">
+<!ENTITY torbutton.prefs.socks_vfive   "SOCKS v5">
