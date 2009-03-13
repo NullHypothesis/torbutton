@@ -138,9 +138,9 @@ pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; LANG)");
 pref("extensions.torbutton.platform_override","Win32");
 pref("extensions.torbutton.oscpu_override", "Windows NT 5.1");
-pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 5.1; LANG; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6");
+pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7");
 
-pref("extensions.torbutton.productsub_override","2009011913");
+pref("extensions.torbutton.productsub_override","2009021910");
 pref("extensions.torbutton.buildID_override","0");
 pref("extensions.torbutton.useragent_vendor", "");
 pref("extensions.torbutton.useragent_vendorSub","");
