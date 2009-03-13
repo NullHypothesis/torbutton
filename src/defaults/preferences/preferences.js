@@ -101,7 +101,7 @@ pref("extensions.torbutton.block_thread",true);
 pref("extensions.torbutton.block_thwrite",true);
 pref("extensions.torbutton.block_nthread",false);
 pref("extensions.torbutton.block_nthwrite",false);
-pref("extensions.torbutton.no_updates",true);
+pref("extensions.torbutton.no_updates",false);
 pref("extensions.torbutton.isolate_content",true);
 pref("extensions.torbutton.no_search",true);
 pref("extensions.torbutton.set_uagent",true);
