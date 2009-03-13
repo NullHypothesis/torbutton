@@ -1825,7 +1825,17 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
 
     for (var i = 0; i < browsers.length; ++i) {
         var b = browser.browsers[i];
-        if (b) {
+        if (b && !b.docShell) {
+            try {
+                if (b.currentURI) 
+                    torbutton_log(5, "DocShell is null for: "+b.currentURI.spec);
+                else 
+                    torbutton_log(5, "DocShell is null for unknown URL");
+            } catch(e) {
+                torbutton_log(5, "DocShell is null for unparsable URL: "+e);
+            }
+        }
+        if (b && b.docShell) {
             // Only allow plugins if the tab load was from an 
             // non-tor state and the current tor state is off.
             if(kill_plugins) 
