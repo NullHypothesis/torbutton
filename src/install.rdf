@@ -36,7 +36,8 @@
         <!-- TODO: seamonkey -->
 
         <!-- firefox 1.5 uses the chrome.manifest file  -->
-        <!-- firefox 1.0 uses the RDF information below -->
+        <!-- firefox 1.0 uses the RDF information below.
+             FF1.0 can DIAF.
         <em:file>
             <Description about="urn:mozilla:extension:file:torbutton.jar">
                 <em:package>content/</em:package>
@@ -59,6 +60,7 @@
                 <em:locale>locale/zh-TW/</em:locale>
             </Description>
         </em:file>
+             -->
     </Description>
 
 </RDF>
