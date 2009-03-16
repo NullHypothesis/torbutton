@@ -6,7 +6,7 @@ LOCALEDIR="../src/chrome/locale"
 poDir="pootle" 
 directories="`ls -1 ./$poDir|tr _ -`"
 mozDir="moz"
-input="en-US"
+input="en"
 template="torbutton.dtd"
 
 for dir in $directories
