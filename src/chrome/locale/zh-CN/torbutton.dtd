@@ -41,7 +41,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "使用 Tor 时禁用插件(重要)">
 <!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "使用 Tor 时禁用更新(重要)">
+<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "使用 Tor 时设置 user-agent (重要)">
 <!ENTITY torbutton.prefs.dynamic "动态内容">
 <!ENTITY torbutton.prefs.cookies "Cookies">
@@ -62,7 +62,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "未使用 Tor 时禁用密码保存(可选)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "禁用 Tor 时">
-<!ENTITY torbutton.prefs.restore_tor "崩溃后恢复保存的进程:">
+<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "在 Firefox 崩溃时重载 cookie jar/清除 cookie(推荐)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "在受保护的jar文件中保存使用 Tor 和未使用 Tor 时的 cookies(危险)">
 <!ENTITY torbutton.prefs.clear_http_auth "清除 HTTP 认证进程(推荐)">
@@ -88,3 +88,5 @@
 <!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
 <!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
+<!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">

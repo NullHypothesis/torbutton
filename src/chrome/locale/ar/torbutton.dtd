@@ -41,7 +41,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "امنع الملحقات أثناء عمل تور (أساسي)">
 <!ENTITY torbutton.prefs.kill_bad_js "التقط جافاسركبت الخطر (أساسي)">
 <!ENTITY torbutton.prefs.isolate_content "اعزل المحتوى الديناميّ قصرا على حالة تور (أساسي)">
-<!ENTITY torbutton.prefs.no_updates "امنع التحديثات أثناء عمل تور (محبذ)">
+<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "اضبط عميل المستخدم لعمل تور (أساسي)">
 <!ENTITY torbutton.prefs.dynamic "المحتوى الديناميّ">
 <!ENTITY torbutton.prefs.cookies "الكعكات">
@@ -62,7 +62,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "امنع حفظ كلمات السر و مدخلات الاستمارات أثناء عدم عمل تور (اختياري)">
 <!ENTITY torbutton.prefs.tor "تور">
 <!ENTITY torbutton.prefs.non_tor "غير تور">
-<!ENTITY torbutton.prefs.restore_tor "عند الانهيار استرجع الجلسة المحفوظة بطريق:">
+<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "حمل جرة الكوكيز/أخل الكوكيز عند انهيار فيرفكس (محبذ)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "احفظ كلا من كوكيز تور و غير تور في جرات آمنة (خطر)">
 <!ENTITY torbutton.prefs.clear_http_auth "أخل جلسات HTTP auth (محبذ)">
@@ -88,3 +88,5 @@
 <!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
 <!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
+<!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">

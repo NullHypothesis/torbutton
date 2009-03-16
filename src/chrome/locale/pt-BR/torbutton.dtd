@@ -41,7 +41,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "Desabilitar plugins durante o uso do TOR (importante)">
 <!ENTITY torbutton.prefs.kill_bad_js "Deter os scripts perigosos de java (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolar os conteúdos dinâmicos no arquivo de estado de Tor (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Desabilitar updates durante o uso do TOR (recomendado)">
+<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Mascarar user agent durante utilização de TOR (importante)">
 <!ENTITY torbutton.prefs.dynamic "Conteúdo Dinâmico">
 <!ENTITY torbutton.prefs.cookies "Cookies">
@@ -62,7 +62,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "Bloquear senhas + informações de formulários quando não usar o TOR (opcional)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Não-Tor">
-<!ENTITY torbutton.prefs.restore_tor "Depois de uma falha, restaurar sessão:">
+<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recarregar cookie/limpar cookies em uma falha do Firefox (recomendado)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Armazene os cookies, sejam ou não de Tor, em recipientes protegidos (Perigoso)">
 <!ENTITY torbutton.prefs.clear_http_auth "Limpar as sessões HTTP autenticadas (recomendado)">
@@ -88,3 +88,5 @@
 <!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
 <!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
+<!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
