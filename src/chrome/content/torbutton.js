@@ -61,6 +61,7 @@ var torbutton_unique_pref_observer =
 {
     register: function()
     {
+        this.forced_ua = false;
         var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
                                      .getService(Components.interfaces.nsIPrefBranchInternal);
         this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
@@ -845,6 +846,60 @@ function torbutton_set_timezone(mode, startup) {
     }
 }
 
+function torbutton_set_uagent() {
+    try {
+        var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+        var lang = new RegExp("LANG", "gm");
+        var appname = torprefs.getCharPref("appname_override");
+        var appvers = torprefs.getCharPref("appversion_override");
+        if(torprefs.getBoolPref("spoof_english")) {
+            appname = appname.replace(lang, 
+                    torprefs.getCharPref("spoof_locale"));
+            appvers = appvers.replace(lang, 
+                    torprefs.getCharPref("spoof_locale"));
+        } else {
+            appname = appname.replace(lang, 
+                    m_tb_prefs.getCharPref("general.useragent.locale"));
+            appvers = appvers.replace(lang, 
+                    m_tb_prefs.getCharPref("general.useragent.locale"));
+        }
+        m_tb_prefs.setCharPref("general.appname.override", appname);
+
+        m_tb_prefs.setCharPref("general.appversion.override", appvers);
+
+        m_tb_prefs.setCharPref("general.platform.override",
+                torprefs.getCharPref("platform_override"));
+
+        var agent = torprefs.getCharPref("useragent_override");
+        if(torprefs.getBoolPref("spoof_english")) {
+            agent = agent.replace(lang,
+                    torprefs.getCharPref("spoof_locale"));
+        } else {
+            agent = agent.replace(lang,
+                    m_tb_prefs.getCharPref("general.useragent.locale"));
+        }
+        m_tb_prefs.setCharPref("general.useragent.override", agent);
+
+        m_tb_prefs.setCharPref("general.useragent.vendor",
+                torprefs.getCharPref("useragent_vendor"));
+
+        m_tb_prefs.setCharPref("general.useragent.vendorSub",
+                torprefs.getCharPref("useragent_vendorSub"));
+
+        m_tb_prefs.setCharPref("general.oscpu.override",
+                torprefs.getCharPref("oscpu_override"));
+
+        m_tb_prefs.setCharPref("general.buildID.override",
+                torprefs.getCharPref("buildID_override"));
+
+        m_tb_prefs.setCharPref("general.productSub.override",
+                torprefs.getCharPref("productsub_override"));
+    } catch(e) {
+        torbutton_log(5, "Prefset error");
+    }
+}
+
+
 // NOTE: If you touch any additional prefs in here, be sure to update
 // the list in torbutton_util.js::torbutton_reset_browser_prefs()
 function torbutton_update_status(mode, force_update) {
@@ -898,57 +953,7 @@ function torbutton_update_status(mode, force_update) {
     
     if(torprefs.getBoolPref("set_uagent")) {
         if(mode) {
-            try {
-                var lang = new RegExp("LANG", "gm");
-                var appname = torprefs.getCharPref("appname_override");
-                var appvers = torprefs.getCharPref("appversion_override");
-                if(torprefs.getBoolPref("spoof_english")) {
-                    appname = appname.replace(lang, 
-                            torprefs.getCharPref("spoof_locale"));
-                    appvers = appvers.replace(lang, 
-                            torprefs.getCharPref("spoof_locale"));
-                } else {
-                    appname = appname.replace(lang, 
-                            m_tb_prefs.getCharPref("general.useragent.locale"));
-                    appvers = appvers.replace(lang, 
-                            m_tb_prefs.getCharPref("general.useragent.locale"));
-                }
-
-                m_tb_prefs.setCharPref("general.appname.override", appname);
-
-                m_tb_prefs.setCharPref("general.appversion.override", appvers);
-
-                m_tb_prefs.setCharPref("general.platform.override",
-                        torprefs.getCharPref("platform_override"));
-
-                var agent = torprefs.getCharPref("useragent_override");
-                if(torprefs.getBoolPref("spoof_english")) {
-                    agent = agent.replace(lang,
-                            torprefs.getCharPref("spoof_locale"));
-                } else {
-                    agent = agent.replace(lang,
-                            m_tb_prefs.getCharPref("general.useragent.locale"));
-                }
-                m_tb_prefs.setCharPref("general.useragent.override", agent);
-
-                m_tb_prefs.setCharPref("general.useragent.vendor",
-                        torprefs.getCharPref("useragent_vendor"));
-
-                m_tb_prefs.setCharPref("general.useragent.vendorSub",
-                        torprefs.getCharPref("useragent_vendorSub"));
-
-                m_tb_prefs.setCharPref("general.oscpu.override",
-                        torprefs.getCharPref("oscpu_override"));
-
-                m_tb_prefs.setCharPref("general.buildID.override",
-                        torprefs.getCharPref("buildID_override"));
-
-                m_tb_prefs.setCharPref("general.productSub.override",
-                        torprefs.getCharPref("productsub_override"));
-
-            } catch(e) {
-                torbutton_log(5, "Prefset error");
-            }
+            torbutton_set_uagent();
         } else {
             try {
                 if(m_tb_prefs.prefHasUserValue("general.appname.override"))
@@ -2307,6 +2312,13 @@ function torbutton_do_startup()
         torbutton_do_fresh_install();
        
         torbutton_do_main_window_startup();
+
+        // This is due to Bug 908: UserAgent Switcher is resetting
+        // the user agent at startup to default
+        if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                    && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
+            torbutton_set_uagent();
+        }
 
         torbutton_set_timezone(torbutton_check_status(), true);
 
