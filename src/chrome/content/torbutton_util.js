@@ -125,7 +125,7 @@ function torbutton_check_status() {
          torbutton_log(1, "socks proxy") &&
          (liveprefs.getIntPref("socks_port")    == torprefs.getIntPref('socks_port'))    &&
          torbutton_log(1, "socks port") &&
-         (liveprefs.getIntPref("socks_version") == 5)              &&
+         (liveprefs.getIntPref("socks_version") == torprefs.getIntPref('socks_version')) &&
          torbutton_log(1, "socks version") &&
          (liveprefs.getBoolPref("share_proxy_settings") == false)   &&
          torbutton_log(1, "share proxy settins") &&
@@ -158,7 +158,7 @@ function torbutton_activate_tor_settings()
   liveprefs.setIntPref('gopher_port',   torprefs.getIntPref('gopher_port'));
   liveprefs.setCharPref('socks',        torprefs.getCharPref('socks_host'));
   liveprefs.setIntPref('socks_port',    torprefs.getIntPref('socks_port'));
-  liveprefs.setIntPref('socks_version', 5);
+  liveprefs.setIntPref('socks_version', torprefs.getIntPref('socks_version'));
   liveprefs.setBoolPref('share_proxy_settings', false);
   if (torbutton_check_socks_remote_dns()) {
       liveprefs.setBoolPref('socks_remote_dns', true);

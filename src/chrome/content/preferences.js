@@ -65,6 +65,7 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_gopherPort').disabled = true;
         doc.getElementById('torbutton_socksHost').disabled = true;
         doc.getElementById('torbutton_socksPort').disabled = true;
+        doc.getElementById('torbutton_socksGroup').disabled = true;
     } else {
         doc.getElementById('torbutton_httpProxy').disabled = false;
         doc.getElementById('torbutton_httpPort').disabled = false;
@@ -76,6 +77,7 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_gopherPort').disabled = false;
         doc.getElementById('torbutton_socksHost').disabled = false;
         doc.getElementById('torbutton_socksPort').disabled = false;
+        doc.getElementById('torbutton_socksGroup').disabled = false;
         /* Do not reset these on every document update..
         doc.getElementById('torbutton_httpProxy').value    = o_customprefs.getCharPref('http_proxy');
         doc.getElementById('torbutton_httpPort').value     = o_customprefs.getIntPref('http_port');
@@ -129,6 +131,13 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_gopherPort').value   = o_torprefs.getIntPref('gopher_port');
     doc.getElementById('torbutton_socksHost').value    = o_torprefs.getCharPref('socks_host');
     doc.getElementById('torbutton_socksPort').value    = o_torprefs.getIntPref('socks_port');
+    if(o_torprefs.getIntPref('socks_version') == 4) {
+        doc.getElementById('torbutton_socksGroup').selectedItem =
+            doc.getElementById('torbutton_socksv4');    
+    } else {
+        doc.getElementById('torbutton_socksGroup').selectedItem =
+            doc.getElementById('torbutton_socksv5');    
+    }
     // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
     doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
@@ -313,7 +322,17 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
     o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
 
+    if(doc.getElementById('torbutton_socksGroup').selectedItem ==
+            doc.getElementById('torbutton_socksv4')) {
+        o_torprefs.setIntPref('socks_version', 4); 
+    } else if(doc.getElementById('torbutton_socksGroup').selectedItem ==
+            doc.getElementById('torbutton_socksv5')) {
+        o_torprefs.setIntPref('socks_version', 5); 
+    }
+
     if (doc.getElementById('torbutton_settingsMethod').value == 'custom') {
+        // XXX: Is this even needed anymore? We don't read the
+        // custom prefs at all it seems..
         o_customprefs.setCharPref('http_proxy',      doc.getElementById('torbutton_httpProxy').value);
         o_customprefs.setIntPref('http_port',        doc.getElementById('torbutton_httpPort').value);
         o_customprefs.setCharPref('https_proxy',     doc.getElementById('torbutton_httpsProxy').value);
@@ -324,6 +343,14 @@ function torbutton_prefs_save(doc) {
         o_customprefs.setIntPref('gopher_port',      doc.getElementById('torbutton_gopherPort').value);
         o_customprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
         o_customprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
+
+        if(doc.getElementById('torbutton_socksGroup').selectedItem ==
+                doc.getElementById('torbutton_socksv4')) {
+            o_customprefs.setIntPref('socks_version', 4); 
+        } else if(doc.getElementById('torbutton_socksGroup').selectedItem ==
+                doc.getElementById('torbutton_socksv5')) {
+            o_customprefs.setIntPref('socks_version', 5); 
+        }
     }
     // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
 

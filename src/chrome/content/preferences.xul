@@ -95,6 +95,19 @@
                             <textbox id="torbutton_socksPort" size="5"/>
                         </hbox>
                     </row>
+                    <row align="center">
+                     <hbox align="center" pack="end">
+                      <spacer flex="1"/>
+                     </hbox>
+                      <radiogroup align="center" orient="horizontal" id="torbutton_socksGroup">
+                          <radio id="torbutton_socksv4"
+                                label="&torbutton.prefs.socks_vfour;" 
+                                oncommand="torbutton_prefs_set_field_attributes(document)"/>
+                          <radio id="torbutton_socksv5" 
+                                label="&torbutton.prefs.socks_vfive;" 
+                                oncommand="torbutton_prefs_set_field_attributes(document)"/>
+                      </radiogroup>
+                    </row>
                 </rows>
             </grid>
         </radiogroup>

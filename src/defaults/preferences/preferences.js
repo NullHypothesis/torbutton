@@ -21,6 +21,7 @@ pref("extensions.torbutton.gopher_proxy","");
 pref("extensions.torbutton.gopher_port",0);
 pref("extensions.torbutton.socks_host","");
 pref("extensions.torbutton.socks_port",0);
+pref("extensions.torbutton.socks_version",5);
 pref("extensions.torbutton.locked_mode",false);
 pref("extensions.torbutton.test_url","https://check.torproject.org/?TorButton=true");
 pref("extensions.torbutton.test_failed",false);
@@ -37,6 +38,7 @@ pref("extensions.torbutton.custom.gopher_proxy","");
 pref("extensions.torbutton.custom.gopher_port",0);
 pref("extensions.torbutton.custom.socks_host","");
 pref("extensions.torbutton.custom.socks_port",0);
+pref("extensions.torbutton.custom.socks_version",5);
 
 // saved prefs:
 pref("extensions.torbutton.saved.type", 0);
