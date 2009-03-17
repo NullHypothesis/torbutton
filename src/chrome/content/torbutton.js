@@ -118,9 +118,11 @@ var torbutton_unique_pref_observer =
                             m_tb_prefs.setBoolPref('extensions.torbutton.tor_memory_jar', false);
                         if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar'))
                             m_tb_prefs.setBoolPref('extensions.torbutton.nontor_memory_jar', false);
-                    } else if(lp == 2 && 
-                            !m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar")) {
-                        m_tb_prefs.setBoolPref("extensions.torbutton.nontor_memory_jar", true);
+                    } else if(lp == 2) {
+                        if(!m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar"))
+                             m_tb_prefs.setBoolPref("extensions.torbutton.nontor_memory_jar", true);
+                        if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar"))
+                             m_tb_prefs.setBoolPref("extensions.torbutton.tor_memory_jar", true);
                     }
                 } else {
                     if(lp == 0) { // The cookie's lifetime is supplied by the server.
