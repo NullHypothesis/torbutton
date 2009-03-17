@@ -2768,8 +2768,15 @@ function torbutton_check_progress(aProgress, aRequest) {
     var DOMWindow = null;
 
     if(aProgress) {
-        DOMWindow = aProgress.DOMWindow;
-    } else {
+        try {
+            DOMWindow = aProgress.DOMWindow;
+        } catch(e) {
+            torbutton_log(4, "Exception on DOMWindow: "+e);
+            DOMWindow = null;
+        }
+    } 
+    
+    if(!DOMWindow) {
         try {
             if(aRequest.notificationCallbacks) {
                 DOMWindow = aRequest.notificationCallbacks.QueryInterface(
