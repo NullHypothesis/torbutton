@@ -68,6 +68,7 @@ var torbutton_unique_pref_observer =
         this._branch.addObserver("extensions.torbutton", this, false);
         this._branch.addObserver("network.proxy", this, false);
         this._branch.addObserver("network.cookie", this, false);
+        this._branch.addObserver("general.useragent", this, false);
     },
 
     unregister: function()
@@ -76,6 +77,7 @@ var torbutton_unique_pref_observer =
         this._branch.removeObserver("extensions.torbutton", this);
         this._branch.removeObserver("network.proxy", this);
         this._branch.removeObserver("network.cookie", this);
+        this._branch.removeObserver("general.useragent", this);
     },
 
     // topic:   what event occurred
@@ -85,6 +87,20 @@ var torbutton_unique_pref_observer =
     {
         if (topic != "nsPref:changed") return;
         switch (data) {
+            // FIXME: If there are other addons than useragentswitcher 
+            // that we need to fight with, we should probably check
+            // every user agent pref here.. but for now, just these
+            // two are enough to reset everything back for UAS.
+            case "general.useragent.vendorSub":
+            case "general.useragent.override":
+                if((!m_tb_prefs.prefHasUserValue("general.useragent.override")
+                    || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub")) 
+                    && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                    && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
+                    torbutton_log(4, "Some other addond tried to clear user agent settings.");
+                    torbutton_set_uagent();
+                }
+                break;
             case "network.proxy.http":
             case "network.proxy.http_port":
             case "network.proxy.ssl":
@@ -2373,6 +2389,30 @@ function torbutton_new_tab(event)
     }
 }
 
+// Returns true if the window wind is neither maximized, full screen,
+// ratpoisioned/evilwmed, nor minimized.
+function torbutton_is_windowed(wind) {
+    torbutton_log(2, "Window: ("+wind.outerHeight+","+wind.outerWidth+") ?= ("
+            +wind.screen.availHeight+","+wind.screen.availWidth+")");
+    if(wind.windowState == Components.interfaces.nsIDOMChromeWindow.STATE_MINIMIZED
+      || wind.windowState == Components.interfaces.nsIDOMChromeWindow.STATE_MAXIMIZED) {
+        torbutton_log(2, "Window is minimized/maximized");
+        return false;
+    }
+    if ("fullScreen" in wind && wind.fullScreen) {
+        torbutton_log(2, "Window is fullScreen");
+        return false;
+    }
+    if(wind.outerHeight == wind.screen.availHeight 
+            && wind.outerWidth == wind.screen.availWidth) {
+        torbutton_log(3, "Window is ratpoisoned/evilwm'ed");
+        return false;
+    }
+        
+    torbutton_log(2, "Window is normal");
+    return true;
+}
+
 function torbutton_do_resize(ev)
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
@@ -2381,9 +2421,9 @@ function torbutton_do_resize(ev)
         // only resize if outer window size has changed (ignore stuff like
         // scrollbars and find bars)
         if((m_tb_window_height != window.outerHeight ||
-                m_tb_window_width != window.outerWidth) && window.windowState 
-                == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL) {
-            torbutton_log(2, "Resizing window on event: "+window.windowState);
+                m_tb_window_width != window.outerWidth) && 
+                torbutton_is_windowed(window)) {
+            torbutton_log(3, "Resizing window on event: "+window.windowState);
             bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
             bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
         }
@@ -2396,8 +2436,7 @@ function torbutton_do_resize(ev)
 function torbutton_check_round(browser) 
 {
     // XXX: Not called???
-    if(window.windowState 
-                == Components.interfaces.nsIDOMChromeWindow.STATE_NORMAL
+    if(torbutton_is_windowed(window)
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
         
@@ -2417,7 +2456,7 @@ function torbutton_check_round(browser)
         }
 
         // Always round.
-        torbutton_log(2, "Resizing window on load: "+window.windowState);
+        torbutton_log(3, "Resizing window on load: "+window.windowState);
         browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
         browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
     }
