@@ -2209,7 +2209,7 @@ observe : function(subject, topic, data) {
 
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
-      torbutton_check_progress(null, subject);
+      torbutton_check_progress(null, subject, 0);
   } else if (topic == "http-on-modify-request") {
       torbutton_eclog(3, 'Modify request: '+subject.name);
   }
@@ -2799,12 +2799,26 @@ function torbutton_hookdoc(win, doc) {
 // of its being called so early. Need to find a quick way to check if
 // aProgress and aRequest are actually fully initialized 
 // (without throwing exceptions)
-function torbutton_check_progress(aProgress, aRequest) {
+function torbutton_check_progress(aProgress, aRequest, aFlags) {
     if (!m_tb_wasinited) {
         torbutton_init();
     }
 
     var DOMWindow = null;
+
+    // Bug #866: Zotero conflict with about:blank windows
+    // handle docshell JS switching and other early duties
+    var WP_STATE_START = Ci.nsIWebProgressListener.STATE_START;
+    var WP_STATE_DOC = Ci.nsIWebProgressListener.STATE_IS_DOCUMENT;
+    var WP_STATE_START_DOC = WP_STATE_START | WP_STATE_DOC;
+
+    if ((aFlags & WP_STATE_START_DOC) == WP_STATE_START_DOC 
+            && aRequest instanceof Ci.nsIChannel
+            && !(aRequest.loadFlags & aRequest.LOAD_INITIAL_DOCUMENT_URI) 
+            && aRequest.URI.spec == "about:blank") { 
+        torbutton_log(3, "Passing on about:blank");
+        return 0;
+    }
 
     if(aProgress) {
         try {
@@ -2814,7 +2828,7 @@ function torbutton_check_progress(aProgress, aRequest) {
             DOMWindow = null;
         }
     } 
-    
+
     if(!DOMWindow) {
         try {
             if(aRequest.notificationCallbacks) {
@@ -2970,25 +2984,25 @@ var torbutton_weblistener =
   onStateChange: function(aProgress, aRequest, aFlag, aStatus)
   { 
       torbutton_eclog(1, 'State change()');
-      return torbutton_check_progress(aProgress, aRequest);
+      return torbutton_check_progress(aProgress, aRequest, aFlag);
   },
 
   onLocationChange: function(aProgress, aRequest, aURI)
   {
       torbutton_eclog(1, 'onLocationChange: '+aURI.asciiSpec);
-      return torbutton_check_progress(aProgress, aRequest);
+      return torbutton_check_progress(aProgress, aRequest, 0);
   },
 
   onProgressChange: function(aProgress, aRequest, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
   { 
       torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress, aRequest);
+      return torbutton_check_progress(aProgress, aRequest, 0);
   },
   
   onStatusChange: function(aProgress, aRequest, stat, message) 
   { 
       torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress, aRequest);
+      return torbutton_check_progress(aProgress, aRequest, 0);
   },
   
   onSecurityChange: function() {return 0;},
