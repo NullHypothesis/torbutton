@@ -1,6 +1,25 @@
 1.2.1
-  ?? Mar 2008
+  21 Mar 2008
+  * bugfix: bug 773: Fixed Noscript conflict issue.
+  * bugfix: bug 866: Fixed conflict with ZoTero
+  * bugfix: bug 908: Make UserAgentSwitcher's 'default' button restore
+    Torbutton's spoofed user agent if Tor is enabled.
+  * bugfix: bug 909: Get Torbutton to "properly" react to users changing 
+    their Firefox cookie lifetime settings as opposed to using the Torbutton 
+    interface.
   * bugfix: bug 834: Fix session saving and startup issues
+  * bugfix: bug 875: Removed docShell == null popup during toggle for 
+    some users
+  * bugfix: bug 910: fixed a locale spoofing issue in navigator.appVersion
+  * bugfix: bug 747: Attempt to fix 'fullscreen' resizing issues.
+  * bugfix: Stop-gap timezone spoofing fix for Linux and Mac 
+    for FF3. Requires a one-line patch to Firefox for Windows to work.
+  * bugfix: Clear SSL Session IDs on toggle. (See FF Bug 448747)
+  * misc: bug 931: Added a socks v4 vs v5 version choice to custom prefs.
+  * misc: bug 836: redesign startup preference window to make it more
+    understandable
+  * misc: Torbutton now presents itself as Windows FF3.0.7.
+
 
 1.2.0
   30 Jul 2008
