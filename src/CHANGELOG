@@ -19,7 +19,7 @@
   * misc: bug 836: redesign startup preference window to make it more
     understandable
   * misc: Torbutton now presents itself as Windows FF3.0.7.
-
+  * misc: Change RDF to allow Torbutton to run on FF3.1 betas.
 
 1.2.0
   30 Jul 2008
