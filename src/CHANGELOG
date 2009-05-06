@@ -1,5 +1,5 @@
 1.2.1
-  21 Mar 2008
+  21 Mar 2009
   * bugfix: bug 773: Fixed Noscript conflict issue.
   * bugfix: bug 866: Fixed conflict with ZoTero
   * bugfix: bug 908: Make UserAgentSwitcher's 'default' button restore
