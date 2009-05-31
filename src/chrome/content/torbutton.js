@@ -97,7 +97,7 @@ var torbutton_unique_pref_observer =
                     || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub")) 
                     && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
                     && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
-                    torbutton_log(4, "Some other addond tried to clear user agent settings.");
+                    torbutton_log(4, "Some other addon tried to clear user agent settings.");
                     torbutton_set_uagent();
                 }
                 break;
