@@ -1,8 +1,12 @@
 
 function LOG(text)
 {
-  var logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
-  logger.log(text);
+ //var logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
+ //logger.log("RefSpoof " + text);
+  var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                        .getService(Components.interfaces.nsIPromptService);
+  prompt.alert(null, "debug", text);
+ 
 }
 
 
@@ -11,19 +15,71 @@ var refObserver = {
   observe: function(subject, topic, data)
   {
     if (topic == "http-on-modify-request") {
-      LOG("----------------------------> (" + subject + ") mod request");
-      var httpChannel = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
-      httpChannel.setRequestHeader("referer", "http://foo.com", false);
+      //LOG("----------------------------> (" + subject + ") mod request");
+      subject.QueryInterface(Components.interfaces.nsIHttpChannel);
+      this.onModifyRequest(subject);
       return;
-      }
+    }
     if (topic == "app-startup") {
-      LOG("----------------------------> app-startup");
+      //LOG("----------------------------> app-startup");
       var os = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
       os.addObserver(this, "http-on-modify-request", false);
       return;
     }
   },
- 
+  onModifyRequest: function(oHttpChannel)
+	{
+	  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+    .getService(Components.interfaces.nsIPrefBranch);
+    
+    var spoofmode = prefs.getIntPref("extensions.torbutton.refererspoof");
+    try {
+    oHttpChannel.QueryInterface(Components.interfaces.nsIChannel);
+    var requestURI = oHttpChannel.URI;
+    
+		
+    	switch(spoofmode)
+			{
+			   //no spoof, should give the regular referer (not recommended)  	    
+        case 0:
+          return;        
+        //spoof document root  
+        case 1:          
+          this.adjustRef(oHttpChannel, requestURI.host + requestURI.path);        
+        break;
+        //spoof domain
+        case 2:
+          this.adjustRef(oHttpChannel, requestURI.host);
+        break;
+        //spoof no referer
+        case 3:
+          this.adjustRef(oHttpChannel, "");
+        break;      
+      }
+
+			// handle wildcarding
+			// try matching "www.foo.example.com", "foo.example.com", "example.com", ...
+			
+			// didn't find any matches, fall back on configured default action
+		} catch (ex) {
+			LOG("onModifyRequest: " + ex);
+		}
+	},
+	adjustRef: function(oChannel, sRef)
+	{
+		try {
+			if (oChannel.referrer)
+			{
+				oChannel.referrer.spec = sRef;
+        oChannel.setRequestHeader("Referer", sRef, false);
+      }
+			return true;
+		} 
+    catch (ex) {
+			LOG("adjustRef: " + ex);
+		}
+		return false;
+	},
   QueryInterface: function(iid)
 	{
 		if (!iid.equals(Components.interfaces.nsISupports) &&
@@ -36,19 +92,19 @@ var refObserver = {
 
 var myModule = {
     
-  myCID: Components.ID("{65be2be0-ceb4-44c2-91a5-9c75c53430bf}"),
+  myCID: Components.ID("65be2be0-ceb4-44c2-91a5-9c75c53430bf"),
   myProgID: "@torproject.org/torRefSpoofer;1",
-  myName:   "Ref Spoofer Component",
+  myName:   "RefSpoofComp",
   registerSelf: function (compMgr, fileSpec, location, type) {
-    var compMgr = compMgr.QueryInterface(Components.interfacesnsIComponentRegistrar);
+    var compMgr = compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
     compMgr.registerFactoryLocation(this.myCID,this.myName,this.myProgID,fileSpec,location,type);
-    LOG("----------------------------> registerSelf");
+    //LOG("----------------------------> registerSelf");
     var catMgr = Components.classes["@mozilla.org/categorymanager;1"].getService(Components.interfaces.nsICategoryManager);
     catMgr.addCategoryEntry("app-startup", this.myName, this.myProgID, true, true);
   },
   
   getClassObject: function (compMgr, cid, iid) {
-    LOG("----------------------------> getClassObject");
+    //LOG("----------------------------> getClassObject");
     return this.myFactory;
   },
 
@@ -78,7 +134,7 @@ var myModule = {
 		{
 			if (outer != null)
 				throw Components.results.NS_ERROR_NO_AGGREGATION;			
-			return myObserver.QueryInterface(iid);
+			return refObserver.QueryInterface(iid);
     }
   }    
 };

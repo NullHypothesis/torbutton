@@ -243,7 +243,9 @@ function torbutton_prefs_init(doc) {
                 doc.getElementById('torbutton_startPrevious');
             break;
     }
-
+    
+    doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof');
+    
     doc.getElementById('torbutton_torSessionStore').checked = !o_torprefs.getBoolPref('notor_sessionstore');
     doc.getElementById('torbutton_nonTorSessionStore').checked = !o_torprefs.getBoolPref('nonontor_sessionstore');
 
@@ -261,7 +263,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_closeNonTor').checked = o_torprefs.getBoolPref('close_nontor');
     doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
     doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
-    doc.getElementById('torbutton_noReferer').checked = o_torprefs.getBoolPref('disable_referer');
+    doc.getElementById('torbutton_spoofRefresh').checked = o_torprefs.getBoolPref('fakerefresh');
     doc.getElementById('torbutton_spoofEnglish').checked = o_torprefs.getBoolPref('spoof_english');
     doc.getElementById('torbutton_clearHttpAuth').checked = o_torprefs.getBoolPref('clear_http_auth');
     doc.getElementById('torbutton_blockJSHistory').checked = o_torprefs.getBoolPref('block_js_history');
@@ -429,10 +431,11 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
     
     o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
-    o_torprefs.setBoolPref('disable_referer', doc.getElementById('torbutton_noReferer').checked);
+    o_torprefs.setBoolPref('fakerefresh', doc.getElementById('torbutton_spoofRefresh').checked);
     o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
     
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);
+    o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
     /*
     o_torprefs.setBoolPref('jar_certs', doc.getElementById('torbutton_jarCerts').checked);
     o_torprefs.setBoolPref('jar_ca_certs',

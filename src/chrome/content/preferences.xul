@@ -329,9 +329,17 @@
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <checkbox id="torbutton_jarCACerts" label="&torbutton.prefs.jar_ca_certs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
--->
-          <checkbox id="torbutton_noReferer" label="&torbutton.prefs.disable_referer;" 
+
+          <checkbox id="torbutton_no  er" label="&torbutton.prefs.disable_referer;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+-->
+            <checkbox id="torbutton_spoofRefresh" label="&torbutton.prefs.spoofreresh;" oncommand="torbutton_prefs_set_field_attributes(document)" />
+            <radiogroup id="torbutton_refererSpoofGroup" label="&torbutton.prefs.refereroptions;">
+              <radio id="torbutton_noRefSpoof" label="&torbutton.prefs.nospoof;" oncommand="torbutton_prefs_set_field_attributes(document)" />
+              <radio id="torbutton_SpoofRoot" label="&torbutton.prefs.spoofroot;" selected="true" oncommand="torbutton_prefs_set_field_attributes(document)" />
+              <radio id="torbutton_SpoofDomain" label="&torbutton.prefs.spoofdomain;" oncommand="torbutton_prefs_set_field_attributes(document)" />
+              <radio id="torbutton_BlankReferer" label="&torbutton.prefs.spoofblank;" oncommand="torbutton_prefs_set_field_attributes(document)" />
+            </radiogroup>
            </vbox>
           </tabpanel>
          </tabpanels>

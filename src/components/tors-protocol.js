@@ -1,8 +1,8 @@
 // Test protocol related
-const kSCHEME = "tor";
-const kPROTOCOL_NAME = "tor";
+const kSCHEME = "tors";
+const kPROTOCOL_NAME = "tors";
 const kPROTOCOL_CONTRACTID = "@mozilla.org/network/protocol;1?name=" + kSCHEME;
-const kPROTOCOL_CID = Components.ID("52183e20-4d4b-11de-8a39-0800200c9a66");
+const kPROTOCOL_CID = Components.ID("a5a4bc50-5e8d-11de-8a39-0800200c9a66");
 
 // Mozilla defined
 const kSIMPLEURI_CONTRACTID = "@mozilla.org/network/simple-uri;1";
@@ -40,7 +40,7 @@ Protocol.prototype =
   {
     const nsIStandardURL = Components.interfaces.nsIStandardURL;
     var uri = Components.classes["@mozilla.org/network/standard-url;1"].createInstance(nsIStandardURL);
-    uri.init(nsIStandardURL.URLTYPE_STANDARD, 80, spec, charset, baseURI);
+    uri.init(nsIStandardURL.URLTYPE_STANDARD, 433, spec, charset, baseURI);
 
     return uri.QueryInterface(Components.interfaces.nsIURI);
 
@@ -48,7 +48,7 @@ Protocol.prototype =
 
   newChannel: function(aURI)
   {
-    /*The protocol has been called, therefore we want to enable tor, wait for it to activate return the new channel with the scheme of http.*/
+    /*The protocol has been called, therefore we want to enable tor, wait for it to activate return the new channel with the scheme of https.*/
     var ios = Components.classes[kIOSERVICE_CONTRACTID].getService(nsIIOService);
     var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                         .getService(Components.interfaces.nsIPromptService);
@@ -75,7 +75,7 @@ Protocol.prototype =
         throw Components.results.NS_ERROR_UNEXPECTED;
     else
     {
-        aURI.scheme = "http";    
+        aURI.scheme = "https";    
         return ios.newChannelFromURI(aURI);
     }      
   },
