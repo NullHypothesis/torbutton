@@ -35,8 +35,8 @@ var refObserver = {
     }
   },
   onModifyRequest: function(oHttpChannel)
-	{
-	  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+  {
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
     .getService(Components.interfaces.nsIPrefBranch);
     var fake_refresh = prefs.getBoolPref("extensions.torbutton.fakerefresh");        
     var spoofmode = prefs.getIntPref("extensions.torbutton.refererspoof");
@@ -44,10 +44,10 @@ var refObserver = {
     oHttpChannel.QueryInterface(Components.interfaces.nsIChannel);
     var requestURI = oHttpChannel.URI;
     
-		
-    	switch(spoofmode)
-			{
-			   //no spoof, should give the regular referer (not recommended)  	    
+    
+      switch(spoofmode)
+      {
+         //no spoof, should give the regular referer (not recommended)        
         case 0:
           return;        
         //spoof document root  
@@ -68,33 +68,33 @@ var refObserver = {
         oHttpChannel.setRequestHeader("If-Modified-Since","Sat, 29 Oct 1989 19:43:31 GMT",false);
         //this will make the server think it is a refresh      
 
-			
-		} catch (ex) {
-			LOG("onModifyRequest: " + ex);
-		}
-	},
-	adjustRef: function(oChannel, sRef)
-	{
-		try {
-			if (oChannel.referrer)
-			{
-				oChannel.referrer.spec = sRef;
+      
+    } catch (ex) {
+      LOG("onModifyRequest: " + ex);
+    }
+  },
+  adjustRef: function(oChannel, sRef)
+  {
+    try {
+      if (oChannel.referrer)
+      {
+        oChannel.referrer.spec = sRef;
         oChannel.setRequestHeader("Referer", sRef, false);
       }
-			return true;
-		} 
+      return true;
+    } 
     catch (ex) {
-			LOG("adjustRef: " + ex);
-		}
-		return false;
-	},
+      LOG("adjustRef: " + ex);
+    }
+    return false;
+  },
   QueryInterface: function(iid)
-	{
-		if (!iid.equals(Components.interfaces.nsISupports) &&
-			!iid.equals(Components.interfaces.nsIObserver) &&
-			!iid.equals(Components.interfaces.nsISupportsWeakReference))
-			throw Components.results.NS_ERROR_NO_INTERFACE;		
-		return this;
+  {
+    if (!iid.equals(Components.interfaces.nsISupports) &&
+      !iid.equals(Components.interfaces.nsIObserver) &&
+      !iid.equals(Components.interfaces.nsISupportsWeakReference))
+      throw Components.results.NS_ERROR_NO_INTERFACE;    
+    return this;
   }
 };
 
@@ -121,28 +121,28 @@ var myModule = {
   },    
 
   unregisterSelf: function(compMgr, fileSpec, location) {
-		// Remove the auto-startup
-		compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
-		compMgr.unregisterFactoryLocation(this.myCID, fileSpec);
+    // Remove the auto-startup
+    compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
+    compMgr.unregisterFactoryLocation(this.myCID, fileSpec);
     var catMan = Components.classes["@mozilla.org/categorymanager;1"].getService(Components.interfaces.nsICategoryManager);
-		catMan.deleteCategoryEntry("app-startup", this.myProgID, true);
+    catMan.deleteCategoryEntry("app-startup", this.myProgID, true);
   },
     
   getClassObject: function(compMgr, cid, iid) {
-		if (!cid.equals(this.myCID))
-			throw Components.results.NS_ERROR_FACTORY_NOT_REGISTERED;
-		if (!iid.equals(Components.interfaces.nsIFactory))
-			throw Components.results.NS_ERROR_NO_INTERFACE;
-		return this.myFactory;
+    if (!cid.equals(this.myCID))
+      throw Components.results.NS_ERROR_FACTORY_NOT_REGISTERED;
+    if (!iid.equals(Components.interfaces.nsIFactory))
+      throw Components.results.NS_ERROR_NO_INTERFACE;
+    return this.myFactory;
     },
     
   myFactory: {
-		// Implement nsIFactory
-		createInstance: function(outer, iid)
-		{
-			if (outer != null)
-				throw Components.results.NS_ERROR_NO_AGGREGATION;			
-			return refObserver.QueryInterface(iid);
+    // Implement nsIFactory
+    createInstance: function(outer, iid)
+    {
+      if (outer != null)
+        throw Components.results.NS_ERROR_NO_AGGREGATION;      
+      return refObserver.QueryInterface(iid);
     }
   }    
 };
