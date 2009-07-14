@@ -95,6 +95,6 @@
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
 <!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
 <!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the root of the site.">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer.">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank.">
+<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
+<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
+<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
