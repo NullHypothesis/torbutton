@@ -1,11 +1,11 @@
 
 function LOG(text)
 {
- //var logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
- //logger.log("RefSpoof " + text);
-  var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+ var logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
+ logger.log("RefSpoof " + text);
+  /*var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                         .getService(Components.interfaces.nsIPromptService);
-  prompt.alert(null, "debug", text);
+  prompt.alert(null, "debug", text);*/
  
 }
 
@@ -16,6 +16,13 @@ var refObserver = {
   {
     if (topic == "http-on-modify-request") {
       //LOG("----------------------------> (" + subject + ") mod request");
+      var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefBranch);    
+      var tor_enabled = prefs.getBoolPref("extensions.torbutton.tor_enabled");
+      
+      if (!tor_enabled)
+        return;
+        
       subject.QueryInterface(Components.interfaces.nsIHttpChannel);
       this.onModifyRequest(subject);
       return;
@@ -31,7 +38,7 @@ var refObserver = {
 	{
 	  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
     .getService(Components.interfaces.nsIPrefBranch);
-    
+    var fake_refresh = prefs.getBoolPref("extensions.torbutton.fakerefresh");        
     var spoofmode = prefs.getIntPref("extensions.torbutton.refererspoof");
     try {
     oHttpChannel.QueryInterface(Components.interfaces.nsIChannel);
@@ -44,23 +51,24 @@ var refObserver = {
         case 0:
           return;        
         //spoof document root  
-        case 1:          
-          this.adjustRef(oHttpChannel, requestURI.host + requestURI.path);        
+        case 1:
+          var path = requestURI.path.substr(0,requestURI.path.lastIndexOf("/")+1);            
+          this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host + path);        
         break;
         //spoof domain
         case 2:
-          this.adjustRef(oHttpChannel, requestURI.host);
+          this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host);
         break;
         //spoof no referer
         case 3:
           this.adjustRef(oHttpChannel, "");
         break;      
       }
+      if (fake_refresh)      
+        oHttpChannel.setRequestHeader("If-Modified-Since","Sat, 29 Oct 1989 19:43:31 GMT",false);
+        //this will make the server think it is a refresh      
 
-			// handle wildcarding
-			// try matching "www.foo.example.com", "foo.example.com", "example.com", ...
 			
-			// didn't find any matches, fall back on configured default action
 		} catch (ex) {
 			LOG("onModifyRequest: " + ex);
 		}
