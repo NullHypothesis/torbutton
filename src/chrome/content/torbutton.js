@@ -97,7 +97,7 @@ var torbutton_unique_pref_observer =
                     || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub")) 
                     && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
                     && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
-                    torbutton_log(4, "Some other addon tried to clear user agent settings.");
+                    torbutton_log(4, "Some other addond tried to clear user agent settings.");
                     torbutton_set_uagent();
                 }
                 break;
@@ -424,6 +424,12 @@ function torbutton_init() {
         torbutton_log(1, 'skipping pref observer init');
     }
     
+    //setting up context menu
+    var contextMenu = document.getElementById("contentAreaContextMenu");
+    if (contextMenu)
+      contextMenu.addEventListener("popupshowing", torbutton_check_contextmenu, false);
+    
+    
     torbutton_set_panel_view();
     torbutton_log(1, 'setting torbutton status from proxy prefs');
     torbutton_set_status();
@@ -431,6 +437,69 @@ function torbutton_init() {
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
     torbutton_log(3, 'init completed');
+}
+
+//this function checks to see if the context menu is being clicked on a link.
+//if it is, then we show the two context menu items
+function torbutton_check_contextmenu() {
+    var torurl = document.getElementById("torcontext-copyurl");
+    var tortab = document.getElementById("torcontext-opentorurl");
+    torurl.hidden = tortab.hidden = (document.popupNode.localName != "A") 
+}
+function torbutton_copy_link() {
+  var element = document.popupNode;
+  var myURI = Components.classes["@mozilla.org/network/io-service;1"]
+                      .getService(Components.interfaces.nsIIOService)
+                      .newURI(element, null, null);
+  //check the scheme
+  if (myURI.scheme == "http" || myURI.scheme == "tor")
+    myURI.scheme = "tor";
+  else if (myURI.scheme == "https" || myURI.scheme == "tors")
+    myURI.scheme = "tors";
+    else
+      return;//unsupported scheme      
+  torbutton_copyToClipboard(myURI.spec);  
+}
+function torbutton_copyToClipboard(copyThis) {	
+	
+	var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+	if (!str) return false;
+	str.data = copyThis; // unicode string?
+	
+	var trans = Components.classes["@mozilla.org/widget/transferable;1"].createInstance(Components.interfaces.nsITransferable);
+	if (!trans) return false; //no transferable widget found
+	
+	trans.addDataFlavor("text/unicode");
+	trans.setTransferData("text/unicode", str, copyThis.length*2); // *2 cuz it's unicode
+	
+	var clipid=Components.interfaces.nsIClipboard;
+	var clip = Components.classes["@mozilla.org/widget/clipboard;1"].getService(clipid);
+	if (!clip) return false; // couldn't get the clipboard
+	
+	clip.setData(trans, null, clipid.kGlobalClipboard);
+	return true;
+}
+//opens new tab with link with tor:// protocol
+function torbutton_open_link_as_tor() {
+  var element = document.popupNode;
+  var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                   .getInterface(Components.interfaces.nsIWebNavigation)
+                   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+                   .rootTreeItem
+                   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                   .getInterface(Components.interfaces.nsIDOMWindow);
+  //make into nsIURI
+  var myURI = Components.classes["@mozilla.org/network/io-service;1"]
+                      .getService(Components.interfaces.nsIIOService)
+                      .newURI(element, null, null);
+  //check the scheme
+  if (myURI.scheme == "http" || myURI.scheme == "tor")
+    myURI.scheme = "tor";
+  else if (myURI.scheme == "https" || myURI.scheme == "tors")
+    myURI.scheme = "tors";
+    else
+      return;//unsupported scheme    
+  mainWindow.getBrowser().addTab(myURI.spec);    
 }
 
 // this function duplicates a lot of code in preferences.js for deciding our

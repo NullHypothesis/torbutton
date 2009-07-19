@@ -45,4 +45,18 @@
         <popup id="torbutton-context-menu"/>
 <!--        <statusbarpanel context="clipmenu" class="statusbarpanel-iconic" id="plugins-status" tooltip="plugin-tooltip" onclick="torbutton_toggle_plugins();"/> -->
    </statusbar>
+   <popup id="contentAreaContextMenu">
+			<menuitem 
+					id="torcontext-copyurl"
+					label="Copy Tor URL" 
+					accesskey="t"
+					insertafter="context-copylink"
+					oncommand="torbutton_copy_link();"/>  
+			    <menuitem 
+					id="torcontext-opentorurl"
+					label="Open Link as Tor URL" 
+					accesskey="r" 
+					insertafter="context-openlinkintab"					
+					oncommand="torbutton_open_link_as_tor();"/>
+  </popup>
 </overlay>
