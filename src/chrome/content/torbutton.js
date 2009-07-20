@@ -722,6 +722,8 @@ function torbutton_update_statusbar(mode)
     var o_statuspanel = torbutton_get_statuspanel();
     if (!window.statusbar.visible) return;
     var o_stringbundle = torbutton_get_stringbundle();
+    var label = "";
+    var tooltip = "";
 
     if (mode) {
         label   = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
@@ -841,7 +843,7 @@ function torbutton_set_timezone(mode, startup) {
 
         // Regex match for 3 letter code
         var re = new RegExp('\\((\\S+)\\)', "gm");
-        match = re.exec(d.toString());
+        var match = re.exec(d.toString());
         // Parse parens. If parseable, use. Otherwise set TZ=""
         var set = ""
         if(match) {

@@ -83,6 +83,7 @@ function torbutton_check_socks_remote_dns()
 function torbutton_check_status() {
     var liveprefs = false;
     var torprefs = false;
+    var remote_dns = true;
     torbutton_log(1, "Check status");
 
     liveprefs = torbutton_get_prefbranch('network.proxy.');
