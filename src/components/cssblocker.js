@@ -101,6 +101,8 @@ var browserSources = { "browser":true, "mozapps":true, "global":true,
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
      "file":true, "view-source":true, "about":true};
 
+var protectedChromeHosts = { "torbutton": true };
+
 function ContentPolicy() {
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;
@@ -126,6 +128,7 @@ function ContentPolicy() {
     this.block_nontor_file_net = this._prefs.getBoolPref("extensions.torbutton.block_nontor_file_net");
     this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
+    this.wrappedJSObject = this;
     return;
 }
 
@@ -256,7 +259,7 @@ ContentPolicy.prototype = {
                                           contentLocation.spec);
                         return ok;
                     } else {
-                        if (this.tor_enabling || ("torbutton" == targetHost)) {
+                        if (this.tor_enabling || (targetHost in protectedChromeHosts)) {
                             this.logger.eclog(4, "Blocking local request from: "
                                               +requestOrigin.spec+" ("
                                               +requestOrigin.scheme+") for: "+
@@ -413,6 +416,11 @@ ContentPolicy.prototype = {
                 this.no_tor_plugins = this._prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
                 break;
         }
+    },
+
+    // API to add another addon to be protected from discovery
+    addProtectedChromeHost: function(name) {
+        protectedChromeHosts[name] = true;
     }
 };
 
