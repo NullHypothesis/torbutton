@@ -480,7 +480,7 @@ function torbutton_copyToClipboard(copyThis) {
 	return true;
 }
 //opens new tab with link with tor:// protocol
-function torbutton_open_link_as_tor() {
+function torbutton_open_link_as_tor(tabFlag) {
   var element = document.popupNode;
   var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
                    .getInterface(Components.interfaces.nsIWebNavigation)
@@ -498,8 +498,11 @@ function torbutton_open_link_as_tor() {
   else if (myURI.scheme == "https" || myURI.scheme == "tors")
     myURI.scheme = "tors";
     else
-      return;//unsupported scheme    
-  mainWindow.getBrowser().addTab(myURI.spec);    
+      return;//unsupported scheme
+  if (tabFlag)
+    mainWindow.getBrowser().addTab(myURI.spec);
+   else
+    mainWindow.open(myURI.spec);    
 }
 
 // this function duplicates a lot of code in preferences.js for deciding our

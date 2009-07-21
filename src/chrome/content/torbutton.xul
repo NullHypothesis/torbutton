@@ -53,10 +53,17 @@
 					insertafter="context-copylink"
 					oncommand="torbutton_copy_link();"/>  
 			    <menuitem 
-					id="torcontext-opentorurl"
-					label="Open Link as Tor URL" 
+					id="torcontext-opentortab"
+					label="Open Tor URL in New Tab" 
 					accesskey="r" 
 					insertafter="context-openlinkintab"					
-					oncommand="torbutton_open_link_as_tor();"/>
+					oncommand="torbutton_open_link_as_tor(true);"/>
+					<menuitem 
+					id="torcontext-opentorwin"
+					label="Open Tor URL in New Window" 
+					accesskey="d" 
+					insertafter="context-openlinkintab"					
+					oncommand="torbutton_open_link_as_tor(false);"/>
+					
   </popup>
 </overlay>
