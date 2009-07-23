@@ -136,10 +136,16 @@ ExternalWrapper.prototype =
                               .getService(Components.interfaces.nsIPromptService);
       var check = {value: false};
       // XXX: Localize
-      var result = prompts.confirmCheck(chrome, "Load external content?",
-                                        "Do you want to launch an external app to handle"
-                                        +"\n"+aUri.spec+
-                                        "\n\nNote: External apps are NOT Tor safe by default and can unmask you!\n", 
+      var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
+                  prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
+                  prompts.BUTTON_DELAY_ENABLE +
+                  prompts.BUTTON_POS_1_DEFAULT;
+      var result = prompts.confirmEx(chrome, "Load external content?",
+                                        "An external application is needed to handle"
+                                        +"\n"+aUri.spec
+                                        +"\n\nNOTE: External applications are NOT Tor safe by default and can unmask you!\n ", 
+                                        flags,
+                                        "Launch application", "Cancel", "",
                                         "Do not ask me again", check);
 
       // do something check.value / result
@@ -147,7 +153,7 @@ ExternalWrapper.prototype =
         // XXX: Set a pref...
       }
 
-      if (!result) {
+      if (result != 0) {
         return null;
       }
  
@@ -168,17 +174,23 @@ ExternalWrapper.prototype =
                               .getService(Components.interfaces.nsIPromptService);
       var check = {value: false};
       // XXX: Localize
-      var result = prompts.confirmCheck(chrome, "Load external content?",
-                                        "Do you want to launch an external app to handle"
-                                        +"\n"+aRequest.name+
-                                        "\n\nNote: External apps are NOT Tor safe by default and can unmask you!\n", 
+      var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
+                  prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
+                  prompts.BUTTON_DELAY_ENABLE +
+                  prompts.BUTTON_POS_1_DEFAULT;
+      var result = prompts.confirmEx(chrome, "Load external content?",
+                                        "An external application is needed to handle"
+                                        +"\n"+aRequest.name
+                                        +"\n\nNOTE: External applications are NOT Tor safe by default and can unmask you!\n ", 
+                                        flags,
+                                        "Launch application", "Cancel", "",
                                         "Do not ask me again", check);
       // do something check.value / result
       if (check.value) {
         // XXX: Set a pref...
       }
 
-      if (!result) {
+      if (result != 0) {
         return null;
       }
     }
