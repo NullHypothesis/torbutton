@@ -25,6 +25,7 @@ pref("extensions.torbutton.socks_version",5);
 pref("extensions.torbutton.locked_mode",false);
 pref("extensions.torbutton.test_url","https://check.torproject.org/?TorButton=true");
 pref("extensions.torbutton.test_failed",false);
+pref("extensions.torbutton.no_proxies_on","127.0.0.1");
 
 // XXX: wtf prefs? These seem not actually connected, but govern
 // if user wants own tor proxy settings
@@ -54,6 +55,7 @@ pref("extensions.torbutton.saved.socks_host","");
 pref("extensions.torbutton.saved.socks_version",0);
 pref("extensions.torbutton.saved.socks_port",0);
 pref("extensions.torbutton.saved.socks_remote_dns",false);
+pref("extensions.torbutton.saved.no_proxies_on","localhost, 127.0.0.1");
 
 pref("extensions.torbutton.saved.cookieLifetime",0);
 pref("extensions.torbutton.saved.full_page_plugins","");
@@ -134,6 +136,7 @@ pref("extensions.torbutton.block_remoting",false);
 pref("extensions.torbutton.tor_memory_jar",false);
 pref("extensions.torbutton.nontor_memory_jar",false);
 pref("extensions.torbutton.tz_string","");
+pref("extensions.torbutton.launch_warning",true);
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");

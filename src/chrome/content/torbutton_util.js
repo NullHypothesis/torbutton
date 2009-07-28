@@ -160,6 +160,7 @@ function torbutton_activate_tor_settings()
   liveprefs.setCharPref('socks',        torprefs.getCharPref('socks_host'));
   liveprefs.setIntPref('socks_port',    torprefs.getIntPref('socks_port'));
   liveprefs.setIntPref('socks_version', torprefs.getIntPref('socks_version'));
+  liveprefs.setCharPref('no_proxies_on', torprefs.getCharPref('no_proxies_on'));
   liveprefs.setBoolPref('share_proxy_settings', false);
   if (torbutton_check_socks_remote_dns()) {
       liveprefs.setBoolPref('socks_remote_dns', true);

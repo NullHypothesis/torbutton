@@ -125,38 +125,14 @@ ExternalWrapper.prototype =
     }
   },
 
-
   loadURI: function(aUri, aContext) {
     if(this.blockApp()) {
-      var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                 .getService(Components.interfaces.nsIWindowMediator);
-      var chrome = wm.getMostRecentWindow("navigator:browser");
-
-      var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                              .getService(Components.interfaces.nsIPromptService);
       var check = {value: false};
-      // XXX: Localize
-      var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
-                  prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
-                  prompts.BUTTON_DELAY_ENABLE +
-                  prompts.BUTTON_POS_1_DEFAULT;
-      var result = prompts.confirmEx(chrome, "Load external content?",
-                                        "An external application is needed to handle"
-                                        +"\n"+aUri.spec
-                                        +"\n\nNOTE: External applications are NOT Tor safe by default and can unmask you!\n ", 
-                                        flags,
-                                        "Launch application", "Cancel", "",
-                                        "Do not ask me again", check);
-
-      // do something check.value / result
-      if (check.value) {
-        // XXX: Set a pref...
-      }
+      var result = this._confirmLaunch(aUri.spec, check);
 
       if (result != 0) {
         return null;
       }
- 
     }
  
     return this._external().loadURI(aUri, aContext);
@@ -164,31 +140,45 @@ ExternalWrapper.prototype =
 
   // loadUrl calls loadURI
 
+  _confirmLaunch: function(urispec, check) {
+    if (!this._prefs.getBoolPref("extensions.torbutton.launch_warning")) {
+      return 0;
+    }
+
+    var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+               .getService(Components.interfaces.nsIWindowMediator);
+    var chrome = wm.getMostRecentWindow("navigator:browser");
+
+    var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                            .getService(Components.interfaces.nsIPromptService);
+    var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
+                prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
+                prompts.BUTTON_DELAY_ENABLE +
+                prompts.BUTTON_POS_1_DEFAULT;
+
+    var bundle = chrome.torbutton_get_stringbundle();
+
+    var title = bundle.GetStringFromName("torbutton.popup.external.title");
+    var app = bundle.GetStringFromName("torbutton.popup.external.app");
+    var note = bundle.GetStringFromName("torbutton.popup.external.note");
+    var launch = bundle.GetStringFromName("torbutton.popup.launch");
+    var cancel = bundle.GetStringFromName("torbutton.popup.cancel");
+    var dontask = bundle.GetStringFromName("torbutton.popup.dontask");
+
+    var result = prompts.confirmEx(chrome, title, app+urispec+note+" ", flags, 
+                                   launch, cancel, "", dontask, check);
+
+    if (check.value) {
+      this._prefs.setBoolPref("extensions.torbutton.launch_warning", false);
+    }
+
+    return result;
+  },
+  
   doContent: function(aMimeContentType, aRequest, aWindowContext, aForceSave) {
     if(this.blockApp()) {
-      var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                 .getService(Components.interfaces.nsIWindowMediator);
-      var chrome = wm.getMostRecentWindow("navigator:browser");
-
-      var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                              .getService(Components.interfaces.nsIPromptService);
       var check = {value: false};
-      // XXX: Localize
-      var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
-                  prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
-                  prompts.BUTTON_DELAY_ENABLE +
-                  prompts.BUTTON_POS_1_DEFAULT;
-      var result = prompts.confirmEx(chrome, "Load external content?",
-                                        "An external application is needed to handle"
-                                        +"\n"+aRequest.name
-                                        +"\n\nNOTE: External applications are NOT Tor safe by default and can unmask you!\n ", 
-                                        flags,
-                                        "Launch application", "Cancel", "",
-                                        "Do not ask me again", check);
-      // do something check.value / result
-      if (check.value) {
-        // XXX: Set a pref...
-      }
+      var result = this._confirmLaunch(aRequest.name, check);
 
       if (result != 0) {
         return null;

@@ -554,6 +554,7 @@ function torbutton_save_nontor_settings()
   savprefs.setCharPref('socks_host',   liveprefs.getCharPref('socks'));
   savprefs.setIntPref('socks_port',    liveprefs.getIntPref('socks_port'));
   savprefs.setIntPref('socks_version', liveprefs.getIntPref('socks_version'));
+  savprefs.setCharPref('no_proxies_on', liveprefs.getCharPref('no_proxies_on'));
   try { // ff-0.9 doesn't have share_proxy_settings
     savprefs.setBoolPref('share_proxy_settings', liveprefs.getBoolPref('share_proxy_settings'));
   } catch(e) {}
@@ -592,6 +593,7 @@ function torbutton_restore_nontor_settings()
   liveprefs.setCharPref('socks',        savprefs.getCharPref('socks_host'));
   liveprefs.setIntPref('socks_port',    savprefs.getIntPref('socks_port'));
   liveprefs.setIntPref('socks_version', savprefs.getIntPref('socks_version'));
+  liveprefs.setCharPref('no_proxies_on',savprefs.getCharPref('no_proxies_on'));
   try { // ff-0.9 doesn't have share_proxy_settings
     liveprefs.setBoolPref('share_proxy_settings', savprefs.getBoolPref('share_proxy_settings'));
   } catch(e) {}

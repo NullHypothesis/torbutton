@@ -66,6 +66,7 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_socksHost').disabled = true;
         doc.getElementById('torbutton_socksPort').disabled = true;
         doc.getElementById('torbutton_socksGroup').disabled = true;
+        doc.getElementById('torbutton_noProxiesOn').disabled = true;
     } else {
         doc.getElementById('torbutton_httpProxy').disabled = false;
         doc.getElementById('torbutton_httpPort').disabled = false;
@@ -78,6 +79,7 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_socksHost').disabled = false;
         doc.getElementById('torbutton_socksPort').disabled = false;
         doc.getElementById('torbutton_socksGroup').disabled = false;
+        doc.getElementById('torbutton_noProxiesOn').disabled = false;
         /* Do not reset these on every document update..
         doc.getElementById('torbutton_httpProxy').value    = o_customprefs.getCharPref('http_proxy');
         doc.getElementById('torbutton_httpPort').value     = o_customprefs.getIntPref('http_port');
@@ -138,6 +140,8 @@ function torbutton_prefs_init(doc) {
         doc.getElementById('torbutton_socksGroup').selectedItem =
             doc.getElementById('torbutton_socksv5');    
     }
+    doc.getElementById('torbutton_noProxiesOn').value = o_torprefs.getCharPref('no_proxies_on');
+
     // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
     doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
@@ -330,6 +334,8 @@ function torbutton_prefs_save(doc) {
         o_torprefs.setIntPref('socks_version', 5); 
     }
 
+    o_torprefs.setCharPref('no_proxies_on',      doc.getElementById('torbutton_noProxiesOn').value);
+    
     if (doc.getElementById('torbutton_settingsMethod').value == 'custom') {
         // XXX: Is this even needed anymore? We don't read the
         // custom prefs at all it seems..

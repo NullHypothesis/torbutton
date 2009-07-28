@@ -108,10 +108,28 @@
                                 oncommand="torbutton_prefs_set_field_attributes(document)"/>
                       </radiogroup>
                     </row>
+                    <row align="center">
+                       <hbox align="center" pack="end">
+                         <label value="&torbutton.prefs.no_proxies_on;" control="torbutton_noProxiesOn"/>
+                       </hbox>
+                       <hbox align="center">
+                         <textbox id="torbutton_noProxiesOn"/>
+                         <spacer/>
+                      </hbox>
+                    </row>
+                    <row align="right">
+                     <hbox align="center" pack="end">
+                      <spacer flex="1"/>
+                     </hbox>
+                     <hbox align="center" pack="end">
+                       <label class="indent" value="&torbutton.prefs.no_proxy_warning;"/>
+                     </hbox>
+                    </row>
                 </rows>
             </grid>
         </radiogroup>
-
+       
+        
         <checkbox id="torbutton_lockedMode"
         label="&torbutton.prefs.locked_mode;"
         oncommand="torbutton_prefs_set_field_attributes(document)"/>
@@ -333,7 +351,7 @@
        </vbox>
     </tabpanel>
 
-    </tabpanels>
+	</tabpanels>
    </tabbox>
 
 <!--
