@@ -2246,6 +2246,40 @@ unregister : function() {
 }
 }
 
+var torbutton_proxyservice = {
+  applyFilter : function(ps, uri, proxy) {
+    try {
+      torbutton_eclog(3, 'apply: '+uri.host+' '+uri.scheme+', '+proxy);
+      if (m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+        if (uri.host == "localhost") return null;
+      }
+      return proxy;
+    }
+    catch (e) {
+      torbutton_eclog(3, 'applyFilter failed:' +e);
+    }
+  },
+  register : function() {
+    torbutton_eclog(3, 'Proxy filter Registering...');
+    try {
+    var proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
+      .getService(Components.interfaces.nsIProtocolProxyService);
+    proxyservice.registerFilter(this, 0);
+    } catch (e) {
+      torbutton_eclog(3, 'RegisterFilter failed:'+e);
+    }
+  },
+  unregister : function() {
+    torbutton_eclog(3, 'Proxy filter Unregistering...');
+    try {
+    var proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
+      .getService(Components.interfaces.nsIProtocolProxyService);
+    proxyservice.unregisterFilter(this, 0);
+    } catch (e) {
+      torbutton_eclog(3, 'UnregisterFilter failed:'+e);
+    }
+  }
+}
 
 function torbutton_do_main_window_startup()
 {
@@ -2266,6 +2300,7 @@ function torbutton_do_main_window_startup()
     torbutton_unique_pref_observer.register();
     torbutton_uninstall_observer.register();
     torbutton_http_observer.register();
+    torbutton_proxyservice.register();
 }
 
 function torbutton_set_initial_state() {
@@ -2529,6 +2564,7 @@ function torbutton_close_window(event) {
         torbutton_unique_pref_observer.unregister();
         torbutton_uninstall_observer.unregister();
         torbutton_http_observer.unregister();
+        torbutton_proxyservice.unregister();
 
         if(m_tb_is_main_window) { // main window not reset above
             // This happens on Mac OS because they allow firefox
