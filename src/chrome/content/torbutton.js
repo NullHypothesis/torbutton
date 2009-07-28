@@ -1215,6 +1215,11 @@ function torbutton_update_status(mode, force_update) {
     m_tb_prefs.setBoolPref("security.enable_ssl2", 
             !m_tb_prefs.getBoolPref("security.enable_ssl2"));
 
+    // This clears the undo tab history.
+    var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
+    m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
+    m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
+ 
     var lp = m_tb_prefs.getIntPref("network.cookie.lifetimePolicy");
 
     if(lp == 1) {
