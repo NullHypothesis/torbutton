@@ -230,9 +230,12 @@ ContentPolicy.prototype = {
                 }
                 break;
             case "moz-nullprincipal":
-                // forbidden
-                if (this.tor_enabling) {
-                    this.logger.safe_log(4, "Blocking request from: ",
+                // forbidden to access anything but chrome
+                // (Chrome access needed for FoxyProxy context menu)
+                if (this.tor_enabling && 
+                        (contentLocation.scheme != "chrome")) {
+                    this.logger.safe_log(4, 
+                            "Blocking nullprinciple request from: ",
                                       requestOrigin.spec + " for: " +
                                       contentLocation.spec);
                     return block;
