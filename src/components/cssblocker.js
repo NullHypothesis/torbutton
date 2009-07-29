@@ -179,7 +179,8 @@ ContentPolicy.prototype = {
                                       contentLocation.spec);
                     return ok;
                 }
-                this.logger.eclog(4, "NO ORIGIN! Blockng request for: "+contentLocation.spec);
+                this.logger.safe_log(4, "NO ORIGIN! Blockng request for: ", 
+                        contentLocation.spec);
                 return block;
             }
         } else {
@@ -221,9 +222,9 @@ ContentPolicy.prototype = {
                 } else {
                     if (this.block_tor_file_net && this.tor_enabling ||
                             this.block_nontor_file_net && !this.tor_enabling) {
-                        this.logger.eclog(4, "Blocking remote request from: " +
-                                          requestOrigin.spec + " for: " +
-                                          contentLocation.spec);
+                        this.logger.safe_log(4, "Blocking remote request from: ",
+                                 requestOrigin.spec+" for: "
+                                 +contentLocation.spec);
                         return block;
                     }
                 }
@@ -231,7 +232,7 @@ ContentPolicy.prototype = {
             case "moz-nullprincipal":
                 // forbidden
                 if (this.tor_enabling) {
-                    this.logger.eclog(4, "Blocking request from: " +
+                    this.logger.safe_log(4, "Blocking request from: ",
                                       requestOrigin.spec + " for: " +
                                       contentLocation.spec);
                     return block;
@@ -245,7 +246,7 @@ ContentPolicy.prototype = {
                         try {
                             targetHost = contentLocation.host;
                         } catch(e) {
-                            this.logger.eclog(4, "No host from: " +
+                            this.logger.safe_log(4, "No host from: ",
                                     requestOrigin.spec + " for: " +
                                     contentLocation.spec);
                         }
@@ -260,8 +261,9 @@ ContentPolicy.prototype = {
                         return ok;
                     } else {
                         if (this.tor_enabling || (targetHost in protectedChromeHosts)) {
-                            this.logger.eclog(4, "Blocking local request from: "
-                                              +requestOrigin.spec+" ("
+                            this.logger.safe_log(4, 
+                                    "Blocking local request from: ",
+                                              requestOrigin.spec+" ("
                                               +requestOrigin.scheme+") for: "+
                                               contentLocation.spec);
                             return block;
@@ -285,13 +287,15 @@ ContentPolicy.prototype = {
             // could handle it either here or shouldProcess, instead of in 
             // the webprogresslistener
             if(this.tor_enabling && this.no_tor_plugins) {
-                this.logger.log(4, "Blocking object at "+contentLocation.spec);
+                this.logger.safe_log(4, "Blocking object at ",
+                                     contentLocation.spec);
                 return block;
             }
         }
 
         if (!wind || !wind.top.location || !wind.top.location.href) {
-            this.logger.log(4, "Skipping no location: "+contentLocation.spec);
+            this.logger.safe_log(4, "Skipping no location: ",
+                                 contentLocation.spec);
 			return ok;
         }
 
@@ -350,14 +354,14 @@ ContentPolicy.prototype = {
                     if(!requestOrigin.schemeIs("chrome")) {
                         if(typeof(browser.__tb_tor_fetched) == 'undefined') {
                             // This happens for "open in new window" context menu
-                            this.logger.log(3, "Untagged window for redirect "+contentLocation.spec);
+                            this.logger.safe_log(3, "Untagged window for redirect: ", contentLocation.spec);
                             return ok;
                         }
                         if(browser.__tb_tor_fetched == this.tor_enabled
                                 && browser.__tb_tor_fetched == this.settings_applied) {
                             return ok;
                         } else {
-                            this.logger.log(4, "Blocking redirect: "+contentLocation.spec);
+                            this.logger.safe_log(4, "Blocking redirect: ", contentLocation.spec);
                             return block;
                         }
                     }
@@ -370,7 +374,8 @@ ContentPolicy.prototype = {
                 && browser.__tb_tor_fetched == this.settings_applied) {
             return ok;
         } else {
-            this.logger.log(4, "Blocking cross state load of: "+contentLocation.spec);
+            this.logger.safe_log(4, "Blocking cross-state load of: ",
+                          contentLocation.spec);
             return block;
         }
 	},

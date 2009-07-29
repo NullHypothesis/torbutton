@@ -143,9 +143,9 @@ ContentWindowMapper.prototype =
       try {
           if(topContentWindow.name != "speedDialLoaderBrowser") {
               if(topContentWindow && topContentWindow.location)
-                  this.logger.log(4, "No browser found: "+topContentWindow.location);
+                  this.logger.safe_log(4, "No browser found: ", topContentWindow.location);
               else
-                  this.logger.log(4, "No browser found: "+topContentWindow.name);
+                  this.logger.safe_log(4, "No browser found: ", topContentWindow.name);
           } else {
               this.logger.log(3, "SpeedDial browser found: "+topContentWindow.name);
           }

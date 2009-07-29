@@ -4,7 +4,11 @@ var m_tb_torlog = Components.classes["@torproject.org/torbutton-logger;1"]
 
 function torbutton_eclog(nLevel, sMsg) {
     m_tb_torlog.eclog(nLevel, sMsg);
+    return true;
+}
 
+function torbutton_safelog(nLevel, sMsg, scrub) {
+    m_tb_torlog.safe_log(nLevel, sMsg, scrub);
     return true;
 }
 

@@ -109,6 +109,14 @@ TorbuttonLogger.prototype =
       }
   },
 
+  safe_log: function(level, str, scrub) {
+      if (this.loglevel < 4) {
+          this.eclog(level, str+scrub);
+      } else {
+          this.eclog(level, str+" [scrubbed]");
+      }
+  },
+
   log: function(level, str) {
       switch(this.logmethod) {
           case 2: // debuglogger

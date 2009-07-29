@@ -3030,7 +3030,9 @@ function torbutton_check_progress(aProgress, aRequest, aFlags) {
                 if(doc && doc.location && 
                   (doc.location.href.indexOf("about:") != 0 &&
                    doc.location.href.indexOf("chrome:") != 0)) {
-                    torbutton_eclog(4, "Exception on tag application at "+doc.location+": "+e);
+                    torbutton_safelog(4, "Exception "+e
+                                   +" on tag application at: ",
+                                    doc.location);
                 } else {
                     torbutton_eclog(3, "Got an about url: "+e);
                 }
