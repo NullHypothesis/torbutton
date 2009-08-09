@@ -1,3 +1,25 @@
+1.2.2
+  09 Aug 2009
+  * bugfix: Workaround Firefox Bug 440892 to prevent external apps from 
+    being launched (and thus bypassing proxy settings) without user 
+    confirmation. Independently reported by Greg Fleischer and optimist.
+  * bugfix: Create a separate "No Proxy For" option and remove the 
+    string "localhost" from proxy exemptions. Prevents a theoretical
+    proxy bypass condition discovered by optimist. Fix based on patch from
+    optimist.
+  * bugfix: bug 970: Purge undo tab list on Tor toggle.
+  * bugfix: bug 1040: Scrub URLs from log level 4 and higher log messages. 
+    Mac OS writes Firefox console messages to disk by default.
+  * bugfix: bug 1033: Fix FoxyProxy conflict that caused some FoxyProxy 
+    strings to fail to display.
+  * misc: bug 1006: Pop up a more specific failure message for pref
+    changing errors during Tor toggle.
+  * misc: Fix a couple of strict javascript warns on FF3.5
+  * misc: Add chrome url protection call to conceal other addons during
+    non-Tor usage. Patch by Sebastian Lisken.
+  * misc: Remove torbutton log system init message that may have scared some
+    paranoids. 
+
 1.2.1
   21 Mar 2009
   * bugfix: bug 773: Fixed Noscript conflict issue.
