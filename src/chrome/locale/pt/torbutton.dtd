@@ -41,7 +41,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "Desabilitar plugins durante o uso do TOR (importante)">
 <!ENTITY torbutton.prefs.kill_bad_js "Deter os scripts perigosos de java (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolar os conteúdos dinâmicos no arquivo de estado de Tor (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
+<!ENTITY torbutton.prefs.no_updates "Desactivar actualizações durante a utilização do Tor">
 <!ENTITY torbutton.prefs.set_uagent "Mascarar user agent durante utilização de TOR (importante)">
 <!ENTITY torbutton.prefs.dynamic "Conteúdo Dinâmico">
 <!ENTITY torbutton.prefs.cookies "Cookies">
@@ -62,7 +62,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "Bloquear senhas + informações de formulários quando não usar o TOR (opcional)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Não-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
+<!ENTITY torbutton.prefs.restore_tor "Na sessão restaurada, ajustar o estado do Tor para:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recarregar cookie/limpar cookies em uma falha do Firefox (recomendado)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Armazene os cookies, sejam ou não de Tor, em recipientes protegidos (Perigoso)">
 <!ENTITY torbutton.prefs.clear_http_auth "Limpar as sessões HTTP autenticadas (recomendado)">
@@ -75,8 +75,8 @@
 <!ENTITY torbutton.prefs.jar_ca_certs "Armazene certificados CA em arquivos de estado separados para páginas Tor e não-Tor (recomendado)">
 <!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
 <!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
+<!ENTITY torbutton.prefs.shutdown_state "Desligar estado">
+<!ENTITY torbutton.prefs.startup "Iniciar">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
@@ -90,3 +90,5 @@
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">

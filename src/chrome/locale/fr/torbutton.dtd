@@ -90,3 +90,5 @@
 <!ENTITY torbutton.prefs.tor_tabs "Onglets chargés en mode Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">

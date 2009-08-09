@@ -32,23 +32,23 @@
 <!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
+<!ENTITY torbutton.prefs.clear_history "清除Tor toggle上的歷史記錄(選項)">
 <!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
 <!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
+<!ENTITY torbutton.prefs.mmm_cookies "我將手動管理我的cookies (危險)">
+<!ENTITY torbutton.prefs.clear_cookies "清除Tor toggle上的cookies">
+<!ENTITY torbutton.prefs.disable_plugins "使用Tor時暫停plugins啟動 (嚴格的)">
 <!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
 <!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
-<!ENTITY torbutton.prefs.dynamic "Dynamic Content">
-<!ENTITY torbutton.prefs.cookies "Cookies">
+<!ENTITY torbutton.prefs.dynamic "動態內容">
+<!ENTITY torbutton.prefs.cookies "Coolies">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
-<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
-<!ENTITY torbutton.prefs.shutdown "Shutdown">
+<!ENTITY torbutton.prefs.history "記錄">
+<!ENTITY torbutton.prefs.no_search "使用Tor時不啟用搜尋推薦 (建議)">
+<!ENTITY torbutton.prefs.shutdown "關閉">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
 <!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
@@ -90,3 +90,5 @@
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">

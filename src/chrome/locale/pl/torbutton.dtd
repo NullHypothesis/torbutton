@@ -41,7 +41,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "Wyłącz wtyczki podczas użycia Tor (krytyczne)">
 <!ENTITY torbutton.prefs.kill_bad_js "Nadzoruj niebezpieczne skrypty (krytyczne)">
 <!ENTITY torbutton.prefs.isolate_content "Izoluj treść dynamiczną (krytyczne)">
-<!ENTITY torbutton.prefs.no_updates "Zablokuj aktualizacje podczas używania Tora (zalecane)">
+<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Ustaw identyfikację przeglądarki podczas używania Tora (ważne)">
 <!ENTITY torbutton.prefs.dynamic "Zawartość dynamiczna">
 <!ENTITY torbutton.prefs.cookies "Ciasteczka">
@@ -62,7 +62,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "Blokuj zapamiętywanie haseł z formularzy gdy Tor nieaktywny (opcjonalnie)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "bez Tora">
-<!ENTITY torbutton.prefs.restore_tor "Po nieoczekiwanym zamknięciu, odzyskaj zapisaną sesję poprzez:">
+<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Usuń ciasteczka z magazynów przy nieoczekiwanym zamknięciu Firefoxa (zalecane)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Zapisuj wszystkie ciasteczka w zabezpieczonych magazynach(niebezpieczne)">
 <!ENTITY torbutton.prefs.clear_http_auth "Czyść sesje autentykacji HTTP (zalecane)">
@@ -90,3 +90,5 @@
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">

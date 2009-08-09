@@ -1,34 +1,34 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
-<!ENTITY torbutton.prefs.panel_format "Status bar display format:">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Icon">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "About Torbutton">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
-<!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
+<!ENTITY torbutton.prefs.title "टोर बटन प्रिफ़्रन्सेस">
+<!ENTITY torbutton.prefs.display_settings "प्रदर्शन पटल">
+<!ENTITY torbutton.prefs.display_panel "टोर के प्रोक्सी सेटिंग को अवस्थिति बार मे दर्शाये">
+<!ENTITY torbutton.prefs.panel_format "अवस्थिति बार प्रदर्शन फॉर्मेट">
+<!ENTITY torbutton.prefs.panel_text_format "पाठ्यांश">
+<!ENTITY torbutton.prefs.panel_icon_format "प्रतिमूर्ति/आईक्न">
+<!ENTITY torbutton.prefs.tor_settings "प्रोक्सी सेटींग">
+<!ENTITY torbutton.prefs.recommended_settings "मेरे फ़ायर फ़ाक्स कथन के लिये सुझायी प्रोक्सी सेटिंग उपयोग करे ">
+<!ENTITY torbutton.prefs.use_privoxy "प्रिवोक्सी का उपयोग करे">
+<!ENTITY torbutton.prefs.custom_settings "व्यवाहारिक प्रोक्सी सेटिंग का उपयोग करे">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP प्रोक्सी:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL प्रोक्सी:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP प्रोक्सी:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "गोफ़र प्रोक्सी ">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS आतिथेय :">
+<!ENTITY torbutton.prefs.proxy.port "पोर्ट/द्वार :">
+<!ENTITY torbutton.about.title "टोर बटन के बारे मे">
+<!ENTITY torbutton.pref_connection.notice "इन सेटिंग को बदलने के लिये टोर बटन को असमर्थ करे ">
+<!ENTITY torbutton.pref_connection.more_info "अधिक जानकारी के लिए ">
+<!ENTITY torbutton.pref_connection_more_info.title "सहायता">
+<!ENTITY torbutton.pref_connection_more_info.text "टोर बटन अभी समर्थकृत है । अगर आप आपने अन्य (टोर के अलावा) प्रोक्सी सेटिंग को बदलना चाहते है तो टोर को असमर्थ करके इधर प्रतिगमन करे । अगर आप अपने टोर सेटिंग को बदलना चाहते है तो कृपिया टोर बटन के प्रिफ़रेन्स खिड़की का उपयोग करे ।">
 <!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
-<!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Preferences...">
-<!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "About Torbutton...">
-<!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
+<!ENTITY torbutton.context_menu.toggle.key "T/त">
+<!ENTITY torbutton.context_menu.preferences "प्रिफ़रेन्सस ...">
+<!ENTITY torbutton.context_menu.preferences.key "P/प">
+<!ENTITY torbutton.context_menu.about "टोर बटन के बरे मे ...">
+<!ENTITY torbutton.context_menu.about.key "A/अ">
+<!ENTITY torbutton.button.label "टोर बटन">
+<!ENTITY torbutton.button.tooltip "टोर बटन को आरंभित करने के लिये क्लिक करे">
+<!ENTITY torbutton.prefs.sec_settings "सुरक्षा सेटिंग">
+<!ENTITY torbutton.prefs.block_thread "टोर चलते समय अपने ब्राउसर के इतिहास रेकार्द को बन्द करे (अतियन्त महत्वपूर्ण)">
 <!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
@@ -90,3 +90,5 @@
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
