@@ -244,7 +244,8 @@ function torbutton_prefs_init(doc) {
             break;
     }
     
-    doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof');
+    if ((doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof'))==4)
+      doc.getElementById('torbutton_CustomRef').value = o_torprefs.getCharPref('customref');
     
     doc.getElementById('torbutton_torSessionStore').checked = !o_torprefs.getBoolPref('notor_sessionstore');
     doc.getElementById('torbutton_nonTorSessionStore').checked = !o_torprefs.getBoolPref('nonontor_sessionstore');
@@ -436,6 +437,8 @@ function torbutton_prefs_save(doc) {
     
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);
     o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
+    if (doc.getElementById('torbutton_CustomReferer').selected)
+       o_torprefs.setCharPref('customref',doc.getElementById('torbutton_CustomRef').value);
     /*
     o_torprefs.setBoolPref('jar_certs', doc.getElementById('torbutton_jarCerts').checked);
     o_torprefs.setBoolPref('jar_ca_certs',

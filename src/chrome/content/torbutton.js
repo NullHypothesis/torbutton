@@ -443,8 +443,9 @@ function torbutton_init() {
 //if it is, then we show the two context menu items
 function torbutton_check_contextmenu() {
     var torurl = document.getElementById("torcontext-copyurl");
-    var tortab = document.getElementById("torcontext-opentorurl");
-    torurl.hidden = tortab.hidden = (document.popupNode.localName != "A") 
+    var tortab = document.getElementById("torcontext-opentortab");
+    var torwin = document.getElementById("torcontext-opentorwin");
+    torurl.hidden = tortab.hidden = torwin.hidden = (document.popupNode.localName != "A") 
 }
 function torbutton_copy_link() {
   var element = document.popupNode;

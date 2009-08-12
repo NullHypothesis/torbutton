@@ -1,12 +1,11 @@
-
 function LOG(text)
 {
  var logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
  logger.log("RefSpoof " + text);
   /*var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                         .getService(Components.interfaces.nsIPromptService);
-  prompt.alert(null, "debug", text);*/
- 
+  prompt.alert(null, "debug", text);
+ */
 }
 
 
@@ -62,7 +61,10 @@ var refObserver = {
         //spoof no referer
         case 3:
           this.adjustRef(oHttpChannel, "");
-        break;      
+        break; 
+        case 4:
+          this.adjustRef(oHttpChannel, prefs.getCharPref("extensions.torbutton.customref"));
+        break;     
       }
       if (fake_refresh)      
         oHttpChannel.setRequestHeader("If-Modified-Since","Sat, 29 Oct 1989 19:43:31 GMT",false);

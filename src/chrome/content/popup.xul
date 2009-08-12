@@ -22,6 +22,12 @@
                   accesskey="&torbutton.context_menu.preferences.key;"
                   insertafter="context-stop"
                   oncommand="torbutton_open_prefs_dialog()"/>
+        <menuitem  id="torbutton-cookies" 
+                  label="Cookie Manager"
+                  accesskey="C"
+                  insertafter="context-stop"
+                  oncommand="window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Manager',
+                                   'centerscreen,chrome,dialog,modal,resizable')"/>
         <menuitem id="torbutton-about"
                   label="&torbutton.context_menu.about;"
                   accesskey="&torbutton.context_menu.about.key;"

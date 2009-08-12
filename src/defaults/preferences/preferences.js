@@ -139,8 +139,9 @@ pref("extensions.torbutton.tor_memory_jar",false);
 pref("extensions.torbutton.nontor_memory_jar",false);
 pref("extensions.torbutton.tz_string","");
 pref("extensions.torbutton.launch_warning",true);
-pref("extensions.torbutton.refererspoof", 0); //0=no spoof, 1=root spoof, 2=domain spoof, 3=blank spoof
+pref("extensions.torbutton.refererspoof", 0); //0=no spoof, 1=root spoof, 2=domain spoof, 3=blank spoof, 4=custom spoof
 pref("extensions.torbutton.fakerefresh", false);
+pref("extensions.torbutton.customeref","");
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");
