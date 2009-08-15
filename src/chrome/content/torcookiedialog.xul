@@ -10,7 +10,7 @@
         buttons="accept,cancel"
         style="width: 30em;"
         onload="initDialog();"
-        ondialogaccept="return;"
+        ondialogaccept="acceptDialog();"
         persist="screenX screenY width height">
   <script src="chrome://torbutton/content/torbutton.js" type="application/x-javascript"/>
   <script src="chrome://torbutton/content/torcookie.js" type="application/x-javascript"/>
@@ -34,8 +34,39 @@
           <splitter class="tree-splitter"/>
           <treecol id="nameCol" label="Name" flex="1"
                        onclick="CookieColumnSort('name', true);" persist="width"/>
+          <treecol id="pathCol" label="Path" flex="1"
+                       onclick="CookieColumnSort('path', true);" persist="width"/>
+          
         </treecols>
         <treechildren/>
       </tree>
   </vbox>
+  <groupbox>
+    <hbox>
+        <vbox>
+          <button id="protectCookie" disabled="true"
+                      label="Protect Cookie"
+                      oncommand="protectCookie();"/>
+          <button id="removeCookie" disabled="true"
+                      label="Remove Cookie"
+                      oncommand="DeleteCookie();"/>
+        </vbox>
+        <vbox>
+          <button id="unprotectCookie" disabled="true"
+                      label="Unprotect Cookie"
+                      oncommand="unprotectCookie();"/>
+          <button id="removeAllCookies"
+                      label="Remove All But Protected"
+                      oncommand="DeleteAllCookies();"/>
+        </vbox>
+      </hbox>
+      <hbox>
+        <radiogroup id="defaultCookieGroup">
+          <radio id="saveAllCookies" label="Protect All New Cookies" />
+          <radio id="donnotsaveCookies" label="Do Not Protect New Cookies" />
+        </radiogroup>
+      </hbox>
+  </groupbox>
+  
 </dialog>
+

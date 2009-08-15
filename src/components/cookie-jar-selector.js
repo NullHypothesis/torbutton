@@ -153,15 +153,93 @@ function CookieJarSelector() {
   }
 
   this._cookiesToFile = function(name) {
-      var file = getProfileFile("cookies-" + name + ".xml");
-      var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
-            .createInstance(Ci.nsIFileOutputStream);
-      foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
-      var data = this["cookiesobj-" + name].toString();
-      foStream.write(data, data.length);
-      foStream.close();
+    var file = getProfileFile("cookies-" + name + ".xml");
+    var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
+          .createInstance(Ci.nsIFileOutputStream);
+    foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
+    var data = this["cookiesobj-" + name].toString();
+    foStream.write(data, data.length);
+    foStream.close();
   }
+  this._protectedCookiesToFile = function(name) {
+    var file = getProfileFile("protected-" + name + ".xml");
+    var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
+        .createInstance(Ci.nsIFileOutputStream);
+    foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
+    var data = this["protected-" + name].toString();
+    foStream.write(data, data.length);
+    foStream.close();
+  }
+  this.getProtectedCookies = function(name) {
+      var file = getProfileFile("protected-" + name + ".xml");
+      if (!file.exists())
+          return null;
+      var data = "";
+      var fstream = Cc["@mozilla.org/network/file-input-stream;1"]
+          .createInstance(Ci.nsIFileInputStream);
+      var sstream = Cc["@mozilla.org/scriptableinputstream;1"]
+          .createInstance(Ci.nsIScriptableInputStream);
+      fstream.init(file, -1, 0, 0);
+      sstream.init(fstream); 
 
+      var str = sstream.read(4096);
+      while (str.length > 0) {
+          data += str;
+          str = sstream.read(4096);
+      }
+
+      sstream.close();
+      fstream.close();
+      try {
+          var ret = XML(data);
+      } catch(e) { // file has been corrupted; XXX: handle error differently
+          this.logger.log(5, "Cookies corrupted: "+e);
+          try {
+              file.remove(false); //XXX: is it necessary to remove it ?
+              var ret = null;
+          } catch(e2) {
+              this.logger.log(5, "Can't remove file "+e);
+          }
+      }
+      return ret;
+  }
+  this.protectCookies = function(cookies) {
+    var tor_enabled = this.prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    var protname = tor_enabled? "tor" : "nontor";
+    this._writeProtectCookies(cookies,protname);
+    this._protectedCookiesToFile(protname);  
+  }
+  this._writeProtectCookies = function(cookies, name) {
+    var cookieManager =
+      Cc["@mozilla.org/cookiemanager;1"]
+      .getService(Ci.nsICookieManager);
+    var cookiesEnum = cookieManager.enumerator;
+    var cookiesAsXml = new XML('<cookies/>');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var xml = <cookie>{cookie.value}</cookie>;
+        //this.logger.log(2, "Saving cookie: "+cookie.host+":"+cookie.name+" until: "+cookie.expiry);
+        xml.@name = cookie.name;
+        xml.@host = cookie.host;
+        xml.@path = cookie.path;
+        if (cookie.isSecure)
+            xml.@isSecure = 1;
+        if (cookie.isSession) {
+            xml.@isSession = 1;
+            // session cookies get fucked up expiry. Give it 1yr if
+            // the user wants to save their session cookies
+            xml.@expiry = Date.now()/1000 + 365*24*60*60;
+        } else {
+            xml.@expiry = cookie.expires; 
+        }
+        if (cookie.isHttpOnly)
+            xml.@isHttpOnly = 1;
+
+        // Save either session or non-session cookies this time around:
+        cookiesAsXml.appendChild(xml);
+    }
+    this["protected-" + name] = cookiesAsXml;
+  }
   this._cookiesFromFile = function(name) {
       var file = getProfileFile("cookies-" + name + ".xml");
       if (!file.exists())

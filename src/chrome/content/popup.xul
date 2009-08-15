@@ -23,10 +23,10 @@
                   insertafter="context-stop"
                   oncommand="torbutton_open_prefs_dialog()"/>
         <menuitem  id="torbutton-cookies" 
-                  label="Cookie Manager"
+                  label="Cookie Protections"
                   accesskey="C"
                   insertafter="context-stop"
-                  oncommand="window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Manager',
+                  oncommand="window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Protections',
                                    'centerscreen,chrome,dialog,modal,resizable')"/>
         <menuitem id="torbutton-about"
                   label="&torbutton.context_menu.about;"
