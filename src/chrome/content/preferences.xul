@@ -239,7 +239,9 @@
             <radio id="torbutton_dualCookieJars"
                     label="&torbutton.prefs.dual_cookie_jars;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/>
-
+            <radio id="torbutton_cookieProtections"
+                    label="Use the Cookie Protections dialog to choose which cookies are protected"
+                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
             <radio id="torbutton_mmmCookies"
                     label="&torbutton.prefs.mmm_cookies;" 
                     oncommand="torbutton_prefs_set_field_attributes(document)"/> 

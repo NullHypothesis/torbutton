@@ -239,7 +239,7 @@ function CookieJarSelector() {
         cookiesAsXml.appendChild(xml);
     }
     this["protected-" + name] = cookiesAsXml;
-  }
+  };
   this._cookiesFromFile = function(name) {
       var file = getProfileFile("cookies-" + name + ".xml");
       if (!file.exists())
@@ -306,7 +306,41 @@ function CookieJarSelector() {
     // ok, everything's fine
     this.logger.log(2, "Cookies saved");
   };
+  this.clearUnprotectedCookies = function(name) {
+  var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                        .getService(Components.interfaces.nsIPromptService);
 
+    var cookiesAsXml = this.getProtectedCookies(name);
+    if (cookiesAsXml == null)
+      return;//file does not exist - no protected cookies
+    var cookiemanager =
+      Cc["@mozilla.org/cookiemanager;1"]
+      .getService(Ci.nsICookieManager);
+    
+    var enumerator = cookiemanager.enumerator;
+    var count = 0;
+    var protcookie = false;
+    prompts.alert(null, "hey", cookiesAsXml.cookie.length());
+
+    while (enumerator.hasMoreElements()) {
+    var nextCookie = enumerator.getNext();
+    for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
+      var xml = cookiesAsXml.cookie[i];
+      var cvalue = xml.toString();
+      var cname = xml.@name; 
+      var chost = xml.@host;
+      var cpath = xml.@path;
+      protcookie = (nextCookie.host == chost && nextCookie.name == cname && nextCookie.path == cpath)        
+    }
+      if (!protcookie)
+       cookiemanager.remove(nextCookie.host,
+                         nextCookie.name,
+                         nextCookie.path,
+                         false);
+      protcookie = false;
+    }                     
+  }
+  
   this._oldLoadCookies = function(name, deleteSavedCookieJar) {
     var cookieManager =
       Cc["@mozilla.org/cookiemanager;1"]

@@ -1408,7 +1408,17 @@ function torbutton_close_on_toggle(mode) {
     }
 }
 
+function checkProtections()
+{
+  var pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections");
+  document.getElementById("torbutton-cookie-protector").disabled = !pref; 
+}
 
+function torbutton_open_cookie_dialog() {
+
+  window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Protections',
+                                   'centerscreen,chrome,dialog,modal,resizable');
+}
 function torbutton_open_prefs_dialog() {
     window.openDialog("chrome://torbutton/content/preferences.xul","torbutton-preferences","centerscreen, chrome");
     torbutton_log(2, 'opened preferences window');
@@ -1539,6 +1549,7 @@ function torbutton_clear_cookies() {
     cm.removeAll();
 }
 
+
 function torbutton_jar_cookies(mode) {
     var selector =
           Components.classes["@stanford.edu/cookie-jar-selector;1"]
@@ -1552,14 +1563,18 @@ function torbutton_jar_cookies(mode) {
         window.alert(warning);
         return;
     }*/
-
+    var protectcookies = m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections');
     if(mode) {
+        if (protectcookies)
+          selector.clearUnprotectedCookies("nontor");        
         selector.saveCookies("nontor");
         selector.clearCookies();
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars') || protectcookies)
             selector.loadCookies("tor", false);
     } else {
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+        if (protectcookies)
+          selector.clearUnprotectedCookies("tor");          
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars') || protectcookies)
             selector.saveCookies("tor");
         selector.clearCookies();
         selector.loadCookies("nontor", false);

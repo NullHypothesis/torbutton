@@ -9,8 +9,9 @@
     <stringbundleset id="torbutton-stringbundleset">
         <stringbundle id="torbutton-bundle" src="chrome://torbutton/locale/torbutton.properties"/>
     </stringbundleset>
+    <script src="chrome://torbutton/content/torbutton.js" type="application/x-javascript"/>
 
-    <popup id="torbutton-context-menu">
+    <popup id="torbutton-context-menu" onpopupshowing="checkProtections();">
         <menuitem id="torbutton-toggle"
                   label="&torbutton.context_menu.toggle;"
                   accesskey="&torbutton.context_menu.toggle.key;"
@@ -22,12 +23,11 @@
                   accesskey="&torbutton.context_menu.preferences.key;"
                   insertafter="context-stop"
                   oncommand="torbutton_open_prefs_dialog()"/>
-        <menuitem  id="torbutton-cookies" 
+        <menuitem  id="torbutton-cookie-protector"
                   label="Cookie Protections"
                   accesskey="C"
-                  insertafter="context-stop"
-                  oncommand="window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Protections',
-                                   'centerscreen,chrome,dialog,modal,resizable')"/>
+                  insertafter="context-stop"                  
+                  oncommand="torbutton_open_cookie_dialog()"/>
         <menuitem id="torbutton-about"
                   label="&torbutton.context_menu.about;"
                   accesskey="&torbutton.context_menu.about.key;"
