@@ -1415,7 +1415,6 @@ function checkProtections()
 }
 
 function torbutton_open_cookie_dialog() {
-
   window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Protections',
                                    'centerscreen,chrome,dialog,modal,resizable');
 }
@@ -1569,12 +1568,12 @@ function torbutton_jar_cookies(mode) {
           selector.clearUnprotectedCookies("nontor");        
         selector.saveCookies("nontor");
         selector.clearCookies();
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars') || protectcookies)
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
             selector.loadCookies("tor", false);
     } else {
         if (protectcookies)
           selector.clearUnprotectedCookies("tor");          
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars') || protectcookies)
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
             selector.saveCookies("tor");
         selector.clearCookies();
         selector.loadCookies("nontor", false);

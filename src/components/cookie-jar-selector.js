@@ -307,38 +307,47 @@ function CookieJarSelector() {
     this.logger.log(2, "Cookies saved");
   };
   this.clearUnprotectedCookies = function(name) {
-  var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                        .getService(Components.interfaces.nsIPromptService);
-
+  try {
+  
     var cookiesAsXml = this.getProtectedCookies(name);
     if (cookiesAsXml == null)
       return;//file does not exist - no protected cookies
     var cookiemanager =
       Cc["@mozilla.org/cookiemanager;1"]
-      .getService(Ci.nsICookieManager);
+      .getService(Ci.nsICookieManager2);
     
     var enumerator = cookiemanager.enumerator;
     var count = 0;
     var protcookie = false;
-    prompts.alert(null, "hey", cookiesAsXml.cookie.length());
 
     while (enumerator.hasMoreElements()) {
     var nextCookie = enumerator.getNext();
+    if (!nextCookie) break;
+      nextCookie = nextCookie.QueryInterface(Components.interfaces.nsICookie);
+  
+     
     for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
       var xml = cookiesAsXml.cookie[i];
       var cvalue = xml.toString();
       var cname = xml.@name; 
       var chost = xml.@host;
       var cpath = xml.@path;
-      protcookie = (nextCookie.host == chost && nextCookie.name == cname && nextCookie.path == cpath)        
+
+      protcookie = protcookie || (nextCookie.host == chost && nextCookie.name == cname && nextCookie.path == cpath);  
     }
-      if (!protcookie)
-       cookiemanager.remove(nextCookie.host,
+    if (!protcookie)
+    {
+      cookiemanager.remove(nextCookie.host,
                          nextCookie.name,
-                         nextCookie.path,
-                         false);
-      protcookie = false;
-    }                     
+                         nextCookie.path, false);
+    }
+    protcookie = false;      
+   }
+   }
+   catch (e)
+   {
+      this.logger.log(2, "Error deleting unprotected cookies. " + e);
+   }                   
   }
   
   this._oldLoadCookies = function(name, deleteSavedCookieJar) {

@@ -181,7 +181,18 @@ function torbutton_prefs_init(doc) {
         o_torprefs.setBoolPref('tor_memory_jar', true);
         doc.getElementById('torbutton_torMemoryJar').disabled = true;
         doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;        
-    } else if(o_torprefs.getBoolPref('dual_cookie_jars')) {
+    } else if(o_torprefs.getBoolPref('cookie_protections')) {
+        doc.getElementById('torbutton_cookieGroup').selectedItem =
+            doc.getElementById('torbutton_cookieProtections');
+        o_torprefs.setBoolPref('cookie_jars', false);
+        o_torprefs.setBoolPref('dual_cookie_jars', true);
+        o_torprefs.setBoolPref('clear_cookies', false); 
+        o_torprefs.setBoolPref('tor_memory_jar', false);
+        o_torprefs.setBoolPref('nontor_memory_jar', false);
+        doc.getElementById('torbutton_torMemoryJar').disabled = true;
+        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
+    } 
+    else if(o_torprefs.getBoolPref('dual_cookie_jars')) {
         doc.getElementById('torbutton_cookieGroup').selectedItem =
             doc.getElementById('torbutton_dualCookieJars');
         o_torprefs.setBoolPref('cookie_jars', false);
@@ -190,17 +201,7 @@ function torbutton_prefs_init(doc) {
         o_torprefs.setBoolPref('cookie_protections',false);
         doc.getElementById('torbutton_torMemoryJar').disabled = false;
         doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
-    } else if(o_torprefs.getBoolPref('cookie_protections')) {
-        doc.getElementById('torbutton_cookieGroup').selectedItem =
-            doc.getElementById('torbutton_cookieProtections');
-        o_torprefs.setBoolPref('cookie_jars', false);
-        o_torprefs.setBoolPref('dual_cookie_jars', false);
-        o_torprefs.setBoolPref('clear_cookies', false); 
-        o_torprefs.setBoolPref('tor_memory_jar', false);
-        o_torprefs.setBoolPref('nontor_memory_jar', false);
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
-    } else {
+    }  else {
         doc.getElementById('torbutton_cookieGroup').selectedItem =
             doc.getElementById('torbutton_mmmCookies');
         o_torprefs.setBoolPref('cookie_jars', false);
@@ -393,7 +394,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
     o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').selected);
     o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
-    o_torprefs.setBoolPref('dual_cookie_jars', doc.getElementById('torbutton_dualCookieJars').selected);
+    o_torprefs.setBoolPref('dual_cookie_jars', doc.getElementById('torbutton_dualCookieJars').selected || doc.getElementById('torbutton_cookieProtections').selected);
     o_torprefs.setBoolPref('cookie_protections', doc.getElementById('torbutton_cookieProtections').selected);
     o_torprefs.setBoolPref('disable_domstorage', doc.getElementById('torbutton_noDomStorage').checked);
     o_torprefs.setBoolPref('clear_http_auth', doc.getElementById('torbutton_clearHttpAuth').checked);
