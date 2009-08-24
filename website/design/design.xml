@@ -2273,14 +2273,14 @@ the Date object though.
   <para>
 
 The purpose of this section is to cover all the known ways that Tor browser
-security can be subverted from a testing and penetration perspective. The hope
+security can be subverted from a penetration testing perspective. The hope
 is that it will be useful both for creating a &quot;Tor Safety Check&quot;
 page, and for developing novel tests and actively attacking Torbutton with the
 goal of finding vulnerabilities in either it or the Mozilla components,
 interfaces and settings upon which it relies.
 
   </para>
-  <sect2 id="Categories">
+  <sect2 id="SingleStateTesting">
    <title>Single state testing</title>
    <para>
 
@@ -2290,8 +2290,9 @@ aggregated test suites exist that can be used to test for regressions in
 Torbutton and to help aid in the development of Torbutton-like addons and
 other privacy modifications of other browsers. Some of these test suites exist
 as a single automated page, while others are a series of pages you must visit
-individually. They are provided here mostly for reference and future
-regression testing.
+individually. They are provided here for reference and future regression
+testing, and also in the hope that some brave soul will one day decide to
+combine them into a comprehensive automated test suite.
 
      <orderedlist>
       <listitem><ulink url="http://decloak.net/">Decloak.net</ulink>
@@ -2430,7 +2431,7 @@ that the user has toggled Tor before fetching content.
     </para>
    </sect3>
   </sect2>
-  <sect2>
+  <sect2 id="HackTorbutton">
    <title>Active testing (aka How to Hack Torbutton)</title>
    <para>
 
