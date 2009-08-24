@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>July 31 2008</pubdate>
+   <pubdate>Aug 23 2009</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.2.0.
+Torbutton Firefox extension. It is current as of Torbutton 1.2.2.
 
   </para>
   <sect2 id="adversary">
@@ -353,7 +353,7 @@ SHOULD NOT perform unauthenticated updates or upgrades via Tor.</para></listitem
 <para>Firefox extensions consist of two main categories of code: 'Components' and
 'Chrome'. Components are a fancy name for classes that implement a given
 interface or interfaces. In Firefox, components <ulink
-url="http://www.xulplanet.com/references/xpcomref/creatingcomps.html">can be
+url="https://developer.mozilla.org/en/XPCOM">can be
 written</ulink> in C++,
 Javascript, or a mixture of both. Components have two identifiers: their
 '<ulink
@@ -386,8 +386,6 @@ reimplement their interfaces; and creating new components that provide
 services to other pieces of the extension.
 
   </para>
-
-<!-- XXX All these xulplanet links are dead... -->
 
   <sect2>
    <title>Hooked Components</title>
@@ -439,7 +437,7 @@ browser crashed and the session needs to be restored. The wrapper notifies the
 Torbutton chrome that the browser crashed by setting the pref
 <command>extensions.torbutton.crashed</command>, or that it is a normal
 startup via the pref <command>extensions.torbutton.noncrashed</command>. The Torbutton Chrome <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIPrefBranch2.html#method_addObserver">listens for a
+url="https://developer.mozilla.org/en/NsIPrefBranch2#addObserver.28.29">listens for a
 preference change</ulink> for this value and then does the appropriate cleanup. This
 includes setting the Tor state to the one the user selected for crash recovery
 in the preferences window (<command>extensions.torbutton.restore_tor</command>), and
@@ -453,8 +451,7 @@ linkend="isolation">Network Isolation</link> requirements.
 
 </sect3>
 <sect3>
-<title><ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_browserglobalhistory2.html">@mozilla.org/browser/global-history;2</ulink>
+<title><ulink url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/global-history;2">@mozilla.org/browser/global-history;2</ulink>
 - <ulink
   url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/ignore-history.js">components/ignore-history.js</ulink></title>
 
@@ -463,9 +460,9 @@ url="http://www.collinjackson.com/">Collin Jackson</ulink> as a method for defea
 CSS and Javascript-based methods of history disclosure. The global-history
 component is what is used by Firefox to determine if a link was visited or not
 (to apply the appropriate style to the link). By hooking the <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIGlobalHistory2.html#method_isVisited">isVisited</ulink>
+url="https://developer.mozilla.org/en/nsIGlobalHistory2#isVisited.28.29">isVisited</ulink>
 and <ulink 
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIGlobalHistory2.html#method_addURI">addURI</ulink>
+url="https://developer.mozilla.org/en/nsIGlobalHistory2#addURI.28.29">addURI</ulink>
 methods, Torbutton is able to selectively prevent history items from being
 added or being displayed as visited, depending on the Tor state and the user's
 preferences.
@@ -523,17 +520,17 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/window-map
 - components/window-mapper.js</ulink></title>
 
 <para>Torbutton tags Firefox <ulink
-url="http://www.xulplanet.com/references/elemref/ref_tabbrowser.html">tabs</ulink> with a special variable that indicates the Tor
+url="https://developer.mozilla.org/en/XUL_Tutorial/Tabboxes">tabs</ulink> with a special variable that indicates the Tor
 state the tab was most recently used under to fetch a page. The problem is
 that for many Firefox events, it is not possible to determine the tab that is
 actually receiving the event. The Torbutton window mapper allows the Torbutton
 chrome and other components to look up a <ulink
-url="http://www.xulplanet.com/references/elemref/ref_tabbrowser.html">browser
+url="https://developer.mozilla.org/en/XUL/tabbrowser">browser
 tab</ulink> for a given <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDOMWindow.html">HTML content
+url="https://developer.mozilla.org/en/nsIDOMWindow">HTML content
 window</ulink>. It does this by traversing all windows and all browsers, until it
 finds the browser with the requested <ulink
-url="http://www.xulplanet.com/references/elemref/ref_browser.html#prop_contentWindow">contentWindow</ulink> element. Since the content policy
+url="https://developer.mozilla.org/en/XUL/tabbrowser#p-contentWindow">contentWindow</ulink> element. Since the content policy
 and page loading in general can generate hundreds of these lookups, this
 result is cached inside the component.
 </para>
@@ -549,10 +546,10 @@ However, CSS is still able to perform network operations by loading styles for
 onmouseover events and other operations. In addition, favicons can still be
 loaded by the browser. The cssblocker component prevents this by implementing
 and registering an <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIContentPolicy.html">nsIContentPolicy</ulink>.
+url="https://developer.mozilla.org/en/nsIContentPolicy">nsIContentPolicy</ulink>.
 When an nsIContentPolicy is registered, Firefox checks every attempted network
 request against its <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIContentPolicy.html#method_shouldLoad">shouldLoad</ulink>
+url="https://developer.mozilla.org/en/nsIContentPolicy#shouldLoad()">shouldLoad</ulink>
 member function to determine if the load should proceed. In Torbutton's case,
 the content policy looks up the appropriate browser tab using the <link
 linkend="windowmapper">window mapper</link>,
@@ -654,20 +651,23 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbut
 It contains event handlers for preference update, shutdown, upgrade, and
 location change events.</para>
 
-<!-- XXX Javascript hooks are mostly unused now -->
 <para>The <ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_docloaderservice1.html">location
+url="https://developer.mozilla.org/en/nsIWebProgressListener#onLocationChange">location
 change</ulink> <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgressListener.html">webprogress
+url="https://developer.mozilla.org/en/nsIWebProgress">webprogress
 listener</ulink>, <command>torbutton_weblistener</command> is perhaps the
 most important part of the chrome from a security standpoint. It is a <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgressListener.html">web
-progress listener</ulink> that handles
+url="https://developer.mozilla.org/en/nsIWebProgressListener">webprogress 
+listener</ulink> that handles
 receiving an event every time a page load or iframe load occurs. This class
 eventually calls down to <function>torbutton_update_tags()</function> and 
 <function>torbutton_hookdoc()</function>, which apply the browser Tor load state tags, plugin
-permissions, and install the Javascript hooks to hook the <ulink
-url="http://phrogz.net/objJob/object.asp?id=224">Date</ulink> object and
+permissions, and install the Javascript hooks to hook the
+<!-- XXX Javascript hooks are mostly unused now.
+     They only apply to window.* settings -->
+
+<ulink
+url="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date">Date</ulink> object and
 the <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink> object (for timezone and platform information,
 respectively).</para>
@@ -854,7 +854,7 @@ proxy settings to the selected Tor settings, and then sets the proxy settings
 to the opposite state, and sets the pref
 <command>extensions.torbutton.tor_enabled</command> to reflect the new state.
 It is this proxy pref update that gives notification via the <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIPrefBranch2.html#method_addObserver">pref
+url="https://developer.mozilla.org/en/NsIPrefBranch2#addObserver.28.29">pref
 observer</ulink>
 <command>torbutton_unique_pref_observer</command> to perform the rest of the
 toggle.
@@ -900,7 +900,7 @@ linkend="contentpolicy">content policy</link>.
 
 <sect1>
  <title>Description of Options</title>
-<!-- XXX: Review these -->
+<!-- FIXME: Review+update these during FF3.5 audit -->
 <para>This section provides a detailed description of Torbutton's options. Each
 option is presented as the string from the preferences window, a summary, the
 preferences it touches, and the effect this has on the components, chrome, and
@@ -931,8 +931,6 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/prefer
  </sect2>
  <sect2 id="plugins">
   <title>Disable plugins on Tor Usage (crucial)</title>
-<!-- XXX: Document java api here-->
-
  <para>Option: <command>extensions.torbutton.no_tor_plugins</command></para>
 
  <para>Java and plugins <ulink
@@ -952,7 +950,7 @@ Flash.
 Enabling this preference causes the above mentioned Torbutton chrome web progress
  listener <command>torbutton_weblistener</command> to disable Java via <command>security.enable_java</command> and to disable
  plugins via the browser <ulink
- url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDocShell.html">docShell</ulink>
+ url="https://developer.mozilla.org/en/XUL%3aProperty%3adocShell">docShell</ulink>
  attribute <command>allowPlugins</command>. These flags are set every time a new window is
  created (<function>torbutton_tag_new_browser()</function>), every time a web
 load
@@ -1014,17 +1012,17 @@ linkend="proxy">Proxy Obedience</link> requirement.
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> content policy
 mentioned above, and causes it to block content load attempts in pages an
 opposite Tor state from the current state. Freshly loaded <ulink
-url="http://www.xulplanet.com/references/elemref/ref_tabbrowser.html">browser
-tabs</ulink> are tagged 
+url="https://developer.mozilla.org/en/XUL/tabbrowser">browser
+tabs</ulink> are tagged
 with a <command>__tb_load_state</command> member in
 <function>torbutton_update_tags()</function> and this
 value is compared against the current tor state in the content policy.</para>
 
 <para>It also kills all Javascript in each page loaded under that state by
 toggling the <command>allowJavascript</command> <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDocShell.html">docShell</ulink> property, and issues a
+url="https://developer.mozilla.org/en/XUL%3aProperty%3adocShell">docShell</ulink> property, and issues a
 <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebNavigation.html#method_stop">webNavigation.stop(webNavigation.STOP_ALL)</ulink> to each browser tab (the
+url="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIWebNavigation#stop()">webNavigation.stop(webNavigation.STOP_ALL)</ulink> to each browser tab (the
 equivalent of hitting the STOP button).</para>
 
 <para>
@@ -1058,18 +1056,19 @@ linkend="isolation">Network Isolation</link> requirement.
 
 <title>Hook Dangerous Javascript (crucial)</title>
 
-<!-- XXX: This has changed.  -->
+<!-- XXX Javascript hooks are mostly unused now.
+     They only apply to window.* settings -->
 
  <para>Option: <command>extensions.torbutton.kill_bad_js</command></para>
 
 <para>This setting enables injection of the <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshooks.js">Javascript
 hooking code</ulink>. Javascript is injected into
-pages to hook the <ulink url="http://phrogz.net/objJob/object.asp?id=224">Date
+pages to hook the <ulink url="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date">Date
 class</ulink> to mask your timezone. This is done in the chrome in
 <function>torbutton_hookdoc()</function>, which is called ultimately by both the 
 <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIWebProgressListener.html">webprogress
+url="https://developer.mozilla.org/en/nsIWebProgressListener">webprogress
 listener</ulink> <command>torbutton_weblistener</command> and the <link
 linkend="contentpolicy">content policy</link> (the latter being a hack to handle
 javascript: urls). This behavior helps to satisfy the <link
@@ -1257,11 +1256,11 @@ for Tor usage.
   <para>Option: <command>extensions.torbutton.block_js_history</command></para>
   <para>
 This setting determines if Torbutton installs an <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsISHistoryListener.html">nsISHistoryListener</ulink>
+url="http://www.oxymoronical.com/experiments/apidocs/interface/nsISHistoryListener">nsISHistoryListener</ulink>
 attached to the <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsISHistory.html">sessionHistory</ulink> of 
+url="http://www.oxymoronical.com/experiments/apidocs/interface/nsISHistory">sessionHistory</ulink> of 
 of each browser's <ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_webshell1.html">webNavigatator</ulink>.
+url="https://developer.mozilla.org/en/XUL%3aProperty%3awebNavigation">webNavigatator</ulink>.
 The nsIShistoryListener is instantiated with a reference to the containing
 browser window and blocks the back, forward, and reload buttons on the browser
 navigation bar when Tor is in an opposite state than the one to load the
@@ -1309,9 +1308,9 @@ requirements.
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/ignore-history.js">components/ignore-history.js</ulink>
 history blocker component mentioned above. By hooking the browser's view of
 the history itself via the <ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_browserglobalhistory2.html">mozilla.org/browser/global-history;2</ulink>
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/global-history;2">@mozilla.org/browser/global-history;2</ulink>
 and <ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_browsernavhistoryservice1.html">@mozilla.org/browser/nav-history-service;1</ulink>
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/nav-history-service;1">@mozilla.org/browser/nav-history-service;1</ulink>
 components, this mechanism defeats all document-based <ulink
 url="http://browserspy.dk/css.php">history disclosure
 attacks</ulink>, including <ulink
@@ -1339,9 +1338,9 @@ linkend="disk">Disk Avoidance</link> requirements.
 
 <para>This setting governs if Torbutton calls
 <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIBrowserHistory.html#method_removeAllPages">nsIBrowserHistory.removeAllPages</ulink>
+url="https://developer.mozilla.org/en/nsIBrowserHistory#removeAllPages.28.29">nsIBrowserHistory.removeAllPages</ulink>
 and <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsISHistory.html#method_PurgeHistory">nsISHistory.PurgeHistory</ulink>
+url="http://www.oxymoronical.com/experiments/apidocs/interface/nsISHistory">nsISHistory.PurgeHistory</ulink>
 for each tab on Tor toggle.</para>
 <para>
 This setting is an optional way to help satisfy the <link
@@ -1381,7 +1380,7 @@ linkend="disk">Disk Avoidance</link> requirements.
   </para>
 
 <para>This option causes Torbutton to call <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsICacheService.html#method_evictEntries">nsICacheService.evictEntries(0)</ulink>
+url="https://developer.mozilla.org/en/nsICacheService#evictEntries.28.29">nsICacheService.evictEntries(0)</ulink>
 on Tor toggle to remove all entries from the cache. In addition, this setting
 causes Torbutton to set <ulink
 url="http://kb.mozillazine.org/Browser.cache.disk.enable">browser.cache.disk.enable</ulink> to false.
@@ -1422,7 +1421,7 @@ linkend="disk">Disk Avoidance</link> requirements.
 <para>
 
 This setting causes Torbutton to call <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsICookieManager.html#method_removeAll">nsICookieManager.removeAll()</ulink> on
+url="https://developer.mozilla.org/en/nsICookieManager#removeAll.28.29">nsICookieManager.removeAll()</ulink> on
 every Tor toggle. In addition, this sets <ulink
 url="http://kb.mozillazine.org/Network.cookie.lifetimePolicy">network.cookie.lifetimePolicy</ulink>
 to 2 for Tor usage, which causes all cookies to be demoted to session cookies,
@@ -1552,7 +1551,7 @@ linkend="state">State Separation</link> requirement.
 
 <para>
 This setting causes Torbutton to call <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIHttpAuthManager.html#method_clearAll">nsIHttpAuthManager.clearAll()</ulink>
+url="http://www.oxymoronical.com/experiments/apidocs/interface/nsIHttpAuthManager">nsIHttpAuthManager.clearAll()</ulink>
 every time Tor is toggled.
 </para>
 
@@ -1599,7 +1598,7 @@ the event of a crash, the Torbutton <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">components/crash-observer.js</ulink> 
   component will notify the Chrome (via the
   <command>extensions.torbutton.crashed</command> pref and a <ulink
-url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIPrefBranch2.html#method_addObserver">pref
+url="https://developer.mozilla.org/en/NsIPrefBranch2#addObserver.28.29">pref
 observer</ulink> in
 the chrome that listens for this update), and Torbutton will load the
   correct jar for the current Tor state via the <ulink
@@ -1694,14 +1693,14 @@ crashes.
 </sect2>
 
 <sect2>
-  
+
   <title>Set user agent during Tor usage (crucial)</title>
-<!-- XXX: Also need to document the new useragent prefs greg made? -->
   <para>Options:
    <simplelist>
     <member><command>extensions.torbutton.set_uagent</command></member>
-    <member><command>extensions.torbutton.oscpu_override</command></member>
     <member><command>extensions.torbutton.platform_override</command></member>
+    <member><command>extensions.torbutton.oscpu_override</command></member>
+    <member><command>extensions.torbutton.buildID_override</command></member>
     <member><command>extensions.torbutton.productsub_override</command></member>
     <member><command>extensions.torbutton.appname_override</command></member>
     <member><command>extensions.torbutton.appversion_override</command></member>
@@ -1716,6 +1715,9 @@ It provides several options for controlling the browser user agent string:
 <command>general.appname.override</command>,
 <command>general.appversion.override</command>,
 <command>general.platform.override</command>,
+<command>general.oscpu.override</command>,
+<command>general.productSub.override</command>,
+<command>general.buildID.override</command>,
 <command>general.useragent.override</command>,
 <command>general.useragent.vendor</command>, and
 <command>general.useragent.vendorSub</command>. If
@@ -1723,14 +1725,6 @@ the Torbutton preference <command>extensions.torbutton.set_uagent</command> is
 true, Torbutton copies all of the other above prefs into their corresponding
 browser preferences during Tor usage.</para>
 
-<para>However, this is not the whole story. Additionally, even with the above
-prefs set, the <command>oscpu</command>, <command>buildID</command>, and <command>productSub</command> fields of the
-<ulink
-url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink> object are not changed appropriately by the above prefs.
-Javascript hooks implemented in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshooks.js">chrome/content/jshooks.js</ulink> are installed as part of the
-same mechanism that hooks the date object.
-</para>
 
 <para>
 
@@ -1740,7 +1734,6 @@ certain resource:// files</ulink>. These cases are handled by Torbutton's
 <link linkend="contentpolicy">content policy</link>.
 
 </para>
-
 
 <para>
 This setting helps to satisfy the <link
@@ -1814,9 +1807,9 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbut
 which calls <function>torbutton_jar_cert_type()</function> and
 <function>torbutton_unjar_cert_type()</function> for each certificate type in
 the <ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_securitynsscertcache1.html">@mozilla.org/security/nsscertcache;1</ulink>.
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/security/nsscertcache;1">@mozilla.org/security/nsscertcache;1</ulink>.
 Certificates are deleted from and imported to the <ulink
-url="http://www.xulplanet.com/references/xpcomref/comps/c_securityx509certdb1.html">@mozilla.org/security/x509certdb;1</ulink>.
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/security/x509certdb;1">@mozilla.org/security/x509certdb;1</ulink>.
 </para>
 
 <para>
@@ -1863,6 +1856,7 @@ to FF2.0. In order of decreasing severity, they are:
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 392274 - Timezone
 config/chrome API</ulink>
    <para>
+
 The lack of a config or API to configure the timezone requires Torbutton to
 <link linkend="jshooks">insert client content window javascript</link> to hook
 the Date object. Additionally, a way to <ulink
@@ -1872,15 +1866,16 @@ javascript sandboxing prevents most of the javascript hooks from being
 installed, including the Date hooks. On Windows and Linux, you can set the TZ
 environment variable to "UTC" as a workaround. Firefox will obey this
 environment variable for your Timezone on those platforms, but on Windows this
-does not take effect until browser restart. The lack of an easy way to reliably
-spoof the timezone interferes with Torbutton's ability to fulfill its
-<link linkend="location">Location Neutrality</link> requirement.
+does not take effect until browser restart. A fix for this has landed in
+Firefox 3.5, but still has not been backported to Firefox 3.0. The lack of an
+easy way to reliably spoof the timezone interferes with Torbutton's ability to
+fulfill its <link linkend="location">Location Neutrality</link> requirement.
 
 
    </para>
    </listitem>
 <!--
-XXX: This one is fixed, but we need to make use of the new API in FF3.5
+FIXME: This one is fixed, but we need to make use of the new API in FF3.5
 
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Bug 436250 - Livemarks can't be
@@ -1954,39 +1949,6 @@ requirement on Firefox 3.
 
      </para>
      </listitem>
-     <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=143220">Bug 143220 - Script can get the value of a file control, including the path</ulink>
-     <para>
-
-Javascript can query the .value field of file input dialogs to retrieve
-username and sometimes hostname/workgroup information. This is obviously very
-dangerous for people who are attempting to submit files anonymously via
-webforms (ie whistleblowers and anonymous publishers). It is also fixed in
-Firefox 3.0, but has not yet been backported to 2.0. This interferes with
-Torbutton's ability to fulfill its <link linkend="state">State
-Separation</link> and <link linkend="setpreservation">Anonymity Set
-Preservation</link> requirements on Firefox 2.0.
-
-     </para>
-     </listitem>
-     <listitem><ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=418119">Bug 418119 - nsIContentPolicy not called for external DTDs of XML documents</ulink>
-      <para>
-
-XML documents can source chrome and resource URLs in their DTDs without a call
-to nsIContentPolicy::shouldLoad. Enumerating chrome URLs gives websites and
-exit nodes a lot of information. They can use it to probe for vulnerable
-versions of extensions, and can also use it to build an <link
-linkend="fingerprinting">identifier for tracking purposes</link>.  This bug
-makes it impossible for extensions such as Adblock and Torbutton to prevent
-chrome inspection and enumeration. It is also fixed in Firefox 3.0, but has not yet been backported to 2.0. This
-impedes upon Torbutton's ability to fulfill its <link
-linkend="undiscoverability">Tor Undiscoverability</link> and
-<link linkend="setpreservation">Anonymity Set Preservation</link> requirements
-on Firefox 2.0.
-
-      </para>
-     </listitem>
-
     </orderedlist>
   </sect2>
   <sect2 id="FirefoxWishlist">
@@ -2002,7 +1964,7 @@ Extensions cannot determine if firefox is fullScreen</ulink>
    <para>
 
 The windowState property of <ulink
-url="http://www.xulplanet.com/references/objref/ChromeWindow.html">ChromeWindows</ulink> does not accurately reflect the true
+url="https://developer.mozilla.org/en/XUL/window">ChromeWindows</ulink> does not accurately reflect the true
 state of the window in some cases on Linux. This causes Torbutton to attempt
 to resize maximized and minimized windows when it should not.
 
@@ -2454,8 +2416,7 @@ be verified to actually be ineffective after Tor has been toggled.</listitem>
      <listitem>Other ways to cause Javascript to be executed after
 <command>javascript.enabled</command> has been toggled off.</listitem>
      <listitem>Odd ways to attempt to load plugins. Kyle Williams has had
-<ulink url="http://www.janusvm.com/goldy/pdf/">some
-success</ulink> with direct loads/meta-refreshes of plugin-handled URLs.</listitem>
+some success with direct loads/meta-refreshes of plugin-handled URLs.</listitem>
      <listitem>The Date and Timezone hooks should be verified to work with
 crazy combinations of iframes, nested iframes, iframes in frames, frames in
 iframes, and popups being loaded and
