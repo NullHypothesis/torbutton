@@ -151,7 +151,7 @@ can cause the browser to perform network activity after Tor has been disabled,
 thus allowing the adversary to correlate Tor and Non-Tor activity and reveal
 a user's non-Tor IP address. Javascript
 also allows the adversary to execute <ulink
-url="http://gemal.dk/browserspy/css.html">history disclosure attacks</ulink>:
+url="http://browserspy.dk/css.php">history disclosure attacks</ulink>:
 to query the history via the different attributes of 'visited' links to search
 for particular google queries, sites, or even to <ulink
 url="http://www.mikeonads.com/2008/07/13/using-your-browser-url-history-estimate-gender/">profile
@@ -173,7 +173,7 @@ browser proxy settings - and often independent of its own proxy settings.
 Sites that have plugin content don't even have to be malicious to obtain a
 user's
 Non-Tor IP (it usually leaks by itself), though <ulink
-url="http://www.metasploit.com/research/projects/decloak/">plenty of active
+url="http://decloak.net">plenty of active
 exploits</ulink> are possible as well. In addition, plugins can be used to store unique identifiers that are more
 difficult to clear than standard cookies. 
 <ulink url="http://epic.org/privacy/cookies/flash.html">Flash-based
@@ -225,7 +225,7 @@ attributes</command>
 
 There is an absurd amount of information available to websites via attributes
 of the browser. This information can be used to reduce anonymity set, or even
-<ulink url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">uniquely
+<ulink url="http://mandark.fr/0x000000/articles/Total_Recall_On_Firefox..html">uniquely
 fingerprint individual users</ulink>. </para>
 <para>
 For illustration, let's perform a
@@ -255,7 +255,7 @@ information alone. </para>
 Of course, this space is non-uniform and prone to incremental changes.
 However, if a bit vector space consisting of the above extracted attributes
 were used instead of the hash approach from <ulink
-url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">The Hacker
+url="http://mandark.fr/0x000000/articles/Total_Recall_On_Firefox..html">The Hacker
 Webzine article above</ulink>, minor changes in browser window resolution will
 no longer generate totally new identifiers. 
 
@@ -384,8 +384,10 @@ url="http://developer.mozilla.org/en/docs/XUL_Reference">XUL</ulink>.</para>
 Torbutton installs components for two purposes: hooking existing components to
 reimplement their interfaces; and creating new components that provide
 services to other pieces of the extension.
- 
+
   </para>
+
+<!-- XXX All these xulplanet links are dead... -->
 
   <sect2>
    <title>Hooked Components</title>
@@ -421,6 +423,7 @@ determine which component to load. The <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.diff">diff against the original session
 store</ulink> is included in the SVN repository.</para>
 </sect3>
+<!-- XXX add external-app-blocker -->
 <sect3>
 <title><ulink
 url="http://lxr.mozilla.org/seamonkey/source/browser/components/sessionstore/src/nsSessionStartup.js">@mozilla.org/browser/sessionstartup;1</ulink> -
@@ -651,6 +654,7 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbut
 It contains event handlers for preference update, shutdown, upgrade, and
 location change events.</para>
 
+<!-- XXX Javascript hooks are mostly unused now -->
 <para>The <ulink
 url="http://www.xulplanet.com/references/xpcomref/comps/c_docloaderservice1.html">location
 change</ulink> <ulink
@@ -666,7 +670,8 @@ permissions, and install the Javascript hooks to hook the <ulink
 url="http://phrogz.net/objJob/object.asp?id=224">Date</ulink> object and
 the <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink> object (for timezone and platform information,
-respectively).</para> 
+respectively).</para>
+
 <para>
 The browser overlay helps to satisfy a number of Torbutton requirements. These
 are better enumerated in each of the Torbutton preferences below. However,
@@ -692,7 +697,6 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Firefox Bug
 functioning completely correctly.
 </para>
   </listitem>
-
  <listitem><ulink
 url="http://kb.mozillazine.org/Network.security.ports.banned">network.security.ports.banned</ulink>
  <para>
@@ -746,9 +750,49 @@ plugins. The mechanisms for handling this are described under the "Disable
 Plugins During Tor Usage" preference. This helps fulfill the <link
 linkend="proxy">Proxy Obedience</link> requirement, by preventing external
 applications from accessing network resources at the command of Tor-fetched
-pages.
+pages. Unfortunately, due to <link linkend="FirefoxBugs">Firefox Bug</link>
+<ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">440892</ulink>,
+these prefs are no longer obeyed. They are set still anyway out of respect for
+the dead.
  </para>
 </listitem>
+  <listitem><ulink
+url="http://kb.mozillazine.org/Browser.sessionstore.max_tabs_undo">browser.sessionstore.max_tabs_undo</ulink>
+   <para>
+
+To help satisfy the Torbutton <link linkend="state">State Separation</link>
+and <link linkend="isolation">Network Isolation</link> requirements,
+Torbutton needs to purge the Undo Tab history on toggle to prevent repeat
+"Undo Close" operations from accidentally restoring tabs from a different Tor
+State. This purge is accomplished by setting this preference to 0 and then
+restoring it to the previous user value upon toggle.
+
+   </para>
+  </listitem>
+
+  <listitem><command>security.enable_ssl2</command>
+   <para>
+TLS Session IDs can persist for an indefinite duration, providing an
+identifier that is sent to TLS sites that can be used to link activity. This
+is particularly troublesome now that we have certificate verification in place
+in Firefox 3: The OCSP server can use this Session ID to build a history of
+TLS sites someone visits, and also correlate their activity as users move from
+network to network (such as home to work to coffee shop, etc), inside and
+outside of Tor. To handle this and to help satisfy our <link
+linkend="state">State Separation Requirement</link>, we currently 
+toggle
+<command>security.enable_ssl2</command>, which clears the SSL Session ID
+cache via the pref observer at <ulink
+url="http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134">nsNSSComponent.cpp
+line 2134</ulink>. This is an arcane and potentially fragile fix. It would be
+better if there were a more standard interface for accomplishing the same
+thing. <link linkend="FirefoxBugs">Firefox Bug</link> <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=448747">448747</ulink> has
+been filed for this.
+
+   </para>
+  </listitem>
 </orderedlist>
 </sect2>
 <sect2>
@@ -856,7 +900,7 @@ linkend="contentpolicy">content policy</link>.
 
 <sect1>
  <title>Description of Options</title>
-
+<!-- XXX: Review these -->
 <para>This section provides a detailed description of Torbutton's options. Each
 option is presented as the string from the preferences window, a summary, the
 preferences it touches, and the effect this has on the components, chrome, and
@@ -887,10 +931,25 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/prefer
  </sect2>
  <sect2 id="plugins">
   <title>Disable plugins on Tor Usage (crucial)</title>
+<!-- XXX: Document java api here-->
 
  <para>Option: <command>extensions.torbutton.no_tor_plugins</command></para>
 
- <para>Enabling this preference causes the above mentioned Torbutton chrome web progress
+ <para>Java and plugins <ulink
+url="http://java.sun.com/j2se/1.5.0/docs/api/java/net/class-use/NetworkInterface.html">can query</ulink> the <ulink
+url="http://www.rgagnon.com/javadetails/java-0095.html">local IP
+address</ulink> and report it back to the
+remote site. They can also <ulink
+url="http://decloak.net">bypass proxy settings</ulink> and directly connect to a
+remote site without Tor. Every browser plugin we have tested with Firefox has
+some form of network capability, and every one ignores proxy settings or worse - only
+partially obeys them. This includes but is not limited to:
+QuickTime, Windows Media Player, RealPlayer, mplayerplug-in, AcroRead, and
+Flash. 
+
+ </para>
+ <para>
+Enabling this preference causes the above mentioned Torbutton chrome web progress
  listener <command>torbutton_weblistener</command> to disable Java via <command>security.enable_java</command> and to disable
  plugins via the browser <ulink
  url="http://www.xulplanet.com/references/xpcomref/ifaces/nsIDocShell.html">docShell</ulink>
@@ -903,12 +962,12 @@ event occurs
  prevented from loading by the content policy in <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> if Tor is
  enabled and this option is set.
- </para> 
- 
+ </para>
+
  <para>Even all this turns out to be insufficient if the user directly
  clicks on a plugin-handled mime-type. <ulink
-url="http://www.janusvm.com/goldy/pdf/">In this case</ulink> (and also <ulink
-url="http://www.janusvm.com/goldy/side-channels/frames/">this
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">In this case</ulink> (and also <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">this
 one</ulink>), the browser decides that
  maybe it should ignore all these other settings and load the plugin anyways,
  because maybe the user really did want to load it (never mind this same
@@ -922,8 +981,11 @@ preferences and internals) if it detects a load of one of them from the web prog
 to stop loading, clears the document, AND throws an exception. Anything short 
 of all this and
  the plugin managed to find some way to load.
+
+<!-- XXX: Link to external-app-blocker too -->
+
  </para>
- 
+
  <para>
  All this could be avoided, of course, if Firefox would either <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">obey
@@ -933,8 +995,10 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=309524">via</ulink> <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=380556">shouldProcess</ulink> or shouldLoad. The fact that it does not is
  not very encouraging. 
  </para>
- <para>
 
+
+ <para>
+ 
 Since most plugins completely ignore browser proxy settings, the actions
 performed by this setting are crucial to satisfying the <link
 linkend="proxy">Proxy Obedience</link> requirement.
@@ -993,6 +1057,8 @@ linkend="isolation">Network Isolation</link> requirement.
 <sect2 id="jshooks">
 
 <title>Hook Dangerous Javascript (crucial)</title>
+
+<!-- XXX: This has changed.  -->
 
  <para>Option: <command>extensions.torbutton.kill_bad_js</command></para>
 
@@ -1247,7 +1313,7 @@ url="http://www.xulplanet.com/references/xpcomref/comps/c_browserglobalhistory2.
 and <ulink
 url="http://www.xulplanet.com/references/xpcomref/comps/c_browsernavhistoryservice1.html">@mozilla.org/browser/nav-history-service;1</ulink>
 components, this mechanism defeats all document-based <ulink
-url="http://gemal.dk/browserspy/css.html">history disclosure
+url="http://browserspy.dk/css.php">history disclosure
 attacks</ulink>, including <ulink
 url="http://ha.ckers.org/weird/CSS-history.cgi">CSS-only attacks</ulink>.
 
@@ -1630,6 +1696,7 @@ crashes.
 <sect2>
   
   <title>Set user agent during Tor usage (crucial)</title>
+<!-- XXX: Also need to document the new useragent prefs greg made? -->
   <para>Options:
    <simplelist>
     <member><command>extensions.torbutton.set_uagent</command></member>
@@ -1668,7 +1735,7 @@ same mechanism that hooks the date object.
 <para>
 
 It also turns out that it is possible to detect the original Firefox version
-by <ulink url="http://0x000000.com/index.php?i=523&amp;bin=1000001011">inspecting
+by <ulink url="http://ha.ckers.org/blog/20070516/read-firefox-settings-poc/">inspecting
 certain resource:// files</ulink>. These cases are handled by Torbutton's
 <link linkend="contentpolicy">content policy</link>.
 
@@ -1812,6 +1879,8 @@ spoof the timezone interferes with Torbutton's ability to fulfill its
 
    </para>
    </listitem>
+<!--
+XXX: This one is fixed, but we need to make use of the new API in FF3.5
 
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Bug 436250 - Livemarks can't be
@@ -1829,7 +1898,7 @@ the <link linkend="isolation">Network Isolation</link> requirement.
 
       </para>
      </listitem>
-
+-->
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=435159">Bug 435159 -
 nsNSSCertificateDB::DeleteCertificate has race conditions</ulink>
@@ -1865,37 +1934,6 @@ policy</link> should block Javascript network access. However, if there are
 ways to open popups or perform redirects such that Torbutton cannot block
 them, pages may still have free reign to break that requirement and reveal a
 user's original IP address.
-
-     </para>
-     </listitem>
-     <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=405652">Bug 405652 - In the
-TLS ClientHello message the gmt_unix_time is incorrect</ulink>
-     <para>
-
-It turns out that Firefox's SSL implementation sends the machine uptime as the
-current time. This essentially is a unique identifier that can be used for
-the duration of your machine uptime. The issue has been fixed in Firefox 3.0,
-but it has as of yet not been backported to 2.0.
-This interferes with Torbutton's ability to fulfill
-its <link linkend="state">State Separation</link> requirement on Firefox 2.
-
-     </para>
-     </listitem>
-     <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=448747">Bug 448747 -
-Provide Mechanism to clear TLS Session IDs</ulink>
-     <para>
-
-In comments on the above bug, it was mentioned that TLS Session IDs can
-persist for an indefinite duration, providing an identifier that is sent to
-TLS sites that can be used to link activity. This is particularly troublesome
-now that we have certificate verification in place in Firefox 3: The OCSP
-server can use this Session ID to build a history of TLS sites someone visits,
-and also correlate their activity as users move from network to network (such
-as home to work to coffee shop, etc), inside and outside of Tor.  This
-interferes with Torbutton's ability to fulfill its <link linkend="state">State
-Separation</link> requirement.
 
      </para>
      </listitem>
@@ -2156,6 +2194,21 @@ Williams.
 
      </para>
      </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=448747">Bug 448747 -
+Provide Mechanism to clear TLS Session IDs</ulink>
+     <para>
+
+As <link linkend="browseroverlay">mentioned above</link>, Torbutton currently
+toggles <command>security.enable_ssl2</command> to clear the SSL
+Session ID cache via the pref observer at <ulink
+url="http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134">nsNSSComponent.cpp
+line 2134</ulink>. This is an arcane and potentially fragile fix. It would be
+better if there were a more standard interface for accomplishing the same
+thing.
+
+     </para>
+     </listitem>
 
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=419598">Bug 419598 - 'var
@@ -2219,82 +2272,112 @@ is that it will be useful both for creating a &quot;Tor Safety Check&quot;
 page, and for developing novel tests and actively attacking Torbutton with the
 goal of finding vulnerabilities in either it or the Mozilla components,
 interfaces and settings upon which it relies.
- 
-  </para> 
+
+  </para>
   <sect2 id="Categories">
    <title>Single state testing</title>
    <para>
-The following tests can be run from a single web page in one visit without
-toggling Tor state or requiring user interaction. Currently they exist as their
-own individual tests, but conceivably a single &quot;Tor Safety Check&quot;
-page can be devised that contains all of these attacks. 
-All of these tests are currently known to pass, but that does not mean that
-consolidating them into an easy to run test page is pointless. Torbutton is a
-complicated piece of software. During development, changes to one component
-can affect a whole slough of unrelated features. Having easy-to-verify
-comprehensive test pages would make it much easier to fix other issues as they
-present themselves without introducing regressions.
 
-   </para>
-   <sect3>
-    <title>Java and Plugin Decloaking</title>
-    <para>
-As <link linkend="plugins">mentioned above</link>, Java and plugins <ulink
-url="http://java.sun.com/j2se/1.5.0/docs/api/java/net/class-use/NetworkInterface.html">can query</ulink> the <ulink
-url="http://www.rgagnon.com/javadetails/java-0095.html">local IP
-address</ulink> and report it back to the
-remote site. They can also <ulink
-url="http://www.metasploit.com/research/projects/decloak/">bypass proxy settings</ulink> and directly connect to a
-remote site without Tor. Every browser plugin we have tested with Firefox has
-some form of network capability, and every one ignores proxy settings or worse - only
-partially obeys them. This includes but is not limited to:
-QuickTime, Windows Media Player, RealPlayer, mplayerplug-in, AcroRead, and
-Flash. In addition, 
-<ulink url="http://www.janusvm.com/goldy/pdf/">issues have been
-discovered</ulink> with the browsers handling of
-<ulink url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">direct links to plugin-handled
-content</ulink> as well as meta-refreshes to plugin content. To make matters
-worse, <ulink
-url="http://www.janusvm.com/goldy/side-channels/side-channels.html">externally
-handled mime types and urls</ulink> can also cause direct non-Tor connections
-as well.
-    </para>
-   </sect3>
-   <sect3>
-    <title>History Disclosure attacks</title>
-    <para>
-The browser's history can also be queried by a remote site to inspect for
-Google queries, visits to sites that contain usernames in the URLs, or
-other anonymity set reducing information. This can be done by either
-<ulink url="http://gemal.dk/browserspy/css.html">Javascript</ulink>, or by 
-<ulink url="http://ha.ckers.org/weird/CSS-history.cgi">CSS</ulink> without any scripting involved.
+Torbutton is a complicated piece of software. During development, changes to
+one component can affect a whole slough of unrelated features.  A number of
+aggregated test suites exist that can be used to test for regressions in
+Torbutton and to help aid in the development of Torbutton-like addons and
+other privacy modifications of other browsers. Some of these test suites exist
+as a single automated page, while others are a series of pages you must visit
+individually. They are provided here mostly for reference and future
+regression testing.
 
-    </para>
-   </sect3>
-   <sect3>
-    <title>User agent, extension, resolution and OS information</title>
-    <para>
+     <orderedlist>
+      <listitem><ulink url="http://decloak.net/">Decloak.net</ulink>
+       <para>
 
-As mentioned above, these properties can be combined to greatly reduce
-anonymity set and even build a potentially <link
-linkend="fingerprinting">globally unique identifier</link> for
-users. <ulink
-url="http://0x000000.com/index.php?i=520&amp;bin=1000001000">Examples of this
-in the wild</ulink> rely on <ulink url="http://gemal.dk/browserspy/basic.html">user agent and OS
-information</ulink> as well as <ulink
-url="http://pseudo-flaw.net/content/tor/torbutton/">chrome disclosure
-information</ulink>.
+Decloak.net is the canonical source of plugin and external-application based
+proxy-bypass exploits. It is a fully automated test suite maintained by <ulink
+url="http://digitaloffense.net/">HD Moore</ulink> as a service for people to
+use to test their anonymity systems.
 
+       </para>
+      </listitem>
+      <listitem><ulink url="http://deanonymizer.com/">Deanonymizer.com</ulink>
+       <para>
+
+Deanonymizer.com is another automated test suite that tests for proxy bypass
+and other information disclosure vulnerabilities. It is maintained by Kyle
+Williams, the author of <ulink url="http://www.janusvm.com/">JanusVM</ulink>
+and <ulink url="http://www.januspa.com/">JanusPA</ulink>.
+
+       </para>
+      </listitem>
+      <listitem><ulink url="https://www.jondos.de/en/anontest">JonDos
+AnonTest</ulink>
+       <para>
+
+The <ulink url="https://www.jondos.de">JonDos people</ulink> also provide an
+anonymity tester. It is more focused on HTTP headers than plugin bypass, and
+points out a couple of headers Torbutton could do a better job with
+obfuscating.
+
+       </para>
+      </listitem>
+      <listitem><ulink url="http://browserspy.dk">Browserspy.dk</ulink>
+       <para>
+
+Browserspy.dk provides a tremendous collection of browser fingerprinting and
+general privacy tests. Unfortunately they are only available one page at a
+time, and there is not really solid feedback on good vs bad behavior in
+the test results.
+
+       </para>
+      </listitem>
+      <listitem><ulink url="http://analyze.privacy.net/">Privacy
+Analyzer</ulink>
+       <para>
+
+The Privacy Analyzer provides a dump of all sorts of browser attributes and
+settings that it detects, including some information on your origin IP
+address. Its page layout and lack of good vs bad test result feedback makes it
+not as useful as a user-facing testing tool, but it does provide some
+interesting checks in a single page.
+
+       </para>
+      </listitem>
+      <listitem><ulink url="http://ha.ckers.org/mr-t/">Mr. T</ulink>
+       <para>
+
+Mr. T is a collection of browser fingerprinting and deanonymization exploits
+discovered by the <ulink url="http://ha.ckers.org">ha.ckers.org</ulink> crew
+and others. It is also not as user friendly as some of the above tests, but it
+is a useful collection.
+
+       </para>
+      </listitem>
+      <listitem>Gregory Fleischer's <ulink
+url="http://pseudo-flaw.net/content/tor/torbutton/">Torbutton</ulink> and
+<ulink
+url="http://pseudo-flaw.net/content/defcon/dc-17-demos/d.html">Defcon
+17</ulink> Test Cases
+       <para>
+
+Gregory Fleischer has been hacking and testing Firefox and Torbutton privacy
+issues for the past 2 years. He has an excellent collection of all his test
+cases that can be used for regression testing. In his Defcon work, he
+demonstrates ways infer Firefox version based on arcane browser properties. We
+are still trying to determine the best way to address some of those test
+cases.
+
+       </para>
+      </listitem>
+      <listitem><ulink url="https://torcheck.xenobite.eu/index.php">Xenobite's
+TorCheck Page</ulink>
+       <para>
+
+As of this writing, this page is currently down. However, people seem to use
+it for testing Tor usage and Torbutton, so it must be useful to some degree.
+
+       </para>
+      </listitem>
+     </orderedlist>
     </para>
-   </sect3>
-   <sect3>
-    <title>Timezone and Location Information</title>
-    <para>
-<ulink url="http://gemal.dk/browserspy/date.html">Time and Timezone</ulink>
-should be obscured to be GMT-only, and by the browser should present itself
-with an US English locale.
-    </para>
-   </sect3>
   </sect2>
   <sect2>
    <title>Multi-state testing</title>
