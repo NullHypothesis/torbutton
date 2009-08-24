@@ -421,7 +421,25 @@ determine which component to load. The <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.diff">diff against the original session
 store</ulink> is included in the SVN repository.</para>
 </sect3>
-<!-- XXX add external-app-blocker -->
+<sect3 id="appblocker">
+ <title><ulink
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/uriloader/external-protocol-service%3B1">@mozilla.org/uriloader/external-protocol-service;1
+</ulink> and <ulink
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/uriloader/external-helper-app-service%3B1">@mozilla.org/uriloader/external-helper-app-service;1</ulink>
+- <ulink
+  url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/external-app-blocker.js">components/external-app-blocker.js</ulink></title>
+ <para>
+Due to <link linkend="FirefoxBugs">Firefox Bug</link> <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">440892</ulink> allowing Firefox 3.x to automatically launch some
+applications without user intervention, Torbutton had to wrap the two
+components involved in launching external applications to provide user
+confirmation before doing so while Tor is enabled. Since external applications
+do not obey proxy settings, they can be manipulated to automatically connect
+back to arbitrary servers outside of Tor with no user intervention. Fixing
+this issue helps to satisfy Torbutton's <link linkend="proxy">Proxy
+Obedience</link> Requirement.
+ </para>
+</sect3>
 <sect3>
 <title><ulink
 url="http://lxr.mozilla.org/seamonkey/source/browser/components/sessionstore/src/nsSessionStartup.js">@mozilla.org/browser/sessionstartup;1</ulink> -
@@ -655,22 +673,19 @@ location change events.</para>
 url="https://developer.mozilla.org/en/nsIWebProgressListener#onLocationChange">location
 change</ulink> <ulink
 url="https://developer.mozilla.org/en/nsIWebProgress">webprogress
-listener</ulink>, <command>torbutton_weblistener</command> is perhaps the
-most important part of the chrome from a security standpoint. It is a <ulink
-url="https://developer.mozilla.org/en/nsIWebProgressListener">webprogress 
-listener</ulink> that handles
-receiving an event every time a page load or iframe load occurs. This class
-eventually calls down to <function>torbutton_update_tags()</function> and 
-<function>torbutton_hookdoc()</function>, which apply the browser Tor load state tags, plugin
-permissions, and install the Javascript hooks to hook the
-<!-- XXX Javascript hooks are mostly unused now.
-     They only apply to window.* settings -->
-
+listener</ulink>, <command>torbutton_weblistener</command> is one of the most
+important parts of the chrome from a security standpoint. It is a <ulink
+url="https://developer.mozilla.org/en/nsIWebProgressListener">webprogress
+listener</ulink> that handles receiving an event every time a page load or
+iframe load occurs. This class eventually calls down to
+<function>torbutton_update_tags()</function> and
+<function>torbutton_hookdoc()</function>, which apply the browser Tor load
+state tags, plugin permissions, and install the Javascript hooks to hook the
 <ulink
-url="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date">Date</ulink> object and
-the <ulink
-url="http://developer.mozilla.org/en/docs/DOM:window.navigator">navigator</ulink> object (for timezone and platform information,
-respectively).</para>
+url="https://developer.mozilla.org/en/DOM/window.screen">window.screen</ulink>
+object to obfuscate browser and desktop resolution information.
+
+</para>
 
 <para>
 The browser overlay helps to satisfy a number of Torbutton requirements. These
@@ -962,27 +977,38 @@ url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker
  enabled and this option is set.
  </para>
 
- <para>Even all this turns out to be insufficient if the user directly
- clicks on a plugin-handled mime-type. <ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">In this case</ulink> (and also <ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">this
-one</ulink>), the browser decides that
- maybe it should ignore all these other settings and load the plugin anyways,
- because maybe the user really did want to load it (never mind this same
- load-style could happen automatically  with meta-refresh or any number of
- other ways..). To handle these cases, Torbutton stores a list of plugin-handled
- mime-types, and sets the pref
+ <para>All of this turns out to be insufficient if the user directly clicks
+on a plugin-handled mime-type. <ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">In this case</ulink>,
+the browser decides that maybe it should ignore all these other settings and
+load the plugin anyways, because maybe the user really did want to load it
+(never mind this same load-style could happen automatically  with meta-refresh
+or any number of other ways..). To handle these cases, Torbutton stores a list
+of plugin-handled mime-types, and sets the pref
 <command>plugin.disable_full_page_plugin_for_types</command> to this list.
 Additionally, (since nothing can be assumed when relying on Firefox
-preferences and internals) if it detects a load of one of them from the web progress
- listener, it cancels the request, tells the associated DOMWindow 
-to stop loading, clears the document, AND throws an exception. Anything short 
-of all this and
- the plugin managed to find some way to load.
-
-<!-- XXX: Link to external-app-blocker too -->
-
+preferences and internals) if it detects a load of one of them from the web
+progress listener, it cancels the request, tells the associated DOMWindow to
+stop loading, clears the document, AND throws an exception. Anything short of
+all this and the plugin managed to find some way to load.
  </para>
+
+<!--
+
+FIXME: Hrmm, technically this behavior is not covered by this pref.
+
+ <para>
+Furthermore, with version 3.0 and above, Firefox
+<ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">began ignoring</ulink>
+
+<ulink
+url="http://kb.mozillazine.org/Network.protocol-handler.warn-external.%28protocol%29">network.protocol-handler.warn-external.(protocol)</ulink>
+prefs, which caused us to have to <link linkend="appblocker">wrap the external
+app launcher components</link> to prevent external apps from being loaded to
+bypass proxy settings.
+ </para>
+-->
 
  <para>
  All this could be avoided, of course, if Firefox would either <ulink
@@ -991,12 +1017,12 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=401296">obey
  loads either <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=309524">via</ulink> <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=380556">shouldProcess</ulink> or shouldLoad. The fact that it does not is
- not very encouraging. 
+ not very encouraging.
  </para>
 
 
  <para>
- 
+
 Since most plugins completely ignore browser proxy settings, the actions
 performed by this setting are crucial to satisfying the <link
 linkend="proxy">Proxy Obedience</link> requirement.
@@ -1054,44 +1080,41 @@ linkend="isolation">Network Isolation</link> requirement.
 </sect2>
 <sect2 id="jshooks">
 
-<title>Hook Dangerous Javascript (crucial)</title>
-
-<!-- XXX Javascript hooks are mostly unused now.
-     They only apply to window.* settings -->
+<title>Hook Dangerous Javascript</title>
 
  <para>Option: <command>extensions.torbutton.kill_bad_js</command></para>
 
 <para>This setting enables injection of the <ulink
 url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshooks.js">Javascript
-hooking code</ulink>. Javascript is injected into
-pages to hook the <ulink url="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date">Date
-class</ulink> to mask your timezone. This is done in the chrome in
+hooking code</ulink>. This is done in the chrome in
 <function>torbutton_hookdoc()</function>, which is called ultimately by both the 
 <ulink
 url="https://developer.mozilla.org/en/nsIWebProgressListener">webprogress
 listener</ulink> <command>torbutton_weblistener</command> and the <link
 linkend="contentpolicy">content policy</link> (the latter being a hack to handle
-javascript: urls). This behavior helps to satisfy the <link
-linkend="location">Location Neutrality</link> requirement.
+javascript: urls).
 
-</para>
-<para>
-
-In addition, this setting also hooks various resolution properties of the
-<ulink url="http://developer.mozilla.org/en/docs/DOM:window">window</ulink>,
-<ulink
-url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>,
-and <ulink
-url="http://developer.mozilla.org/en/docs/DOM:window.navigator">window.navigator</ulink>
-to mask window size information and user agent properties not handled by the
-standard Firefox user agent override settings. The resolution hooks
+In the Firefox 2 days, this option did a lot more than
+it does now. It used to be responsible for timezone and improved useragent
+spoofing, and history object cloaking. However, now it only provides
+obfuscation of the <ulink
+url="https://developer.mozilla.org/en/DOM/window.screen">window.screen</ulink>
+object to mask your browser and desktop resolution.
+The resolution hooks
 effectively make the Firefox browser window appear to websites as if the renderable area
 takes up the entire desktop, has no toolbar or other GUI element space, and
 the desktop itself has no toolbars.
 These hooks drastically reduce the amount of information available to do <link
 linkend="fingerprinting">anonymity set reduction attacks</link> and help to
 meet the <link linkend="setpreservation">Anonymity Set Preservation</link>
-requirements.
+requirements. Unfortunately, Gregory Fleischer discovered it is still possible
+to retrieve the original screen values by using <ulink
+url="http://pseudo-flaw.net/tor/torbutton/unmask-sandbox-xpcnativewrapper.html">XPCNativeWrapper</ulink>
+or <ulink
+url="http://pseudo-flaw.net/tor/torbutton/unmask-components-lookupmethod.html">Components.lookupMethod</ulink>.
+We are still looking for a workaround as of Torbutton 1.2.2.
+
+<!-- FIXME: Don't forget to update this -->
 
 </para>
 </sect2>
@@ -1894,6 +1917,7 @@ the <link linkend="isolation">Network Isolation</link> requirement.
       </para>
      </listitem>
 -->
+
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=435159">Bug 435159 -
 nsNSSCertificateDB::DeleteCertificate has race conditions</ulink>
@@ -1978,8 +2002,10 @@ Block/clear Flash MX "cookies" as well</ulink>
 Today, it is possible to allow plugins if you have a transparent proxy such as
 <ulink url="http://anonymityanywhere.com/incognito/">Incognito</ulink> to prevent proxy bypass. However, flash cookies can still be used to
 link your Tor and Non-Tor activity, and this reveal your IP to an adversary
-that does so. This can be solved by manually removing your flash cookies, but
-it would be nice if there was a standard way to do this from a Firefox API. 
+that does so. This can be solved by manually removing your flash cookies (like
+<ulink
+url="https://addons.mozilla.org/en-US/firefox/addon/6623">BetterPrivacy</ulink> does), but
+it would be nice if there was a standard way to do this from a Firefox API.
 
    </para>
    </listitem>
@@ -2010,6 +2036,8 @@ some of them involve disabling functionality during Tor usage.
    </para>
    </listitem>
 
+<!--
+FIXME: Need to use new observer methods if possible
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=448741">Bug 448741 -
 nsISessionStore uses private methods and is not extensible</ulink>
@@ -2024,7 +2052,6 @@ objections</ulink> from some developers.
 
    </para>
    </listitem>
-
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=439384">Bug 439384 -
 "profile-do-change" event does not cause cookie table reload</ulink>
@@ -2054,6 +2081,7 @@ subset of the <link linkend="requirements">requirements</link> is of course fine
 
    </para>
    </listitem>
+-->
 
 
 
@@ -2079,6 +2107,22 @@ Firefox 3, but a better solution for Torbutton's specific date hooking needs
 would be a fix for the above mentioned Bug 392274. Of course, many more
 extensions may be interested in the sandbox hooking functionality working
 properly though.
+
+     </para>
+     </listitem>
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">Bug 440892 -
+network.protocol-handler.warn-external are ignored</ulink>
+     <para>
+
+Sometime in the Firefox 3 development cycle, the preferences that governed
+warning a user when external apps were launched got disconnected from the code
+that does the launching. Torbutton depended on these prefs to prevent websites
+from launching specially crafted documents and application arguments that
+caused Proxy Bypass. We currently work around this issue by <link
+linkend="appblocker">wrapping the app launching components</link> to present a
+popup before launching external apps while Tor is enabled. While this works,
+it would be nice if these prefs were either fixed or removed.
 
      </para>
      </listitem>
