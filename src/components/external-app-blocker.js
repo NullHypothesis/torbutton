@@ -8,6 +8,7 @@
 const kMODULE_NAME = "Torbutton External App Handler";
 
 // XXX: Also psm-external-content-listener?
+// XXX: Also @mozilla.org/mime;1?
 const kMODULE_CONTRACTID_APP = "@mozilla.org/uriloader/external-helper-app-service;1";
 const kMODULE_CONTRACTID_PROTO = "@mozilla.org/uriloader/external-protocol-service;1";
 

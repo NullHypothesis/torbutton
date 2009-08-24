@@ -1234,7 +1234,7 @@ function torbutton_update_status(mode, force_update) {
 
     // This clears the SSL Identifier Cache.
     // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747 and
-    // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2057
+    // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134
     m_tb_prefs.setBoolPref("security.enable_ssl2", 
             !m_tb_prefs.getBoolPref("security.enable_ssl2"));
     m_tb_prefs.setBoolPref("security.enable_ssl2", 
