@@ -167,7 +167,8 @@ function getProtectedCookies()
 {
   var tor_enabled = prefs.getBoolPref("extensions.torbutton.tor_enabled");                
   var cookiesAsXml = selector.getProtectedCookies(tor_enabled? "tor" : "nontor");
-  
+  if (cookiesAsXml == null)
+    return;
   for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
             var xml = cookiesAsXml.cookie[i];
             var value = xml.toString();

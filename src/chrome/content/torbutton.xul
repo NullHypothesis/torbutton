@@ -48,20 +48,20 @@
    <popup id="contentAreaContextMenu">
 			<menuitem 
 					id="torcontext-copyurl"
-					label="Copy Tor URL" 
-					accesskey="t"
+					label="&torbutton.context_menu.copyTor;" 
+					accesskey="&torbutton.context_menu.copyTor.key;"
 					insertafter="context-copylink"
 					oncommand="torbutton_copy_link();"/>  
 			    <menuitem 
 					id="torcontext-opentortab"
-					label="Open Tor URL in New Tab" 
-					accesskey="r" 
+					label="&torbutton.context_menu.openTorTab;" 
+					accesskey="&torbutton.context_menu.openTorTab.key;" 
 					insertafter="context-openlinkintab"					
 					oncommand="torbutton_open_link_as_tor(true);"/>
 					<menuitem 
 					id="torcontext-opentorwin"
-					label="Open Tor URL in New Window" 
-					accesskey="d" 
+					label="&torbutton.context_menu.openTorWindow;" 
+					accesskey="&torbutton.context_menu.openTorWindow.key;" 
 					insertafter="context-openlinkintab"					
 					oncommand="torbutton_open_link_as_tor(false);"/>
 					

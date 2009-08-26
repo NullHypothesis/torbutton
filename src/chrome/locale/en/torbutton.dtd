@@ -25,6 +25,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "About Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections.key "C">
+<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Security Settings">
@@ -36,6 +44,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
 <!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
+<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
 <!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
 <!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
 <!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
@@ -98,3 +107,23 @@
 <!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
 <!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
 <!ENTITY torbutton.prefs.spoofblank "Make referer blank">
+<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
+<!ENTITY torbutton.cookiedialog.lockCol "Protected">
+<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.pathCol "Path">
+<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+
+
+
+
+
+
+
+
+

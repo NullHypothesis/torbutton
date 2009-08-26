@@ -6,7 +6,7 @@
 
 <dialog id="TorCookieDialog"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        title="Manage Cookies"
+        title="&torbutton.cookiedialog.title;"
         buttons="accept,cancel"
         style="width: 30em;"
         onload="initDialog();"
@@ -26,15 +26,15 @@
                 onselect="itemSelected();"
                 hidecolumnpicker="true">
         <treecols>
-          <treecol id="lockCol" label="Protected" flex="1"
+          <treecol id="lockCol" label="&torbutton.cookiedialog.lockCol;" flex="1"
                        onclick="CookieColumnSort('isProtected', true);" persist="width"/>
           <splitter class="tree-splitter"/>
-          <treecol id="domainCol" label="Host" flex="2"
+          <treecol id="domainCol" label="&torbutton.cookiedialog.domainCol;" flex="2"
                        onclick="CookieColumnSort('rawHost', true);" persist="width"/>
           <splitter class="tree-splitter"/>
-          <treecol id="nameCol" label="Name" flex="1"
+          <treecol id="nameCol" label="&torbutton.cookiedialog.nameCol;" flex="1"
                        onclick="CookieColumnSort('name', true);" persist="width"/>
-          <treecol id="pathCol" label="Path" flex="1"
+          <treecol id="pathCol" label="&torbutton.cookiedialog.pathCol;" flex="1"
                        onclick="CookieColumnSort('path', true);" persist="width"/>
           
         </treecols>
@@ -45,25 +45,25 @@
     <hbox>
         <vbox>
           <button id="protectCookie" disabled="true"
-                      label="Protect Cookie"
+                      label="&torbutton.cookiedialog.protectCookie;"
                       oncommand="protectCookie();"/>
           <button id="removeCookie" disabled="true"
-                      label="Remove Cookie"
+                      label="&torbutton.cookiedialog.removeCookie;"
                       oncommand="DeleteCookie();"/>
         </vbox>
         <vbox>
           <button id="unprotectCookie" disabled="true"
-                      label="Unprotect Cookie"
+                      label="&torbutton.cookiedialog.unprotectCookie;"
                       oncommand="unprotectCookie();"/>
           <button id="removeAllCookies"
-                      label="Remove All But Protected"
+                      label="&torbutton.cookiedialog.removeAllBut;"
                       oncommand="DeleteAllCookies();"/>
         </vbox>
       </hbox>
       <hbox>
         <radiogroup id="defaultCookieGroup">
-          <radio id="saveAllCookies" label="Protect All New Cookies" />
-          <radio id="donnotsaveCookies" label="Do Not Protect New Cookies" />
+          <radio id="saveAllCookies" label="&torbutton.cookiedialog.saveAllCookies;" />
+          <radio id="donnotsaveCookies" label="&torbutton.cookiedialog.doNotSaveAllCookies;" />
         </radiogroup>
       </hbox>
   </groupbox>
