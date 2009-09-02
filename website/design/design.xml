@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Aug 24 2009</pubdate>
+   <pubdate>Sep 2 2009</pubdate>
  </articleinfo>
 
 <sect1>
@@ -151,7 +151,7 @@ can cause the browser to perform network activity after Tor has been disabled,
 thus allowing the adversary to correlate Tor and Non-Tor activity and reveal
 a user's non-Tor IP address. Javascript
 also allows the adversary to execute <ulink
-url="http://browserspy.dk/css.php">history disclosure attacks</ulink>:
+url="http://whattheinternetknowsaboutyou.com/">history disclosure attacks</ulink>:
 to query the history via the different attributes of 'visited' links to search
 for particular google queries, sites, or even to <ulink
 url="http://www.mikeonads.com/2008/07/13/using-your-browser-url-history-estimate-gender/">profile
@@ -1335,7 +1335,7 @@ url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/c
 and <ulink
 url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/nav-history-service;1">@mozilla.org/browser/nav-history-service;1</ulink>
 components, this mechanism defeats all document-based <ulink
-url="http://browserspy.dk/css.php">history disclosure
+url="http://whattheinternetknowsaboutyou.com/">history disclosure
 attacks</ulink>, including <ulink
 url="http://ha.ckers.org/weird/CSS-history.cgi">CSS-only attacks</ulink>.
 
