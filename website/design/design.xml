@@ -2368,8 +2368,8 @@ url="http://pseudo-flaw.net/content/defcon/dc-17-demos/d.html">Defcon
 Gregory Fleischer has been hacking and testing Firefox and Torbutton privacy
 issues for the past 2 years. He has an excellent collection of all his test
 cases that can be used for regression testing. In his Defcon work, he
-demonstrates ways infer Firefox version based on arcane browser properties. We
-are still trying to determine the best way to address some of those test
+demonstrates ways to infer Firefox version based on arcane browser properties.
+We are still trying to determine the best way to address some of those test
 cases.
 
        </para>
@@ -2378,8 +2378,10 @@ cases.
 TorCheck Page</ulink>
        <para>
 
-As of this writing, this page is currently down. However, people seem to use
-it for testing Tor usage and Torbutton, so it must be useful to some degree.
+This page checks to ensure you are using a valid Tor exit node and checks for
+some basic browser properties related to privacy. It is not very fine-grained
+or complete, but it is automated and could be turned into something useful
+with a bit of work.
 
        </para>
       </listitem>
