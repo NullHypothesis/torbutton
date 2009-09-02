@@ -98,6 +98,7 @@ pref("extensions.torbutton.no_tor_plugins",true);
 pref("extensions.torbutton.clear_cookies",false);
 pref("extensions.torbutton.cookie_jars",true);
 pref("extensions.torbutton.cookie_protections",false);
+pref("extensions.torbutton.cookie_auto_protect",false);
 pref("extensions.torbutton.dual_cookie_jars",false);
 pref("extensions.torbutton.disable_domstorage",true);
 pref("extensions.torbutton.clear_cache",true);

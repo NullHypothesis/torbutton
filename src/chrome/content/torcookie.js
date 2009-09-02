@@ -79,9 +79,7 @@ function initDialog() {
   //apply custom view
   cookiesTreeView.rowCount = cookies.length;
   cookiesTree.treeBoxObject.view = cookiesTreeView;    
- 
-  //grab data from xml files
-  //add protected tag
+  document.getElementById('defaultCookieGroup').selectedIndex = prefs.getBoolPref("extensions.torbutton.cookie_auto_protect")? 0 : 1;
 }
 function protectCookie()
 {
@@ -134,6 +132,7 @@ function acceptDialog() {
   }
   selector.protectCookies(protcookies);
   //output protected cookies
+  prefs.setBoolPref("extensions.torbutton.cookie_auto_protect",document.getElementById('saveAllCookies').selected);
 }
 function CookieColumnSort(column) {
   lastCookieSortAscending =

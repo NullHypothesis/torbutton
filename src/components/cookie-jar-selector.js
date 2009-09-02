@@ -170,10 +170,36 @@ function CookieJarSelector() {
     foStream.write(data, data.length);
     foStream.close();
   }
+  this.addProtectedCookie = function(cookie) {
+    var tor_enabled = this.prefs.getBoolPref("extensions.torbutton.tor_enabled");
+    var name = tor_enabled? "tor" : "nontor";
+    var cookies = this.getProtectedCookies(name);
+    var xml = <cookie>{cookie.value}</cookie>;
+    xml.@name = cookie.name;
+    xml.@host = cookie.host;
+    xml.@path = cookie.path;
+    if (cookie.isSecure)
+      xml.@isSecure = 1;
+    if (cookie.isSession) {
+      xml.@isSession = 1;
+      // session cookies get fucked up expiry. Give it 1yr if
+      // the user wants to save their session cookies
+      xml.@expiry = Date.now()/1000 + 365*24*60*60;
+    } else {
+      xml.@expiry = cookie.expiry; 
+    }
+    if (cookie.isHttpOnly)
+      xml.@isHttpOnly = 1;
+
+    
+    cookies.appendChild(xml);
+    this["protected-" + name] = cookies;
+    this._protectedCookiesToFile(name);
+  }
   this.getProtectedCookies = function(name) {
       var file = getProfileFile("protected-" + name + ".xml");
       if (!file.exists())
-          return null;
+        return null;
       var data = "";
       var fstream = Cc["@mozilla.org/network/file-input-stream;1"]
           .createInstance(Ci.nsIFileInputStream);
@@ -501,7 +527,6 @@ CookieJarSelector.prototype =
     }
     return this;
   },
-
   wrappedJSObject: null,  // Initialized by constructor
 
   // make this an nsIClassInfo object
@@ -524,7 +549,10 @@ CookieJarSelector.prototype =
   observe : function(aSubject, aTopic, aData) {
        switch(aTopic) { 
         case "cookie-changed":
+            var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);          
             this.timerCallback.cookie_changed = true;
+            if (aData = "added" && prefs.getBoolPref("extensions.torbutton.cookie_auto_protect"))
+              this.addProtectedCookie(aSubject.QueryInterface(Components.interfaces.nsICookie2));//protect the new cookie!
             break;
         case "app-startup": 
             var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(nsIObserverService);

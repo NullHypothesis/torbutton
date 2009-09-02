@@ -1563,17 +1563,20 @@ function torbutton_jar_cookies(mode) {
         return;
     }*/
     var protectcookies = m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections');
+    var writeTor = !m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar');
+    var writeNontor = !m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar');
     if(mode) {
         if (protectcookies)
           selector.clearUnprotectedCookies("nontor");        
-        selector.saveCookies("nontor");
+        if (writeNontor)
+          selector.saveCookies("nontor");
         selector.clearCookies();
         if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
             selector.loadCookies("tor", false);
     } else {
         if (protectcookies)
           selector.clearUnprotectedCookies("tor");          
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+        if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars') && writeTor)
             selector.saveCookies("tor");
         selector.clearCookies();
         selector.loadCookies("nontor", false);
