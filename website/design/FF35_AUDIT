@@ -42,40 +42,70 @@ First pass: Quick Review of Firefox Features
   - https://developer.mozilla.org/en/Storage
   - "It is available to trusted callers, meaning extensions and Firefox
     components only."
-- Local Storage
-  - https://developer.mozilla.org/en/DOM/Storage#localStorage
-  - Disabled by dom storage pref..
-  - XXX: How to clear if we want to leave enabled?
+- New content policy
+  - Content Security Policy. Addon-only
 - "Offline resources"
   - https://developer.mozilla.org/en/Offline_resources_in_Firefox
   - https://developer.mozilla.org/en/nsIApplicationCache
+  - browser.cache.offline.enable toggles
+  - browser.cache.disk.enable does not apply. Seperate "device".
+  - Does our normal cache clearing mechanism apply?
+    - We call nsICacheService.evictEntries()
+    - May need: nsOfflineCacheDevice::EvictEntries(NULL)
+  - Code is smart enough to behave cleanly if we simply set
+    browser.cache.offline.enable or enable private browsing.
+- Mouse gesture and other new DOM events
+- Fonts
+  - Remote fonts obey content policy. Good.
+  - XXX: Are they cached independent of regular cache? Prob not.
+  - Hrmm can probe for installed fonts:
+    http://remysharp.com/2008/07/08/how-to-detect-if-a-font-is-installed-only-using-javascript/
+    http://www.lalit.org/lab/javascript-css-font-detect
+    http://www.ajaxupdates.com/cssjavascript-font-detector/
+    http://code.google.com/p/jquery-fontavailable/
 - Drag and drop
   - https://developer.mozilla.org/En/DragDrop/Drag_and_Drop
   - https://developer.mozilla.org/En/DragDrop/Drag_Operations
   - https://developer.mozilla.org/En/DragDrop/Dragging_and_Dropping_Multiple_Items
   - https://developer.mozilla.org/En/DragDrop/Recommended_Drag_Types
   - https://developer.mozilla.org/En/DragDrop/DataTransfer
-- Mouse gesture and other new DOM events
-- Remote fonts
-  - Do they obey the content policy?
-- New content policy
-  - Content Security Policy. Addon-only
+  - Should be no different than normal url handling..
+- Local Storage
+  - https://developer.mozilla.org/en/DOM/Storage#localStorage
+  - Disabled by dom storage pref..
+  - Private browsing mode has its own DB
+    - Memory only?
+  - Disk Avoidance of gStorage and local storage:
+    - mSessionOnly set via nsDOMStorage::CanUseStorage()
+      - Seems to be set to true if cookies are session-only or private
+        browsing mode
+        - Our cookies are NOT session-only with dual cookie jars
+          - but this is ok if we clear the session storage..
+            - XXX: Technically clearing session storage may break
+              sites if cookies remain though
+      - nsDOMStoragePersistentDB not used if mSessionOnly
+  - Can clear with nsDOMStorage::ClearAll() or nsIDOMStorage2::clear()?
+    - These only work for a particular storage. There's both global now
+      and per-origin storage instances
+    - Each docshell has tons of storages for each origin contained in it
+    - Toggling dom.storage.enabled does not clear existing storage
 
 Second Pass: Verification of all Torbutton Assumptions
 - "Better privacy controls"
 - "Swap DocShell"
   - https://developer.mozilla.org/En/XUL/Method/SwapDocShells
 - Private browsing
-  - Read iSec report
   - https://developer.mozilla.org/En/Supporting_private_browsing_mode
+  - Read iSec report
   - Compare to Chrome
     - API use cases
 - https://developer.mozilla.org/En/Security_changes_in_Firefox_3.5
-- https://developer.mozilla.org/En/Monitoring_WiFi_access_points
 - SSL Toggle
 - Unto tabs Toggle
 - SafeBrowsing Update Key
 - Places
+- SessionStore
+  - Has been reworked with observers and write methods. Should use those.
 
 Third Pass: Exploit Auditing
 - Remote fonts
