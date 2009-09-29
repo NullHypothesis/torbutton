@@ -1,0 +1,88 @@
+First pass: Quick Review of Firefox Features
+- Video Tag
+  - Docs:
+    - https://developer.mozilla.org/En/HTML/Element/Audio
+    - https://developer.mozilla.org/En/HTML/Element/Video
+    - https://developer.mozilla.org/En/HTML/Element/Source
+    - https://developer.mozilla.org/En/Manipulating_video_using_canvas
+    - https://developer.mozilla.org/En/nsIDOMHTMLMediaElement
+    - https://developer.mozilla.org/En/Media_formats_supported_by_the_audio_and_video_elements
+    - http://en.flossmanuals.net/TheoraCookbook
+  - nsIContentPolicy is checked on load
+  - Uses NSIChannels for initial load
+  - Wrapped in nsHTMLMediaElement::mDecoder
+    - is nsOggDecoder() or nsWaveDecoder()
+    - liboggplay
+  - Governed by media.* prefs
+  - Preliminary audit shows they do not use the liboggplay tcp functions
+- Geolocation
+  - Wifi:
+    - https://developer.mozilla.org/En/Monitoring_WiFi_access_points
+    - Requires security policy to allow. Then still prompted
+  - navigator.geolocation
+    - Governed by geo.enabled
+    - "2 week access token" is set
+    - http://mxr.mozilla.org/mozilla1.9.1/source/dom/src/geolocation/NetworkGeolocationProvider.js
+    - https://developer.mozilla.org/En/Using_geolocation
+- DNS prefetching after toggle
+  - prefetch pref? Always disable for now?
+    - network.dns.disablePrefetch
+    - Also disabled in netwerk/dns/src/nsDNSService2.cpp when manual proxies
+      are set..
+    - This should prevent prefetching of non-tor urls in tor mode..
+    - But the reverse is unclear.
+    - DocShell attribute!!1 YAY
+      - http://www.oxymoronical.com/experiments/apidocs/interface/nsIDocShell
+      - "Takes effect for the NEXT document loaded...."
+        - Do we win this race? hrmm.. If we do, the tor->nontor direction
+          should also be safe.
+  - Content policy called?
+    - No. See content/html/content/src/nsHTMLDNSPrefetch.cpp
+- Storage
+  - https://developer.mozilla.org/en/Storage
+  - "It is available to trusted callers, meaning extensions and Firefox
+    components only."
+- Local Storage
+  - https://developer.mozilla.org/en/DOM/Storage#localStorage
+  - Disabled by dom storage pref..
+  - XXX: How to clear if we want to leave enabled?
+- "Offline resources"
+  - https://developer.mozilla.org/en/Offline_resources_in_Firefox
+  - https://developer.mozilla.org/en/nsIApplicationCache
+- Drag and drop
+  - https://developer.mozilla.org/En/DragDrop/Drag_and_Drop
+  - https://developer.mozilla.org/En/DragDrop/Drag_Operations
+  - https://developer.mozilla.org/En/DragDrop/Dragging_and_Dropping_Multiple_Items
+  - https://developer.mozilla.org/En/DragDrop/Recommended_Drag_Types
+  - https://developer.mozilla.org/En/DragDrop/DataTransfer
+- Mouse gesture and other new DOM events
+- Remote fonts
+  - Do they obey the content policy?
+- New content policy
+  - Content Security Policy. Addon-only
+
+Second Pass: Verification of all Torbutton Assumptions
+- "Better privacy controls"
+- "Swap DocShell"
+  - https://developer.mozilla.org/En/XUL/Method/SwapDocShells
+- Private browsing
+  - Read iSec report
+  - https://developer.mozilla.org/En/Supporting_private_browsing_mode
+  - Compare to Chrome
+    - API use cases
+- https://developer.mozilla.org/En/Security_changes_in_Firefox_3.5
+- https://developer.mozilla.org/En/Monitoring_WiFi_access_points
+- SSL Toggle
+- Unto tabs Toggle
+- SafeBrowsing Update Key
+- Places
+
+Third Pass: Exploit Auditing
+- Remote fonts
+- SVG with HTML
+- Javascript threads+locking
+- Ogg theora and vorbis codecs
+- SQLite
+
+
+- https://developer.mozilla.org/en/Firefox_3_for_developers
