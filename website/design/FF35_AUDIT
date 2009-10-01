@@ -90,6 +90,11 @@ First pass: Quick Review of Firefox Features
       and per-origin storage instances
     - Each docshell has tons of storages for each origin contained in it
     - Toggling dom.storage.enabled does not clear existing storage
+    - Oh HOT! cookie-changed to clear cookies clears all storages!
+  - Conclusion:
+    - can safely enable dom storage
+      - May have minor buggy usability issues unless we preserve it
+        when user is preserving cookies..
 
 Second Pass: Verification of all Torbutton Assumptions
 - "Better privacy controls"
@@ -165,13 +170,16 @@ Second Pass: Verification of all Torbutton Assumptions
   - Read iSec report
   - Compare to Chrome
     - API use cases
-- SSL Toggle to clear session id
-- Unto tabs Toggle
-- SafeBrowsing Update Key removed on cookie clear still?
-- Places
 - SessionStore
   - Has been reworked with observers and write methods. Should use those.
-- check if nsICertStore is still buggy...
+- security.enable_ssl2 to clear session id
+  - Still cleared
+- browser.sessionstore.max_tabs_undo
+  - Yep.
+- SafeBrowsing Update Key removed on cookie clear still?
+  - Yep.
+- Livemark updates have kill events now
+- Test if nsICertStore is still buggy...
 
 Third Pass: Exploit Auditing
 - Remote fonts
