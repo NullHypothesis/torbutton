@@ -138,6 +138,17 @@ pref("extensions.torbutton.nontor_memory_jar",false);
 pref("extensions.torbutton.tz_string","");
 pref("extensions.torbutton.launch_warning",true);
 
+// Google Captcha prefs
+// FIXME: NID cookie?
+pref("extensions.torbutton.gpref_cookie", "ID=1d101904e41c3513:U=92b2ec1fc6e1b672:TM=1254959408:LM=1254959427:S=axQD6IS2sUN94gCM");
+pref("extensions.torbutton.gpref_host", ".google.ca");
+// Reset the google cookie to pref on cookie-changed:clear events
+pref("extensions.torbutton.reset_gpref_cookie", true);
+// Regen the google cookie on cookie-changed:clear events via a fetch
+pref("extensions.torbutton.regen_gpref_cookie", false);
+// Xfer google PREF cookie across all google domains
+pref("extensions.torbutton.xfer_gpref_cookie", true);
+
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; LANG)");
