@@ -174,6 +174,9 @@ function CookieJarSelector() {
     var tor_enabled = this.prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var name = tor_enabled? "tor" : "nontor";
     var cookies = this.getProtectedCookies(name);
+    
+    if (cookies.toString() == "" || cookies == null)
+      cookies = new XML('<cookies/>');
     var xml = <cookie>{cookie.value}</cookie>;
     xml.@name = cookie.name;
     xml.@host = cookie.host;
@@ -551,8 +554,11 @@ CookieJarSelector.prototype =
         case "cookie-changed":
             var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);          
             this.timerCallback.cookie_changed = true;
-            if (aData = "added" && prefs.getBoolPref("extensions.torbutton.cookie_auto_protect"))
-              this.addProtectedCookie(aSubject.QueryInterface(Components.interfaces.nsICookie2));//protect the new cookie!
+    
+            if (aData == "added" && prefs.getBoolPref("extensions.torbutton.cookie_auto_protect") && ((!prefs.getBoolPref("extensions.torbutton.tor_memory_jar") && prefs.getBoolPref("extensions.torbutton.tor_enabled")) || (!prefs.getBoolPref("extensions.torbutton.nontor_memory_jar") && !prefs.getBoolPref("extensions.torbutton.tor_enabled"))))
+            {
+              this.addProtectedCookie(aSubject.QueryInterface(Components.interfaces.nsICookie2));//protect the new cookie!    
+            }
             break;
         case "app-startup": 
             var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(nsIObserverService);

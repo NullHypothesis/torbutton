@@ -1410,7 +1410,7 @@ function torbutton_close_on_toggle(mode) {
 
 function checkProtections()
 {
-  var pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections");
+  var pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections") && ((!m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar") && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) || (!m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar") && !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")));
   document.getElementById("torbutton-cookie-protector").disabled = !pref; 
 }
 
@@ -1566,7 +1566,7 @@ function torbutton_jar_cookies(mode) {
     var writeTor = !m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar');
     var writeNontor = !m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar');
     if(mode) {
-        if (protectcookies)
+        if (protectcookies && writeNontor)
           selector.clearUnprotectedCookies("nontor");        
         if (writeNontor)
           selector.saveCookies("nontor");
@@ -1574,7 +1574,7 @@ function torbutton_jar_cookies(mode) {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
             selector.loadCookies("tor", false);
     } else {
-        if (protectcookies)
+        if (protectcookies && writeTor)
           selector.clearUnprotectedCookies("tor");          
         if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars') && writeTor)
             selector.saveCookies("tor");
