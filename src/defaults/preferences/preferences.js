@@ -146,8 +146,8 @@ pref("extensions.torbutton.gpref_host", ".google.ca");
 pref("extensions.torbutton.reset_gpref_cookie", true);
 // Regen the google cookie on cookie-changed:clear events via a fetch
 pref("extensions.torbutton.regen_gpref_cookie", false);
-// Xfer google PREF cookie across all google domains
-pref("extensions.torbutton.xfer_gpref_cookie", true);
+// Xfer google search cookies across all google domains
+pref("extensions.torbutton.xfer_google_cookies", true);
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");

@@ -2322,7 +2322,9 @@ function torbutton_reset_google_cookie() {
        getService(Components.interfaces.nsICookieManager2);
     var expires = (new Date("Jan 1, 3000")).getTime() / 1000;
 
-    // FIXME: NID cookie?
+    // FIXME: Also need S, GDSESS, SS (www, /search), SNID (/verify) and NID...
+    // But it may be the case that NID, SNID and the others can be tied
+    // to a gmail account, search history, prefs, and/or iGoogle customization
     cm.add(
        m_tb_prefs.getCharPref("extensions.torbutton.gpref_host"),
        "/",   // path
@@ -2335,25 +2337,39 @@ function torbutton_reset_google_cookie() {
   }
 }
 
-function torbutton_xfer_google_cookie(subject, topic, data) {
+/*
+function torbutton_filter_cookies(filter_cookies) {
+  var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
+                     .getService(Ci.nsICookieManager);
+  var cookiesEnum = cookieManager.enumerator;
+  var new_cookies = [];
+  while (cookiesEnum.hasMoreElements()) {
+    var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
+  }
+}
+*/
+
+
+function torbutton_xfer_google_cookies(subject, topic, data) {
   // Only fire if tor is fully enabled
   if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
     // catch load requests for nsIURI.host of google.(com|[\S\S](.[\S\S])?)$
     // If no pref cookie, generate from google.ca PREF
-    var httpChannel = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
+    var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
     var hostmatch =
-        subject.URI.host.match(/google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+        subject.URI.host.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+    var domain = hostmatch[1];
 
     // check nsIURI
     if (hostmatch) {
       var google_host = m_tb_prefs.getCharPref("extensions.torbutton.gpref_host");
       torbutton_log(3, "Got Google request for host: "+subject.URI.host
               +", matched: "+hostmatch[0]);
-      if ("."+hostmatch[0] == google_host) {
+      /* Check if we have a cookie yet:
+      if (hostmatch[0] == "www"+google_host) {
         torbutton_log(3, "Skipping google cookie for main host");
         return;
       }
-      // Check if we have a cookie yet:
       var cookies = null;
       try {
         cookies = new String(httpChannel.getRequestHeader("Cookie"));
@@ -2362,14 +2378,18 @@ function torbutton_xfer_google_cookie(subject, topic, data) {
         torbutton_log(3, "Google cookies exploded: "+e);
       }
       if (!cookies || !(cookies.match(/(^|;)PREF=/))) {
-        torbutton_log(3, "No pref cookie for: "+subject.URI.host);
+      */
+      if (true) {
+        torbutton_log(3, "Preparing to xfer cookies for: "+subject.URI.host);
         var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
                               .getService(Ci.nsICookieManager);
         var cookiesEnum = cookieManager.enumerator;
-        var gpref = null;
-        var use_google_host =
-              m_tb_prefs.getBoolPref("extensions.torbutton.reset_gpref_cookie")
+        var copy_cookies = [];
+        // Lets always xfer over all cookies from www.google hosts
+        var use_google_host = false;
+           /* m_tb_prefs.getBoolPref("extensions.torbutton.reset_gpref_cookie")
            || m_tb_prefs.getBoolPref("extensions.torbutton.regen_gpref_cookie");
+           */
         torbutton_log(3, "Got prefs: "+subject.URI.host);
         while (cookiesEnum.hasMoreElements()) {
           var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
@@ -2377,37 +2397,91 @@ function torbutton_xfer_google_cookie(subject, topic, data) {
           if (use_google_host) {
             hostmatched = (cookie.host == google_host);
           } else {
-            hostmatched = (new String(cookie.host)).match(/^\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+            hostmatched = (new String(cookie.host)).match(
+                    /^(\.www|www|)\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
           }
-          if (cookie.host != "."+hostmatch[0] && hostmatched &&
-                  cookie.path == "/" && cookie.name == "PREF") {
-            gpref = cookie;
+          // Copy all relevent cookies (except for ssl)
+          if (hostmatched && !cookie.isSecure) {
+            copy_cookies.push(cookie);
           }
         }
-        torbutton_log(3, "Got gpref: "+(gpref ? gpref.host+" "+gpref.value : "none"));
-        if (!gpref) {
+
+        if (!copy_cookies.length) {
           torbutton_safelog(4, "No cookie to migrate: ", subject.URI.host);
           return;
         }
-        httpChannel.setRequestHeader("Cookie", gpref.name+"="+gpref.value,
-                true);
         var cm = Components.classes['@mozilla.org/cookiemanager;1'].
            getService(Components.interfaces.nsICookieManager2);
         var expires = (new Date("Jan 1, 3000")).getTime() / 1000;
+        var i;
 
-        // FIXME: NID cookie?
+        for (i = 0; i < copy_cookies.length; i++) {
+          var new_host = new String(copy_cookies[i].host);
+          // Regex sub out copy_cookies[i].host
+          new_host = new_host.replace(
+                           /\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/,
+                           ".google."+domain);
+          try {
+            cm.add(
+               new_host,
+               copy_cookies[i].path,   // path
+               copy_cookies[i].name,
+               copy_cookies[i].value,
+               copy_cookies[i].isSecure,  // isSecure
+               false,  // isHttpOnly
+               false,  // isSession
+               expires);
+            /* Need to copy only cookies matching the host/domain and
+             * path of this request... */
+            var dmatch = new RegExp(new_host+"$");
+            if (subject.URI.host.match(dmatch)
+                && subject.URI.path.indexOf(copy_cookies[i].path) == 0) {
+              httpChannel.setRequestHeader("Cookie",
+                      copy_cookies[i].name+"="+copy_cookies[i].value, true);
+              torbutton_log(3, "Google cookie "+copy_cookies[i].name+
+                            " applied for: "+subject.URI.host+" to domain "+
+                            new_host);
+            } else {
+              torbutton_log(3, "Google cookie "+copy_cookies[i].name+
+                            " transfered for: "+subject.URI.host+" to domain "+
+                            new_host);
+            }
+          } catch(e) {
+            torbutton_log(3, "Cookie add fail for "+new_host+" "
+                          +copy_cookies[i].name+": "+e);
+          }
+        }
 
-        cm.add(
-           "."+hostmatch[0],
-           gpref.path,   // path
-           gpref.name,
-           gpref.value,
-           gpref.isSecure,  // isSecure
-           false,  // isHttpOnly
-           false,  // isSession
-           expires);
+        /*
+        var browser = null;
+        if (subject.notificationCallbacks ||
+             (subject.loadGroup && subject.loadGroup.notificationCallbacks) {
+          try {
+            var callbacks = subject.notificationCallbacks;
+            if (!callbacks) {
+              callbacks = subject.loadGroup.notificationCallbacks;
+            }
+            var wind = callbacks.QueryInterface(
+                Components.interfaces.nsIInterfaceRequestor).getInterface(
+                   Components.interfaces.nsIDOMWindow);
 
-        torbutton_log(3, "Google cookie transfered for: "+subject.URI.host+" to domain ."+hostmatch[0]);
+            if (wind instanceof Components.interfaces.nsIDOMChromeWindow) {
+              if (wind.browserDOMWindow) {
+                browser = wind.getBrowser().selectedTab.linkedBrowser;
+              }
+            }
+          } catch(e) {
+              torbutton_eclog(4,
+                      'Failure obtaining window for cookie xfer: '+e);
+          }
+        }
+        if (browser) {
+          torbutton_eclog(3, "Reload after cookie xfer: "+subject.URI.spec);
+          browser.reload();
+        } else {
+          torbutton_eclog(4, "Could not find browser to reload "+subject.URI.spec);
+        }
+        */
       }
     }
   }
@@ -2415,6 +2489,7 @@ function torbutton_xfer_google_cookie(subject, topic, data) {
 
 // Technique courtesy of:
 // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
+// XXX: Exception here??
 const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 var torbutton_uninstall_observer = {
 _uninstall : false,
@@ -2534,9 +2609,9 @@ observe : function(subject, topic, data) {
       torbutton_check_progress(null, subject, 0);
   } else if (topic == "http-on-modify-request") {
       torbutton_eclog(3, 'Modify request: '+subject.name);
-      if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_gpref_cookie")) {
+      if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_google_cookies")) {
         try {
-          torbutton_xfer_google_cookie(subject, topic, data);
+          torbutton_xfer_google_cookies(subject, topic, data);
         } catch(e) {
           torbutton_log(4, "Explosion on cookie transfer: "+e);
         }
