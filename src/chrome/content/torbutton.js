@@ -1946,6 +1946,7 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
 
             // Likewise for DNS prefetch
             if(m_tb_ff35) {
+                b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
                 b.docShell.allowDNSPrefetch = !b.__tb_tor_fetched
                     && !tor_enabled;
             }
@@ -2019,6 +2020,7 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 
     if (!tor_tag && m_tb_ff35) {
+        browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
         browser.docShell.allowDNSPrefetch = tor_tag;
     }
 
@@ -2071,7 +2073,10 @@ function torbutton_conditional_set(state) {
             if (state) {
                 if(b && b.docShell){
                     if(no_plugins) b.docShell.allowPlugins = false;
-                    if(m_tb_ff35) b.docShell.allowDNSPrefetch = false;
+                    if(m_tb_ff35) {
+                        b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                        b.docShell.allowDNSPrefetch = false;
+                    }
                 } else {
                     try {
                         if (b && b.currentURI) 
@@ -3186,7 +3191,10 @@ function torbutton_update_tags(win) {
         /* We want to disable allowDNSPrefetch on Tor-loaded tabs
          * before the load, because we don't want prefetch to be enabled
          * on tor tabs once we leave Tor. */
-        if(m_tb_ff35) browser.docShell.allowDNSPrefetch = tor_tag;
+        if(m_tb_ff35) {
+            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+            browser.docShell.allowDNSPrefetch = tor_tag;
+        }
 
         if(js_enabled && !browser.docShell.allowJavascript) {
             // Only care about re-enabling javascript. 
