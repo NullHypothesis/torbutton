@@ -15,6 +15,7 @@ var m_tb_window_height = window.outerHeight;
 var m_tb_window_width = window.outerWidth;
 
 var m_tb_ff3 = false;
+var m_tb_ff35 = false;
 
 var torbutton_window_pref_observer =
 {
@@ -398,7 +399,13 @@ function torbutton_init() {
     } else {
         m_tb_ff3 = false;
     }
-    
+
+    if(versionChecker.compare(appInfo.version, "3.5a1") >= 0) {
+        m_tb_ff35 = true;
+    } else {
+        m_tb_ff35 = false;
+    }
+
     // initialize preferences before we start our prefs observer
     torbutton_init_prefs();
 
@@ -1114,17 +1121,46 @@ function torbutton_update_status(mode, force_update) {
                 m_tb_prefs.clearUserPref(children[i]);
         }
     }
-    
+
     // Always block disk cache during Tor. We clear it on toggle, 
     // so no need to keep it around for someone to rifle through.
     torbutton_setBoolPref("browser.cache.disk.enable", "disk_cache", !mode, 
             mode, changed);
+
+    torbutton_setBoolPref("browser.cache.offline.enable", "offline_cache",
+            !mode, mode, changed);
+
+    torbutton_setBoolPref("browser.zoom.siteSpecific", "zoom_specific",
+            !mode, mode, changed);
 
     // Disable safebrowsing in Tor for FF2. It fetches some info in 
     // cleartext with no HMAC (Firefox Bug 360387)
     if(!m_tb_ff3) {
         torbutton_setBoolPref("browser.safebrowsing.enabled", "safebrowsing", 
                 !mode, mode, changed);
+    }
+
+    if(m_tb_ff35) {
+        // Disable geolocation
+        torbutton_setBoolPref("geo.enabled", "geo_enabled", !mode, mode,
+                changed);
+        torbutton_setBoolPref("network.dns.disablePrefetch", "dns_prefetch",
+                mode, !mode, changed);
+        try {
+            if(m_tb_prefs.prefHasUserValue("geo.wifi.access_token")) {
+                m_tb_prefs.clearUserPref("geo.wifi.access_token");
+            }
+        } catch(e) {
+            torbutton_log(3, "Exception on wifi token clear: "+e);
+        }
+    }
+
+    try {
+        if(m_tb_prefs.prefHasUserValue("general.open_location.last_url")) {
+            m_tb_prefs.clearUserPref("general.open_location.last_url");
+        }
+    } catch(e) {
+        torbutton_log(3, "Exception on wifi token clear: "+e);
     }
 
     // I think this pref is evil (and also hidden from user configuration, 
@@ -1140,7 +1176,7 @@ function torbutton_update_status(mode, force_update) {
     // Prevent pages from pinging the Tor ports regardless tor mode
     m_tb_prefs.setCharPref("network.security.ports.banned", 
             m_tb_prefs.getCharPref("extensions.torbutton.banned_ports"));
-   
+
     if (m_tb_prefs.getBoolPref("extensions.torbutton.no_search")) {
         torbutton_setBoolPref("browser.search.suggest.enabled", 
                 "search_suggest", !mode, mode, changed);
@@ -1907,7 +1943,13 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
                 b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
             else 
                 b.docShell.allowPlugins = true;
-            
+
+            // Likewise for DNS prefetch
+            if(m_tb_ff35) {
+                b.docShell.allowDNSPrefetch = !b.__tb_tor_fetched
+                    && !tor_enabled;
+            }
+
             if(isolate_dyn) {
                 torbutton_check_js_tag(b, tor_enabled, js_enabled);
                 // kill meta-refresh and existing page loading 
@@ -1976,6 +2018,10 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
         browser.docShell.allowPlugins = tor_tag;
     }
 
+    if (!tor_tag && m_tb_ff35) {
+        browser.docShell.allowDNSPrefetch = tor_tag;
+    }
+
     // Only tag new windows
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         torbutton_log(3, "Tagging new window: "+tor_tag);
@@ -2022,9 +2068,10 @@ function torbutton_conditional_set(state) {
         for (var i = 0; i < browsers.length; ++i) {
             var b = browser.browsers[i];
 
-            if (!state && no_plugins) {
+            if (state) {
                 if(b && b.docShell){
-                    b.docShell.allowPlugins = false;
+                    if(no_plugins) b.docShell.allowPlugins = false;
+                    if(m_tb_ff35) b.docShell.allowDNSPrefetch = false;
                 } else {
                     try {
                         if (b && b.currentURI) 
@@ -2034,7 +2081,7 @@ function torbutton_conditional_set(state) {
                     } catch(e) {
                         torbutton_log(5, "Initial docShell is null for unparsable URL: "+e);
                     }
-                } 
+                }
             }
             b.__tb_tor_fetched = state;
         }
@@ -3135,6 +3182,12 @@ function torbutton_update_tags(win) {
 
         browser.__tb_tor_fetched = !tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
+
+        /* We want to disable allowDNSPrefetch on Tor-loaded tabs
+         * before the load, because we don't want prefetch to be enabled
+         * on tor tabs once we leave Tor. */
+        if(m_tb_ff35) browser.docShell.allowDNSPrefetch = tor_tag;
+
         if(js_enabled && !browser.docShell.allowJavascript) {
             // Only care about re-enabling javascript. 
             // The js engine obeys the pref over the docshell attribute

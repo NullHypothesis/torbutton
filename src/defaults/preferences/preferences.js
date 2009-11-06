@@ -72,11 +72,15 @@ pref("extensions.torbutton.saved.sendSecureXSiteReferrer", true);
 pref("extensions.torbutton.saved.sendRefererHeader", 2);
 pref("extensions.torbutton.saved.dom_storage", true);
 pref("extensions.torbutton.saved.mem_cache", true);
+pref("extensions.torbutton.saved.offline_cache", true);
 pref("extensions.torbutton.saved.http_cache", true);
 pref("extensions.torbutton.saved.extension_update", true);
 pref("extensions.torbutton.saved.app_update", true);
 pref("extensions.torbutton.saved.auto_update", true);
 pref("extensions.torbutton.saved.search_update", true);
+pref("extensions.torbutton.saved.geo_enabled", true);
+pref("extensions.torbutton.saved.zoom_specific", true);
+pref("extensions.torbutton.saved.dns_prefetch", true);
 
 // State prefs:
 pref("extensions.torbutton.tor_enabled",false);

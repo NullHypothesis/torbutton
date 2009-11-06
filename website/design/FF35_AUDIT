@@ -91,6 +91,7 @@ First pass: Quick Review of Firefox Features
     - Each docshell has tons of storages for each origin contained in it
     - Toggling dom.storage.enabled does not clear existing storage
     - Oh HOT! cookie-changed to clear cookies clears all storages!
+      - happens for both ff3.0 and 3.5 in dom/src/storage/nsDOMStorage.cpp
   - Conclusion:
     - can safely enable dom storage
       - May have minor buggy usability issues unless we preserve it
@@ -114,6 +115,8 @@ Second Pass: Verification of all Torbutton Assumptions
         - Stuff the emit does (grep for NS_PRIVATE_BROWSING_SWITCH_TOPIC and
           "private-browsing")
           - XXX:  clear mozilla.org/security/sdr;1. We should too! Wtf is it??
+            - Neg. Best to let them handle this. Users will be annoyed
+              at having to re-enter their passwords..
           - They also clear the console service..
           - Recommend watching private-browsing-cancel-vote and blocking if
             we are performing a db operation
