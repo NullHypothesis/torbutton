@@ -96,8 +96,9 @@ var torbutton_unique_pref_observer =
             case "general.useragent.vendorSub":
             case "general.useragent.override":
                 if((!m_tb_prefs.prefHasUserValue("general.useragent.override")
-                    || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub")) 
+                    || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
                     && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                    && m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")
                     && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
                     torbutton_log(4, "Some other addon tried to clear user agent settings.");
                     torbutton_set_uagent();
@@ -715,6 +716,7 @@ function torbutton_update_toolbutton(mode)
   var o_toolbutton = torbutton_get_toolbutton();
   if (!o_toolbutton) return;
   var o_stringbundle = torbutton_get_stringbundle();
+  var tooltip = "";
 
   if (mode) {
       tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
@@ -2036,9 +2038,13 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
             if(!browser.webNavigation.sessionHistory) {
                 torbutton_log(4, "Still failed to add historyListener!");
             }
-            browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
-            browser.__tb_hlistener = hlisten;
-            torbutton_log(2, "Added history listener");
+            try {
+               browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
+               browser.__tb_hlistener = hlisten;
+               torbutton_log(2, "Added history listener");
+            } catch(e) {
+               torbutton_log(4,  "Exception adding history listener: "+e);
+            }
         }
         
         if(browser.webNavigation.sessionHistory) {
