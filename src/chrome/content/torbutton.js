@@ -2432,10 +2432,10 @@ function torbutton_xfer_google_cookies(subject, topic, data) {
     var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
     var hostmatch =
         subject.URI.host.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
-    var domain = hostmatch[1];
 
     // check nsIURI
     if (hostmatch) {
+      var domain = hostmatch[1];
       var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
       torbutton_log(3, "Got Google request for host: "+subject.URI.host
               +", matched: "+hostmatch[0]);
