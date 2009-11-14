@@ -1408,7 +1408,7 @@ function torbutton_close_on_toggle(mode) {
     }
 }
 
-function checkProtections()
+function torbutton_check_protections()
 {
   var pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections") && ((!m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar") && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) || (!m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar") && !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")));
   document.getElementById("torbutton-cookie-protector").disabled = !pref; 
