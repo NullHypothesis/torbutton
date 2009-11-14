@@ -152,7 +152,7 @@ pref("extensions.torbutton.ggdsess_cookie", "ID=b7d8832732f59bb2:EX=1256952014:S
 pref("extensions.torbutton.gs_cookie", "sorry=zDHg1z1zi0BRXVKRrIaH2Q");
 pref("extensions.torbutton.google_host", ".google.ca");
 // Reset the google cookie to pref on cookie-changed:clear events
-pref("extensions.torbutton.reset_google_cookies", true);
+pref("extensions.torbutton.reset_google_cookies", false);
 // Regen the google cookie on cookie-changed:clear events via a fetch
 pref("extensions.torbutton.regen_google_cookies", false);
 // Xfer google search cookies across all google domains
