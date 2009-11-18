@@ -1340,14 +1340,35 @@ function torbutton_close_on_toggle(mode) {
     }
 
     // TODO: muck around with browser.tabs.warnOnClose.. maybe..
-    torbutton_log(3, "Closing tabs");
+    torbutton_log(3, "Closing tabs...");
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
         .getService(Components.interfaces.nsIWindowMediator);
     var enumerator = wm.getEnumerator("navigator:browser");
+    var closeWins = new Array();
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+
+        if(!browser) {
+          torbutton_log(3, "No browser..");
+          continue;
+        }
+
+        if(!browser.browsers) {
+          torbutton_log(3, "No browser.browsers..");
+          continue;
+        }
+
         var tabs = browser.browsers.length;
+
+        torbutton_log(3, "Length: "+browser.browsers.length);
+
+        if(!tabs) {
+          torbutton_log(2, "No tabs to close in this window.");
+          continue;
+        }
+
+
         var remove = new Array();
         for(var i = 0; i < tabs; i++) {
             if(browser.browsers[i].__tb_tor_fetched != mode) {
@@ -1356,21 +1377,32 @@ function torbutton_close_on_toggle(mode) {
         }
 
         for(var i = 0; i < remove.length; i++) {
+            if(!remove[i].linkedBrowser) {
+              torbutton_log(3, "Tab for "+remove[i].currentURI.spec+
+                      " has no linked browser. Hacking one in.");
+              remove[i].linkedBrowser = browser;
+            }
             browser.removeTab(remove[i]);
         }
 
-        torbutton_log(3, "Length: "+browser.browsers.length);
-
-        if(browser.browsers.length == 1 
+        if(browser.browsers.length == 1
                 && browser.browsers[0].__tb_tor_fetched != mode) {
             if(win != window) {
-                win.close();
+                closeWins.push(win);
             } else {
                 var newb = browser.addTab("about:blank");
                 browser.removeAllTabsBut(newb);
             }
         }
     }
+
+    torbutton_log(2, "Closing windows...");
+
+    for(var i = 0; i < closeWins.length; ++i) {
+      closeWins[i].close();
+    }
+
+    torbutton_log(3, "Closed all tabs");
 }
 
 
@@ -1479,11 +1511,11 @@ function torbutton_clear_history() {
                        .getService(Components.interfaces.nsIWindowMediator);
     var enumerator = wm.getEnumerator("navigator:browser");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
+    torbutton_log(2, "Clearing browser session history");
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
         var browsers = browser.browsers;
-        torbutton_log(1, "Toggle window plugins");
 
         for (var i = 0; i < browsers.length; ++i) {
             var b = browser.browsers[i];
