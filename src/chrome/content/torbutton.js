@@ -1348,6 +1348,10 @@ function torbutton_close_on_toggle(mode) {
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+        if(!browser) {
+          torbutton_log(5, "No browser for possible closed window");
+          continue;
+        }
         var tabs = browser.browsers.length;
 
         torbutton_log(3, "Length: "+browser.browsers.length);
@@ -1492,6 +1496,11 @@ function torbutton_clear_history() {
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+        if(!browser) {
+          torbutton_log(5, "No browser for history window");
+          continue;
+        }
+
         var browsers = browser.browsers;
 
         for (var i = 0; i < browsers.length; ++i) {
@@ -1932,6 +1941,10 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
 function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
                                         kill_plugins) {
     var browser = win.getBrowser();
+    if(!browser) {
+      torbutton_log(5, "No browser for plugin window...");
+      return;
+    }
     var browsers = browser.browsers;
     torbutton_log(1, "Toggle window plugins");
 
@@ -2080,6 +2093,11 @@ function torbutton_conditional_set(state) {
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+        if(!browser) {
+          // XXX: Could add a location here..
+          torbutton_log(5, "No browser for plugin window in conditional_set.");
+          continue;
+        }
         var browsers = browser.browsers;
 
         for (var i = 0; i < browsers.length; ++i) {
@@ -2668,6 +2686,18 @@ observe : function(subject, topic, data) {
               if(wind instanceof Components.interfaces.nsIDOMChromeWindow) {
                   if(wind.browserDOMWindow) {
                       var browser = wind.getBrowser().selectedTab.linkedBrowser;
+                      if(!browser) {
+                         torbutton_safelog(5,
+                            "No linked browser for possible favicon request: ",
+                               subject.name);
+                         // Hrmm.. fail closed is the safe option here,
+                         // but how often does this happen?? If this
+                         // is bug 1035, this request probably is the
+                         // proxy test.
+                         //subject.cancel(0x804b0002); // NS_BINDING_ABORTED
+                         return;
+                      }
+
                       // This can happen in the first request of a new state.
                       // block favicons till we've reach steady state
                       if((typeof(browser.__tb_tor_fetched) != "undefined")
@@ -2996,7 +3026,11 @@ function torbutton_check_round(browser)
 function torbutton_new_window(event)
 {
     torbutton_log(3, "New window");
-    var browser = getBrowser(); 
+    var browser = getBrowser();
+    if(!browser) {
+      torbutton_log(5, "No browser for new window.");
+      return;
+    }
 
     m_tb_window_height = window.outerHeight;
     m_tb_window_width = window.outerWidth;
