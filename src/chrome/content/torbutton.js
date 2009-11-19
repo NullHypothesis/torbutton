@@ -2514,7 +2514,7 @@ function torbutton_xfer_google_cookies(subject, topic, data) {
              copy_cookies[i].name,
              copy_cookies[i].value,
              copy_cookies[i].isSecure,  // isSecure
-             false,  // isHttpOnly
+             copy_cookies[i].isHttpOnly,  // isHttpOnly
              false,  // isSession
              expires);
           /* Need to copy only cookies matching the host/domain and
