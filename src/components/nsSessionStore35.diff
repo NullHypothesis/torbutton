@@ -1,32 +1,28 @@
---- nsSessionStore3.js.orig	2009-11-18 17:22:53.000000000 -0800
-+++ nsSessionStore3.js	2009-11-18 17:23:42.000000000 -0800
-@@ -99,9 +99,22 @@
+--- ./nsSessionStore.js	2009-11-02 15:01:50.000000000 -0800
++++ ./nsSessionStore35.js	2009-11-18 17:02:54.000000000 -0800
+@@ -106,7 +106,20 @@
    "Subframes", "Plugins", "Javascript", "MetaRedirects", "Images"
  ];
  
--// module for JSON conversion (needed for the nsISessionStore API)
--Cu.import("resource://gre/modules/JSON.jsm");
 -Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-+var is_FF3 = false;
++var is_FF35 = false;
 +var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
 +  .getService(Components.interfaces.nsIXULAppInfo);
 +var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
 +  .getService(Components.interfaces.nsIVersionComparator);
 +
-+if(versionChecker.compare(appInfo.version, "3.0a1") >= 0
-+        && versionChecker.compare(appInfo.version, "3.5a1") <= 0) {
-+    is_FF3 = true;
-+    // module for JSON conversion (needed for the nsISessionStore API)
-+    Cu.import("resource://gre/modules/JSON.jsm");
++if(versionChecker.compare(appInfo.version, "3.5a1") >= 0
++        && versionChecker.compare(appInfo.version, "3.6a1") <= 0) {
++    is_FF35 = true;
 +    Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 +} else {
-+    is_FF3 = false;
++    is_FF35 = false;
 +    var XPCOMUtils = { generateQI: function() { return null; } };
 +}
  
  function debug(aMsg) {
    aMsg = ("SessionStore: " + aMsg).replace(/\S{80}/g, "$&\n");
-@@ -112,6 +125,9 @@
+@@ -117,6 +130,9 @@
  /* :::::::: The Service ::::::::::::::: */
  
  function SessionStoreService() {
@@ -36,7 +32,7 @@
  }
  
  SessionStoreService.prototype = {
-@@ -862,9 +878,26 @@
+@@ -1064,9 +1080,26 @@
      var tabbrowser = aWindow.getBrowser();
      var tabs = tabbrowser.mTabs;
      var tabsData = this._windows[aWindow.__SSi].tabs = [];
@@ -66,26 +62,27 @@
      
      this._windows[aWindow.__SSi].selected = tabbrowser.mTabBox.selectedIndex + 1;
    },
-@@ -897,6 +930,7 @@
-     if (history && browser.parentNode.__SS_data &&
-         browser.parentNode.__SS_data.entries[history.index] && !aFullData) {
+@@ -1102,6 +1135,7 @@
+         browser.parentNode.__SS_data.entries[history.index] &&
+         history.index < this._sessionhistory_max_entries - 1 && !aFullData) {
        tabData = browser.parentNode.__SS_data;
 +      if(!tabData) return null;
        tabData.index = history.index + 1;
      }
      else if (history && history.count > 0) {
-@@ -1114,7 +1148,7 @@
+@@ -1336,7 +1370,8 @@
      for (var i = 0; i < browsers.length; i++) {
        try {
          var tabData = this._windows[aWindow.__SSi].tabs[i];
--        if (tabData.entries.length == 0 ||
+-        if (browsers[i].parentNode.__SS_data &&
 +        if (!tabData || tabData.entries.length == 0 ||
-             browsers[i].parentNode.__SS_data && browsers[i].parentNode.__SS_data._tab)
++            browsers[i].parentNode.__SS_data &&
+             browsers[i].parentNode.__SS_data._tabStillLoading)
            continue; // ignore incompletely initialized tabs
          this._updateTextAndScrollDataForTab(aWindow, browsers[i], tabData);
-@@ -2187,5 +2221,23 @@
-   }
- };
+@@ -2919,5 +2954,23 @@
+          (prevChar == "." || prevChar == "/");
+ }
  
 -function NSGetModule(aComMgr, aFileSpec)
 -  XPCOMUtils.generateModule([SessionStoreService]);
@@ -103,7 +100,7 @@
 +function NSGetModule(aComMgr, aFileSpec) {
 +  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
 +        .getService(Components.interfaces.nsIPrefBranch);
-+  if(is_FF3) {
++  if(is_FF35) {
 +      return XPCOMUtils.generateModule([SessionStoreService]);
 +  } else {
 +      return NoModule;
