@@ -1348,26 +1348,9 @@ function torbutton_close_on_toggle(mode) {
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
-
-        if(!browser) {
-          torbutton_log(3, "No browser..");
-          continue;
-        }
-
-        if(!browser.browsers) {
-          torbutton_log(3, "No browser.browsers..");
-          continue;
-        }
-
         var tabs = browser.browsers.length;
 
         torbutton_log(3, "Length: "+browser.browsers.length);
-
-        if(!tabs) {
-          torbutton_log(2, "No tabs to close in this window.");
-          continue;
-        }
-
 
         var remove = new Array();
         for(var i = 0; i < tabs; i++) {
@@ -1376,30 +1359,24 @@ function torbutton_close_on_toggle(mode) {
             }
         }
 
-        for(var i = 0; i < remove.length; i++) {
-            if(!remove[i].linkedBrowser) {
-              torbutton_log(3, "Tab for "+remove[i].currentURI.spec+
-                      " has no linked browser. Hacking one in.");
-              remove[i].linkedBrowser = browser;
-            }
-            browser.removeTab(remove[i]);
-        }
-
-        if(browser.browsers.length == 1
-                && browser.browsers[0].__tb_tor_fetched != mode) {
+        if(browser.browsers.length == remove.length) {
+            // It is a bad idea to alter the window list while
+            // iterating over it.
+            browser.addTab("about:blank");
             if(win != window) {
                 closeWins.push(win);
-            } else {
-                var newb = browser.addTab("about:blank");
-                browser.removeAllTabsBut(newb);
             }
+        }
+
+        for(var i = 0; i < remove.length; i++) {
+            remove[i].contentWindow.close();
         }
     }
 
     torbutton_log(2, "Closing windows...");
 
     for(var i = 0; i < closeWins.length; ++i) {
-      closeWins[i].close();
+        closeWins[i].close();
     }
 
     torbutton_log(3, "Closed all tabs");
