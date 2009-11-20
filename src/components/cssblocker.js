@@ -262,9 +262,18 @@ ContentPolicy.prototype = {
                                           requestOrigin.spec + " for: " +
                                           contentLocation.spec);
                         return ok;
+                    } else if ("file" == targetScheme) {
+                        // This fix is for bug 1014. XHTML documents need to source
+                        // a special dtd as a file url. The same origin policy should
+                        // prevent other access to file urls, so this should be ok
+                        // to just allow.
+                        this.logger.eclog(3, "Allowing browser file request from: " +
+                                          requestOrigin.spec + " for: " +
+                                          contentLocation.spec);
+                        //return ok;
                     } else {
                         if (this.tor_enabling || (targetHost in protectedChromeHosts)) {
-                            this.logger.safe_log(4, 
+                            this.logger.safe_log(4,
                                     "Blocking local request from: ",
                                               requestOrigin.spec+" ("
                                               +requestOrigin.scheme+") for: "+
