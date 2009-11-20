@@ -645,6 +645,11 @@ function torbutton_test_settings() {
         // Right now the check works because we get called from the 
         // preference window. Sort of makes automatic testing a bit trickier..
         if(!wasEnabled) torbutton_disable_tor();
+        if(e.result == 0x80004005) { // NS_ERROR_FAILURE
+            torbutton_log(5,
+                    "Test failed! HTTP proxy down or request blocked!");
+            return 8;
+        }
         torbutton_log(5, "Test failed! Tor internal error: "+e);
         return 0;
     }
