@@ -11,7 +11,7 @@
 
 // Module specific constants
 const kMODULE_NAME = "Cookie Jar Selector";
-const kMODULE_CONTRACTID = "@stanford.edu/cookie-jar-selector;1";
+const kMODULE_CONTRACTID = "@torproject.org/cookie-jar-selector;1";
 const kMODULE_CID = Components.ID("e6204253-b690-4159-bfe8-d4eedab6b3be");
 
 const Cr = Components.results;

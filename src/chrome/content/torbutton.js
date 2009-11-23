@@ -1478,7 +1478,7 @@ function torbutton_browser_proxy_prefs_init()
   else
   {
     document.getElementById('networkProxyType').disabled = true;
-    for (i = 0; i < _elementIDs.length; i++)
+    for (var i = 0; i < _elementIDs.length; i++)
         document.getElementById(_elementIDs[i]).setAttribute( "disabled", "true" );
   }
 
@@ -1529,7 +1529,7 @@ function torbutton_clear_cookies() {
 
 function torbutton_jar_cookies(mode) {
     var selector =
-          Components.classes["@stanford.edu/cookie-jar-selector;1"]
+          Components.classes["@torproject.org/cookie-jar-selector;1"]
                     .getService(Components.interfaces.nsISupports)
                     .wrappedJSObject;
 
@@ -2140,7 +2140,7 @@ function torbutton_conditional_set(state) {
 function torbutton_restore_cookies()
 {
     var selector =
-          Components.classes["@stanford.edu/cookie-jar-selector;1"]
+          Components.classes["@torproject.org/cookie-jar-selector;1"]
                     .getService(Components.interfaces.nsISupports)
                     .wrappedJSObject;
     torbutton_log(4, "Restoring cookie status");
@@ -2635,7 +2635,7 @@ observe : function(subject, topic, data) {
         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
         || m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
         var selector =
-            Components.classes["@stanford.edu/cookie-jar-selector;1"]
+            Components.classes["@torproject.org/cookie-jar-selector;1"]
             .getService(Components.interfaces.nsISupports)
             .wrappedJSObject;
         selector.clearCookies();
@@ -3146,7 +3146,7 @@ function torbutton_check_flag(obj, flag) {
     }
 }
 
-function torbutton_is_same_origin(source, target) { // unused.
+function torbutton_is_same_origin(win, source, target) { // unused.
     var fixup = Components.classes["@mozilla.org/docshell/urifixup;1"]
         .getService(Components.interfaces.nsIURIFixup);
     var source = fixup.createFixupURI(win.top.location.href, 0);
