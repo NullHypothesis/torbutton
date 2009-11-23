@@ -95,8 +95,10 @@ var localSchemes = {"about" : true, "chrome" : true, "file" : true,
     "resource" : true, "x-jsd" : true, "addbook" : true, 
     "mailbox" : true, "moz-icon" : true};
 
-var browserSources = { "browser":true, "mozapps":true, "global":true, 
-     "pippki":true, "branding":true};
+var browserSources = { "browser":true, "mozapps":true, "global":true,
+     "pippki":true, "branding":true, "cookie":true, "xbl-marquee":true,
+     "reporter":true, "global-region":true, "passwordmgr":true,
+     "global-platform":true};
 
 var hostFreeSchemes = { "resource":true, "data":true, "cid":true, 
      "file":true, "view-source":true, "about":true};
