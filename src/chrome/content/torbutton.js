@@ -2726,7 +2726,7 @@ observe : function(subject, topic, data) {
 
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
-      torbutton_check_progress(null, subject, 0);
+      torbutton_check_progress(null, subject, 0, false);
   } else if (topic == "http-on-modify-request") {
       torbutton_eclog(3, 'Modify request: '+subject.name);
       if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_google_cookies")) {
@@ -3172,7 +3172,7 @@ function torbutton_is_same_origin(win, source, target) { // unused.
 }
 
 
-function torbutton_update_tags(win) {
+function torbutton_update_tags(win, new_loc) {
     torbutton_eclog(2, "Updating tags.");
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
@@ -3201,9 +3201,8 @@ function torbutton_update_tags(win) {
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
-    if (!torbutton_check_flag(win.top, "__tb_did_tag")) {
+    if (new_loc && !torbutton_check_flag(win.top, "__tb_js_refresh")) {
         torbutton_log(2, "Tagging browser for: " + win.location);
-        torbutton_set_flag(win.top, "__tb_did_tag");
 
         if(typeof(browser.__tb_tor_fetched) == "undefined") {
             torbutton_log(5, "Untagged browser at: "+win.location);
@@ -3258,6 +3257,11 @@ function torbutton_update_tags(win) {
             torbutton_log(3, "Javascript changed from "+browser.docShell.allowJavascript+" to: "+js_enabled);
             browser.docShell.allowJavascript = js_enabled;
             torbutton_check_round(browser);
+
+            // Tag this specially, so that the next onLocationChange
+            // doesn't redo these hooks.
+            torbutton_set_flag(win.top, "__tb_js_refresh");
+
             // JS was not fully enabled for some page elements. 
             // Need to reload
             browser.reload(); 
@@ -3380,7 +3384,7 @@ function torbutton_hookdoc(win, doc) {
 // of its being called so early. Need to find a quick way to check if
 // aProgress and aRequest are actually fully initialized 
 // (without throwing exceptions)
-function torbutton_check_progress(aProgress, aRequest, aFlags) {
+function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
     if (!m_tb_wasinited) {
         torbutton_init();
     }
@@ -3524,9 +3528,11 @@ function torbutton_check_progress(aProgress, aRequest, aFlags) {
     if(DOMWindow) {
         var doc = DOMWindow.document;
         try {
-            if(doc && doc.domain) {
-                torbutton_update_tags(DOMWindow.window);
-                torbutton_hookdoc(DOMWindow.window, doc);
+            if(doc) {
+                torbutton_update_tags(DOMWindow.window, new_loc);
+                if(doc.domain) {
+                    torbutton_hookdoc(DOMWindow.window, doc);
+                }
             }
         } catch(e) {
             try {
@@ -3566,26 +3572,26 @@ var torbutton_weblistener =
 
   onStateChange: function(aProgress, aRequest, aFlag, aStatus)
   { 
-      torbutton_eclog(1, 'State change()');
-      return torbutton_check_progress(aProgress, aRequest, aFlag);
+      torbutton_eclog(2, 'State change()');
+      return torbutton_check_progress(aProgress, aRequest, aFlag, false);
   },
 
   onLocationChange: function(aProgress, aRequest, aURI)
   {
-      torbutton_eclog(1, 'onLocationChange: '+aURI.asciiSpec);
-      return torbutton_check_progress(aProgress, aRequest, 0);
+      torbutton_eclog(2, 'onLocationChange: '+aURI.asciiSpec);
+      return torbutton_check_progress(aProgress, aRequest, 0, true);
   },
 
   onProgressChange: function(aProgress, aRequest, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
   { 
-      torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress, aRequest, 0);
+      torbutton_eclog(2, 'called progressChange'); 
+      return torbutton_check_progress(aProgress, aRequest, 0, false);
   },
   
   onStatusChange: function(aProgress, aRequest, stat, message) 
   { 
-      torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress, aRequest, 0);
+      torbutton_eclog(2, 'called progressChange'); 
+      return torbutton_check_progress(aProgress, aRequest, 0, false);
   },
   
   onSecurityChange: function() {return 0;},
