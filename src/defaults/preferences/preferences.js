@@ -81,6 +81,17 @@ pref("extensions.torbutton.saved.search_update", true);
 pref("extensions.torbutton.saved.geo_enabled", true);
 pref("extensions.torbutton.saved.zoom_specific", true);
 pref("extensions.torbutton.saved.dns_prefetch", true);
+pref("extensions.torbutton.saved.accept_languages", "");
+pref("extensions.torbutton.saved.accept_charsets", "");
+pref("extensions.torbutton.saved.appname_override","");
+pref("extensions.torbutton.saved.appversion_override","");
+pref("extensions.torbutton.saved.platform_override","");
+pref("extensions.torbutton.saved.oscpu_override", "");
+pref("extensions.torbutton.saved.useragent_override", "");
+pref("extensions.torbutton.saved.productsub_override","");
+pref("extensions.torbutton.saved.buildID_override","");
+pref("extensions.torbutton.saved.useragent_vendor", "");
+pref("extensions.torbutton.saved.useragent_vendorSub","");
 
 // State prefs:
 pref("extensions.torbutton.tor_enabled",false);

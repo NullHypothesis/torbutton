@@ -1011,35 +1011,74 @@ function torbutton_update_status(mode, force_update) {
             torprefs.getBoolPref("no_tor_plugins"));
 
     torbutton_log(2, 'Setting user agent');
-    
-    if(torprefs.getBoolPref("set_uagent")) {
-        if(mode) {
-            torbutton_set_uagent();
-        } else {
-            try {
-                if(m_tb_prefs.prefHasUserValue("general.appname.override"))
-                    m_tb_prefs.clearUserPref("general.appname.override");
-                if(m_tb_prefs.prefHasUserValue("general.appversion.override"))
-                    m_tb_prefs.clearUserPref("general.appversion.override");
-                if(m_tb_prefs.prefHasUserValue("general.useragent.override"))
-                    m_tb_prefs.clearUserPref("general.useragent.override");
-                if(m_tb_prefs.prefHasUserValue("general.useragent.vendor"))
-                    m_tb_prefs.clearUserPref("general.useragent.vendor");
-                if(m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
-                    m_tb_prefs.clearUserPref("general.useragent.vendorSub");
-                if(m_tb_prefs.prefHasUserValue("general.platform.override"))
-                    m_tb_prefs.clearUserPref("general.platform.override");
 
-                if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
-                    m_tb_prefs.clearUserPref("general.oscpu.override");
-                if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
-                    m_tb_prefs.clearUserPref("general.buildID.override");
-                if(m_tb_prefs.prefHasUserValue("general.productSub.override"))
-                    m_tb_prefs.clearUserPref("general.productSub.override");
-            } catch (e) {
-                // This happens because we run this from time to time
-                torbutton_log(3, "Prefs already cleared");
+    if(torprefs.getBoolPref("set_uagent")) {
+        try {
+            var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+            var lang = new RegExp("LANG", "gm");
+            var appname = torprefs.getCharPref("appname_override");
+            var appvers = torprefs.getCharPref("appversion_override");
+            if(torprefs.getBoolPref("spoof_english")) {
+                appname = appname.replace(lang,
+                        torprefs.getCharPref("spoof_locale"));
+                appvers = appvers.replace(lang,
+                        torprefs.getCharPref("spoof_locale"));
+            } else {
+                appname = appname.replace(lang,
+                        m_tb_prefs.getCharPref("general.useragent.locale"));
+                appvers = appvers.replace(lang,
+                        m_tb_prefs.getCharPref("general.useragent.locale"));
             }
+
+            torbutton_setCharPref("general.appname.override",
+                                "appname_override", appname, mode, changed);
+
+            torbutton_setCharPref("general.appversion.override",
+                                "appversion_override", appvers, mode, changed);
+
+            torbutton_setCharPref("general.platform.override",
+                                "platform_override",
+                                torprefs.getCharPref("platform_override"),
+                                mode, changed);
+
+            var agent = torprefs.getCharPref("useragent_override");
+            if(torprefs.getBoolPref("spoof_english")) {
+                agent = agent.replace(lang,
+                        torprefs.getCharPref("spoof_locale"));
+            } else {
+                agent = agent.replace(lang,
+                        m_tb_prefs.getCharPref("general.useragent.locale"));
+            }
+
+            torbutton_setCharPref("general.useragent.override",
+                                "useragent_override", agent, mode, changed);
+
+            torbutton_setCharPref("general.useragent.vendor",
+                                "useragent_vendor",
+                                torprefs.getCharPref("useragent_vendor"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.useragent.vendorSub",
+                                "useragent_vendorSub",
+                                torprefs.getCharPref("useragent_vendorSub"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.oscpu.override",
+                                "oscpu_override",
+                                torprefs.getCharPref("oscpu_override"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.buildID.override",
+                                "buildID_override",
+                                torprefs.getCharPref("buildID_override"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.productSub.override",
+                                "productsub_override",
+                                torprefs.getCharPref("productsub_override"),
+                                mode, changed);
+        } catch(e) {
+            torbutton_log(5, "Useragent set error: "+e);
         }
     }
 
@@ -1067,21 +1106,13 @@ function torbutton_update_status(mode, force_update) {
                 "dom_storage", true, mode, changed);
     }
 
-    if(torprefs.getBoolPref("spoof_english") && mode) {
-        m_tb_prefs.setCharPref("intl.accept_charsets", 
-                torprefs.getCharPref("spoof_charset"));
-        m_tb_prefs.setCharPref("intl.accept_languages",
-                torprefs.getCharPref("spoof_language"));
-    } else {
-        try {
-            if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
-                m_tb_prefs.clearUserPref("intl.accept_charsets");
-            if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
-                m_tb_prefs.clearUserPref("intl.accept_languages");
-        } catch (e) {
-            // Can happen if english browser.
-            torbutton_log(3, "Browser already english");
-        }
+    if(torprefs.getBoolPref("spoof_english")) {
+        torbutton_setCharPref("intl.accept_charsets",
+                "accept_charsets", torprefs.getCharPref("spoof_charset"),
+                mode, changed);
+        torbutton_setCharPref("intl.accept_languages",
+                "accept_languages", torprefs.getCharPref("spoof_language"),
+                mode, changed);
     }
 
     if (torprefs.getBoolPref("no_updates")) {
@@ -1219,7 +1250,7 @@ function torbutton_update_status(mode, force_update) {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
             torbutton_setIntPref("browser.download.manager.retention", 
                     "download_retention", 0, mode, changed);
-        } 
+        }
 
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
             torbutton_setBoolPref("browser.formfill.enable", "formfill",
@@ -1230,7 +1261,8 @@ function torbutton_update_status(mode, force_update) {
     } else {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
-        } else {
+        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
+            // Only restore this pref if it was blocked during tor...
             torbutton_setIntPref("browser.download.manager.retention", 
                     "download_retention", 0, mode, changed);
         }
@@ -1238,7 +1270,8 @@ function torbutton_update_status(mode, force_update) {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_ntforms')) {
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
-        } else {
+        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
+            // Only restore this pref if it was blocked during tor...
             torbutton_setBoolPref("browser.formfill.enable", "formfill", 
                     false, mode, changed);
             torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
@@ -1261,7 +1294,7 @@ function torbutton_update_status(mode, force_update) {
         return;
 
     // XXX: Pref for this? Hrmm.. It's broken anyways
-    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds", 
+    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds",
             "livemark_refresh", 31536000, mode, changed);
 
     torbutton_set_timezone(mode, false);
