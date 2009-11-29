@@ -467,7 +467,6 @@ function torbutton_prefs_test_settings() {
         return;
     }
 
-    // XXX: Localize these.
     switch(ret) {
         case 0:
             window.alert("Tor proxy test: Internal error");
@@ -496,7 +495,8 @@ function torbutton_prefs_test_settings() {
             window.alert("Tor proxy test: check.torproject.org returned bad result");
             break;
         case 8:
-            window.alert("Tor proxy test: HTTP Proxy is unreachable. Is Polipo running properly?");
+            var warning = strings.GetStringFromName("torbutton.popup.test.no_http_proxy");
+            window.alert(warning);
             break;
     }
 }

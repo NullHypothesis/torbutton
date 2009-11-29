@@ -30,7 +30,7 @@
                    label="&torbutton.prefs.recommended_settings;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
                 <checkbox class="indent" id="torbutton_usePrivoxy"
-                   label="&torbutton.prefs.use_privoxy;"
+                   label="&torbutton.prefs.use_polipo;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
             <radio value="custom" id="torbutton_useCustomSettings"
                    label="&torbutton.prefs.custom_settings;"
