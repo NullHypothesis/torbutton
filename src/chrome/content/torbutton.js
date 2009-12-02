@@ -3612,7 +3612,11 @@ var torbutton_weblistener =
   onLocationChange: function(aProgress, aRequest, aURI)
   {
       torbutton_eclog(2, 'onLocationChange: '+aURI.asciiSpec);
-      return torbutton_check_progress(aProgress, aRequest, 0, true);
+      if(aURI.spec != "about:blank") {
+          return torbutton_check_progress(aProgress, aRequest, 0, true);
+      } else {
+          torbutton_ecloc(3, "Skipping location change for about:blank");
+      }
   },
 
   onProgressChange: function(aProgress, aRequest, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
