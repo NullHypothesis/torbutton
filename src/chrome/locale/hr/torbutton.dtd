@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Proxy Postavke">
 <!ENTITY torbutton.prefs.recommended_settings "Koristi preporučene proxy postavke za moju inačicu Firefoxa">
 <!ENTITY torbutton.prefs.use_privoxy "Koristi Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Koristi prilagođene proxy postavke">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">

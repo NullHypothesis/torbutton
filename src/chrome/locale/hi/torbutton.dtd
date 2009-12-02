@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "प्रोक्सी सेटींग">
 <!ENTITY torbutton.prefs.recommended_settings "मेरे फ़ायर फ़ाक्स कथन के लिये सुझायी प्रोक्सी सेटिंग उपयोग करे ">
 <!ENTITY torbutton.prefs.use_privoxy "प्रिवोक्सी का उपयोग करे">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "व्यवाहारिक प्रोक्सी सेटिंग का उपयोग करे">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP प्रोक्सी:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL प्रोक्सी:">

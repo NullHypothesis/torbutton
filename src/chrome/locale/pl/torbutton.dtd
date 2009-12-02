@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Ustawienia proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Użyj zalecanych ustawień proxy dla tej wersji Firefoksa">
 <!ENTITY torbutton.prefs.use_privoxy "Użyj Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Użyj ustawień proxy użytkownika">
 <!ENTITY torbutton.prefs.proxy.host.http "Serwer proxy HTTP:">
 <!ENTITY torbutton.prefs.proxy.host.https "Serwer proxy SSL:">
@@ -41,7 +42,7 @@
 <!ENTITY torbutton.prefs.disable_plugins "Wyłącz wtyczki podczas użycia Tor (krytyczne)">
 <!ENTITY torbutton.prefs.kill_bad_js "Nadzoruj niebezpieczne skrypty (krytyczne)">
 <!ENTITY torbutton.prefs.isolate_content "Izoluj treść dynamiczną (krytyczne)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
+<!ENTITY torbutton.prefs.no_updates "Wyłącz uaktualnienia podczas używanie Tora">
 <!ENTITY torbutton.prefs.set_uagent "Ustaw identyfikację przeglądarki podczas używania Tora (ważne)">
 <!ENTITY torbutton.prefs.dynamic "Zawartość dynamiczna">
 <!ENTITY torbutton.prefs.cookies "Ciasteczka">
@@ -62,7 +63,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "Blokuj zapamiętywanie haseł z formularzy gdy Tor nieaktywny (opcjonalnie)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "bez Tora">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
+<!ENTITY torbutton.prefs.restore_tor "Po przywróceniu sesji, ustaw stan Tora na:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Usuń ciasteczka z magazynów przy nieoczekiwanym zamknięciu Firefoxa (zalecane)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Zapisuj wszystkie ciasteczka w zabezpieczonych magazynach(niebezpieczne)">
 <!ENTITY torbutton.prefs.clear_http_auth "Czyść sesje autentykacji HTTP (zalecane)">
@@ -73,21 +74,21 @@
 <!ENTITY torbutton.prefs.block_links "Blokuj klikanie na łącza i przeładowania strony gdy zmienił się status Tora (opcjonalnie)">
 <!ENTITY torbutton.prefs.jar_certs "Zapisuj cetryfikaty SSL w osobnych magazynach, w każdym trybie (zalecane)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Zapisuj certyfikaty CA w osobnych magazynach, w każdym trybie (zalecane)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.locked_mode "Zablokuj przycisk i gorące klawisze aby uniknąć przypadkowego przełączenia">
+<!ENTITY torbutton.prefs.startup_state "Podczas normalnego uruchomienia, ustaw stan Tora na:">
+<!ENTITY torbutton.prefs.shutdown_state "Stan przy wyłączeniu">
+<!ENTITY torbutton.prefs.startup "Uruchomienie">
+<!ENTITY torbutton.prefs.block_tor_file_net "Blokuj dostęp do sieci z odnośników file:// (zalecane)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Blokuj dostęp do sieci z odnośników file:// (gdy Tor jest wyłączony)">
+<!ENTITY torbutton.prefs.restore_defaults "Ustawienia domyślne">
+<!ENTITY torbutton.prefs.test_settings "Testuj ustawienia">
+<!ENTITY torbutton.prefs.test_auto "Testuj moje ustawienia podczas pierwszego włączenia Tora po starcie Firefoxa">
+<!ENTITY torbutton.prefs.disable_livemarks "Wyłącz uaktualnienia livemarks podczas używania Tora">
+<!ENTITY torbutton.prefs.tor_memory_jar "Nie zapisuj ciasteczek Tora na dysk">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Nie zapisuj ciasteczek na dysk (tryb bez Tora)">
+<!ENTITY torbutton.prefs.session_restore "Niech sesja zapamiętuje i przywraca te zakładki:">
+<!ENTITY torbutton.prefs.nontor_tabs "Zakładki otwarte w trybie bez Tora">
+<!ENTITY torbutton.prefs.tor_tabs "Zakładki otwarte w trybie Tora">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">

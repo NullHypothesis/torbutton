@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "กำหนดค่า Proxy">
 <!ENTITY torbutton.prefs.recommended_settings "นำค่้า Proxy ที่เหมาะสมมาใช้กับ Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "นำ Privoxy มาใช้">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "นำ Proxy ที่กำหนดมาใช้">
 <!ENTITY torbutton.prefs.proxy.host.http "ค่า HTTP Proxy :">
 <!ENTITY torbutton.prefs.proxy.host.https "ค่า SSL Proxy :">

@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Proxy 設定">
 <!ENTITY torbutton.prefs.recommended_settings "在Firefox 使用建議的 Proxy 設定">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "使用自訂的Proxy 設定">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">

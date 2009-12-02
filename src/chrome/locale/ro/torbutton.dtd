@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
 <!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
@@ -16,18 +17,18 @@
 <!ENTITY torbutton.prefs.proxy.port "Port:">
 <!ENTITY torbutton.about.title "About Torbutton">
 <!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
-<!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
+<!ENTITY torbutton.pref_connection.more_info "Informatii suplimentare">
+<!ENTITY torbutton.pref_connection_more_info.title "Ajutor">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
-<!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
+<!ENTITY torbutton.context_menu.toggle "Comutarea starii Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Preferences...">
+<!ENTITY torbutton.context_menu.preferences "Preferinte">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "About Torbutton...">
+<!ENTITY torbutton.context_menu.about "Despre Butonul Tor">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
+<!ENTITY torbutton.button.label "Butonul Tor">
+<!ENTITY torbutton.button.tooltip "Click pentru initializarea Butonului Tor">
+<!ENTITY torbutton.prefs.sec_settings "Setari de securitate">
 <!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
 <!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
@@ -43,12 +44,12 @@
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
 <!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
-<!ENTITY torbutton.prefs.dynamic "Dynamic Content">
+<!ENTITY torbutton.prefs.dynamic "Conţinut dinamic ">
 <!ENTITY torbutton.prefs.cookies "Cookies">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
+<!ENTITY torbutton.prefs.history "Cronologie (istorie)">
 <!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
-<!ENTITY torbutton.prefs.shutdown "Shutdown">
+<!ENTITY torbutton.prefs.shutdown "Inchide">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
 <!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
@@ -60,8 +61,8 @@
 <!ENTITY torbutton.prefs.forms "Forms">
 <!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "Non-Tor">
+<!ENTITY torbutton.prefs.tor "Tor-DA">
+<!ENTITY torbutton.prefs.non_tor "Tor-NU">
 <!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Reload cookie jar/clear cookies on Firefox crash (recommended)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Store both Tor and Non-Tor cookies in protected jars (dangerous)">

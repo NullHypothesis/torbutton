@@ -1,13 +1,14 @@
-<!ENTITY torbutton.prefs.title "تفضيلات توربتن(مفاتيح التور)">
+<!ENTITY torbutton.prefs.title "تفضيلات مفتاح التور">
 <!ENTITY torbutton.prefs.display_settings "إعدادات العرض">
 <!ENTITY torbutton.prefs.display_panel "أظهر حالة وسيط تور في شريط الحالة">
 <!ENTITY torbutton.prefs.panel_format "صيغة عرض الحالة في الشريط:">
 <!ENTITY torbutton.prefs.panel_text_format "نصية">
 <!ENTITY torbutton.prefs.panel_icon_format "أيقونة">
-<!ENTITY torbutton.prefs.tor_settings "تضبطيات الوسيط">
-<!ENTITY torbutton.prefs.recommended_settings "استخدم التضبطيات المحبذة لإصدارتي من فيرفكس">
+<!ENTITY torbutton.prefs.tor_settings "إعدادات الوسيط">
+<!ENTITY torbutton.prefs.recommended_settings "استخدم الإعدادات المفضلة لنسختي من فيرفوكس">
 <!ENTITY torbutton.prefs.use_privoxy "استخدم بريڤوكسي">
-<!ENTITY torbutton.prefs.custom_settings "استخدم تضبيطات وسيط مطوعة">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.custom_settings "استخدم إعدادات وسيط معرّفة ">
 <!ENTITY torbutton.prefs.proxy.host.http "وسيط HTTP:">
 <!ENTITY torbutton.prefs.proxy.host.https "وسيط SLL:">
 <!ENTITY torbutton.prefs.proxy.host.ftp "وسيط SSL:">

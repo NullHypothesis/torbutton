@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Välityspalvelin Asetukset">
 <!ENTITY torbutton.prefs.recommended_settings "Käytä suositeltuja välityspalvelin asetuksia minun Firefox versiolleni.">
 <!ENTITY torbutton.prefs.use_privoxy "Käytä Privoxyä">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Aseta välityspalvelinasetukset käsin">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP-välityspalvelin:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL-välityspalvelin:">
