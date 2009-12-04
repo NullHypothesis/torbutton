@@ -87,11 +87,16 @@ ContentWindowMapper.prototype =
           return;
       }
 
+      var delkeys = [];
       for(var elem in this.cache) {
           if((now - this.cache[elem].time) > EXPIRATION_TIME) {
               this.logger.log(2, "Deleting cached element: "+elem.location);
-              delete this.cache[elem];
+              delkeys.push(elem);
           }
+      }
+
+      for(var k in delkeys) {
+        delete this.cache[k];
       }
 
       this.last_expired = now;

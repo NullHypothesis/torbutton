@@ -74,11 +74,26 @@ pref("extensions.torbutton.saved.sendSecureXSiteReferrer", true);
 pref("extensions.torbutton.saved.sendRefererHeader", 2);
 pref("extensions.torbutton.saved.dom_storage", true);
 pref("extensions.torbutton.saved.mem_cache", true);
+pref("extensions.torbutton.saved.offline_cache", true);
 pref("extensions.torbutton.saved.http_cache", true);
 pref("extensions.torbutton.saved.extension_update", true);
 pref("extensions.torbutton.saved.app_update", true);
 pref("extensions.torbutton.saved.auto_update", true);
 pref("extensions.torbutton.saved.search_update", true);
+pref("extensions.torbutton.saved.geo_enabled", true);
+pref("extensions.torbutton.saved.zoom_specific", true);
+pref("extensions.torbutton.saved.dns_prefetch", true);
+pref("extensions.torbutton.saved.accept_languages", "");
+pref("extensions.torbutton.saved.accept_charsets", "");
+pref("extensions.torbutton.saved.appname_override","");
+pref("extensions.torbutton.saved.appversion_override","");
+pref("extensions.torbutton.saved.platform_override","");
+pref("extensions.torbutton.saved.oscpu_override", "");
+pref("extensions.torbutton.saved.useragent_override", "");
+pref("extensions.torbutton.saved.productsub_override","");
+pref("extensions.torbutton.saved.buildID_override","");
+pref("extensions.torbutton.saved.useragent_vendor", "");
+pref("extensions.torbutton.saved.useragent_vendorSub","");
 
 // State prefs:
 pref("extensions.torbutton.tor_enabled",false);
@@ -144,6 +159,22 @@ pref("extensions.torbutton.launch_warning",true);
 pref("extensions.torbutton.refererspoof", 0); //0=no spoof, 1=root spoof, 2=domain spoof, 3=blank spoof, 4=custom spoof
 pref("extensions.torbutton.fakerefresh", false);
 pref("extensions.torbutton.customeref","");
+
+// Google Captcha prefs
+// FIXME: NID cookie?
+pref("extensions.torbutton.gss_cookie", "Q0=dGVzdA");
+pref("extensions.torbutton.gnid_cookie", "28=aJDrQUM1UIWu1dl1tLMdzsi4trVtb8wayv4C2BCLPfjgQ2PlN7Pubc8UB9pYdMqGnzzCu95eXXB8MPhXVCC3o9SmJm_tQv8A4V2UZ4zoKKmrJqxcB1q00c2WxRJZD0uH");
+pref("extensions.torbutton.gsnid_cookie", "28=IY3ya2lsYwatvtjgr_zCzNaL0fU4LRusf1tJ-bRd-g=_qqMP84CMW2_bUOT");
+pref("extensions.torbutton.gpref_cookie", "ID=b7d8832732f59bb2:U=d7bc4e42b53ea8b5:TM=1256941064:LM=1256941222:S=AUWTvLPhx8FcIgYc");
+pref("extensions.torbutton.ggdsess_cookie", "ID=b7d8832732f59bb2:EX=1256952014:S=4CLFlq6bPRmEtd8c");
+pref("extensions.torbutton.gs_cookie", "sorry=zDHg1z1zi0BRXVKRrIaH2Q");
+pref("extensions.torbutton.google_host", ".google.ca");
+// Reset the google cookie to pref on cookie-changed:clear events
+pref("extensions.torbutton.reset_google_cookies", false);
+// Regen the google cookie on cookie-changed:clear events via a fetch
+pref("extensions.torbutton.regen_google_cookies", false);
+// Xfer google search cookies across all google domains
+pref("extensions.torbutton.xfer_google_cookies", true);
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");

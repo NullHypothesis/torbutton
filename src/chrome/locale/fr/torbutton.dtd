@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Paramètres du proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Utiliser les paramètres de proxy recommandés pour ma version de Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Utiliser Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Utiliser des paramètres de proxy personnalisés">
 <!ENTITY torbutton.prefs.proxy.host.http "Proxy HTTP:">
 <!ENTITY torbutton.prefs.proxy.host.https "Proxy SSL:">

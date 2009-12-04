@@ -1,0 +1,120 @@
+- Investigation of Privacy Mode:
+  - Good:
+    - Cookies Cleared+memory only
+    - Cache cleared and memory-only
+    - History not available via javascript or CSS
+    - Safe because currently unsupported:
+      - Geolocation not supported in browser
+      - DOM Storage not supported
+      - HTML5 Storage not supported
+    - Http auth is cleared
+    - Do they have a session store?
+      - Yes. It is disabled.
+    - Form history disabled
+      - But non-private entries still available
+    - Malware and phishing protection
+      - Per-url check?
+        - Doesn't seem like it..
+  - Bad:
+    - RLZ Identifier sent with all queries even in Incognito mode
+      - http://www.google.com/support/chrome/bin/answer.py?hl=en&answer=107684
+    - Flash cookies not cleared
+    - Google gears are still available
+      - Do they have their own storage?
+        - Yes. Completely ignores private mode.
+    - Safebrowsing API key not cleared?
+      - but updates may not happen "under" the incognito window
+    - Desktop resolution available
+    - Browser resolution is available
+    - SSL session keys
+      - Not cleared!
+      - They clear trusted certs tho
+    - Timezone not spoofed
+
+- Misc Features we definitely need:
+  - Incognito-specific proxy settings
+    - Browser proxy settings currently do not apply immediately
+  - Plugin enable/disable controls
+  - Spoof user agent
+  - Referer alteration API
+  - Autolaunching of remote apps needs to be disabled
+  - API to opt-out of all the opt-in tracking for incognito mode
+  - Cookie API would be nice
+  - Need network.security.ports.banned
+    - http://www.remote.org/jochen/sec/hfpa/hfpa.pdf
+  - Resize windows (content-window side possibly ok)
+
+- Future investigation
+  - Non-private form history still available
+    - Forms seem to not be auto-filled, but this may be different
+      for some fields?
+  - How evil is google update? will it happen over incognito?
+    - http://en.wikipedia.org/wiki/Google_Updater#Google_Updater
+    - http://en.wikipedia.org/wiki/SRWare_Iron#Differences_from_Chrome
+    - http://foliovision.com/2008/12/09/adwords-ppc-organic-rlz/
+  - Test in more detail with sysinternals for disk writes
+  - What about safebrowsing requests? Can they bypass proxy?
+  - Video tag supports H264 and ogg via ffmpeg
+    - Hrmm.. proxy bypass ability?
+
+- Test results. Used Incognito Mode with the test suites from:
+  https://www.torproject.org/torbutton/design/#SingleStateTesting
+  - Decloak.net:
+    - Recovers IP and DNS via Java
+    - Recovers IP via flash
+  - Deanonymizer.com
+    - Failed NNTP and FTP quicktime
+  - JohnDo's hated some headers
+  - Mr. T got a lot of shit wrong...
+  - http://labs.isecpartners.com/breadcrumbs/breadcrumbs.html
+
+- Comparison with Torora
+  - http://github.com/mwenge/torora/tree/master/doc/DESIGN.torora
+  - Good ideas for both chrome and torbutton:
+    - Cache/Cookie expiry every 24hrs
+    - Random preturbation on Date() object..
+      - No longer possible without js hooks :/
+      - Possible if Chrome allows non-delatable shadowing of window.Date()
+        from user scripts. ECMA says it should
+
+==========================================
+
+- Incognito Issues:
+  - SSL session keys
+    - Not cleared!
+  - Flash cookies not cleared
+    - Better Privacy? Permissions?
+  - Google gears are still available
+    - Do they have their own storage?
+      - Yes. Completely ignores private mode.
+  - RLZ override/disable for incognito
+  - Opt out of opt-in tracking?
+  - Source code:
+    http://src.chromium.org/viewvc/chrome/trunk/src/chrome/browser/profile.cc
+
+- Privacy Enhancing API Wishlist (remove existing items):
+  - http://code.google.com/chrome/extensions/devguide.html
+  - Prefs (copy-on-write for incognito mode)
+    - Incognito-specific proxy settings
+      - Should not be used for safebrowsing or app/addon update
+    - pref to disable autolaunch of apps/warn user
+    - network.security.ports.banned
+    - User agent (that also govern navigator.*)
+      - could be done (better) via http headers and good hook support
+  - Core APIs:
+    - Per-Plugin enable/disable controls
+    - Cookie API
+    - Cache control
+    - HTTP header alteration ("on-modify-request")
+      - Referrer, accept, user agent
+  - Javascript hooks:
+    - http://code.google.com/chrome/extensions/content_scripts.html
+      - Bleh, these suck... Too limited.
+    - ECMA compliance
+    - desktop+screen resolution
+    - Date hooking
+    - navigator.* hooking
+
+- Posted at:
+  - http://groups.google.com/group/chromium-extensions/t/ceba26ca9e2f6a78
+

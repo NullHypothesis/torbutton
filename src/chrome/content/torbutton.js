@@ -9,11 +9,13 @@ var m_tb_jshooks = false;
 var m_tb_plugin_mimetypes = false;
 var m_tb_plugin_string = false;
 var m_tb_is_main_window = false;
+var m_tb_hidden_browser = false;
 
 var m_tb_window_height = window.outerHeight;
 var m_tb_window_width = window.outerWidth;
 
 var m_tb_ff3 = false;
+var m_tb_ff35 = false;
 
 var torbutton_window_pref_observer =
 {
@@ -94,8 +96,9 @@ var torbutton_unique_pref_observer =
             case "general.useragent.vendorSub":
             case "general.useragent.override":
                 if((!m_tb_prefs.prefHasUserValue("general.useragent.override")
-                    || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub")) 
+                    || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
                     && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+                    && m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")
                     && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
                     torbutton_log(4, "Some other addond tried to clear user agent settings.");
                     torbutton_set_uagent();
@@ -397,7 +400,13 @@ function torbutton_init() {
     } else {
         m_tb_ff3 = false;
     }
-    
+
+    if(versionChecker.compare(appInfo.version, "3.5a1") >= 0) {
+        m_tb_ff35 = true;
+    } else {
+        m_tb_ff35 = false;
+    }
+
     // initialize preferences before we start our prefs observer
     torbutton_init_prefs();
 
@@ -704,11 +713,16 @@ function torbutton_test_settings() {
         req.overrideMimeType("text/xml");
         req.send(null);
     } catch(e) {
-        // XXX: This happens if this function is called from a browser
+        // FIXME: This happens if this function is called from a browser
         // window with tor disabled because the content policy will block us.
         // Right now the check works because we get called from the 
         // preference window. Sort of makes automatic testing a bit trickier..
         if(!wasEnabled) torbutton_disable_tor();
+        if(e.result == 0x80004005) { // NS_ERROR_FAILURE
+            torbutton_log(5,
+                    "Test failed! HTTP proxy down or request blocked!");
+            return 8;
+        }
         torbutton_log(5, "Test failed! Tor internal error: "+e);
         return 0;
     }
@@ -780,6 +794,7 @@ function torbutton_update_toolbutton(mode)
   var o_toolbutton = torbutton_get_toolbutton();
   if (!o_toolbutton) return;
   var o_stringbundle = torbutton_get_stringbundle();
+  var tooltip = "";
 
   if (mode) {
       tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
@@ -903,11 +918,10 @@ function torbutton_setBoolPref(pref, save, val, mode, changed) {
 }
 
 function torbutton_set_timezone(mode, startup) {
-    /*
-     * XXX: Windows doesn't call tzset() automatically.. Linux and MacOS
-     * both do though.. :(
+    /* Windows doesn't call tzset() automatically.. Linux and MacOS
+     * both do though.. FF3.5 now calls _tzset() for us on windows.
      */
-    // XXX: Test: 
+    // FIXME: Test:
     //  1. odd timezones like IST and IST+13:30
     //  2. negative offsets
     //  3. Windows-style spaced names
@@ -1070,35 +1084,74 @@ function torbutton_update_status(mode, force_update) {
             torprefs.getBoolPref("no_tor_plugins"));
 
     torbutton_log(2, 'Setting user agent');
-    
-    if(torprefs.getBoolPref("set_uagent")) {
-        if(mode) {
-            torbutton_set_uagent();
-        } else {
-            try {
-                if(m_tb_prefs.prefHasUserValue("general.appname.override"))
-                    m_tb_prefs.clearUserPref("general.appname.override");
-                if(m_tb_prefs.prefHasUserValue("general.appversion.override"))
-                    m_tb_prefs.clearUserPref("general.appversion.override");
-                if(m_tb_prefs.prefHasUserValue("general.useragent.override"))
-                    m_tb_prefs.clearUserPref("general.useragent.override");
-                if(m_tb_prefs.prefHasUserValue("general.useragent.vendor"))
-                    m_tb_prefs.clearUserPref("general.useragent.vendor");
-                if(m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
-                    m_tb_prefs.clearUserPref("general.useragent.vendorSub");
-                if(m_tb_prefs.prefHasUserValue("general.platform.override"))
-                    m_tb_prefs.clearUserPref("general.platform.override");
 
-                if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
-                    m_tb_prefs.clearUserPref("general.oscpu.override");
-                if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
-                    m_tb_prefs.clearUserPref("general.buildID.override");
-                if(m_tb_prefs.prefHasUserValue("general.productSub.override"))
-                    m_tb_prefs.clearUserPref("general.productSub.override");
-            } catch (e) {
-                // This happens because we run this from time to time
-                torbutton_log(3, "Prefs already cleared");
+    if(torprefs.getBoolPref("set_uagent")) {
+        try {
+            var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
+            var lang = new RegExp("LANG", "gm");
+            var appname = torprefs.getCharPref("appname_override");
+            var appvers = torprefs.getCharPref("appversion_override");
+            if(torprefs.getBoolPref("spoof_english")) {
+                appname = appname.replace(lang,
+                        torprefs.getCharPref("spoof_locale"));
+                appvers = appvers.replace(lang,
+                        torprefs.getCharPref("spoof_locale"));
+            } else {
+                appname = appname.replace(lang,
+                        m_tb_prefs.getCharPref("general.useragent.locale"));
+                appvers = appvers.replace(lang,
+                        m_tb_prefs.getCharPref("general.useragent.locale"));
             }
+
+            torbutton_setCharPref("general.appname.override",
+                                "appname_override", appname, mode, changed);
+
+            torbutton_setCharPref("general.appversion.override",
+                                "appversion_override", appvers, mode, changed);
+
+            torbutton_setCharPref("general.platform.override",
+                                "platform_override",
+                                torprefs.getCharPref("platform_override"),
+                                mode, changed);
+
+            var agent = torprefs.getCharPref("useragent_override");
+            if(torprefs.getBoolPref("spoof_english")) {
+                agent = agent.replace(lang,
+                        torprefs.getCharPref("spoof_locale"));
+            } else {
+                agent = agent.replace(lang,
+                        m_tb_prefs.getCharPref("general.useragent.locale"));
+            }
+
+            torbutton_setCharPref("general.useragent.override",
+                                "useragent_override", agent, mode, changed);
+
+            torbutton_setCharPref("general.useragent.vendor",
+                                "useragent_vendor",
+                                torprefs.getCharPref("useragent_vendor"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.useragent.vendorSub",
+                                "useragent_vendorSub",
+                                torprefs.getCharPref("useragent_vendorSub"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.oscpu.override",
+                                "oscpu_override",
+                                torprefs.getCharPref("oscpu_override"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.buildID.override",
+                                "buildID_override",
+                                torprefs.getCharPref("buildID_override"),
+                                mode, changed);
+
+            torbutton_setCharPref("general.productSub.override",
+                                "productsub_override",
+                                torprefs.getCharPref("productsub_override"),
+                                mode, changed);
+        } catch(e) {
+            torbutton_log(5, "Useragent set error: "+e);
         }
     }
 
@@ -1126,21 +1179,13 @@ function torbutton_update_status(mode, force_update) {
                 "dom_storage", true, mode, changed);
     }
 
-    if(torprefs.getBoolPref("spoof_english") && mode) {
-        m_tb_prefs.setCharPref("intl.accept_charsets", 
-                torprefs.getCharPref("spoof_charset"));
-        m_tb_prefs.setCharPref("intl.accept_languages",
-                torprefs.getCharPref("spoof_language"));
-    } else {
-        try {
-            if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
-                m_tb_prefs.clearUserPref("intl.accept_charsets");
-            if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
-                m_tb_prefs.clearUserPref("intl.accept_languages");
-        } catch (e) {
-            // Can happen if english browser.
-            torbutton_log(3, "Browser already english");
-        }
+    if(torprefs.getBoolPref("spoof_english")) {
+        torbutton_setCharPref("intl.accept_charsets",
+                "accept_charsets", torprefs.getCharPref("spoof_charset"),
+                mode, changed);
+        torbutton_setCharPref("intl.accept_languages",
+                "accept_languages", torprefs.getCharPref("spoof_language"),
+                mode, changed);
     }
 
     if (torprefs.getBoolPref("no_updates")) {
@@ -1187,17 +1232,46 @@ function torbutton_update_status(mode, force_update) {
                 m_tb_prefs.clearUserPref(children[i]);
         }
     }
-    
+
     // Always block disk cache during Tor. We clear it on toggle, 
     // so no need to keep it around for someone to rifle through.
     torbutton_setBoolPref("browser.cache.disk.enable", "disk_cache", !mode, 
             mode, changed);
+
+    torbutton_setBoolPref("browser.cache.offline.enable", "offline_cache",
+            !mode, mode, changed);
+
+    torbutton_setBoolPref("browser.zoom.siteSpecific", "zoom_specific",
+            !mode, mode, changed);
 
     // Disable safebrowsing in Tor for FF2. It fetches some info in 
     // cleartext with no HMAC (Firefox Bug 360387)
     if(!m_tb_ff3) {
         torbutton_setBoolPref("browser.safebrowsing.enabled", "safebrowsing", 
                 !mode, mode, changed);
+    }
+
+    if(m_tb_ff35) {
+        // Disable geolocation
+        torbutton_setBoolPref("geo.enabled", "geo_enabled", !mode, mode,
+                changed);
+        torbutton_setBoolPref("network.dns.disablePrefetch", "dns_prefetch",
+                mode, !mode, changed);
+        try {
+            if(m_tb_prefs.prefHasUserValue("geo.wifi.access_token")) {
+                m_tb_prefs.clearUserPref("geo.wifi.access_token");
+            }
+        } catch(e) {
+            torbutton_log(3, "Exception on wifi token clear: "+e);
+        }
+    }
+
+    try {
+        if(m_tb_prefs.prefHasUserValue("general.open_location.last_url")) {
+            m_tb_prefs.clearUserPref("general.open_location.last_url");
+        }
+    } catch(e) {
+        torbutton_log(3, "Exception on wifi token clear: "+e);
     }
 
     // I think this pref is evil (and also hidden from user configuration, 
@@ -1213,7 +1287,7 @@ function torbutton_update_status(mode, force_update) {
     // Prevent pages from pinging the Tor ports regardless tor mode
     m_tb_prefs.setCharPref("network.security.ports.banned", 
             m_tb_prefs.getCharPref("extensions.torbutton.banned_ports"));
-   
+
     if (m_tb_prefs.getBoolPref("extensions.torbutton.no_search")) {
         torbutton_setBoolPref("browser.search.suggest.enabled", 
                 "search_suggest", !mode, mode, changed);
@@ -1249,7 +1323,7 @@ function torbutton_update_status(mode, force_update) {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
             torbutton_setIntPref("browser.download.manager.retention", 
                     "download_retention", 0, mode, changed);
-        } 
+        }
 
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
             torbutton_setBoolPref("browser.formfill.enable", "formfill",
@@ -1260,7 +1334,8 @@ function torbutton_update_status(mode, force_update) {
     } else {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
-        } else {
+        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
+            // Only restore this pref if it was blocked during tor...
             torbutton_setIntPref("browser.download.manager.retention", 
                     "download_retention", 0, mode, changed);
         }
@@ -1268,7 +1343,8 @@ function torbutton_update_status(mode, force_update) {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_ntforms')) {
             m_tb_prefs.setBoolPref("browser.formfill.enable", false);
             m_tb_prefs.setBoolPref("signon.rememberSignons", false);
-        } else {
+        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
+            // Only restore this pref if it was blocked during tor...
             torbutton_setBoolPref("browser.formfill.enable", "formfill", 
                     false, mode, changed);
             torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
@@ -1291,7 +1367,7 @@ function torbutton_update_status(mode, force_update) {
         return;
 
     // XXX: Pref for this? Hrmm.. It's broken anyways
-    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds", 
+    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds",
             "livemark_refresh", 31536000, mode, changed);
 
     torbutton_set_timezone(mode, false);
@@ -1350,15 +1426,15 @@ function torbutton_update_status(mode, force_update) {
         }
     }
 
+    if (m_tb_prefs.getBoolPref('extensions.torbutton.jar_certs')) {
+        torbutton_jar_certs(mode);
+    }
+
     if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
         torbutton_clear_cookies();
     } else if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars') 
             || m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
         torbutton_jar_cookies(mode);
-    }
-
-    if (m_tb_prefs.getBoolPref('extensions.torbutton.jar_certs')) {
-        torbutton_jar_certs(mode);
     }
 
     m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", mode);
@@ -1375,14 +1451,22 @@ function torbutton_close_on_toggle(mode) {
     }
 
     // TODO: muck around with browser.tabs.warnOnClose.. maybe..
-    torbutton_log(3, "Closing tabs");
+    torbutton_log(3, "Closing tabs...");
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
         .getService(Components.interfaces.nsIWindowMediator);
     var enumerator = wm.getEnumerator("navigator:browser");
+    var closeWins = new Array();
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+        if(!browser) {
+          torbutton_log(5, "No browser for possible closed window");
+          continue;
+        }
         var tabs = browser.browsers.length;
+
+        torbutton_log(3, "Length: "+browser.browsers.length);
+
         var remove = new Array();
         for(var i = 0; i < tabs; i++) {
             if(browser.browsers[i].__tb_tor_fetched != mode) {
@@ -1390,22 +1474,27 @@ function torbutton_close_on_toggle(mode) {
             }
         }
 
-        for(var i = 0; i < remove.length; i++) {
-            browser.removeTab(remove[i]);
-        }
-
-        torbutton_log(3, "Length: "+browser.browsers.length);
-
-        if(browser.browsers.length == 1 
-                && browser.browsers[0].__tb_tor_fetched != mode) {
+        if(browser.browsers.length == remove.length) {
+            // It is a bad idea to alter the window list while
+            // iterating over it.
+            browser.addTab("about:blank");
             if(win != window) {
-                win.close();
-            } else {
-                var newb = browser.addTab("about:blank");
-                browser.removeAllTabsBut(newb);
+                closeWins.push(win);
             }
         }
+
+        for(var i = 0; i < remove.length; i++) {
+            remove[i].contentWindow.close();
+        }
     }
+
+    torbutton_log(2, "Closing windows...");
+
+    for(var i = 0; i < closeWins.length; ++i) {
+        closeWins[i].close();
+    }
+
+    torbutton_log(3, "Closed all tabs");
 }
 
 function torbutton_check_protections()
@@ -1504,7 +1593,7 @@ function torbutton_browser_proxy_prefs_init()
   else
   {
     document.getElementById('networkProxyType').disabled = true;
-    for (i = 0; i < _elementIDs.length; i++)
+    for (var i = 0; i < _elementIDs.length; i++)
         document.getElementById(_elementIDs[i]).setAttribute( "disabled", "true" );
   }
 
@@ -1523,11 +1612,16 @@ function torbutton_clear_history() {
                        .getService(Components.interfaces.nsIWindowMediator);
     var enumerator = wm.getEnumerator("navigator:browser");
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
+    torbutton_log(2, "Clearing browser session history");
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+        if(!browser) {
+          torbutton_log(5, "No browser for history window");
+          continue;
+        }
+
         var browsers = browser.browsers;
-        torbutton_log(1, "Toggle window plugins");
 
         for (var i = 0; i < browsers.length; ++i) {
             var b = browser.browsers[i];
@@ -1551,7 +1645,7 @@ function torbutton_clear_cookies() {
 
 function torbutton_jar_cookies(mode) {
     var selector =
-          Components.classes["@stanford.edu/cookie-jar-selector;1"]
+          Components.classes["@torproject.org/cookie-jar-selector;1"]
                     .getService(Components.interfaces.nsISupports)
                     .wrappedJSObject;
 
@@ -1975,6 +2069,10 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
 function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
                                         kill_plugins) {
     var browser = win.getBrowser();
+    if(!browser) {
+      torbutton_log(5, "No browser for plugin window...");
+      return;
+    }
     var browsers = browser.browsers;
     torbutton_log(1, "Toggle window plugins");
 
@@ -1997,7 +2095,14 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
                 b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
             else 
                 b.docShell.allowPlugins = true;
-            
+
+            // Likewise for DNS prefetch
+            if(m_tb_ff35) {
+                b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                b.docShell.allowDNSPrefetch = !b.__tb_tor_fetched
+                    && !tor_enabled;
+            }
+
             if(isolate_dyn) {
                 torbutton_check_js_tag(b, tor_enabled, js_enabled);
                 // kill meta-refresh and existing page loading 
@@ -2066,6 +2171,11 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
         browser.docShell.allowPlugins = tor_tag;
     }
 
+    if (!tor_tag && m_tb_ff35) {
+        browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+        browser.docShell.allowDNSPrefetch = tor_tag;
+    }
+
     // Only tag new windows
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         torbutton_log(3, "Tagging new window: "+tor_tag);
@@ -2078,9 +2188,13 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
             if(!browser.webNavigation.sessionHistory) {
                 torbutton_log(4, "Still failed to add historyListener!");
             }
-            browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
-            browser.__tb_hlistener = hlisten;
-            torbutton_log(2, "Added history listener");
+            try {
+               browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
+               browser.__tb_hlistener = hlisten;
+               torbutton_log(2, "Added history listener");
+            } catch(e) {
+               torbutton_log(4,  "Exception adding history listener: "+e);
+            }
         }
         
         if(browser.webNavigation.sessionHistory) {
@@ -2107,14 +2221,23 @@ function torbutton_conditional_set(state) {
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
         var browser = win.getBrowser();
+        if(!browser) {
+          // XXX: Could add a location here..
+          torbutton_log(5, "No browser for plugin window in conditional_set.");
+          continue;
+        }
         var browsers = browser.browsers;
 
         for (var i = 0; i < browsers.length; ++i) {
             var b = browser.browsers[i];
 
-            if (!state && no_plugins) {
+            if (state) {
                 if(b && b.docShell){
-                    b.docShell.allowPlugins = false;
+                    if(no_plugins) b.docShell.allowPlugins = false;
+                    if(m_tb_ff35) {
+                        b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                        b.docShell.allowDNSPrefetch = false;
+                    }
                 } else {
                     try {
                         if (b && b.currentURI) 
@@ -2124,7 +2247,7 @@ function torbutton_conditional_set(state) {
                     } catch(e) {
                         torbutton_log(5, "Initial docShell is null for unparsable URL: "+e);
                     }
-                } 
+                }
             }
             b.__tb_tor_fetched = state;
         }
@@ -2140,7 +2263,7 @@ function torbutton_conditional_set(state) {
 function torbutton_restore_cookies()
 {
     var selector =
-          Components.classes["@stanford.edu/cookie-jar-selector;1"]
+          Components.classes["@torproject.org/cookie-jar-selector;1"]
                     .getService(Components.interfaces.nsISupports)
                     .wrappedJSObject;
     torbutton_log(4, "Restoring cookie status");
@@ -2218,6 +2341,12 @@ function torbutton_crash_recover()
             torbutton_conditional_set(true);
         else
             torbutton_conditional_set(false);
+
+        if (state) {
+          // Need to maybe generate google cookie if tor is enabled
+          torbutton_new_google_cookie();
+        }
+
         m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
     }
 
@@ -2227,8 +2356,371 @@ function torbutton_crash_recover()
 
 // ---------------------- Event handlers -----------------
 
+// Observer to handle regeneration of google pref cookies
+var torbutton_cookie_observer = {
+observe: function(subject, topic, data) {
+    if (topic == 'cookie-changed') {
+      if (data == 'cleared') {
+        // XXX: Does this get called for every cookie that is cleared?
+        if (m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies")) {
+          torbutton_reset_google_cookie();
+        } else if (m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies")) {
+          torbutton_regen_google_cookie();
+        }
+      } else if (data == 'deleted') {
+        // single cookie deleted or changed - reset just what we need to
+        var cookie = subject.QueryInterface(Components.interfaces.nsICookie);
+        var host = cookie.host;
+        var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
+        if (cookie.host == google_host && cookie.path == "/" && cookie.name == "PREF") {
+          if (m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies")) {
+             torbutton_reset_google_cookie();
+          } else if (m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies")) {
+             torbutton_regen_google_cookie();
+          }
+        }
+      }
+    }
+},
+
+register: function() {
+  var os = Components.classes['@mozilla.org/observer-service;1'].
+                getService(Components.interfaces.nsIObserverService);
+  os.addObserver(torbutton_cookie_observer, 'cookie-changed', false);
+
+
+},
+
+unregister: function() {
+  try {
+    var os = Components.classes['@mozilla.org/observer-service;1'].
+                getService(Components.interfaces.nsIObserverService);
+    os.removeObserver(torbutton_cookie_observer, 'cookie-changed');
+  } catch(e) {
+    torbutton_log(3, "Already unregistered cookie observer");
+  }
+}
+
+};
+
+function torbutton_new_google_cookie() {
+  var regen = m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies");
+  var reset = m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies");
+  if (!regen && !reset) {
+    return;
+  }
+  var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
+                        .getService(Ci.nsICookieManager);
+  var cookiesEnum = cookieManager.enumerator;
+  var gpref = null;
+  var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
+  while (cookiesEnum.hasMoreElements()) {
+    var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
+    if (cookie.host == google_host && cookie.path == "/" &&
+            cookie.name == "PREF") {
+      gpref = cookie;
+    }
+  }
+
+  if (!gpref) {
+    torbutton_log(3, "No google cookie found. Regenerating.");
+    if (reset) {
+        torbutton_reset_google_cookie();
+    } else if (regen) {
+        torbutton_regen_google_cookie();
+    }
+  }
+}
+
+function torbutton_init_hidden_browser() {
+  var loaderBox = document.createElement("hbox");
+  loaderBox.setAttribute("style", "overflow: hidden; visibility: hidden;");
+  loaderBox.setAttribute("flex", "1");
+  loaderBox.setAttribute("height", "0");
+  loaderBox.setAttribute("maxheight", "0");
+  loaderBox.setAttribute("minheight", "0");
+
+  var loaderSubBox = document.createElement("vbox");
+  loaderSubBox.setAttribute("flex", "0");
+  loaderBox.appendChild(loaderSubBox);
+  document.documentElement.appendChild(loaderBox);
+
+  var win_width = window.getBrowser().contentWindow.innerWidth;
+  var win_height = window.getBrowser().contentWindow.innerHeight;
+
+  loaderSubBox.setAttribute("width", win_width);
+  loaderSubBox.setAttribute("minwidth", win_width);
+  loaderSubBox.setAttribute("maxwidth", win_width);
+  loaderSubBox.setAttribute("height", win_height);
+  loaderSubBox.setAttribute("minheight", win_height);
+  loaderSubBox.setAttribute("maxheight", win_height);
+
+  loaderSubBox.style.width = win_width + "px !important";
+  loaderSubBox.style.maxWidth = loaderSubBox.style.width;
+  loaderSubBox.style.minWidth = loaderSubBox.style.width;
+  loaderSubBox.style.height = win_height + "px !important";
+  loaderSubBox.style.maxHeight = loaderSubBox.style.height;
+  loaderSubBox.style.minHeight = loaderSubBox.style.height;
+
+  m_tb_hidden_browser = document.createElement("browser");
+  m_tb_hidden_browser.setAttribute("class", "torbuttonBrowser");
+  m_tb_hidden_browser.setAttribute("type", "content");
+  m_tb_hidden_browser.setAttribute("disablehistory", true);
+  m_tb_hidden_browser.setAttribute("allowPlugins", false);
+  m_tb_hidden_browser.setAttribute("flex", "1");
+  m_tb_hidden_browser.setAttribute("id", "torbuttonBrowser");
+
+  loaderSubBox.appendChild(m_tb_hidden_browser);
+  torbutton_log(3, "Created hidden browser.");
+}
+
+var torbutton_google_cookie_regen_listener = {
+  QueryInterface: function(aIID)
+  {
+   if (aIID.equals(Components.interfaces.nsIDOMEventListener) ||
+       aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+       aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+       aIID.equals(Components.interfaces.nsISupports))
+     return this;
+   throw Components.results.NS_NOINTERFACE;
+  },
+
+  onStateChange: function(aWebProgress, aRequest, aFlag, aStatus) {
+    torbutton_log(3, "Google cookie fetch progress");
+    if ((aFlag & Ci.nsIWebProgressListener.STATE_STOP)
+      && (aFlag & Ci.nsIWebProgressListener.STATE_IS_WINDOW)) {
+      m_tb_hidden_browser.removeProgressListener(torbutton_google_cookie_regen_listener);
+      m_tb_hidden_browser.setAttribute("src", "about:blank");
+      torbutton_log(3, "Google cookie fetch complete.");
+    }
+  },
+
+  onLocationChange: function(aProgress, aRequest, aURI) { return 0; },
+  onProgressChange: function() {return 0;},
+  onStatusChange: function() {return 0;},
+  onSecurityChange: function() {return 0;},
+  onLinkIconAvailable: function() {return 0;}
+};
+
+function torbutton_regen_google_cookie() {
+  // Only fire if tor fully enabled...
+  if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
+    torbutton_log(3, "Regenerating google cookie via fetch");
+    if (!m_tb_hidden_browser) {
+      torbutton_init_hidden_browser();
+    }
+    m_tb_hidden_browser.addProgressListener(torbutton_google_cookie_regen_listener,
+                        Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+
+    /* XXX: ideal, but broken..
+    m_tb_hidden_browser.loadURIWithFlags(
+        "http://www"+m_tb_prefs.getCharPref("extensions.torbutton.google_host")+"/",
+        Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE
+            |Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY, null, null);
+    */
+
+    torbutton_log(3, "Cookie fetch initiating..");
+
+    m_tb_hidden_browser.setAttribute("src",
+        "http://www"+m_tb_prefs.getCharPref("extensions.torbutton.google_host")+"/");
+
+  }
+}
+
+function torbutton_reset_google_cookie() {
+  // Only fire if tor is fully enabled..
+  if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
+    torbutton_log(3, "Resetting google cookie to pref");
+    var cm = Components.classes['@mozilla.org/cookiemanager;1'].
+       getService(Components.interfaces.nsICookieManager2);
+    var expires = (new Date("Jan 1, 3000")).getTime() / 1000;
+
+    // Need S, GDSESS, SS (www, /search), SNID (/verify) and NID...
+    // But it may be the case that NID, SNID and the others can be tied
+    // to a gmail account, search history, prefs, and/or iGoogle customization.
+    // Initial testing shows this to be not the case though.
+
+    cm.add("www"+m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
+      "/search", "SS",
+      m_tb_prefs.getCharPref("extensions.torbutton.gss_cookie"),
+      false, false, false, expires);
+
+    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
+      "/verify", "SNID",
+      m_tb_prefs.getCharPref("extensions.torbutton.gsnid_cookie"),
+      false, false, false, expires);
+
+    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
+      "/", "NID",
+      m_tb_prefs.getCharPref("extensions.torbutton.gnid_cookie"),
+      false, false, false, expires);
+
+    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
+      "/", "PREF", m_tb_prefs.getCharPref("extensions.torbutton.gpref_cookie"),
+      false, false, false, expires);
+
+    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
+      "/", "GDSESS",
+      m_tb_prefs.getCharPref("extensions.torbutton.ggdsess_cookie"),
+      false, false, false, expires);
+
+    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
+      "/", "S", m_tb_prefs.getCharPref("extensions.torbutton.gs_cookie"),
+      false, false, false, expires);
+
+
+  }
+}
+
+/*
+function torbutton_filter_cookies(filter_cookies) {
+  var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
+                     .getService(Ci.nsICookieManager);
+  var cookiesEnum = cookieManager.enumerator;
+  var new_cookies = [];
+  while (cookiesEnum.hasMoreElements()) {
+    var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
+  }
+}
+*/
+
+
+function torbutton_xfer_google_cookies(subject, topic, data) {
+  // Only fire if tor is fully enabled
+  if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
+    // catch load requests for nsIURI.host of google.(com|[\S\S](.[\S\S])?)$
+    // If no pref cookie, generate from google.ca PREF
+    var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
+    var hostmatch =
+        subject.URI.host.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+
+    // check nsIURI
+    if (hostmatch) {
+      var domain = hostmatch[1];
+      var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
+      torbutton_log(3, "Got Google request for host: "+subject.URI.host
+              +", matched: "+hostmatch[0]);
+      var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
+                            .getService(Ci.nsICookieManager);
+      var cookiesEnum = cookieManager.enumerator;
+      var copy_cookies = [];
+      // Lets always xfer over all cookies from www.google hosts
+      var use_google_host = false;
+         /* m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies")
+         || m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies");
+         */
+      torbutton_log(3, "Got prefs: "+subject.URI.host);
+      while (cookiesEnum.hasMoreElements()) {
+        var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
+        var hostmatched = false;
+        if (use_google_host) {
+          hostmatched = (cookie.host == google_host);
+        } else {
+          hostmatched = (new String(cookie.host)).match(
+                  /^(\.www|www|)\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+        }
+        // Copy all relevent cookies (except for ssl)
+        if (hostmatched && !cookie.isSecure) {
+          copy_cookies.push(cookie);
+        }
+      }
+
+      if (!copy_cookies.length) {
+        torbutton_safelog(4, "No cookie to migrate: ", subject.URI.host);
+        return;
+      }
+      var cm = Components.classes['@mozilla.org/cookiemanager;1'].
+         getService(Components.interfaces.nsICookieManager2);
+      var expires = (new Date("Jan 1, 3000")).getTime() / 1000;
+      var i;
+
+      var cookies = null;
+      try {
+        cookies = new String(httpChannel.getRequestHeader("Cookie"));
+        torbutton_log(3, "Google cookies: "+(cookies ? cookies : "none"));
+      } catch(e) {
+        torbutton_log(3, "Google cookies exploded: "+e);
+      }
+      for (i = 0; i < copy_cookies.length; i++) {
+        var cmatch = new RegExp("(^|;)"+copy_cookies[i].name+"=");
+        // XXX: Hrmm.. could also replace with most recent cookie..
+        // but that requires another O(n^2) loop above
+        if (cookies && cookies.match(cmatch))
+          continue; // Already present. Skip.
+
+        var new_host = new String(copy_cookies[i].host);
+        // Regex sub out copy_cookies[i].host
+        new_host = new_host.replace(
+                         /\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/,
+                         ".google."+domain);
+        try {
+          cm.add(
+             new_host,
+             copy_cookies[i].path,   // path
+             copy_cookies[i].name,
+             copy_cookies[i].value,
+             copy_cookies[i].isSecure,  // isSecure
+             copy_cookies[i].isHttpOnly,  // isHttpOnly
+             false,  // isSession
+             expires);
+          /* Need to copy only cookies matching the host/domain and
+           * path of this request... */
+          var dmatch = new RegExp(new_host+"$");
+          if (subject.URI.host.match(dmatch)
+              && subject.URI.path.indexOf(copy_cookies[i].path) == 0) {
+            httpChannel.setRequestHeader("Cookie",
+                    copy_cookies[i].name+"="+copy_cookies[i].value, true);
+            torbutton_log(3, "Google cookie "+copy_cookies[i].name+
+                          " applied for: "+subject.URI.host+" to domain "+
+                          new_host+" from "+copy_cookies[i].host);
+          } else {
+            torbutton_log(3, "Google cookie "+copy_cookies[i].name+
+                          " transfered for: "+subject.URI.host+" to domain "+
+                          new_host+" from "+copy_cookies[i].host);
+          }
+        } catch(e) {
+          torbutton_log(3, "Cookie add fail for "+new_host+" "
+                        +copy_cookies[i].name+": "+e);
+        }
+      }
+
+      /*
+      var browser = null;
+      if (subject.notificationCallbacks ||
+           (subject.loadGroup && subject.loadGroup.notificationCallbacks) {
+        try {
+          var callbacks = subject.notificationCallbacks;
+          if (!callbacks) {
+            callbacks = subject.loadGroup.notificationCallbacks;
+          }
+          var wind = callbacks.QueryInterface(
+              Components.interfaces.nsIInterfaceRequestor).getInterface(
+                 Components.interfaces.nsIDOMWindow);
+
+          if (wind instanceof Components.interfaces.nsIDOMChromeWindow) {
+            if (wind.browserDOMWindow) {
+              browser = wind.getBrowser().selectedTab.linkedBrowser;
+            }
+          }
+        } catch(e) {
+            torbutton_eclog(4,
+                    'Failure obtaining window for cookie xfer: '+e);
+        }
+      }
+      if (browser) {
+        torbutton_eclog(3, "Reload after cookie xfer: "+subject.URI.spec);
+        browser.reload();
+      } else {
+        torbutton_eclog(4, "Could not find browser to reload "+subject.URI.spec);
+      }
+      */
+    }
+  }
+}
+
 // Technique courtesy of:
 // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
+// XXX: Exception here??
 const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 var torbutton_uninstall_observer = {
 _uninstall : false,
@@ -2251,6 +2743,10 @@ observe : function(subject, topic, data) {
         torbutton_disable_tor();
     }
 
+    // Remove the cookie observer so clearing cookies does not
+    // issue a new request.
+    torbutton_cookie_observer.unregister();
+
     // Set pref in case this is just an upgrade (So we don't
     // mess with cookies)
     torbutton_log(2, "Torbutton normal exit");
@@ -2262,7 +2758,7 @@ observe : function(subject, topic, data) {
         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
         || m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
         var selector =
-            Components.classes["@stanford.edu/cookie-jar-selector;1"]
+            Components.classes["@torproject.org/cookie-jar-selector;1"]
             .getService(Components.interfaces.nsISupports)
             .wrappedJSObject;
         selector.clearCookies();
@@ -2318,6 +2814,18 @@ observe : function(subject, topic, data) {
               if(wind instanceof Components.interfaces.nsIDOMChromeWindow) {
                   if(wind.browserDOMWindow) {
                       var browser = wind.getBrowser().selectedTab.linkedBrowser;
+                      if(!browser) {
+                         torbutton_safelog(5,
+                            "No linked browser for possible favicon request: ",
+                               subject.name);
+                         // Hrmm.. fail closed is the safe option here,
+                         // but how often does this happen?? If this
+                         // is bug 1035, this request probably is the
+                         // proxy test.
+                         //subject.cancel(0x804b0002); // NS_BINDING_ABORTED
+                         return;
+                      }
+
                       // This can happen in the first request of a new state.
                       // block favicons till we've reach steady state
                       if((typeof(browser.__tb_tor_fetched) != "undefined")
@@ -2341,9 +2849,16 @@ observe : function(subject, topic, data) {
 
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
-      torbutton_check_progress(null, subject, 0);
+      torbutton_check_progress(null, subject, 0, false);
   } else if (topic == "http-on-modify-request") {
       torbutton_eclog(3, 'Modify request: '+subject.name);
+      if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_google_cookies")) {
+        try {
+          torbutton_xfer_google_cookies(subject, topic, data);
+        } catch(e) {
+          torbutton_log(4, "Explosion on cookie transfer: "+e);
+        }
+      }
   }
 },
 register : function() {
@@ -2420,6 +2935,7 @@ function torbutton_do_main_window_startup()
     torbutton_unique_pref_observer.register();
     torbutton_uninstall_observer.register();
     torbutton_http_observer.register();
+    torbutton_cookie_observer.register();
     torbutton_proxyservice.register();
 }
 
@@ -2504,10 +3020,11 @@ function torbutton_do_startup()
                     && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
             torbutton_set_uagent();
         }
+        var tor_enabled = torbutton_check_status();
 
-        torbutton_set_timezone(torbutton_check_status(), true);
+        torbutton_set_timezone(tor_enabled, true);
 
-        // XXX: This is probably better done by reimplementing the 
+        // FIXME: This is probably better done by reimplementing the 
         // component.
         if(m_tb_prefs.getBoolPref("extensions.torbutton.block_remoting")) {
             var appSupport = Cc["@mozilla.org/toolkit/native-app-support;1"]
@@ -2520,7 +3037,12 @@ function torbutton_do_startup()
                 torbutton_log(3, "Remoting window closed.");
             }
         }
-        
+
+        if (tor_enabled) {
+          // Need to maybe generate google cookie if tor is enabled
+          torbutton_new_google_cookie();
+        }
+
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
 }
@@ -2602,7 +3124,7 @@ function torbutton_do_resize(ev)
 
 function torbutton_check_round(browser) 
 {
-    // XXX: Not called???
+    // FIXME: Not called???
     if(torbutton_is_windowed(window)
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
@@ -2632,7 +3154,11 @@ function torbutton_check_round(browser)
 function torbutton_new_window(event)
 {
     torbutton_log(3, "New window");
-    var browser = getBrowser(); 
+    var browser = getBrowser();
+    if(!browser) {
+      torbutton_log(5, "No browser for new window.");
+      return;
+    }
 
     m_tb_window_height = window.outerHeight;
     m_tb_window_width = window.outerWidth;
@@ -2640,7 +3166,7 @@ function torbutton_new_window(event)
     if (!m_tb_wasinited) {
         torbutton_init();
     }
-    
+
     torbutton_do_startup();
     torbutton_crash_recover();
 
@@ -2684,6 +3210,7 @@ function torbutton_close_window(event) {
         torbutton_unique_pref_observer.unregister();
         torbutton_uninstall_observer.unregister();
         torbutton_http_observer.unregister();
+        torbutton_cookie_observer.unregister();
         torbutton_proxyservice.unregister();
 
         if(m_tb_is_main_window) { // main window not reset above
@@ -2742,7 +3269,7 @@ function torbutton_check_flag(obj, flag) {
     }
 }
 
-function torbutton_is_same_origin(source, target) { // unused.
+function torbutton_is_same_origin(win, source, target) { // unused.
     var fixup = Components.classes["@mozilla.org/docshell/urifixup;1"]
         .getService(Components.interfaces.nsIURIFixup);
     var source = fixup.createFixupURI(win.top.location.href, 0);
@@ -2768,7 +3295,7 @@ function torbutton_is_same_origin(source, target) { // unused.
 }
 
 
-function torbutton_update_tags(win) {
+function torbutton_update_tags(win, new_loc) {
     torbutton_eclog(2, "Updating tags.");
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
@@ -2797,9 +3324,8 @@ function torbutton_update_tags(win) {
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
 
-    if (!torbutton_check_flag(win.top, "__tb_did_tag")) {
+    if (new_loc && !torbutton_check_flag(win.top, "__tb_js_refresh")) {
         torbutton_log(2, "Tagging browser for: " + win.location);
-        torbutton_set_flag(win.top, "__tb_did_tag");
 
         if(typeof(browser.__tb_tor_fetched) == "undefined") {
             torbutton_log(5, "Untagged browser at: "+win.location);
@@ -2807,19 +3333,19 @@ function torbutton_update_tags(win) {
             // an alternate tor state. It wil lmake this window totally
             // useless, but that is better than some undefined state
             browser.__tb_tor_fetched = tor_tag;
-        } 
+        }
         if(browser.__tb_tor_fetched != !tor_tag) {
             // Purge session history every time we fetch a new doc 
             // in a new tor state
             torbutton_log(2, "Purging session history");
             if(browser.webNavigation.sessionHistory.count > 1
                     && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
-                // XXX: This isn't quite right.. For some reason
+                // FIXME: This isn't quite right.. For some reason
                 // this breaks in some cases..
                 /*
                 var current = browser.webNavigation
                     .QueryInterface(Components.interfaces.nsIDocShellHistory)
-                    .getChildSHEntry(0).clone(); // XXX: Use index??
+                    .getChildSHEntry(0).clone(); // FIXME: Use index??
                     */
                 var current = browser.webNavigation.contentViewer.historyEntry;
 
@@ -2837,6 +3363,15 @@ function torbutton_update_tags(win) {
 
         browser.__tb_tor_fetched = !tor_tag;
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
+
+        /* We want to disable allowDNSPrefetch on Tor-loaded tabs
+         * before the load, because we don't want prefetch to be enabled
+         * on tor tabs once we leave Tor. */
+        if(m_tb_ff35) {
+            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+            browser.docShell.allowDNSPrefetch = tor_tag;
+        }
+
         if(js_enabled && !browser.docShell.allowJavascript) {
             // Only care about re-enabling javascript. 
             // The js engine obeys the pref over the docshell attribute
@@ -2845,6 +3380,11 @@ function torbutton_update_tags(win) {
             torbutton_log(3, "Javascript changed from "+browser.docShell.allowJavascript+" to: "+js_enabled);
             browser.docShell.allowJavascript = js_enabled;
             torbutton_check_round(browser);
+
+            // Tag this specially, so that the next onLocationChange
+            // doesn't redo these hooks.
+            torbutton_set_flag(win.top, "__tb_js_refresh");
+
             // JS was not fully enabled for some page elements. 
             // Need to reload
             browser.reload(); 
@@ -2858,7 +3398,7 @@ function torbutton_update_tags(win) {
     torbutton_log(2, "Tags updated.");
 }
 
-// XXX: Same-origin policy may prevent our hooks from applying
+// Same-origin policy may prevent our hooks from applying
 // to inner iframes.. Test with frames, iframes, and
 // popups. Test these extensively:
 // http://taossa.com/index.php/2007/02/08/same-origin-policy/
@@ -2937,7 +3477,7 @@ function torbutton_hookdoc(win, doc) {
         torbutton_log(2, "Type of window: " + typeof(win));
         torbutton_log(2, "Type of wrapped window: " + typeof(win.wrappedJSObject));
         var s = new Components.utils.Sandbox(win.wrappedJSObject);
-        // XXX: FF3 issues 
+        // FIXME: FF3 issues 
         // http://developer.mozilla.org/en/docs/XPConnect_wrappers#XPCSafeJSObjectWrapper
         // http://developer.mozilla.org/en/docs/Code_snippets:Interaction_between_privileged_and_non-privileged_pages
         s.window = win.wrappedJSObject; 
@@ -2963,11 +3503,11 @@ function torbutton_hookdoc(win, doc) {
     return;
 }
 
-// XXX: Tons of exceptions get thrown from this function on account
+// FIXME: Tons of exceptions get thrown from this function on account
 // of its being called so early. Need to find a quick way to check if
 // aProgress and aRequest are actually fully initialized 
 // (without throwing exceptions)
-function torbutton_check_progress(aProgress, aRequest, aFlags) {
+function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
     if (!m_tb_wasinited) {
         torbutton_init();
     }
@@ -3111,9 +3651,11 @@ function torbutton_check_progress(aProgress, aRequest, aFlags) {
     if(DOMWindow) {
         var doc = DOMWindow.document;
         try {
-            if(doc && doc.domain) {
-                torbutton_update_tags(DOMWindow.window);
-                torbutton_hookdoc(DOMWindow.window, doc);
+            if(doc) {
+                torbutton_update_tags(DOMWindow.window, new_loc);
+                if(doc.domain) {
+                    torbutton_hookdoc(DOMWindow.window, doc);
+                }
             }
         } catch(e) {
             try {
@@ -3153,26 +3695,30 @@ var torbutton_weblistener =
 
   onStateChange: function(aProgress, aRequest, aFlag, aStatus)
   { 
-      torbutton_eclog(1, 'State change()');
-      return torbutton_check_progress(aProgress, aRequest, aFlag);
+      torbutton_eclog(2, 'State change()');
+      return torbutton_check_progress(aProgress, aRequest, aFlag, false);
   },
 
   onLocationChange: function(aProgress, aRequest, aURI)
   {
-      torbutton_eclog(1, 'onLocationChange: '+aURI.asciiSpec);
-      return torbutton_check_progress(aProgress, aRequest, 0);
+      torbutton_eclog(2, 'onLocationChange: '+aURI.asciiSpec);
+      if(aURI.spec != "about:blank") {
+          return torbutton_check_progress(aProgress, aRequest, 0, true);
+      } else {
+          torbutton_ecloc(3, "Skipping location change for about:blank");
+      }
   },
 
   onProgressChange: function(aProgress, aRequest, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
   { 
-      torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress, aRequest, 0);
+      torbutton_eclog(2, 'called progressChange'); 
+      return torbutton_check_progress(aProgress, aRequest, 0, false);
   },
   
   onStatusChange: function(aProgress, aRequest, stat, message) 
   { 
-      torbutton_eclog(1, 'called progressChange'); 
-      return torbutton_check_progress(aProgress, aRequest, 0);
+      torbutton_eclog(2, 'called progressChange'); 
+      return torbutton_check_progress(aProgress, aRequest, 0, false);
   },
   
   onSecurityChange: function() {return 0;},

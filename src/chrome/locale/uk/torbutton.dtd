@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Властивості проксі">
 <!ENTITY torbutton.prefs.recommended_settings "Використовувати рекомендовані значення для моєї версії Фірефоху">
 <!ENTITY torbutton.prefs.use_privoxy "Використовувати Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Використовувати незвичні налаштування проксі">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP проксі:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL проксі:">

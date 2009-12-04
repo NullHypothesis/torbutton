@@ -492,7 +492,7 @@ function torbutton_prefs_test_settings() {
         window.alert("Tor proxy test: HTTP error for check.torproject.org: "+ret);
         return;
     }
-            
+
     switch(ret) {
         case 0:
             window.alert("Tor proxy test: Internal error");
@@ -519,6 +519,10 @@ function torbutton_prefs_test_settings() {
             break;
         case 7:
             window.alert("Tor proxy test: check.torproject.org returned bad result");
+            break;
+        case 8:
+            var warning = strings.GetStringFromName("torbutton.popup.test.no_http_proxy");
+            window.alert(warning);
             break;
     }
 }

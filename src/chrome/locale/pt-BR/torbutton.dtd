@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Configurações Proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Usar as cinfigurações recomendadas de proxy para minha versão de Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Usar Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Usar configurações padrão de proxy">
 <!ENTITY torbutton.prefs.proxy.host.http "Proxy HTTP:">
 <!ENTITY torbutton.prefs.proxy.host.https "Proxy SSL:">
@@ -80,7 +81,7 @@
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
+<!ENTITY torbutton.prefs.test_settings "Testar configurações">
 <!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">

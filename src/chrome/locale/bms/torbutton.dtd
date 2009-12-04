@@ -1,93 +1,94 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
-<!ENTITY torbutton.prefs.panel_format "Status bar display format:">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Icon">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "About Torbutton">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
-<!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
-<!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
+<!ENTITY torbutton.prefs.title "Tor Button ဦးစားေပးညႊန္ျပခ်က္မ်ား">
+<!ENTITY torbutton.prefs.display_settings "ျပသရန္ ခ်ိန္ညိႇခ်က္မ်ား">
+<!ENTITY torbutton.prefs.display_panel "Tor proxy ခ်ိန္ညႇိခ်က္မ်ားကို Status Bar တြင္ ျပသရန္">
+<!ENTITY torbutton.prefs.panel_format "Status bar ျပသမႈ ပံုစံ">
+<!ENTITY torbutton.prefs.panel_text_format "စာသား">
+<!ENTITY torbutton.prefs.panel_icon_format "အိုင္ကြန္ ရုပ္ပံု">
+<!ENTITY torbutton.prefs.tor_settings "Proxy ခ်ိန္ညႇိခ်က္မ်ား">
+<!ENTITY torbutton.prefs.recommended_settings "အၾကံျပဳ ေထာက္ခံေသာ proxy ခ်ိန္ညိႇခ်က္မ်ားကို မိမိ၏ Firefox version တြင္ အသံုးျပဳရန္">
+<!ENTITY torbutton.prefs.use_privoxy "Privoxy ကို အသံုးျပဳရန္">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.custom_settings "proxy ခ်ိန္ညိႇခ်က္မ်ားကို စိတ္ၾကိဳက္ျပဳျပင္၍ အသံုးျပဳရန္">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP ပေရာ့စီ :">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL ပေရာ့စီ :">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP ပေရာ့စီ :">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher ပေရာ့စီ">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host :">
+<!ENTITY torbutton.prefs.proxy.port "Port :">
+<!ENTITY torbutton.about.title "Torbutton အေၾကာင္း">
+<!ENTITY torbutton.pref_connection.notice "၄င္းခ်ိန္ညႇိခ်က္မ်ားကို ေျပာင္းလဲရန္အတြက္ Torbutton ကုိ ပိတ္ထားရန္">
+<!ENTITY torbutton.pref_connection.more_info "ပိုမုိျပည့္စံုေသာ သတင္းအခ်က္အလက္မ်ားသို႕">
+<!ENTITY torbutton.pref_connection_more_info.title "ကူညီမႈရယူရန္">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton ကုိ လက္ရွိတြင္ အသံုးျပဳႏုိင္ပါသည္။ Tor Proxy မဟုတ္ေသာ ခ်ိန္ညိႇခ်က္မ်ားကို ေျပာင္းလဲ အသံုးျပဳႏုိင္ရန္အတြက္ Torbutton ကုိ အသံုးမျပဳႏိုင္ေအာင္ ပိတ္၍ ယခုေနရာသို႕ ျပန္လာပါ။ Tor ခ်ိန္ညႇိခ်က္မ်ားကို ေျပာင္းလဲလိုပါက Torbutton ဦးစားေပးညႊန္ျပခ်က္မ်ားကို ကို အသံုးျပဳပါ။">
+<!ENTITY torbutton.context_menu.toggle "Tor အေျခအေနအခ်က္ျပမႈကို ေျပာင္းလဲရန္">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Preferences...">
+<!ENTITY torbutton.context_menu.preferences "ဦးစားေပး ညႊန္ျပမႈမ်ား">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "About Torbutton...">
+<!ENTITY torbutton.context_menu.about "Torbutton အေၾကာင္း">
 <!ENTITY torbutton.context_menu.about.key "A">
 <!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
-<!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
-<!ENTITY torbutton.prefs.dynamic "Dynamic Content">
-<!ENTITY torbutton.prefs.cookies "Cookies">
+<!ENTITY torbutton.button.tooltip "Torbutton စတင္ရန္ ကလစ္လုပ္ပါ">
+<!ENTITY torbutton.prefs.sec_settings "လံုျခံဳမႈအတြက္ ခ်ိန္ညိႇခ်က္မ်ား">
+<!ENTITY torbutton.prefs.block_thread "Tor အသံုးျပဳစဥ္အတြင္း history ဖတ္႐ႈျခင္းကို ပိတ္ပင္ထားရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.block_thwrite "Tor အသံုးျပဳစဥ္အတြင္း history ေရးျခင္းကုိ ပိတ္ပင္ထားရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.block_nthread "Tor အသံုးမျပဳစဥ္အတြင္း history ဖတ္ျခင္းကို ပိတ္ပင္ထားရန္ (ေရြးခ်ယ္ႏိုင္ပါသည္)">
+<!ENTITY torbutton.prefs.block_nthwrite "Tor အသံုးမျပဳစဥ္အတြင္း history ေရးျခင္းကုိ ပိတ္ပင္ထားရန္ (ေရြးခ်ယ္ႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.clear_history "Tor အသံုးျပဳ/မျပဳ ေျပာင္းလဲခ်ိန္တြင္ history ကုိ ရွင္းလင္းရန္ (ေရြးခ်ယ္ႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.clear_cache "Tor အသံုးျပဳ/မျပဳ ေျပာင္းလဲခ်ိန္တြင္ Disk cache ျပဳလုပ္မႈႏွင့္ cache ရွင္းလင္းမႈမ်ားကုိ ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.block_cache "Tor အသံုးျပဳစဥ္အတြင္း disk ႏွင့္ memory cache အသံုးျပဳမႈကို ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.cookie_jars "Tor မဟုတ္ေသာ cookies မ်ားကို ကာကြယ္ထားသည့္ jar ထဲတြင္ သိမ္းဆည္းထားရန္">
+<!ENTITY torbutton.prefs.mmm_cookies "မိမိဘာသာ cookies မ်ားကုိ စီစဥ္မႈျပဳလုပ္ပါမည္။ (အႏၱရယ္ ရွိပါသည္)">
+<!ENTITY torbutton.prefs.clear_cookies "Tor အသံုးျပဳ/မျပဳ ေျပာင္းလဲခ်ိန္တြင္ cookies မ်ားကုိ ရွင္းလင္းရန္">
+<!ENTITY torbutton.prefs.disable_plugins "Tor အသံုးျပဳမႈရွိေနစဥ္အတြင္း plugins မ်ားကုိ ပိတ္ပင္ထားရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.kill_bad_js "အႏၱရယ္ရွိေသာ javascript မ်ားကုိ hook ခ်ိတ္ျဖင့္ထိန္းခ်ဳပ္ထားရန္ လုပ္ထားရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.isolate_content "Tor အေျခအေနတြင္ dynamic content မ်ားကို သီးျခား ခဲြထားရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.no_updates "Tor အသံုးျပဳေနစဥ္အတြင္း update အသစ္ထည့္သြင္းမႈမ်ားကို ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.set_uagent "Tor အသံုးျပဳမႈအတြက္ အသံုးျပဳသူ ကုိယ္စားလွယ္ကို သတ္မွတ္ရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.dynamic "ေျပာင္းလဲေနေသာ အခ်က္အလက္မ်ား">
+<!ENTITY torbutton.prefs.cookies "Cookies မ်ား">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
-<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
-<!ENTITY torbutton.prefs.shutdown "Shutdown">
-<!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
-<!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
-<!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
-<!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
-<!ENTITY torbutton.prefs.headers "Headers">
-<!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">
-<!ENTITY torbutton.prefs.disable_referer "Don't send referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.disable_domstorage "Disable DOM Storage during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.forms "Forms">
-<!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "Non-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Reload cookie jar/clear cookies on Firefox crash (recommended)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
-<!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.close_tor "Close all Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.close_nontor "Close all Non-Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
-<!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.history "အသံုးျပဳမႈ မွတ္တမ္းစဥ္မ်ား">
+<!ENTITY torbutton.prefs.no_search "Tor အသံုးျပဳစဥ္အတြင္း ရွာေဖြရန္ အၾကံျပဳမႈမ်ားကုိ ပိတ္ပင္ထားရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.shutdown "ရပ္နားပိတ္သိမ္းရန္">
+<!ENTITY torbutton.prefs.tor_shutdown "Tor အသံုးျပဳႏုိင္ေသာ browser ကုိ ပိတ္ေနစဥ္အတြင္း Tor Cookies မ်ားကို ရွင္းလင္းရန္">
+<!ENTITY torbutton.prefs.all_shutdown "မည္သည့္  browser ကုိ မဆုိ ပိတ္ေနစဥ္အတြင္း Cookies မ်ားကို ရွင္းလင္းရန္">
+<!ENTITY torbutton.prefs.no_shutdown "ပိတ္သိမ္းလွ်င္ cookies မ်ားကုိ မရွင္းလင္းပါႏွင့္">
+<!ENTITY torbutton.prefs.disable_sessionstore "သိမ္းဆည္းေနစဥ္ Session ကုိ ပိတ္ပင္ထားရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.headers "ေခါင္းစည္းမ်ား">
+<!ENTITY torbutton.prefs.spoof_english "US အဂၤလိပ္ browser ကုိ Spoof လုပ္ရန္">
+<!ENTITY torbutton.prefs.disable_referer "Tor အသံုးျပဳေနစဥ္အတြင္း ရည္ညႊန္းသူကို ေပးပို႕ျခင္း မျပဳရန္ (အခ်ိဳ႕ ဆုိက္မ်ားကို ျပတ္ေတာက္ေစႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.disable_domstorage "Tor အသံုးျပဳစဥ္အတြင္း DOM သိမ္းဆည္းမႈကို ပိတ္ပင္ထားရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.forms "ျဖည့္စြက္ပံုစံကြက္မ်ား">
+<!ENTITY torbutton.prefs.block_tforms "Tor အသံုးျပဳစဥ္အတြင္း စကားဝွက္ ႏွင့္ ျဖည့္စြက္ပံုစံမ်ား သိမ္းဆည္းျခင္းကုိ ပိတ္ပင္ထားရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.block_ntforms "Tor အသံုးမျပဳစဥ္အတြင္း စကားဝွက္ ႏွင့္ ျဖည့္စြက္ပံုစံမ်ား သိမ္းဆည္းျခင္းကုိ ပိတ္ပင္ထားရန္ (ေရြးခ်ယ္ႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.tor "Tor အသံုးျပဳ">
+<!ENTITY torbutton.prefs.non_tor "Tor အသံုးမျပဳ">
+<!ENTITY torbutton.prefs.restore_tor "Session ျပန္လည္စတင္လွ်င္၊ Tor အေျခအေနကို သတ္မွတ္ရန္ :">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Firefox မွားယြင္းရပ္တန္႕သြားလွ်င္ cookie jar ကုိ ျပန္လည္ တင္ပို႕ယူရန္/ ရွင္းလင္းရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "Tor ႏွင့္ Tor မဟုတ္ေသာ cookies မ်ားကုိ ကာကြယ္ထားေသာ jars မ်ားထဲတြင္ သိမ္းဆည္းထားရန္">
+<!ENTITY torbutton.prefs.clear_http_auth "HTTP အသံုးျပဳမႈ စစ္ေဆးေသာ က႑မ်ားကို ရွင္းလင္းရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.block_js_history "Tor အေျခအေနသို႕ history ရွာေဖြသြားလာမႈ အသံုးျပဳခြင့္ကို သီးျခား ခဲြျခား ထားရန္ (အေရးၾကီးပါသည္)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Tor အသံုးျပဳေနစဥ္အတြင္း windows ကုိ 50 px သို႕ အရြယ္အစား ထားရွိရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.close_tor "အသံုးျပဳမႈ ေျပာင္းလဲစဥ္အတြင္း Tor windows မ်ားႏွင့္ tabs မ်ား အားလံုးကုိ ပိတ္သိမ္းရန္ (ေရြးခ်ယ္ႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.close_nontor "အသံုးျပဳမႈ ေျပာင္းလဲစဥ္အတြင္း Tor မဟုတ္ေသာ windows မ်ားႏွင့္ tabs မ်ား အားလံုးကုိ ပိတ္သိမ္းရန္ (ေရြးခ်ယ္ႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.block_links "မတူညီေသာ Tor အေျခအေနမ်ားတြင္ ခ်ိတ္ဆက္လင့္ခ္မ်ားကုိ ကုိ ကလစ္လုပ္ျခင္းႏွင့္ စာမ်က္ႏွာမ်ား ျပန္လည္ ေခၚယူျခင္းကို ပိတ္ပင္ရန္ (ေရြးခ်ယ္ႏုိင္ပါသည္)">
+<!ENTITY torbutton.prefs.jar_certs "Tor အသံုးျပဳေသာ သို႕မဟုတ္ Tor အသံုးမျပဳေသာ အေျခအေနတြင္ SSL certs မ်ားကုိ သီးျခား jars မ်ားတြင္ သိမ္းဆည္းရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.jar_ca_certs "Tor အသံုးျပဳေသာ သို႕မဟုတ္ Tor အသံုးမျပဳေသာ အေျခအေနတြင္ CA certs မ်ားကုိ သီးျခား jars မ်ားတြင္ သိမ္းဆည္းရန္ (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.locked_mode "မေတာ္တဆ ေျပာင္းလဲမႈ မျဖစ္ေစရန္ Button ႏွင့္ Hotkeys မ်ားကို ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.startup_state "ပံုမွန္ စတင္မႈမ်ားတြင္ Tor အေျခအေနကုိ သတ္မွတ္ရန္ :">
+<!ENTITY torbutton.prefs.shutdown_state "ရပ္တန္႕ပိတ္သိမ္းမႈ အေျခအေန">
+<!ENTITY torbutton.prefs.startup "စတင္မႈ">
+<!ENTITY torbutton.prefs.block_tor_file_net "Network သုိ႕ Tor အသံုးျပဳမႈကုိ ပိတ္ပင္ရန္ file:// urls (အၾကံျပဳေထာက္ခံပါသည္)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Network သို႕ Tor မဟုတ္ေသာ အသံုးျပဳမႈကုိ ပိတ္ပင္ရန္ file:// urls">
+<!ENTITY torbutton.prefs.restore_defaults "မူလအေျခအေနသို႕ ျပန္လည္ ထည့္သြင္းရန္">
+<!ENTITY torbutton.prefs.test_settings "ခ်ိန္ညိႇမႈမ်ားကို စမ္းသပ္ရန္">
+<!ENTITY torbutton.prefs.test_auto "Firefox စတင္ျပီး ပထမဆံုး ေျပာင္းလဲအသံုးျပဳမႈျပီးလွ်င္ မိမိ၏ Tor ခ်ိန္ညိႇမႈမ်ားကို ျပန္လည္ စမ္းသပ္ရန္">
+<!ENTITY torbutton.prefs.disable_livemarks "Tor အသံုးျပဳေနစဥ္အတြင္း livemarks အသစ္ထည့္သြင္းမႈမ်ားကုိ ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.tor_memory_jar "Tor cookies မ်ားကို disk အတြင္းသုိ႕ ေရးသားျခင္း မျပဳရန္">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Tor မဟုတ္ေသာ cookies မ်ားကုိ disk အတြင္းသို႕ ေရးသားျခင္း မျပဳရန္">
+<!ENTITY torbutton.prefs.session_restore "session သိမ္းဆည္းမႈအတြက္ သိမ္းဆည္းရန္ ရန္ႏွင့္ ျပန္လည္ တင္ယူရန္ tabs မ်ား :">
+<!ENTITY torbutton.prefs.nontor_tabs "Tor အသံုးမျပဳေသာ တင္ယူထားသည့္ tabs မ်ား">
+<!ENTITY torbutton.prefs.tor_tabs "Tor အသံုးျပဳ တင္ယူထားသည့္ tabs မ်ား">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">

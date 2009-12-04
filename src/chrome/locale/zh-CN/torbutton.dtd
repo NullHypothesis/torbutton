@@ -5,8 +5,9 @@
 <!ENTITY torbutton.prefs.panel_text_format "文本">
 <!ENTITY torbutton.prefs.panel_icon_format "图标">
 <!ENTITY torbutton.prefs.tor_settings "代理设置">
-<!ENTITY torbutton.prefs.recommended_settings "使用为我的 Firefox 的推荐代理设置">
+<!ENTITY torbutton.prefs.recommended_settings "为该版本 Firefox 使用推荐的代理设置">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "使用自定义代理设置">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP 代理：">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL 代理：">
@@ -21,73 +22,73 @@
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton 目前使用中。如果您想改变非 Tor 代理设置，请禁用 Torbutton 后回到这里。如果您想改变 Tor 代理设置，请使用 Torbutton 偏好设置。">
 <!ENTITY torbutton.context_menu.toggle "转换 Tor 状态">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "偏好...">
+<!ENTITY torbutton.context_menu.preferences "设置...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "关于 Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "点击初始化 Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "安全选项">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Tor运行时禁止写入历史(推荐)">
-<!ENTITY torbutton.prefs.block_nthread "Tor禁用时禁止读取历史(可选)">
-<!ENTITY torbutton.prefs.block_nthwrite "Tor禁用时禁止写入历史(可选)">
+<!ENTITY torbutton.prefs.block_thread "使用 Tor 时禁止读取历史(重要)">
+<!ENTITY torbutton.prefs.block_thwrite "使用 Tor 时禁止写入历史(推荐)">
+<!ENTITY torbutton.prefs.block_nthread "不用 Tor 时禁止读取历史(可选)">
+<!ENTITY torbutton.prefs.block_nthwrite "不用 Tor 时禁止写入历史(可选)">
 <!ENTITY torbutton.prefs.clear_history "切换 Tor 时清除历史(可选)">
-<!ENTITY torbutton.prefs.clear_cache "禁用 Tor 硬盘缓存并在切换 Tor 时清除缓存">
-<!ENTITY torbutton.prefs.block_cache "Tor 运行时禁止访问硬盘缓存和内存缓存">
-<!ENTITY torbutton.prefs.cookie_jars "在受保护的jar文件中保存非 Tor 下 cookies">
-<!ENTITY torbutton.prefs.mmm_cookies "我要自己手动管理我的 cookies (危险)">
+<!ENTITY torbutton.prefs.clear_cache "使用 Tor 时禁用硬盘缓存并在切换时清除缓存">
+<!ENTITY torbutton.prefs.block_cache "使用 Tor 时禁止访问硬盘缓存和内存缓存">
+<!ENTITY torbutton.prefs.cookie_jars "在受保护的jar中保存不用 Tor 时的cookie">
+<!ENTITY torbutton.prefs.mmm_cookies "我要自己手动管理 cookies (危险)">
 <!ENTITY torbutton.prefs.clear_cookies "切换 Tor 时清除 cookies">
 <!ENTITY torbutton.prefs.disable_plugins "使用 Tor 时禁用插件(重要)">
-<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
-<!ENTITY torbutton.prefs.set_uagent "使用 Tor 时设置 user-agent (重要)">
-<!ENTITY torbutton.prefs.dynamic "动态内容">
+<!ENTITY torbutton.prefs.kill_bad_js "Hook 危险的 JavaScript (重要)">
+<!ENTITY torbutton.prefs.isolate_content "根据 Tor 状态隔离动态网页内容 (重要)">
+<!ENTITY torbutton.prefs.no_updates "使用 Tor 时禁止浏览器更新">
+<!ENTITY torbutton.prefs.set_uagent "使用 Tor 时修改 user-agent (重要)">
+<!ENTITY torbutton.prefs.dynamic "动态网页内容">
 <!ENTITY torbutton.prefs.cookies "Cookies">
 <!ENTITY torbutton.prefs.cache "缓存">
 <!ENTITY torbutton.prefs.history "历史">
 <!ENTITY torbutton.prefs.no_search "使用 Tor 时禁用搜索建议(推荐)">
 <!ENTITY torbutton.prefs.shutdown "关闭">
-<!ENTITY torbutton.prefs.tor_shutdown "关闭启用 Tor 的浏览器时清除 Tor cookies">
-<!ENTITY torbutton.prefs.all_shutdown "关闭任意浏览器时清除 cookies">
+<!ENTITY torbutton.prefs.tor_shutdown "戴 Tor 关闭浏览器时清除用 Tor 浏览产生的 Cookies">
+<!ENTITY torbutton.prefs.all_shutdown "任何时候关闭浏览器都清除 cookies">
 <!ENTITY torbutton.prefs.no_shutdown "关闭时不清除 cookies">
-<!ENTITY torbutton.prefs.disable_sessionstore "禁用进程保存(推荐)">
-<!ENTITY torbutton.prefs.headers "Headers">
-<!ENTITY torbutton.prefs.spoof_english "欺骗英文浏览器">
-<!ENTITY torbutton.prefs.disable_referer "使用 Tor 时不发送引用(Referer)信息(将影响小部分站点的功能)">
-<!ENTITY torbutton.prefs.disable_domstorage "使用 Tor 时禁止储存 DOM (重要)">
+<!ENTITY torbutton.prefs.disable_sessionstore "禁用Firefox的进程保存 (推荐)">
+<!ENTITY torbutton.prefs.headers "Header">
+<!ENTITY torbutton.prefs.spoof_english "伪装浏览器语言为美国英语">
+<!ENTITY torbutton.prefs.disable_referer "使用 Tor 时不发送 Referer (可能影响某些站点的访问)">
+<!ENTITY torbutton.prefs.disable_domstorage "使用 Tor 时禁用浏览器的 DOM储存 (重要)">
 <!ENTITY torbutton.prefs.forms "表单">
-<!ENTITY torbutton.prefs.block_tforms "使用 Tor 时禁用密码保存(推荐)">
-<!ENTITY torbutton.prefs.block_ntforms "未使用 Tor 时禁用密码保存(可选)">
-<!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "禁用 Tor 时">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "在 Firefox 崩溃时重载 cookie jar/清除 cookie(推荐)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "在受保护的jar文件中保存使用 Tor 和未使用 Tor 时的 cookies(危险)">
+<!ENTITY torbutton.prefs.block_tforms "使用 Tor 时禁用密码保存与表单记忆(推荐)">
+<!ENTITY torbutton.prefs.block_ntforms "不用 Tor 时禁用密码保存与表单记忆(可选)">
+<!ENTITY torbutton.prefs.tor "使用Tor">
+<!ENTITY torbutton.prefs.non_tor "不用Tor">
+<!ENTITY torbutton.prefs.restore_tor "浏览器恢复进程时，设置 Tor 的状态为">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Firefox 崩溃后重载 cookie jar/清除 cookie(推荐)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "在受保护的jar文件中同时保存使用Tor和不用Tor时的 cookies(危险)">
 <!ENTITY torbutton.prefs.clear_http_auth "清除 HTTP 认证进程(推荐)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "使用 Tor 时调整窗口大小为 50 像素倍数(推荐)">
-<!ENTITY torbutton.prefs.close_tor "切换 Tor 时关闭所有使用 Tor 的窗口和标签(可选)">
-<!ENTITY torbutton.prefs.close_nontor "切换 Tor 时关闭所有未使用 Tor 的窗口和标签(可选)">
-<!ENTITY torbutton.prefs.block_links "禁止在不同 Tor 状态间打开链接或刷新页面(可选)">
-<!ENTITY torbutton.prefs.jar_certs "存储 SSL 证书到单独的 Tor/非 Tor jar(推荐)">
-<!ENTITY torbutton.prefs.jar_ca_certs "存储 CA 证书到单独的 Tor/非 Tor jar(推荐)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.block_js_history "Tor 状态变化后限制在先前状态下已浏览的网页间进行跳转 (重要)">
+<!ENTITY torbutton.prefs.resize_on_toggle "使用 Tor 时调整窗口大小为50像素的倍数(推荐)">
+<!ENTITY torbutton.prefs.close_tor "切换时关闭所有使用 Tor 的窗口和标签(可选)">
+<!ENTITY torbutton.prefs.close_nontor "切换时关闭所有不用 Tor 的窗口和标签(可选)">
+<!ENTITY torbutton.prefs.block_links "Tor 状态发生改变的页面中拦截链接点击和页面刷新(可选)">
+<!ENTITY torbutton.prefs.jar_certs "将使用Tor/不用Tor时的SSL证书分开存放(推荐)">
+<!ENTITY torbutton.prefs.jar_ca_certs "将使用Tor/不用Tor时的CA证书分开存放(推荐)">
+<!ENTITY torbutton.prefs.locked_mode "禁用工具栏按钮与键盘快捷键防止误切换">
+<!ENTITY torbutton.prefs.startup_state "正常启动时，设置Tor的状态为：">
+<!ENTITY torbutton.prefs.shutdown_state "与上次关闭时一致">
+<!ENTITY torbutton.prefs.startup "启动">
+<!ENTITY torbutton.prefs.block_tor_file_net "禁止本地链接(file://)使用Tor访问网络(推荐)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "禁止本地链接(file://)未经Tor访问网络">
+<!ENTITY torbutton.prefs.restore_defaults "恢复默认设置">
+<!ENTITY torbutton.prefs.test_settings "测试代理设置">
+<!ENTITY torbutton.prefs.test_auto "每次启动Firefox后在第一次切换 Tor 时自动验证 Tor 设置">
+<!ENTITY torbutton.prefs.disable_livemarks "使用 Tor 时禁用 Livemark(RSS书签) 更新">
+<!ENTITY torbutton.prefs.tor_memory_jar "使用Tor浏览时不要将Cookie存入磁盘">
+<!ENTITY torbutton.prefs.nontor_memory_jar "不用Tor浏览时不要将Cookie存入磁盘">
+<!ENTITY torbutton.prefs.session_restore "让Firefox进程保存功能保存并恢复如下标签页：">
+<!ENTITY torbutton.prefs.nontor_tabs "不用Tor的标签页">
+<!ENTITY torbutton.prefs.tor_tabs "使用Tor的标签页">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">

@@ -1,0 +1,195 @@
+First pass: Quick Review of Firefox Features
+- Video Tag
+  - Docs:
+    - https://developer.mozilla.org/En/HTML/Element/Audio
+    - https://developer.mozilla.org/En/HTML/Element/Video
+    - https://developer.mozilla.org/En/HTML/Element/Source
+    - https://developer.mozilla.org/En/Manipulating_video_using_canvas
+    - https://developer.mozilla.org/En/nsIDOMHTMLMediaElement
+    - https://developer.mozilla.org/En/Media_formats_supported_by_the_audio_and_video_elements
+    - http://en.flossmanuals.net/TheoraCookbook
+  - nsIContentPolicy is checked on load
+  - Uses NSIChannels for initial load
+  - Wrapped in nsHTMLMediaElement::mDecoder
+    - is nsOggDecoder() or nsWaveDecoder()
+    - liboggplay
+  - Governed by media.* prefs
+  - Preliminary audit shows they do not use the liboggplay tcp functions
+- Geolocation
+  - Wifi:
+    - https://developer.mozilla.org/En/Monitoring_WiFi_access_points
+    - Requires security policy to allow. Then still prompted
+  - navigator.geolocation
+    - Governed by geo.enabled
+    - "2 week access token" is set
+      - geo.wifi.access_token.. Clearing is prob a good idea
+    - http://mxr.mozilla.org/mozilla1.9.1/source/dom/src/geolocation/NetworkGeolocationProvider.js
+    - https://developer.mozilla.org/En/Using_geolocation
+- DNS prefetching after toggle
+  - prefetch pref? Always disable for now?
+    - network.dns.disablePrefetch
+    - Also disabled in netwerk/dns/src/nsDNSService2.cpp when manual proxies
+      are set..
+    - This should prevent prefetching of non-tor urls in tor mode..
+    - But the reverse is unclear.
+    - DocShell attribute!!1 YAY
+      - http://www.oxymoronical.com/experiments/apidocs/interface/nsIDocShell
+      - "Takes effect for the NEXT document loaded...."
+        - Do we win this race? hrmm.. If we do, the tor->nontor direction
+          should also be safe.
+  - Content policy called?
+    - No. See content/html/content/src/nsHTMLDNSPrefetch.cpp
+- Storage
+  - https://developer.mozilla.org/en/Storage
+  - "It is available to trusted callers, meaning extensions and Firefox
+    components only."
+- New content policy
+  - Content Security Policy. Addon-only
+- "Offline resources"
+  - https://developer.mozilla.org/en/Offline_resources_in_Firefox
+  - https://developer.mozilla.org/en/nsIApplicationCache
+  - browser.cache.offline.enable toggles
+  - browser.cache.disk.enable does not apply. Seperate "device".
+  - Does our normal cache clearing mechanism apply?
+    - We call nsICacheService.evictEntries()
+    - May need: nsOfflineCacheDevice::EvictEntries(NULL)
+  - Code is smart enough to behave cleanly if we simply set
+    browser.cache.offline.enable or enable private browsing.
+- Mouse gesture and other new DOM events
+- Fonts
+  - Remote fonts obey content policy. Good.
+  - XXX: Are they cached independent of regular cache? Prob not.
+  - Hrmm can probe for installed fonts:
+    http://remysharp.com/2008/07/08/how-to-detect-if-a-font-is-installed-only-using-javascript/
+    http://www.lalit.org/lab/javascript-css-font-detect
+    http://www.ajaxupdates.com/cssjavascript-font-detector/
+    http://code.google.com/p/jquery-fontavailable/
+- Drag and drop
+  - https://developer.mozilla.org/En/DragDrop/Drag_and_Drop
+  - https://developer.mozilla.org/En/DragDrop/Drag_Operations
+  - https://developer.mozilla.org/En/DragDrop/Dragging_and_Dropping_Multiple_Items
+  - https://developer.mozilla.org/En/DragDrop/Recommended_Drag_Types
+  - https://developer.mozilla.org/En/DragDrop/DataTransfer
+  - Should be no different than normal url handling..
+- Local Storage
+  - https://developer.mozilla.org/en/DOM/Storage#localStorage
+  - Disabled by dom storage pref..
+  - Private browsing mode has its own DB
+    - Memory only?
+  - Disk Avoidance of gStorage and local storage:
+    - mSessionOnly set via nsDOMStorage::CanUseStorage()
+      - Seems to be set to true if cookies are session-only or private
+        browsing mode
+        - Our cookies are NOT session-only with dual cookie jars
+          - but this is ok if we clear the session storage..
+            - XXX: Technically clearing session storage may break
+              sites if cookies remain though
+      - nsDOMStoragePersistentDB not used if mSessionOnly
+  - Can clear with nsDOMStorage::ClearAll() or nsIDOMStorage2::clear()?
+    - These only work for a particular storage. There's both global now
+      and per-origin storage instances
+    - Each docshell has tons of storages for each origin contained in it
+    - Toggling dom.storage.enabled does not clear existing storage
+    - Oh HOT! cookie-changed to clear cookies clears all storages!
+      - happens for both ff3.0 and 3.5 in dom/src/storage/nsDOMStorage.cpp
+  - Conclusion:
+    - can safely enable dom storage
+      - May have minor buggy usability issues unless we preserve it
+        when user is preserving cookies..
+
+Second Pass: Verification of all Torbutton Assumptions
+- "Better privacy controls"
+  - Basically UI stuff for prefs we set already
+  - address bar search disable option is interesting, but not
+    torbutton's job to toggle. Users will hate us.
+- Private browsing
+  - https://developer.mozilla.org/En/Supporting_private_browsing_mode
+    - We should consider an option (off by default) to enable PBM during
+      toggle
+      - It is a good idea because it will let our users use DOM storage
+        safely and also may cause their plugins and other addons to be
+        safe
+      - Doing it always will cause the user to lose fine-grained control
+        of many settings
+        - Also we'll need to prevent them from leaving without toggling tor
+        - Stuff the emit does (grep for NS_PRIVATE_BROWSING_SWITCH_TOPIC and
+          "private-browsing")
+          - XXX:  clear mozilla.org/security/sdr;1. We should too! Wtf is it??
+            - Neg. Best to let them handle this. Users will be annoyed
+              at having to re-enter their passwords..
+          - They also clear the console service..
+          - Recommend watching private-browsing-cancel-vote and blocking if
+            we are performing a db operation
+            - Maybe we want to block transitions during our toggle for safety
+          - XXX: They also clear general.open_location.last_url
+          - XXX: mozilla.org/permissionmanager
+          - XXX: mozilla.org/content-pref/service
+          - XXX: Sets browser.zoom.siteSpecific to false
+          - Interesting.. They clear their titles.. I wonder if some
+            window managers log titles.. But that level of surveillance is
+            unbeatable..
+            - XXX: Unless there is some way for flash or script to read titles?
+          - They empty the clipboard..
+            - Can js access the clipboard?? ...
+            - Yes, but needs special pref+confirmation box
+              - http://www.dynamic-tools.net/toolbox/copyToClipboard/
+          - They clear cache..
+          - Cookies:
+            - Use in-memory table that is different than their default
+              - This could fuck up our cookie storage options
+              - We could maybe prevent them from getting this
+                event by wrapping nsCookieService::Observe(). Lullz..
+          - NavHistory:
+            - XXX: nsNavHistory::AutoCompleteFeedback() doesn't track
+              awesomebar choices for feedback.. Is this done on disk?
+            - Don't add history entries
+            - We should block this observe event too if we can..
+          - The session store stops storing tabs
+            - We could block this observe
+          - XXX: They expunge private temporary files on exit from PMB
+            - This is not done normally until browser exit or
+              "on-profile-change"
+           - emits browser:purge-domain-data.. Mostly just for session
+             editing it appears
+           - Direct component query for pbs.privateBrowsingEnabled
+              - This is where we have no ability to provide certain option
+                control
+              - browser.js seems to prevent user from allowing blocked
+                popups?
+              - Some items in some places context menu get blocked:
+                - Can't delete items from history? placesContext_deleteHost
+              - nsCookiePermission::InPrivateBrowsing() calls direct
+                - but is irellevant
+              - Form history cannot be saved while in PBM.. :(
+              - User won't be prompted for adding login passwords..
+              - Can't remember prefs on content types
+              - Many components read this value upon init:
+                - This fucks up our observer game if tor starts enabled
+                - NavHistory and cookie and dl manager
+                - We could just wrap the bool on startup and lie
+                  and emit later... :/
+                  - Or! emit an exit and an enter always at startup if tor is
+                    enabled.
+  - Read iSec report
+  - Compare to Chrome
+    - API use cases
+- SessionStore
+  - Has been reworked with observers and write methods. Should use those.
+- security.enable_ssl2 to clear session id
+  - Still cleared
+- browser.sessionstore.max_tabs_undo
+  - Yep.
+- SafeBrowsing Update Key removed on cookie clear still?
+  - Yep.
+- Livemark updates have kill events now
+- Test if nsICertStore is still buggy...
+
+Third Pass: Exploit Auditing
+- Remote fonts
+- SVG with HTML
+- Javascript threads+locking
+- Ogg theora and vorbis codecs
+- SQLite
+
+
+- https://developer.mozilla.org/en/Firefox_3_for_developers

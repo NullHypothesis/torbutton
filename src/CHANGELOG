@@ -1,3 +1,26 @@
+1.2.3
+  02 Dec 2009
+  * bugfix: bug 950: Preserve useragent and download settings across toggle
+  * bugfix: bug 1014: Fix XML Parsing Error on XHTML sites in Tor mode
+  * bugfix: bug 1041: Preserve tab history in FF3.5
+  * bugfix: bug 1047: Fix spurious user agent change notice
+  * bugfix: bug 1053: Partial fix for 'TypeError: browser is undefined' error
+  * bugfix: bug 1084: Preserve HTTP accept language for Non-Tor usage
+  * bugfix: bug 1085: Fix test settings issues with dead privoxy
+  * bugfix: bug 1088: Clean up some namespace issues in the main chrome window
+  * bugfix: bug 1091: Fix a lockup when 'Ask Every Time' cookie pref is set
+  * bugfix: bug 1093: Fix cert acceptance dialogs in Firefox 3.5
+  * bugfix: bug 1146: Fixes for properly handling tab restore in FF3.5
+  * bugfix: bug 1152: Close tabs on toggle prevents toggling in FF3.5"
+  * bugfix: bug 1154: Clarify "Last Tor test failed" message
+  * misc: Disable geolocation in FF3.5 during Tor mode
+  * misc: Disable DNS prefetch in FF3.5 in Tor mode and for Tor-loaded tabs
+  * misc: Disable offline app cache during Tor mode
+  * misc: Disable specific site zoom settings during Tor mode
+  * new: Transfer Google cookies between country-code domains. This should
+    make it such that captchas only need to be solved once per Tor session,
+    as opposed to for each country.
+
 1.2.2
   09 Aug 2009
   * bugfix: Workaround Firefox Bug 440892 to prevent external apps from 

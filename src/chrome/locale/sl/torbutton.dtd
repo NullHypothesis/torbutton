@@ -7,6 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Nastavitve posredniškega (proxy) strežnika">
 <!ENTITY torbutton.prefs.recommended_settings "Uporabi priporočene nastavitve posredniškega strežnika za mojo različico Firefoxa">
 <!ENTITY torbutton.prefs.use_privoxy "Uporabi tudi povezavo preko Privoxy-a">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Uporabi nastavitve proxy strežnika po meri">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP posredniški strežnik:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL posredniški strežnik:">
