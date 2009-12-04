@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Sep 2 2009</pubdate>
+   <pubdate>Dec 2 2009</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.2.2.
+Torbutton Firefox extension. It is current as of Torbutton 1.2.3.
 
   </para>
   <sect2 id="adversary">
@@ -500,7 +500,7 @@ anywhere besides Torbutton itself.</para>
 
 <sect3>
 <title><ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@stanford.edu/cookie-jar-selector;2
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2
 - components/cookie-jar-selector.js</ulink></title>
 
 <para>The cookie jar selector (also based on code from <ulink
@@ -808,6 +808,70 @@ been filed for this.
 
    </para>
   </listitem>
+
+  <listitem><command><ulink url="http://www.mozilla.com/en-US/firefox/geolocation/">geo.enabled</ulink></command></listitem>
+   <para>
+
+Torbutton disables Geolocation support in Firefox 3.5 and above whenever tor
+is enabled. This helps Torbutton maintain its
+<link linkend="location">Location Neutrality</link> requirement.
+While Firefox does prompt before divulging geolocational information,
+the assumption is that Tor users will never want to give their
+location away during Tor usage, and even allowing websites to prompt
+them to do so will only cause confusion and accidents to happen. Moreover,
+just because users may approve a site to know their location in non-Tor mode
+does not mean they want it divulged during Tor mode.
+
+   </para>
+  </listitem>
+
+  <listitem><command><ulink
+url="http://kb.mozillazine.org/Browser.zoom.siteSpecific">browser.zoom.siteSpecific</ulink></command></listitem>
+   <para>
+
+Firefox actually remembers your zoom settings for certain sites. CSS
+and Javascript rule can use this to recognize previous visitors to a site.
+This helps Torbutton fulfill its <link linkend="state">State Separation</link>
+requirement.
+
+   </para>
+  </listitem>
+
+  <listitem><command><ulink
+url="https://developer.mozilla.org/en/controlling_dns_prefetching">network.dns.disablePrefetch</ulink></command></listitem>
+   <para>
+
+Firefox 3.5 and above implement prefetching of DNS resolution for hostnames in
+links on a page to decrease page load latency. While Firefox does typically
+disable this behavior when proxies are enabled, we set this pref for added
+safety during Tor usage. Additionally, to prevent Tor-loaded tabs from having
+their links prefetched after a toggle to Non-Tor mode occurs,
+we also set the docShell attribute
+<ulink
+url="http://www.oxymoronical.com/experiments/apidocs/interface/nsIDocShell">
+allowDNSPrefetch</ulink> to false on Tor loaded tabs. This happens in the same
+positions in the code as those for disabling plugins via the allowPlugins
+docShell attribute. This helps Torbutton fulfill its <link
+linkend="isolation">Network Isolation</link> requirement.
+
+   </para>
+  </listitem>
+
+  <listitem><command><ulink
+url="http://kb.mozillazine.org/Browser.cache.offline.enable">browser.cache.offline.enable</ulink></command></listitem>
+   <para>
+
+Firefox has the ability to store web applications in a special cache to allow
+them to continue to operate while the user is offline. Since this subsystem
+is actually different than the normal disk cache, it must be dealt with
+separately. Thus, Torbutton sets this preference to false whenever Tor is
+enabled. This helps Torbutton fulfill its <link linkend="disk">Disk
+Avoidance</link> and <link linkend="state">State Separation</link>
+requirements.
+
+   </para>
+  </listitem>
+
 </orderedlist>
 </sect2>
 <sect2>
@@ -1112,7 +1176,7 @@ to retrieve the original screen values by using <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-sandbox-xpcnativewrapper.html">XPCNativeWrapper</ulink>
 or <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-components-lookupmethod.html">Components.lookupMethod</ulink>.
-We are still looking for a workaround as of Torbutton 1.2.2.
+We are still looking for a workaround as of Torbutton 1.2.3.
 
 <!-- FIXME: Don't forget to update this -->
 
@@ -1468,7 +1532,7 @@ linkend="disk">Disk Avoidance</link> requirements.
 <para>
 
 This setting causes Torbutton to use <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@stanford.edu/cookie-jar-selector;2</ulink> to store
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink> to store
 non-tor cookies in a cookie jar during Tor usage, and clear the Tor cookies
 before restoring the jar.
 </para>
@@ -1498,7 +1562,7 @@ linkend="disk">Disk Avoidance</link> requirements.
 <para>
 
 This setting causes Torbutton to use <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@stanford.edu/cookie-jar-selector;2</ulink> to store
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink> to store
 both Tor and Non-Tor cookies into protected jars.
 </para>
 
@@ -1597,7 +1661,7 @@ clear for both Tor and Non-Tor shutdown. When set to 1 or 2, Torbutton listens
 for the <ulink
 url="http://developer.mozilla.org/en/docs/Observer_Notifications#Application_shutdown">quit-application-granted</ulink> event in
 <function>torbutton_uninstall_observer()</function> and use <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@stanford.edu/cookie-jar-selector;2</ulink>
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
 to clear out all cookies and all cookie jars upon shutdown.  </para>
 <para>
 This setting helps to satisfy the <link
@@ -1625,7 +1689,7 @@ url="https://developer.mozilla.org/en/NsIPrefBranch2#addObserver.28.29">pref
 observer</ulink> in
 the chrome that listens for this update), and Torbutton will load the
   correct jar for the current Tor state via the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@stanford.edu/cookie-jar-selector;2</ulink>
+url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
   component.</para>
 
 <para>
