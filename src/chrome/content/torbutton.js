@@ -16,6 +16,7 @@ var m_tb_window_width = window.outerWidth;
 
 var m_tb_ff3 = false;
 var m_tb_ff35 = false;
+var m_tb_ff36 = false;
 
 var torbutton_window_pref_observer =
 {
@@ -405,6 +406,12 @@ function torbutton_init() {
         m_tb_ff35 = true;
     } else {
         m_tb_ff35 = false;
+    }
+
+    if(versionChecker.compare(appInfo.version, "3.6a1") >= 0) {
+        m_tb_ff36 = true;
+    } else {
+        m_tb_ff36 = false;
     }
 
     // initialize preferences before we start our prefs observer
@@ -2008,7 +2015,8 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
 
             // Likewise for DNS prefetch
             if(m_tb_ff35) {
-                b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                if(!m_tb_ff36)
+                    b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
                 b.docShell.allowDNSPrefetch = !b.__tb_tor_fetched
                     && !tor_enabled;
             }
@@ -2082,7 +2090,8 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 
     if (!tor_tag && m_tb_ff35) {
-        browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+        if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
+            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
         browser.docShell.allowDNSPrefetch = tor_tag;
     }
 
@@ -2145,7 +2154,8 @@ function torbutton_conditional_set(state) {
                 if(b && b.docShell){
                     if(no_plugins) b.docShell.allowPlugins = false;
                     if(m_tb_ff35) {
-                        b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                        if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
+                          b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
                         b.docShell.allowDNSPrefetch = false;
                     }
                 } else {
@@ -3278,7 +3288,8 @@ function torbutton_update_tags(win, new_loc) {
          * before the load, because we don't want prefetch to be enabled
          * on tor tabs once we leave Tor. */
         if(m_tb_ff35) {
-            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+            if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
+              browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
             browser.docShell.allowDNSPrefetch = tor_tag;
         }
 
