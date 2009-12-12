@@ -3626,7 +3626,7 @@ var torbutton_weblistener =
       if(aURI.spec != "about:blank") {
           return torbutton_check_progress(aProgress, aRequest, 0, true);
       } else {
-          torbutton_ecloc(3, "Skipping location change for about:blank");
+          torbutton_eclog(3, "Skipping location change for about:blank");
       }
   },
 
