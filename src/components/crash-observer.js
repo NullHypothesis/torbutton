@@ -89,7 +89,7 @@ StoreWrapper.prototype =
           var x = 0;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; return wrapped."+method+".apply(wrapped, arguments);})";
+          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") return Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; try { return wrapped."+method+".apply(wrapped, arguments);} catch(e) { return e.result; }})";
           // already in scope
           //var Components = this.Components;
           newObj[method] = eval(fun);
