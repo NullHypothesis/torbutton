@@ -1,0 +1,109 @@
+--- nsSessionStore36.js.orig	2009-12-13 11:46:41.000000000 -0800
++++ nsSessionStore36.js	2009-12-13 11:46:18.000000000 -0800
+@@ -112,7 +112,20 @@
+ 
+ //@line 116 "/builds/moz2_slave/linux_build/build/browser/components/sessionstore/src/nsSessionStore.js"
+ 
+-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
++var is_FF36 = false;
++var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
++  .getService(Components.interfaces.nsIXULAppInfo);
++var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
++  .getService(Components.interfaces.nsIVersionComparator);
++
++if(versionChecker.compare(appInfo.version, "3.6a1") >= 0
++        && versionChecker.compare(appInfo.version, "3.7a1") <= 0) {
++    is_FF36 = true;
++    Cu.import("resource://gre/modules/XPCOMUtils.jsm");
++} else {
++    is_FF36 = false;
++    var XPCOMUtils = { generateQI: function() { return null; } };
++}
+ 
+ function debug(aMsg) {
+   aMsg = ("SessionStore: " + aMsg).replace(/\S{80}/g, "$&\n");
+@@ -129,6 +142,9 @@
+ /* :::::::: The Service ::::::::::::::: */
+ 
+ function SessionStoreService() {
++  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
++      .getService(Components.interfaces.nsISupports).wrappedJSObject;
++  this.logger.log(3, "Component Load: New SessionStoreService @mozilla.org/browser/sessionstore;1");
+ }
+ 
+ SessionStoreService.prototype = {
+@@ -1151,9 +1167,26 @@
+     var tabbrowser = aWindow.getBrowser();
+     var tabs = tabbrowser.mTabs;
+     var tabsData = this._windows[aWindow.__SSi].tabs = [];
+-    
+-    for (var i = 0; i < tabs.length; i++)
+-      tabsData.push(this._collectTabData(tabs[i]));
++    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
++        .getService(Components.interfaces.nsIPrefBranch);
++    var bypass_tor = prefs.getBoolPref("extensions.torbutton.notor_sessionstore");
++    var bypass_nontor = prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore");
++  
++    for (var i = 0; i < tabs.length; i++) {
++      if(typeof(tabs[i].linkedBrowser.__tb_tor_fetched) != "undefined") {
++          if(bypass_tor && tabs[i].linkedBrowser.__tb_tor_fetched) {
++              this.logger.log(2, "Skipping saving tor tab: "+tabs[i].linkedBrowser.currentURI.spec);
++              continue; 
++          }
++          if(bypass_nontor && !tabs[i].linkedBrowser.__tb_tor_fetched) {
++              this.logger.log(2, "Skipping saving non-tor tab: "+tabs[i].linkedBrowser.currentURI.spec);
++              continue; 
++          }
++      }
++      this.logger.log(2, "Saving tab: "+tabs[i].linkedBrowser.currentURI.spec);
++      var tabData = this._collectTabData(tabs[i]);
++      if(tabData) tabsData.push(tabData);
++    }
+     
+     this._windows[aWindow.__SSi].selected = tabbrowser.mTabBox.selectedIndex + 1;
+   },
+@@ -1189,6 +1222,7 @@
+         browser.__SS_data.entries[history.index] &&
+         history.index < this._sessionhistory_max_entries - 1 && !aFullData) {
+       tabData = browser.__SS_data;
++      if(!tabData) return null;
+       tabData.index = history.index + 1;
+     }
+     else if (history && history.count > 0) {
+@@ -1434,8 +1468,8 @@
+     for (var i = 0; i < browsers.length; i++) {
+       try {
+         var tabData = this._windows[aWindow.__SSi].tabs[i];
+-        if (browsers[i].__SS_data &&
+-            browsers[i].__SS_data._tabStillLoading)
++        if (!tabData || tabData.entries.length == 0 ||
++            browsers[i].__SS_data && browsers[i].__SS_data._tabStillLoading)
+           continue; // ignore incompletely initialized tabs
+         this._updateTextAndScrollDataForTab(aWindow, browsers[i], tabData);
+       }
+@@ -3064,5 +3098,23 @@
+          (prevChar == "." || prevChar == "/");
+ }
+ 
+-function NSGetModule(aComMgr, aFileSpec)
+-  XPCOMUtils.generateModule([SessionStoreService]);
++const NoModule = {
++  getClassObject: function(aCompMgr, aCID, aIID) {
++    Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
++    return null;
++  },
++  registerSelf: function(aCompMgr, aFileSpec, aLocation, aType) { return; },
++  unregisterSelf: function(aCompMgr, aLocation, aType) { return; },
++  canUnload: function(aCompMgr) { return true; }
++};
++
++
++function NSGetModule(aComMgr, aFileSpec) {
++  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
++        .getService(Components.interfaces.nsIPrefBranch);
++  if(is_FF36) {
++      return XPCOMUtils.generateModule([SessionStoreService]);
++  } else {
++      return NoModule;
++  }
++}
