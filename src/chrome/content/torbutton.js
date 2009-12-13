@@ -1190,7 +1190,7 @@ function torbutton_update_status(mode, force_update) {
         torbutton_setBoolPref("geo.enabled", "geo_enabled", !mode, mode,
                 changed);
         torbutton_setBoolPref("network.dns.disablePrefetch", "dns_prefetch",
-                mode, !mode, changed);
+                mode, mode, changed);
         try {
             if(m_tb_prefs.prefHasUserValue("geo.wifi.access_token")) {
                 m_tb_prefs.clearUserPref("geo.wifi.access_token");
