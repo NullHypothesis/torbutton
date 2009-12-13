@@ -149,9 +149,9 @@ Second Pass: Verification of all Torbutton Assumptions
           - XXX: They expunge private temporary files on exit from PMB
             - This is not done normally until browser exit or
               "on-profile-change"
-           - emits browser:purge-domain-data.. Mostly just for session
-             editing it appears
-           - Direct component query for pbs.privateBrowsingEnabled
+            - emits browser:purge-domain-data.. Mostly just for session
+              editing it appears
+            - Direct component query for pbs.privateBrowsingEnabled
               - This is where we have no ability to provide certain option
                 control
               - browser.js seems to prevent user from allowing blocked
