@@ -15,21 +15,46 @@
 const kMODULE_NAME = "Ignore History";
 const kMODULE_CONTRACTID2 = "@mozilla.org/browser/global-history;2";
 const kMODULE_CONTRACTID3 = "@mozilla.org/browser/nav-history-service;1";
+const kMODULE_CONTRACTID3D = "@mozilla.org/browser/download-history;1";
 const kMODULE_CID = Components.ID("bc666d45-a9a1-4096-9511-f6db6f686881");
 
 /* Mozilla defined interfaces for FF3.0 and 2.0 */
 const kREAL_HISTORY_CID3 = "{88cecbb7-6c63-4b3b-8cd4-84f3b8228c69}";
 const kREAL_HISTORY_CID2 = "{59648a91-5a60-4122-8ff2-54b839c84aed}";
 
-// const kREAL_HISTORY = Components.classesByID[kREAL_HISTORY_CID];
-
 const kHistoryInterfaces2 = [ "nsIBrowserHistory", "nsIGlobalHistory2" ];
 
-const kHistoryInterfaces3 = [ "nsIBrowserHistory", "nsIGlobalHistory2", 
+const kHistoryInterfaces3 = [ "nsIBrowserHistory", "nsIGlobalHistory2",
                              "nsIAutoCompleteSearch", "nsIGlobalHistory3",
-                             "nsIDownloadHistory", "nsIBrowserHistory",
+                             "nsIDownloadHistory",
                              "nsIAutoCompleteSimpleResultListener",
                              "nsINavHistoryService" ];
+
+const kHistoryInterfaces35 = [ "nsIAutoCompleteSearch",
+                              "nsIBrowserHistory",
+                              "nsIObserver",
+                              "nsIGlobalHistory3",
+                              "nsIBrowserHistory_MOZILLA_1_9_1_ADDITIONS",
+                              "nsPIPlacesDatabase",
+                              "nsIDownloadHistory",
+                              "nsIGlobalHistory2",
+                              "nsINavHistoryService",
+                              "nsISupportsWeakReference",
+                              "nsIAutoCompleteSimpleResultListener",
+                              "nsICharsetResolver" ];
+
+const kHistoryInterfaces36 = [
+                              "nsICharsetResolver",
+                              "nsIGlobalHistory3",
+                              "nsIObserver",
+                              "nsPIPlacesDatabase",
+                              "nsIDownloadHistory",
+                              "nsIBrowserHistory",
+                              "nsIGlobalHistory2",
+                              "nsPIPlacesHistoryListenersNotifier",
+                              "nsISupportsWeakReference",
+                              "nsINavHistoryService"
+                              ];
 
 const Cr = Components.results;
 
@@ -52,7 +77,13 @@ function HistoryWrapper() {
   var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
 
-  if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
+  if(versionChecker.compare(appInfo.version, "3.6a1") >= 0) {
+    this._real_history = Components.classesByID[kREAL_HISTORY_CID3];
+    this._interfaces = kHistoryInterfaces36;
+  } else if(versionChecker.compare(appInfo.version, "3.5a1") >= 0) {
+    this._real_history = Components.classesByID[kREAL_HISTORY_CID3];
+    this._interfaces = kHistoryInterfaces35;
+  } else if(versionChecker.compare(appInfo.version, "3.0a1") >= 0) {
     this._real_history = Components.classesByID[kREAL_HISTORY_CID3];
     this._interfaces = kHistoryInterfaces3;
   } else {
@@ -139,7 +170,8 @@ HistoryWrapper.prototype =
     // damned service. how are there more than one?
     //  - http://developer.mozilla.org/en/docs/nsIGlobalHistory3
     var mimic = function(newObj, method) {
-       if(method == "getURIGeckoFlags" || method == "setURIGeckoFlags") {
+       if(method == "getURIGeckoFlags" || method == "setURIGeckoFlags"
+               || method == "hidePage") {
           // Hack to deal with unimplemented methods.
           // XXX: the API docs say to RETURN the not implemented error
           // for these functions as opposed to throw.. Also,
@@ -299,8 +331,14 @@ function (compMgr, fileSpec, location, type) {
       compMgr.registerFactoryLocation(kMODULE_CID,
               kMODULE_NAME,
               kMODULE_CONTRACTID3,
-              fileSpec, 
-              location, 
+              fileSpec,
+              location,
+              type);
+      compMgr.registerFactoryLocation(kMODULE_CID,
+              kMODULE_NAME,
+              kMODULE_CONTRACTID3D,
+              fileSpec,
+              location,
               type);
   }
 };
