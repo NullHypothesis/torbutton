@@ -279,6 +279,7 @@ var torbutton_unique_pref_observer =
                 }
                 break;
 
+            case "extensions.torbutton.disable_livemarks":
             case "extensions.torbutton.spoof_english":
                 torbutton_log(1, "Got update message, updating status");
                 torbutton_update_status(
@@ -1296,13 +1297,22 @@ function torbutton_update_status(mode, force_update) {
                 "full_page_plugins", m_tb_plugin_string, false, changed);
     }
 
+    if(m_tb_ff35) {
+      var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
+                        getService(Ci.nsILivemarkService);
+      if (mode &&
+           m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
+        livemarks.stopUpdateLivemarks();
+        torbutton_log(3, "Disabled livemarks");
+      } else {
+        livemarks.start();
+        torbutton_log(3, "Enabled livemarks");
+      }
+    }
+
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
-
-    // XXX: Pref for this? Hrmm.. It's broken anyways
-    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds",
-            "livemark_refresh", 31536000, mode, changed);
 
     torbutton_set_timezone(mode, false);
 
@@ -2941,6 +2951,16 @@ function torbutton_do_startup()
             torbutton_set_uagent();
         }
         var tor_enabled = torbutton_check_status();
+
+        if(m_tb_ff35 &&
+           m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
+          var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
+                            getService(Ci.nsILivemarkService);
+          if (tor_enabled) {
+            livemarks.stopUpdateLivemarks();
+            torbutton_log(3, "Disabled livemarks");
+          }
+        }
 
         torbutton_set_timezone(tor_enabled, true);
 

@@ -67,7 +67,6 @@ pref("extensions.torbutton.saved.expire_history", 9);
 pref("extensions.torbutton.saved.download_retention", 2);
 pref("extensions.torbutton.saved.formfill", true);
 pref("extensions.torbutton.saved.remember_signons", true);
-pref("extensions.torbutton.saved.livemark_refresh", 0);
 pref("extensions.torbutton.saved.sendSecureXSiteReferrer", true);
 pref("extensions.torbutton.saved.sendRefererHeader", 2);
 pref("extensions.torbutton.saved.dom_storage", true);
@@ -152,6 +151,7 @@ pref("extensions.torbutton.tor_memory_jar",false);
 pref("extensions.torbutton.nontor_memory_jar",false);
 pref("extensions.torbutton.tz_string","");
 pref("extensions.torbutton.launch_warning",true);
+pref("extensions.torbutton.disable_livemarks",true);
 
 // Google Captcha prefs
 // FIXME: NID cookie?
