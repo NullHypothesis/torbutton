@@ -3643,10 +3643,10 @@ var torbutton_weblistener =
   onLocationChange: function(aProgress, aRequest, aURI)
   {
       torbutton_eclog(2, 'onLocationChange: '+aURI.asciiSpec);
-      if(aURI.spec != "about:blank") {
-          return torbutton_check_progress(aProgress, aRequest, 0, true);
+      if(aURI.scheme == "about" || aURI.scheme == "chrome") {
+          torbutton_eclog(3, "Skipping location change for "+aURI.asciiSpec);
       } else {
-          torbutton_eclog(3, "Skipping location change for about:blank");
+          return torbutton_check_progress(aProgress, aRequest, 0, true);
       }
   },
 
