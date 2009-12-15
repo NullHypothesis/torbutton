@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Dec 2 2009</pubdate>
+   <pubdate>Dec 15 2009</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.2.3.
+Torbutton Firefox extension. It is current as of Torbutton 1.2.4.
 
   </para>
   <sect2 id="adversary">
@@ -398,9 +398,7 @@ first.</para>
  <title><ulink
 url="http://developer.mozilla.org/en/docs/nsISessionStore">@mozilla.org/browser/sessionstore;1</ulink> -
 <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore2.js">components/nsSessionStore2.js</ulink>
-and <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.js">components/nsSessionStore3.js</ulink></title>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/nsSessionStore36.js">components/nsSessionStore36.js</ulink></title>
 
 <para>These components address the <link linkend="disk">Disk Avoidance</link>
 requirements of Torbutton. As stated in the requirements, Torbutton needs to
@@ -414,24 +412,25 @@ only hook member functions of a class if they are published in an
 interface that the class implements. Unfortunately, the sessionstore has no
 published interface that is amenable to disabling the writing out of Tor tabs
 in specific. As such, Torbutton had to include the <emphasis>entire</emphasis>
-nsSessionStore from both Firefox 2 and Firefox 3, 
+nsSessionStore from both Firefox 2.0, 3.0, 3.5 and 3.6
 with a couple of modifications to prevent tabs that were loaded with Tor
 enabled from being written to disk, and some version detection code to
 determine which component to load. The <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.diff">diff against the original session
-store</ulink> is included in the SVN repository.</para>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/nsSessionStore36.diff">diff against the original session
+store</ulink> is included in the git repository.</para>
 </sect3>
 <sect3 id="appblocker">
  <title><ulink
 url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/uriloader/external-protocol-service%3B1">@mozilla.org/uriloader/external-protocol-service;1
-</ulink> and <ulink
-url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/uriloader/external-helper-app-service%3B1">@mozilla.org/uriloader/external-helper-app-service;1</ulink>
+</ulink>, <ulink
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/uriloader/external-helper-app-service%3B1">@mozilla.org/uriloader/external-helper-app-service;1</ulink>,
+and <ulink url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/mime%3B1">@mozilla.org/mime;1</ulink>
 - <ulink
-  url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/external-app-blocker.js">components/external-app-blocker.js</ulink></title>
+  url="https://git.torproject.org/checkout/torbutton/master/src/components/external-app-blocker.js">components/external-app-blocker.js</ulink></title>
  <para>
 Due to <link linkend="FirefoxBugs">Firefox Bug</link> <ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=440892">440892</ulink> allowing Firefox 3.x to automatically launch some
-applications without user intervention, Torbutton had to wrap the two
+applications without user intervention, Torbutton had to wrap the three
 components involved in launching external applications to provide user
 confirmation before doing so while Tor is enabled. Since external applications
 do not obey proxy settings, they can be manipulated to automatically connect
@@ -444,7 +443,7 @@ Obedience</link> Requirement.
 <title><ulink
 url="http://lxr.mozilla.org/seamonkey/source/browser/components/sessionstore/src/nsSessionStartup.js">@mozilla.org/browser/sessionstartup;1</ulink> -
     <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">components/crash-observer.js</ulink></title>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/crash-observer.js">components/crash-observer.js</ulink></title>
 
 <para>This component wraps the Firefox Session Startup component that is in
 charge of <ulink
@@ -471,7 +470,7 @@ linkend="isolation">Network Isolation</link> requirements.
 <sect3>
 <title><ulink url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/global-history;2">@mozilla.org/browser/global-history;2</ulink>
 - <ulink
-  url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/ignore-history.js">components/ignore-history.js</ulink></title>
+  url="https://git.torproject.org/checkout/torbutton/master/src/components/ignore-history.js">components/ignore-history.js</ulink></title>
 
 <para>This component was contributed by <ulink
 url="http://www.collinjackson.com/">Collin Jackson</ulink> as a method for defeating
@@ -490,6 +489,27 @@ This component helps satisfy the <link linkend="state">State Separation</link>
 and <link linkend="disk">Disk Avoidance</link> requirements of Torbutton.
 </para>
 </sect3>
+<sect3 id="livemarks">
+<title><ulink
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/livemark-service;2">@mozilla.org/browser/livemark-service;2</ulink>
+- <ulink
+  url="https://git.torproject.org/checkout/torbutton/master/src/components/block-livemarks.js">components/block-livemarks.js</ulink></title>
+<para>
+
+The <ulink
+url="http://www.mozilla.com/en-US/firefox/livebookmarks.html">livemark</ulink> service
+is started by a timer that runs 5 seconds after Firefox
+startup. As a result, we cannot simply call the stopUpdateLivemarks() method to
+disable it. We must wrap the component to prevent this start() call from
+firing in the event the browser starts in Tor mode.
+
+</para>
+<para>
+This component helps satisfy the <link linkend="isolation">Network
+Isolation</link> and <link linkend="setpreservation">Anonymity Set
+Preservation</link> requirements.
+</para>
+</sect3>
 </sect2>
 <sect2>
 <title>New Components</title>
@@ -500,7 +520,7 @@ anywhere besides Torbutton itself.</para>
 
 <sect3>
 <title><ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2
 - components/cookie-jar-selector.js</ulink></title>
 
 <para>The cookie jar selector (also based on code from <ulink
@@ -519,7 +539,7 @@ Isolation</link> requirement of Torbutton.
 </sect3>
 <sect3>
 <title><ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/torbutton-logger.js">@torproject.org/torbutton-logger;1
+url="https://git.torproject.org/checkout/torbutton/master/src/components/torbutton-logger.js">@torproject.org/torbutton-logger;1
 - components/torbutton-logger.js</ulink></title>
 
 <para>The torbutton logger component allows on-the-fly redirection of torbutton
@@ -534,7 +554,7 @@ change the loglevel on the fly by changing
 <sect3 id="windowmapper">
 
 <title><ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/window-mapper.js">@torproject.org/content-window-mapper;1
+url="https://git.torproject.org/checkout/torbutton/master/src/components/window-mapper.js">@torproject.org/content-window-mapper;1
 - components/window-mapper.js</ulink></title>
 
 <para>Torbutton tags Firefox <ulink
@@ -555,7 +575,7 @@ result is cached inside the component.
 </sect3>
 <sect3 id="contentpolicy">
 <title><ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker.js">@torproject.org/cssblocker;1
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cssblocker.js">@torproject.org/cssblocker;1
 - components/cssblocker.js</ulink></title>
 
 <para>This is a key component to Torbutton's security measures. When Tor is
@@ -588,7 +608,7 @@ disabled. </para>
 Finally, some of the work that logically belongs to the content policy is
 instead handled by the <command>torbutton_http_observer</command> and
 <command>torbutton_weblistener</command> in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink>. These two objects handle blocking of
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.js">torbutton.js</ulink>. These two objects handle blocking of
 Firefox 3 favicon loads, popups, and full page plugins, which for whatever
 reason are not passed to the Firefox content policy itself (see Firefox Bugs 
 <ulink
@@ -661,11 +681,11 @@ window.</para>
 
 <sect2 id="browseroverlay">
 <title>Browser Overlay - <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.xul">torbutton.xul</ulink></title>
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.xul">torbutton.xul</ulink></title>
 
 <para>The browser overlay, torbutton.xul, defines the toolbar button, the status
 bar, and events for toggling the button. The overlay code is in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">chrome/content/torbutton.js</ulink>.
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.js">chrome/content/torbutton.js</ulink>.
 It contains event handlers for preference update, shutdown, upgrade, and
 location change events.</para>
 
@@ -696,6 +716,8 @@ Torbutton setting. These are:
 </para>
 <orderedlist>
 
+<!--
+Not set any more.
  <listitem><ulink
 url="http://kb.mozillazine.org/Browser.bookmarks.livemark_refresh_seconds">browser.bookmarks.livemark_refresh_seconds</ulink>
 <para>
@@ -712,6 +734,8 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Firefox Bug
 functioning completely correctly.
 </para>
   </listitem>
+-->
+
  <listitem><ulink
 url="http://kb.mozillazine.org/Network.security.ports.banned">network.security.ports.banned</ulink>
  <para>
@@ -809,7 +833,7 @@ been filed for this.
    </para>
   </listitem>
 
-  <listitem><command><ulink url="http://www.mozilla.com/en-US/firefox/geolocation/">geo.enabled</ulink></command></listitem>
+  <listitem><command><ulink url="http://www.mozilla.com/en-US/firefox/geolocation/">geo.enabled</ulink></command>
    <para>
 
 Torbutton disables Geolocation support in Firefox 3.5 and above whenever tor
@@ -826,7 +850,7 @@ does not mean they want it divulged during Tor mode.
   </listitem>
 
   <listitem><command><ulink
-url="http://kb.mozillazine.org/Browser.zoom.siteSpecific">browser.zoom.siteSpecific</ulink></command></listitem>
+url="http://kb.mozillazine.org/Browser.zoom.siteSpecific">browser.zoom.siteSpecific</ulink></command>
    <para>
 
 Firefox actually remembers your zoom settings for certain sites. CSS
@@ -838,7 +862,7 @@ requirement.
   </listitem>
 
   <listitem><command><ulink
-url="https://developer.mozilla.org/en/controlling_dns_prefetching">network.dns.disablePrefetch</ulink></command></listitem>
+url="https://developer.mozilla.org/en/controlling_dns_prefetching">network.dns.disablePrefetch</ulink></command>
    <para>
 
 Firefox 3.5 and above implement prefetching of DNS resolution for hostnames in
@@ -858,7 +882,7 @@ linkend="isolation">Network Isolation</link> requirement.
   </listitem>
 
   <listitem><command><ulink
-url="http://kb.mozillazine.org/Browser.cache.offline.enable">browser.cache.offline.enable</ulink></command></listitem>
+url="http://kb.mozillazine.org/Browser.cache.offline.enable">browser.cache.offline.enable</ulink></command>
    <para>
 
 Firefox has the ability to store web applications in a special cache to allow
@@ -872,15 +896,17 @@ requirements.
    </para>
   </listitem>
 
+<!-- FIXME: We should make it possible to search for ALL modified FF prefs -->
+
 </orderedlist>
 </sect2>
 <sect2>
  <title>Preferences Window - <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/preferences.xul">preferences.xul</ulink></title>
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/preferences.xul">preferences.xul</ulink></title>
 
 <para>The preferences window of course lays out the Torbutton preferences, with
 handlers located in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/preferences.js">chrome/content/preferences.js</ulink>.</para>
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/preferences.js">chrome/content/preferences.js</ulink>.</para>
 </sect2>
 <sect2>
  <title>Other Windows</title>
@@ -897,11 +923,11 @@ the status bar, the toolbutton, and the about page.</para>
 
 The act of toggling is connected to <function>torbutton_toggle()</function>
 via the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.xul">torbutton.xul</ulink>
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.xul">torbutton.xul</ulink>
 and <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/popup.xul">popup.xul</ulink>
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/popup.xul">popup.xul</ulink>
 overlay files. Most of the work in the toggling process is present in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink> 
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.js">torbutton.js</ulink> 
 
 </para>
 <para>
@@ -999,12 +1025,12 @@ Torbutton can easily inspect for a hidden link with an id of
 or <command>failure</command> to indicate if the
 user hit the page from a Tor IP, a non-Tor IP. This check is handled in
 <function>torbutton_test_settings()</function> in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">torbutton.js</ulink>.
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.js">torbutton.js</ulink>.
 Presenting the results to the user is handled by the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/preferences.xul">preferences
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/preferences.xul">preferences
 window</ulink>
 callback <function>torbutton_prefs_test_settings()</function> in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/preferences.js">preferences.js</ulink>.  
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/preferences.js">preferences.js</ulink>.  
 
   </para>
  </sect2>
@@ -1037,7 +1063,7 @@ event occurs
  (<function>torbutton_update_tags()</function>), and every time the tor state is changed
  (<function>torbutton_update_status()</function>). As a backup measure, plugins are also
  prevented from loading by the content policy in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> if Tor is
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> if Tor is
  enabled and this option is set.
  </para>
 
@@ -1099,7 +1125,7 @@ linkend="proxy">Proxy Obedience</link> requirement.
  <para>Option: <command>extensions.torbutton.isolate_content</command></para>
 
 <para>Enabling this preference is what enables the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> content policy
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cssblocker.js">@torproject.org/cssblocker;1</ulink> content policy
 mentioned above, and causes it to block content load attempts in pages an
 opposite Tor state from the current state. Freshly loaded <ulink
 url="https://developer.mozilla.org/en/XUL/tabbrowser">browser
@@ -1149,7 +1175,7 @@ linkend="isolation">Network Isolation</link> requirement.
  <para>Option: <command>extensions.torbutton.kill_bad_js</command></para>
 
 <para>This setting enables injection of the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/jshooks.js">Javascript
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/jshooks.js">Javascript
 hooking code</ulink>. This is done in the chrome in
 <function>torbutton_hookdoc()</function>, which is called ultimately by both the 
 <ulink
@@ -1176,7 +1202,7 @@ to retrieve the original screen values by using <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-sandbox-xpcnativewrapper.html">XPCNativeWrapper</ulink>
 or <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-components-lookupmethod.html">Components.lookupMethod</ulink>.
-We are still looking for a workaround as of Torbutton 1.2.3.
+We are still looking for a workaround as of Torbutton 1.2.4.
 
 <!-- FIXME: Don't forget to update this -->
 
@@ -1269,8 +1295,35 @@ for Tor usage.
 </para>
 </sect2>
 <sect2>
-<title>Block Tor/Non-Tor access to network from file:// urls (recommended)</title>
+<title>Disable livemarks updates during Tor usage (recommended)</title>
   <para>Option:
+   <simplelist>
+   <member><command>extensions.torbutton.disable_livemarks</command></member>
+   </simplelist>
+  </para>
+
+<para>
+This option causes Torbutton to prevent Firefox from loading <ulink
+url="http://www.mozilla.com/firefox/livebookmarks.html">Livemarks</ulink> during
+Tor usage. Because people often have very personalized Livemarks (such as RSS
+feeds of Wikipedia articles they maintain, etc). This is accomplished both by
+<link linkend="livemarks">wrapping the livemark-service component</link> and
+by calling stopUpdateLivemarks() on the <ulink
+url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/livemark-service;2">Livemark
+service</ulink> when Tor is enabled.
+
+</para>
+
+<para>
+This helps satisfy the <link linkend="isolation">Network
+Isolation</link> and <link linkend="setpreservation">Anonymity Set
+Preservation</link> requirements.
+</para>
+
+</sect2>
+<sect2>
+<title>Block Tor/Non-Tor access to network from file:// urls (recommended)</title>
+  <para>Options:
    <simplelist>
    <member><command>extensions.torbutton.block_tor_file_net</command></member>
    <member><command>extensions.torbutton.block_nontor_file_net</command></member>
@@ -1297,14 +1350,14 @@ This preference helps to ensure Tor's <link linkend="isolation">Network
 Isolation</link> requirement, by preventing file urls from executing network
 operations in opposite Tor states. Also, allowing pages to submit arbitrary
 files to arbitrary sites just generally seems like a bad idea.
- 
+
 </para>
 </sect2>
 <sect2>
 
 <title>Close all Tor/Non-Tor tabs and windows on toggle (optional)</title>
 
-  <para>Options: 
+  <para>Options:
    <simplelist>
    <member><command>extensions.torbutton.close_nontor</command></member>
    <member><command>extensions.torbutton.close_tor</command></member>
@@ -1392,7 +1445,7 @@ requirements.
   </para>
 
 <para>These four settings govern the behavior of the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/ignore-history.js">components/ignore-history.js</ulink>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/ignore-history.js">components/ignore-history.js</ulink>
 history blocker component mentioned above. By hooking the browser's view of
 the history itself via the <ulink
 url="http://www.oxymoronical.com/experiments/xpcomref/applications/Firefox/3.5/components/%40mozilla.org/browser/global-history;2">@mozilla.org/browser/global-history;2</ulink>
@@ -1532,7 +1585,7 @@ linkend="disk">Disk Avoidance</link> requirements.
 <para>
 
 This setting causes Torbutton to use <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink> to store
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink> to store
 non-tor cookies in a cookie jar during Tor usage, and clear the Tor cookies
 before restoring the jar.
 </para>
@@ -1562,7 +1615,7 @@ linkend="disk">Disk Avoidance</link> requirements.
 <para>
 
 This setting causes Torbutton to use <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink> to store
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink> to store
 both Tor and Non-Tor cookies into protected jars.
 </para>
 
@@ -1661,7 +1714,7 @@ clear for both Tor and Non-Tor shutdown. When set to 1 or 2, Torbutton listens
 for the <ulink
 url="http://developer.mozilla.org/en/docs/Observer_Notifications#Application_shutdown">quit-application-granted</ulink> event in
 <function>torbutton_uninstall_observer()</function> and use <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
 to clear out all cookies and all cookie jars upon shutdown.  </para>
 <para>
 This setting helps to satisfy the <link
@@ -1682,14 +1735,14 @@ linkend="state">State Separation</link> requirement.
 
   <para>This is no longer a user visible option, and is enabled by default. In
 the event of a crash, the Torbutton <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">components/crash-observer.js</ulink> 
+url="https://git.torproject.org/checkout/torbutton/master/src/components/crash-observer.js">components/crash-observer.js</ulink> 
   component will notify the Chrome (via the
   <command>extensions.torbutton.crashed</command> pref and a <ulink
 url="https://developer.mozilla.org/en/NsIPrefBranch2#addObserver.28.29">pref
 observer</ulink> in
 the chrome that listens for this update), and Torbutton will load the
   correct jar for the current Tor state via the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
   component.</para>
 
 <para>
@@ -1712,7 +1765,7 @@ crashes.
   </para>
 
   <para>This option works with the Torbutton <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
+url="https://git.torproject.org/checkout/torbutton/master/src/components/crash-observer.js">crash-observer.js</ulink> 
   to set the Tor state after a crash is detected (via the 
   <command>extensions.torbutton.crashed</command> pref). To confirm for
 false positives (such as session restore failures, upgrade, normal
@@ -1742,7 +1795,7 @@ settings and saved sessions are reloaded from a fixed Tor state.
   </para>
 
   <para>This option also works with the Torbutton <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/crash-observer.js">crash-observer.js</ulink> 
+url="https://git.torproject.org/checkout/torbutton/master/src/components/crash-observer.js">crash-observer.js</ulink> 
   to set the Tor state after a normal startup is detected (via the 
   <command>extensions.torbutton.noncrashed</command> pref). To confirm for
 false positives
@@ -1765,7 +1818,7 @@ Firefox exit and checks this value as well during startup.
   </para>
 
   <para>If these options are enabled, the <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/components/nsSessionStore3.js">replacement nsSessionStore.js</ulink>
+url="https://git.torproject.org/checkout/torbutton/master/src/components/nsSessionStore3.js">replacement nsSessionStore.js</ulink>
   component checks the <command>__tb_tor_fetched</command> tag of tabs before writing them
   out. If the tag is from a blocked Tor state, the tab is not written to disk.
   </para>
@@ -1890,7 +1943,7 @@ some may desire to mask their referrer for general privacy concerns.
 These settings govern if Torbutton attempts to isolate the user's SSL
 certificates into separate jars for each Tor state. This isolation is
 implemented in <function>torbutton_jar_certs()</function> in <ulink
-url="https://tor-svn.freehaven.net/svn/torbutton/trunk/src/chrome/content/torbutton.js">chrome/content/torbutton.js</ulink>,
+url="https://git.torproject.org/checkout/torbutton/master/src/chrome/content/torbutton.js">chrome/content/torbutton.js</ulink>,
 which calls <function>torbutton_jar_cert_type()</function> and
 <function>torbutton_unjar_cert_type()</function> for each certificate type in
 the <ulink
@@ -2204,6 +2257,7 @@ dirty.
 
     </para>
     </listitem>
+<!--
     <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=437016">Bug 437016 -
 nsIContentPolicy::shouldLoad not called for livemarks</ulink>
@@ -2215,6 +2269,7 @@ livemarks fetches.
 
     </para>
     </listitem>
+-->
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=418986">Bug 418986 - window.screen
 provides a large amount of identifiable information</ulink>
