@@ -98,13 +98,7 @@ ExternalWrapper.prototype =
   /* Copies methods from the true object we are wrapping */
   copyMethods: function(wrapped) {
     var mimic = function(newObj, method) {
-       if(method == "XXXX") {
-          // Hack to deal with unimplemented methods.
-          // XXX: the API docs say to RETURN the not implemented error
-          // for these functions as opposed to throw...
-          var fun = "(function (){return Components.results.NS_ERROR_NOT_IMPLEMENTED; })";
-          newObj[method] = eval(fun);
-       } else if(typeof(wrapped[method]) == "function") {
+       if(typeof(wrapped[method]) == "function") {
           // Code courtesy of timeless: 
           // http://www.webwizardry.net/~timeless/windowStubs.js
           var params = [];
@@ -113,8 +107,24 @@ ExternalWrapper.prototype =
           var call;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") return Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; try { return wrapped."+method+".apply(wrapped, arguments);} catch(e) { return e.result; }})";
-          newObj[method] = eval(fun);
+          if(method == "getTypeFromFile" || method == "getTypeFromExtension") {
+           // XXX: Due to https://developer.mozilla.org/en/Exception_logging_in_JavaScript
+           // this is necessary to prevent error console noise on the return to C++ code.
+           // It is not technically correct, but as far as I can tell, returning null
+           // here should be equivalent to throwing an error for the codepaths invovled
+           var fun = "(function "+call+"{"+
+              "if (arguments.length < "+wrapped[method].length+")"+
+              "  throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS;"+
+              "try { return wrapped."+method+".apply(wrapped, arguments); }"+
+              "catch(e) { if(e.result == Components.results.NS_ERROR_NOT_AVAILABLE) return null; else throw e;} })";
+            newObj[method] = eval(fun);
+          } else {
+            var fun = "(function "+call+"{"+
+              "if (arguments.length < "+wrapped[method].length+")"+
+              "  throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS;"+
+              "return wrapped."+method+".apply(wrapped, arguments);})";
+            newObj[method] = eval(fun);
+          }
        } else {
           newObj.__defineGetter__(method, function() { return wrapped[method]; });
           newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });

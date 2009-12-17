@@ -162,25 +162,21 @@ HistoryWrapper.prototype =
   },
 
 
-  /* 
+  /*
    * Copies methods from the true history object we are wrapping
    */
   copyMethods: function(wrapped) {
-    // XXX: "Not all histories implement all methods"? wtf?? It's a 
-    // damned service. how are there more than one?
-    //  - http://developer.mozilla.org/en/docs/nsIGlobalHistory3
     var mimic = function(newObj, method) {
        if(method == "getURIGeckoFlags" || method == "setURIGeckoFlags"
                || method == "hidePage") {
-          // Hack to deal with unimplemented methods.
-          // XXX: the API docs say to RETURN the not implemented error
-          // for these functions as opposed to throw.. Also,
-          // what other "histories" actually DO implement these functions?
-          // Did we just break them somehow?
+          // XXX: Due to https://developer.mozilla.org/en/Exception_logging_in_JavaScript
+          // this is necessary to prevent error console noise on the return to C++ code.
+          // It is not technically correct, but as far as I can tell, the return values
+          // for these calls are never checked anyway.
           var fun = "(function (){return Components.results.NS_ERROR_NOT_IMPLEMENTED; })";
           newObj[method] = eval(fun);
        } else if(typeof(wrapped[method]) == "function") {
-          // Code courtesy of timeless: 
+          // Code courtesy of timeless:
           // http://www.webwizardry.net/~timeless/windowStubs.js
           var params = [];
           params.length = wrapped[method].length;
@@ -188,7 +184,10 @@ HistoryWrapper.prototype =
           var call;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") return Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; try { return wrapped."+method+".apply(wrapped, arguments);} catch(e) { return e.result; }})";
+          var fun = "(function "+call+"{"+
+            "if (arguments.length < "+wrapped[method].length+")"+
+            "  throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS;"+
+            "return wrapped."+method+".apply(wrapped, arguments);})";
           newObj[method] = eval(fun);
        } else {
           newObj.__defineGetter__(method, function() { return wrapped[method]; });

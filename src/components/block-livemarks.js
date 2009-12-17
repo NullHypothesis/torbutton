@@ -72,7 +72,10 @@ LivemarkWrapper.prototype =
           var call;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          var fun = "(function "+call+"{if (arguments.length < "+wrapped[method].length+") return Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS; try { return wrapped."+method+".apply(wrapped, arguments);} catch(e) { return e.result; }})";
+          var fun = "(function "+call+"{"+
+            "if (arguments.length < "+wrapped[method].length+")"+
+            "  throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS;"+
+            "return wrapped."+method+".apply(wrapped, arguments);})";
           newObj[method] = eval(fun);
        } else {
           newObj.__defineGetter__(method, function() { return wrapped[method]; });
