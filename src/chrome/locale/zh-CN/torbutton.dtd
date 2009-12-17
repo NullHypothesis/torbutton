@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "代理设置">
 <!ENTITY torbutton.prefs.recommended_settings "为该版本 Firefox 使用推荐的代理设置">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "使用 Polipo">
 <!ENTITY torbutton.prefs.custom_settings "使用自定义代理设置">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP 代理：">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL 代理：">
@@ -83,7 +83,7 @@
 <!ENTITY torbutton.prefs.restore_defaults "恢复默认设置">
 <!ENTITY torbutton.prefs.test_settings "测试代理设置">
 <!ENTITY torbutton.prefs.test_auto "每次启动Firefox后在第一次切换 Tor 时自动验证 Tor 设置">
-<!ENTITY torbutton.prefs.disable_livemarks "使用 Tor 时禁用 Livemark(RSS书签) 更新">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "使用Tor浏览时不要将Cookie存入磁盘">
 <!ENTITY torbutton.prefs.nontor_memory_jar "不用Tor浏览时不要将Cookie存入磁盘">
 <!ENTITY torbutton.prefs.session_restore "让Firefox进程保存功能保存并恢复如下标签页：">
@@ -91,5 +91,9 @@
 <!ENTITY torbutton.prefs.tor_tabs "使用Tor的标签页">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "不使用代理的地址:">
+<!ENTITY torbutton.prefs.no_proxy_warning "警告：请不要使用上述任何主机名。">
+<!ENTITY torbutton.prefs.disable_livemarks "使用 Tor 时禁用 Livemark(RSS书签) 更新">
+<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
+<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
