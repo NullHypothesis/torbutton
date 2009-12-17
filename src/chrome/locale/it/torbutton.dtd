@@ -83,7 +83,7 @@
 <!ENTITY torbutton.prefs.restore_defaults "Reimposta i valori di default">
 <!ENTITY torbutton.prefs.test_settings "Fai un test delle impostazioni">
 <!ENTITY torbutton.prefs.test_auto "Verifica le mie impostazioni Tor dopo la prima volta che lo attivo o disattivo ad ogni avvio di Firefox">
-<!ENTITY torbutton.prefs.disable_livemarks "Disabilita gli aggiornamenti dei livemarks durante l'uso di Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Non scrivere cookie Tor sul disco">
 <!ENTITY torbutton.prefs.nontor_memory_jar "Non scrivere cookie non-Tor sul disco">
 <!ENTITY torbutton.prefs.session_restore "Fai che il session store salvi e ripristini queste schede:">
@@ -93,3 +93,7 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.disable_livemarks "Disabilita gli aggiornamenti dei livemarks durante l'uso di Tor">
+<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
+<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

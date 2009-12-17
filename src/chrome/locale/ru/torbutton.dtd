@@ -83,7 +83,7 @@
 <!ENTITY torbutton.prefs.restore_defaults "Восстановить значения по умолчанию">
 <!ENTITY torbutton.prefs.test_settings "Проверить настройки">
 <!ENTITY torbutton.prefs.test_auto "Проверять настройки Tor, каждый раз когда я включаю этот режим при каждом запуске Firefox">
-<!ENTITY torbutton.prefs.disable_livemarks "Отключить обновление livemarks во время работы в Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Не писать cookies на диск в режиме Tor">
 <!ENTITY torbutton.prefs.nontor_memory_jar "Не писать cookies на диск в режиме Не-Tor">
 <!ENTITY torbutton.prefs.session_restore "Может ли храниться сохраняться и воссанавливаться сессия со следующими вкладками:">
@@ -91,5 +91,9 @@
 <!ENTITY torbutton.prefs.tor_tabs "Вкладки загруженые в режиме Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "Нет прокси для">
+<!ENTITY torbutton.prefs.no_proxy_warning "Внимание: Не вносите никаких имен доменов в поле выше">
+<!ENTITY torbutton.prefs.disable_livemarks "Отключить обновление livemarks во время работы в Tor">
+<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
+<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

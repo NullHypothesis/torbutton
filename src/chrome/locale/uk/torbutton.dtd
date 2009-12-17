@@ -1,5 +1,5 @@
 <!ENTITY torbutton.prefs.title "Налаштування Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
+<!ENTITY torbutton.prefs.display_settings "Показати опції">
 <!ENTITY torbutton.prefs.display_panel "Показувати стан проксі Tor у рядку стану">
 <!ENTITY torbutton.prefs.panel_format "Формат поля у рядку стану">
 <!ENTITY torbutton.prefs.panel_text_format "Текст">
@@ -8,7 +8,7 @@
 <!ENTITY torbutton.prefs.recommended_settings "Використовувати рекомендовані значення для моєї версії Фірефоху">
 <!ENTITY torbutton.prefs.use_privoxy "Використовувати Privoxy">
 <!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Використовувати незвичні налаштування проксі">
+<!ENTITY torbutton.prefs.custom_settings "Використовувати звичайні налаштування проксі">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP проксі:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL проксі:">
 <!ENTITY torbutton.prefs.proxy.host.ftp "FTP проксі:">
@@ -67,7 +67,7 @@
 <!ENTITY torbutton.prefs.reload_crashed_jar "Перевантажити куки/очистити куки при падінні Фірефоху (рекомендовано)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Зберігати як Tor, так і не-Tor куки у захищеному стані (небезпечно)">
 <!ENTITY torbutton.prefs.clear_http_auth "Очистити сесії HTTP аутентифікації (рекомендовано)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
+<!ENTITY torbutton.prefs.block_js_history "Виділити доступ до історії навігації до Tor (важливо)">
 <!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
 <!ENTITY torbutton.prefs.close_tor "Close all Tor windows and tabs on toggle (optional)">
 <!ENTITY torbutton.prefs.close_nontor "Close all Non-Tor windows and tabs on toggle (optional)">
@@ -93,3 +93,7 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
+<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
+<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

@@ -1,3 +1,14 @@
+1.2.4
+  16 Dec 2009
+  * bugfix: bug 1169: Fix blank popup conflict with Google Toolbar
+  * bugfix: bug 1171: Properly store and set network.dns.disablePrefetch
+  * bugfix: bug 1165: Fix an exception on toggle in FF3.6
+  * bugfix: bug 1163: Fix history loss in FF3.6
+  * bugfix: Fix a typo error during logging
+  * bugfix: Properly handle session restore in FF3.6
+  * misc: Kill a warning message about missing properties in window-mapper.js
+  * new: Add a new pref to disable Livemark updates during Tor usage (FF3.5+)
+
 1.2.3
   02 Dec 2009
   * bugfix: bug 950: Preserve useragent and download settings across toggle

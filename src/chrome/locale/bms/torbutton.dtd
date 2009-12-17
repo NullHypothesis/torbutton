@@ -83,7 +83,7 @@
 <!ENTITY torbutton.prefs.restore_defaults "မူလအေျခအေနသို႕ ျပန္လည္ ထည့္သြင္းရန္">
 <!ENTITY torbutton.prefs.test_settings "ခ်ိန္ညိႇမႈမ်ားကို စမ္းသပ္ရန္">
 <!ENTITY torbutton.prefs.test_auto "Firefox စတင္ျပီး ပထမဆံုး ေျပာင္းလဲအသံုးျပဳမႈျပီးလွ်င္ မိမိ၏ Tor ခ်ိန္ညိႇမႈမ်ားကို ျပန္လည္ စမ္းသပ္ရန္">
-<!ENTITY torbutton.prefs.disable_livemarks "Tor အသံုးျပဳေနစဥ္အတြင္း livemarks အသစ္ထည့္သြင္းမႈမ်ားကုိ ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Tor cookies မ်ားကို disk အတြင္းသုိ႕ ေရးသားျခင္း မျပဳရန္">
 <!ENTITY torbutton.prefs.nontor_memory_jar "Tor မဟုတ္ေသာ cookies မ်ားကုိ disk အတြင္းသို႕ ေရးသားျခင္း မျပဳရန္">
 <!ENTITY torbutton.prefs.session_restore "session သိမ္းဆည္းမႈအတြက္ သိမ္းဆည္းရန္ ရန္ႏွင့္ ျပန္လည္ တင္ယူရန္ tabs မ်ား :">
@@ -93,3 +93,7 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.disable_livemarks "Tor အသံုးျပဳေနစဥ္အတြင္း livemarks အသစ္ထည့္သြင္းမႈမ်ားကုိ ပိတ္ပင္ထားရန္">
+<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
+<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

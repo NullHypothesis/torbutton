@@ -16,6 +16,7 @@ var m_tb_window_width = window.outerWidth;
 
 var m_tb_ff3 = false;
 var m_tb_ff35 = false;
+var m_tb_ff36 = false;
 
 var torbutton_window_pref_observer =
 {
@@ -278,6 +279,7 @@ var torbutton_unique_pref_observer =
                 }
                 break;
 
+            case "extensions.torbutton.disable_livemarks":
             case "extensions.torbutton.spoof_english":
                 torbutton_log(1, "Got update message, updating status");
                 torbutton_update_status(
@@ -405,6 +407,12 @@ function torbutton_init() {
         m_tb_ff35 = true;
     } else {
         m_tb_ff35 = false;
+    }
+
+    if(versionChecker.compare(appInfo.version, "3.6a1") >= 0) {
+        m_tb_ff36 = true;
+    } else {
+        m_tb_ff36 = false;
     }
 
     // initialize preferences before we start our prefs observer
@@ -1256,7 +1264,7 @@ function torbutton_update_status(mode, force_update) {
         torbutton_setBoolPref("geo.enabled", "geo_enabled", !mode, mode,
                 changed);
         torbutton_setBoolPref("network.dns.disablePrefetch", "dns_prefetch",
-                mode, !mode, changed);
+                mode, mode, changed);
         try {
             if(m_tb_prefs.prefHasUserValue("geo.wifi.access_token")) {
                 m_tb_prefs.clearUserPref("geo.wifi.access_token");
@@ -1362,13 +1370,22 @@ function torbutton_update_status(mode, force_update) {
                 "full_page_plugins", m_tb_plugin_string, false, changed);
     }
 
+    if(m_tb_ff35) {
+      var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
+                        getService(Ci.nsILivemarkService);
+      if (mode &&
+           m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
+        livemarks.stopUpdateLivemarks();
+        torbutton_log(3, "Disabled livemarks");
+      } else {
+        livemarks.start();
+        torbutton_log(3, "Enabled livemarks");
+      }
+    }
+
     // No need to clear cookies if just updating prefs
     if(!changed && force_update)
         return;
-
-    // XXX: Pref for this? Hrmm.. It's broken anyways
-    torbutton_setIntPref("browser.bookmarks.livemark_refresh_seconds",
-            "livemark_refresh", 31536000, mode, changed);
 
     torbutton_set_timezone(mode, false);
 
@@ -2098,7 +2115,8 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
 
             // Likewise for DNS prefetch
             if(m_tb_ff35) {
-                b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                if(!m_tb_ff36)
+                    b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
                 b.docShell.allowDNSPrefetch = !b.__tb_tor_fetched
                     && !tor_enabled;
             }
@@ -2172,7 +2190,8 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 
     if (!tor_tag && m_tb_ff35) {
-        browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+        if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
+            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
         browser.docShell.allowDNSPrefetch = tor_tag;
     }
 
@@ -2235,7 +2254,8 @@ function torbutton_conditional_set(state) {
                 if(b && b.docShell){
                     if(no_plugins) b.docShell.allowPlugins = false;
                     if(m_tb_ff35) {
-                        b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+                        if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
+                          b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
                         b.docShell.allowDNSPrefetch = false;
                     }
                 } else {
@@ -3022,6 +3042,16 @@ function torbutton_do_startup()
         }
         var tor_enabled = torbutton_check_status();
 
+        if(m_tb_ff35 &&
+           m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
+          var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
+                            getService(Ci.nsILivemarkService);
+          if (tor_enabled) {
+            livemarks.stopUpdateLivemarks();
+            torbutton_log(3, "Disabled livemarks");
+          }
+        }
+
         torbutton_set_timezone(tor_enabled, true);
 
         // FIXME: This is probably better done by reimplementing the 
@@ -3368,7 +3398,8 @@ function torbutton_update_tags(win, new_loc) {
          * before the load, because we don't want prefetch to be enabled
          * on tor tabs once we leave Tor. */
         if(m_tb_ff35) {
-            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
+            if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
+              browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
             browser.docShell.allowDNSPrefetch = tor_tag;
         }
 
@@ -3702,10 +3733,10 @@ var torbutton_weblistener =
   onLocationChange: function(aProgress, aRequest, aURI)
   {
       torbutton_eclog(2, 'onLocationChange: '+aURI.asciiSpec);
-      if(aURI.spec != "about:blank") {
-          return torbutton_check_progress(aProgress, aRequest, 0, true);
+      if(aURI.scheme == "about" || aURI.scheme == "chrome") {
+          torbutton_eclog(3, "Skipping location change for "+aURI.asciiSpec);
       } else {
-          torbutton_ecloc(3, "Skipping location change for about:blank");
+          return torbutton_check_progress(aProgress, aRequest, 0, true);
       }
   },
 

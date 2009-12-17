@@ -177,6 +177,9 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noSearch" label="&torbutton.prefs.no_search;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_disableLivemarks"
+                  label="&torbutton.prefs.disable_livemarks; &torbutton.prefs.dtd_recommended;" 
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_blockTorFileNet" label="&torbutton.prefs.block_tor_file_net;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_blockNonTorFileNet" label="&torbutton.prefs.block_nontor_file_net;" 

@@ -21,8 +21,7 @@ const nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;
 const nsIObserverService = Components.interfaces.nsIObserverService;
 
 function ContentWindowMapper() {
-    this.cache = new Object();
-    this.cache["bah"] = 0;
+    this.cache = {};
 
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
         .getService(Components.interfaces.nsISupports).wrappedJSObject;

@@ -69,7 +69,6 @@ pref("extensions.torbutton.saved.expire_history", 9);
 pref("extensions.torbutton.saved.download_retention", 2);
 pref("extensions.torbutton.saved.formfill", true);
 pref("extensions.torbutton.saved.remember_signons", true);
-pref("extensions.torbutton.saved.livemark_refresh", 0);
 pref("extensions.torbutton.saved.sendSecureXSiteReferrer", true);
 pref("extensions.torbutton.saved.sendRefererHeader", 2);
 pref("extensions.torbutton.saved.dom_storage", true);
@@ -82,7 +81,6 @@ pref("extensions.torbutton.saved.auto_update", true);
 pref("extensions.torbutton.saved.search_update", true);
 pref("extensions.torbutton.saved.geo_enabled", true);
 pref("extensions.torbutton.saved.zoom_specific", true);
-pref("extensions.torbutton.saved.dns_prefetch", true);
 pref("extensions.torbutton.saved.accept_languages", "");
 pref("extensions.torbutton.saved.accept_charsets", "");
 pref("extensions.torbutton.saved.appname_override","");
@@ -94,6 +92,8 @@ pref("extensions.torbutton.saved.productsub_override","");
 pref("extensions.torbutton.saved.buildID_override","");
 pref("extensions.torbutton.saved.useragent_vendor", "");
 pref("extensions.torbutton.saved.useragent_vendorSub","");
+// network.dns.disablePrefetch is a hidden option. It has no default value:
+//pref("extensions.torbutton.saved.dns_prefetch", false);
 
 // State prefs:
 pref("extensions.torbutton.tor_enabled",false);
@@ -159,6 +159,7 @@ pref("extensions.torbutton.launch_warning",true);
 pref("extensions.torbutton.refererspoof", 0); //0=no spoof, 1=root spoof, 2=domain spoof, 3=blank spoof, 4=custom spoof
 pref("extensions.torbutton.fakerefresh", false);
 pref("extensions.torbutton.customeref","");
+pref("extensions.torbutton.disable_livemarks",true);
 
 // Google Captcha prefs
 // FIXME: NID cookie?
