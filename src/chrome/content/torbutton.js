@@ -1974,6 +1974,7 @@ function torbutton_jar_certs(mode) {
 // -------------- JS/PLUGIN HANDLING CODE ---------------------
 
 function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
+    var eventSuppressor = null;
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         try {
             torbutton_log(5, "UNTAGGED WINDOW at: "+browser.src);
@@ -1986,10 +1987,26 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
         browser.__tb_tor_fetched = !tor_enabled;
     }
 
+    /* Solution from: https://bugzilla.mozilla.org/show_bug.cgi?id=409737 */
+    try {
+        if (!browser.contentWindow)
+            torbutton_log(3, "No content window to disable JS events.");
+        else
+            eventSuppressor = browser.contentWindow.
+                QueryInterface(Components.interfaces.nsIInterfaceRequestor).
+                       getInterface(Ci.nsIDOMWindowUtils);
+    } catch(e) {
+        torbutton_log(4, "Failed to disable JS events: "+e)
+    }
+
     if(browser.__tb_tor_fetched == tor_enabled) { // States match, js ok 
         browser.docShell.allowJavascript = js_enabled;
+        if (eventSuppressor)
+            eventSuppressor.suppressEventHandling(!js_enabled);
     } else { // States differ or undefined, js not ok 
         browser.docShell.allowJavascript = false;
+        if (eventSuppressor)
+            eventSuppressor.suppressEventHandling(true);
     }
 }
 
