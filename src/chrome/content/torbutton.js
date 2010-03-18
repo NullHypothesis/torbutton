@@ -3390,7 +3390,9 @@ function torbutton_update_tags(win, new_loc) {
             // Purge session history every time we fetch a new doc 
             // in a new tor state
             torbutton_log(2, "Purging session history");
-            if(browser.webNavigation.sessionHistory.count > 1
+            // sessionHistory can be null now...
+            if(browser.webNavigation.sessionHistory
+                    && browser.webNavigation.sessionHistory.count > 1
                     && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
                 // FIXME: This isn't quite right.. For some reason
                 // this breaks in some cases..
