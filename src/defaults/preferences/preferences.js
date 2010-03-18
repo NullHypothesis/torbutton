@@ -1,7 +1,7 @@
 // debug prefs
 pref("extensions.torbutton.debug",true);
 pref("extensions.torbutton.loglevel",4);
-pref("extensions.torbutton.logmethod",2); // 0=stdout, 1=errorconsole, 2=debuglog
+pref("extensions.torbutton.logmethod",1); // 0=stdout, 1=errorconsole, 2=debuglog
 
 // Display prefs
 pref("extensions.torbutton.display_panel",true);
