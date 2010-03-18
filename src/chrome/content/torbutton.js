@@ -371,7 +371,7 @@ function torbutton_set_status() {
             // FIXME: Do we need to translate it? I'm guessing not.
             window.alert("Torbutton: Please file bug report! Error applying Non-Tor settings: "+e);
             torbutton_log(5,'Error applying nontor settings: '+e);
-            // Setting these prefs should avoid ininite recursion
+            // Setting these prefs should avoid infinite recursion
             // because torbutton_update_status should return immediately
             // on the next call.
             m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", true);
@@ -2297,7 +2297,7 @@ function torbutton_conditional_set(state) {
     else  torbutton_disable_tor();
 }
 
-function torbutton_restore_cookies()
+function torbutton_restore_cookies(tor_enabled)
 {
     var selector =
           Components.classes["@torproject.org/cookie-jar-selector;1"]
@@ -2306,7 +2306,7 @@ function torbutton_restore_cookies()
     torbutton_log(4, "Restoring cookie status");
     selector.clearCookies();
     
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+    if(tor_enabled) {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
             torbutton_log(4, "Loading tor jar after crash");
             selector.loadCookies("tor", false);
@@ -2345,34 +2345,65 @@ function torbutton_crash_recover()
         }
 
         torbutton_log(4, "Crash detected, attempting recovery");
+
+        /* These prefs get set in this order during toggle: */
+        /* extentions.torbutton.saved.* */
+        var te = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
         var state = torbutton_check_status();
-        if(state != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                || state != m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")
-                || state != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")) {
-            var te = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-            var pa = m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
-            var sa = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
-            // XXX: This did happen once in the wild. We should
-            // probably write some code to carefully recover user's
-            // prefs that were touched by Tor.
-            window.alert("Torbutton crash state conflict! Please file bug report with these four values: "
-                    +state+","+te+","+pa+","+sa);
-            torbutton_log(5, "Crash state conflict: "+state+","
-                    +te+","+pa+","+sa);
+        var pa = m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
+        var sa = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
+
+        // TODO: This might not properly preserve a user's settings if
+        // Firefox crashes on the very *first* toggle they ever do,
+        // but it should at least not break in that case either.
+        if(state != te || state != pa || state != sa) {
+            if (state != te && state != pa && state != sa) {
+                // redo the whole toggle from the top
+                torbutton_log(4, "Crash state conflict: "+state+","
+                            +te+","+pa+","+sa);
+
+                if (te) {
+                   torbutton_activate_tor_settings();
+                } else {
+                   torbutton_activate_nontor_settings();
+                }
+            } else if (state == te && state != pa && state != sa) {
+                // redo the whole toggle from the top
+                torbutton_log(4, "Crash state conflict: "+state+","
+                            +te+","+pa+","+sa);
+                // Update_status did not run at all..
+                torbutton_update_status(state, true);
+            } else if (state == te && state == pa && state != sa) {
+                // Tor->Non-Tor is safe to redo, so long as first_toggle is
+                // false..
+                // However, Non-Tor->Tor needs to first perform Tor->Non-Tor
+                // and then retry
+                if (state) {
+                    torbutton_restore_cookies(true); // Restore Tor cookies
+                    torbutton_update_status(false, true); // Toggle into Non-Tor
+                    torbutton_update_status(true, true); // Toggle into Tor
+                } else {
+                    torbutton_restore_cookies(true); // Restore Tor cookies
+                    torbutton_update_status(false, true); // Toggle into Non-Tor
+                }
+            } else {
+                window.alert("Torbutton crash state conflict! Please file bug report with these four values: "
+                            +state+","+te+","+pa+","+sa);
+                torbutton_log(5, "Crash state conflict: "+state+","
+                            +te+","+pa+","+sa);
+            }
+        } else {
+            // Do the restore cookies first because we potentially save
+            // cookies by toggling tor state in the next pref. If we
+            // do this first, we can be sure we have the 'right' cookies
+            // currently loaded before the switch writes out a new jar
+            if(m_tb_prefs.getBoolPref("extensions.torbutton.reload_crashed_jar"))
+                torbutton_restore_cookies(state);
         }
 
-        // FIXME: consider trying to check these to see what work we may 
-        // need to redo?
         m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", state);
         m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", state);
         m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", state);
-      
-        // Do the restore cookies first because we potentially save
-        // cookies by toggling tor state in the next pref. If we
-        // do this first, we can be sure we have the 'right' cookies
-        // currently loaded before the switch writes out a new jar
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.reload_crashed_jar"))
-            torbutton_restore_cookies();
 
         if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
             torbutton_conditional_set(true);
