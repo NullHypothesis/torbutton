@@ -2952,7 +2952,8 @@ unregister : function() {
 var torbutton_proxyservice = {
   applyFilter : function(ps, uri, proxy) {
     try {
-      torbutton_eclog(3, 'apply: '+uri.host+' '+uri.scheme+', '+proxy);
+      proxyhost = proxy ? 'proxy: '+proxy.host:'no proxy';
+      torbutton_eclog(3, 'apply: '+proxyhost);
       if (m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
         if (uri.host == "localhost") return null;
       }
@@ -2977,7 +2978,7 @@ var torbutton_proxyservice = {
     try {
     var proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
       .getService(Components.interfaces.nsIProtocolProxyService);
-    proxyservice.unregisterFilter(this, 0);
+    proxyservice.unregisterFilter(this);
     } catch (e) {
       torbutton_eclog(3, 'UnregisterFilter failed:'+e);
     }
