@@ -881,10 +881,10 @@ function torbutton_set_timezone(mode, startup) {
             offStr = "+";
         }
         
-        if(offset/60 < 10) {
+        if(Math.floor(offset/60) < 10) {
             offStr += "0";
         }
-        offStr += (offset/60)+":";
+        offStr += Math.floor(offset/60)+":";
         if((offset%60) < 10) {
             offStr += "0";
         }
