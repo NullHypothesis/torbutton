@@ -2867,6 +2867,69 @@ var torbutton_proxyservice = {
       if (m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
         if (uri.host == "localhost") return null;
       }
+
+      if (!m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")) {
+          if (m_tb_prefs.getBoolPref("extensions.torbutton.update_torbutton_via_tor")) {
+               var path = new String(uri.path);
+               var update_proxy = proxy;
+               if (uri.host == "versioncheck.addons.mozilla.org") {
+                   if (path.indexOf("{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}") != -1) {
+                       // https_proxy, https_port
+                       var https_proxy=m_tb_prefs.getCharPref("extensions.torbutton.https_proxy");
+                       var https_port=m_tb_prefs.getIntPref("extensions.torbutton.https_port");
+                       if (!https_proxy || !https_port) {
+                           var socks_host=m_tb_prefs.getCharPref("extensions.torbutton.socks_host");
+                           var socks_port=m_tb_prefs.getIntPref("extensions.torbutton.socks_port");
+                           var socks_version=m_tb_prefs.getIntPref("extensions.torbutton.socks_version");
+                           var flag = 0;
+                           if (!socks_host || !socks_port)
+                               return proxy;
+                           if (m_tb_prefs.getBoolPref("network.proxy.socks_remote_dns"))
+                               flag = Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST;
+                           if (socks_version == 4) {
+                               update_proxy = this._proxyservice.newProxyInfo("socks4", socks_proxy, socks_port,
+                                   flag, 0x7ffffffe, null);
+                           } else {
+                               update_proxy = this._proxyservice.newProxyInfo("socks", socks_proxy, socks_port,
+                                   flag, 0x7ffffffe, null);
+                           }
+                       } else {
+                           update_proxy = this._proxyservice.newProxyInfo("http", https_proxy, https_port,
+                                   Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST, 0x7ffffffe, null);
+                       }
+                   }
+               } else if (uri.host == "releases.mozilla.org") {
+                   if (path.indexOf("/pub/mozilla.org/addons/2275/") == 0) {
+                       var http_proxy=m_tb_prefs.getCharPref("extensions.torbutton.http_proxy");
+                       var http_port=m_tb_prefs.getIntPref("extensions.torbutton.http_port");
+                       if (!http_proxy || !http_port) {
+                           var socks_host=m_tb_prefs.getCharPref("extensions.torbutton.socks_host");
+                           var socks_port=m_tb_prefs.getIntPref("extensions.torbutton.socks_port");
+                           var socks_version=m_tb_prefs.getIntPref("extensions.torbutton.socks_version");
+                           var flag = 0;
+                           if (!socks_host || !socks_port)
+                               return proxy;
+                           if (m_tb_prefs.getBoolPref("network.proxy.socks_remote_dns"))
+                               flag = Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST;
+                           if (socks_version == 4) {
+                               update_proxy = this._proxyservice.newProxyInfo("socks4", socks_proxy, socks_port,
+                                   flag, 0x7ffffffe, null);
+                           } else {
+                               update_proxy = this._proxyservice.newProxyInfo("socks", socks_proxy, socks_port,
+                                   flag, 0x7ffffffe, null);
+                           }
+                       } else {
+                           update_proxy = this._proxyservice.newProxyInfo("http", http_proxy, http_port,
+                                   Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST, 0x7ffffffe, null);
+                       }
+                   }
+               }
+               if (update_proxy != proxy)
+                   torbutton_log(3, "Performing Torbutton update check via Tor proxy for: "+
+                                  uri.spec);
+               return update_proxy;
+          }
+      }
       return proxy;
     }
     catch (e) {
@@ -2876,9 +2939,9 @@ var torbutton_proxyservice = {
   register : function() {
     torbutton_eclog(3, 'Proxy filter Registering...');
     try {
-    var proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
+    this._proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
       .getService(Components.interfaces.nsIProtocolProxyService);
-    proxyservice.registerFilter(this, 0);
+    this._proxyservice.registerFilter(this, 0);
     } catch (e) {
       torbutton_eclog(3, 'RegisterFilter failed:'+e);
     }
@@ -2886,9 +2949,9 @@ var torbutton_proxyservice = {
   unregister : function() {
     torbutton_eclog(3, 'Proxy filter Unregistering...');
     try {
-    var proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
+    this._proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
       .getService(Components.interfaces.nsIProtocolProxyService);
-    proxyservice.unregisterFilter(this);
+    this._proxyservice.unregisterFilter(this);
     } catch (e) {
       torbutton_eclog(3, 'UnregisterFilter failed:'+e);
     }

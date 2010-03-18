@@ -153,6 +153,7 @@ pref("extensions.torbutton.nontor_memory_jar",false);
 pref("extensions.torbutton.tz_string","");
 pref("extensions.torbutton.launch_warning",true);
 pref("extensions.torbutton.disable_livemarks",true);
+pref("extensions.torbutton.update_torbutton_via_tor",true);
 
 // Google Captcha prefs
 // FIXME: NID cookie?
