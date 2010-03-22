@@ -1988,6 +1988,9 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
     }
 
     /* Solution from: https://bugzilla.mozilla.org/show_bug.cgi?id=409737 */
+    // XXX: This is disabled. It kills the entire window. We need to redirect
+    // focus and inform the user via a lightbox.
+    // See https://bugs.torproject.org/flyspray/index.php?do=details&id=1283
     try {
         if (!browser.contentWindow)
             torbutton_log(3, "No content window to disable JS events.");
@@ -1995,6 +1998,7 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
             eventSuppressor = browser.contentWindow.
                 QueryInterface(Components.interfaces.nsIInterfaceRequestor).
                        getInterface(Ci.nsIDOMWindowUtils);
+        eventSuppressor = null;
     } catch(e) {
         torbutton_log(4, "Failed to disable JS events: "+e)
     }
