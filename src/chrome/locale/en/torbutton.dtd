@@ -123,3 +123,4 @@
 <!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
 <!ENTITY torbutton.prefs.dtd_optional "(optional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
