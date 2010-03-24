@@ -184,6 +184,9 @@
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_blockNonTorFileNet" label="&torbutton.prefs.block_nontor_file_net;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        <checkbox id="torbutton_updateTorbuttonViaTor"
+                  label="&torbutton.prefs.update_torbutton_via_tor; &torbutton.prefs.dtd_recommended;"
+                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_noUpdates" label="&torbutton.prefs.no_updates;" 
                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
         <checkbox id="torbutton_closeTor" label="&torbutton.prefs.close_tor;" 
