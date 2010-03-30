@@ -2795,6 +2795,71 @@ function torbutton_xfer_google_cookies(subject, topic, data) {
   }
 }
 
+/* Redirect the user to a different search engine if Google is blocking Tor */
+function torbutton_check_google_captcha(subject, topic, data) {
+  if (!m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied"))
+    return;
+
+  var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
+  var hostmatch = subject.URI.host.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+
+  // check nsIURI
+  if (hostmatch && httpChannel.responseStatus == 302) {
+    // Now check for 302 to sorry.google.com
+    torbutton_log(3, "Got Google 302 response...");
+    var redir = httpChannel.getResponseHeader("Location");
+    var redirURI = Components.classes["@mozilla.org/network/standard-url;1"]
+                      .createInstance(Ci.nsIStandardURL);
+
+    redirURI.init(Ci.nsIStandardURL.URLTYPE_STANDARD, 80, redir,
+                  subject.URI.originCharset, null);
+    redirURI = redirURI.QueryInterface(Components.interfaces.nsIURI);
+    if (redirURI.host == "sorry.google.com") {
+      querymatch = subject.URI.path.match("[\?\&]q=([^&]+)[\&]");
+      if (!querymatch) {
+        torbutton_safelog(4, "No Google query found for captcha in: ",
+                subject.URI.spec);
+        return;
+      }
+      var newUrl = m_tb_prefs.getCharPref("extensions.torbutton.redir_url."+
+                    m_tb_prefs.getIntPref("extensions.torbutton.google_redir_url"));
+
+      if (!m_tb_prefs.getBoolPref("extensions.torbutton.asked_google_captcha")) {
+        var check = {value: false};
+        var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                                .getService(Components.interfaces.nsIPromptService);
+        var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
+                    prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
+                    prompts.BUTTON_POS_1_DEFAULT;
+
+        var bundle = torbutton_get_stringbundle();
+        var title = bundle.GetStringFromName("torbutton.popup.captcha.title");
+        var ask = bundle.GetStringFromName("torbutton.popup.captcha.ask");
+        var dontask = bundle.GetStringFromName("torbutton.popup.captcha.always");
+        var launch = bundle.GetStringFromName("torbutton.popup.redirect");
+        var cancel = bundle.GetStringFromName("torbutton.popup.no_redirect");
+
+        var result = prompts.confirmEx(window, title, ask, flags,
+                                       launch, cancel, "", dontask, check);
+
+        if (check.value) {
+          m_tb_prefs.setBoolPref("extensions.torbutton.asked_google_captcha",
+                                 true);
+          m_tb_prefs.setBoolPref("extensions.torbutton.dodge_google_captcha",
+                                 (result == 0));
+        }
+
+        if (result != 0) {
+          return;
+        }
+      }
+      // Split url into [?&]q=...[&$]
+      httpChannel.setResponseHeader("Location", newUrl+querymatch[1], false);
+      torbutton_log(4, "Got Google Captcha. Redirecting");
+    }
+  }
+}
+
 // Technique courtesy of:
 // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
 // XXX: Exception here??
@@ -2926,10 +2991,19 @@ observe : function(subject, topic, data) {
 
   if (topic == "http-on-examine-response") {
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
+      if (m_tb_prefs.getBoolPref("extensions.torbutton.dodge_google_captcha")
+            && subject instanceof Ci.nsIHttpChannel) {
+        try {
+          torbutton_check_google_captcha(subject, topic, data);
+        } catch(e) {
+          torbutton_log(4, "Explosion on captcha redirect: "+e);
+        }
+      }
       torbutton_check_progress(null, subject, 0, false);
   } else if (topic == "http-on-modify-request") {
       torbutton_eclog(3, 'Modify request: '+subject.name);
-      if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_google_cookies")) {
+      if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_google_cookies")
+            && subject instanceof Ci.nsIHttpChannel) {
         try {
           torbutton_xfer_google_cookies(subject, topic, data);
         } catch(e) {

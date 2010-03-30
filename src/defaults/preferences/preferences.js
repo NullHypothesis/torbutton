@@ -178,6 +178,14 @@ pref("extensions.torbutton.regen_google_cookies", false);
 // Xfer google search cookies across all google domains
 pref("extensions.torbutton.xfer_google_cookies", true);
 
+// Google redirect prefs
+pref("extensions.torbutton.google_redir_url", 1);
+pref("extensions.torbutton.dodge_google_captcha", true);
+pref("extensions.torbutton.asked_google_captcha", false);
+pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.pl?query=");
+pref("extensions.torbutton.redir_url.2", "http://www.bing.com/search?q=");
+pref("extensions.torbutton.redir_url.3", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=");
+
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; LANG)");
