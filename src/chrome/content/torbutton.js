@@ -67,6 +67,7 @@ var torbutton_unique_pref_observer =
         this.forced_ua = false;
         var pref_service = Components.classes["@mozilla.org/preferences-service;1"]
                                      .getService(Components.interfaces.nsIPrefBranchInternal);
+        this.did_toggle_warning = false;
         this._branch = pref_service.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
         this._branch.addObserver("extensions.torbutton", this, false);
         this._branch.addObserver("network.proxy", this, false);
@@ -263,18 +264,22 @@ var torbutton_unique_pref_observer =
             case "extensions.torbutton.block_tforms":
             case "extensions.torbutton.block_cache":
             case "extensions.torbutton.block_thwrite":
-                if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                if(!this.did_toggle_warning &&
+                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
                     var o_stringbundle = torbutton_get_stringbundle();
                     var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
+                    this.did_toggle_warning = true;
                     window.alert(warning);
                 }
                 break;
 
             case "extensions.torbutton.block_nthwrite":
             case "extensions.torbutton.block_ntforms":
-                if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
+                if(!this.did_toggle_warning &&
+                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
                     var o_stringbundle = torbutton_get_stringbundle();
                     var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
+                    this.did_toggle_warning = true;
                     window.alert(warning);
                 }
                 break;
@@ -3461,8 +3466,14 @@ function torbutton_update_tags(win, new_loc) {
         return;
         //win.alert("No window found!");
     }
-    torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
+
+    // This sometimes happens with CoolPreviews..
+    try {
+        torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
             + win.location + ", under: "+win.top.location);
+    } catch(e) {
+        torbutton_log(4, "Missing content window? "+str(e));
+    }
 
     // Base this tag off of proxies_applied, since we want to go
     // by whatever the actual load proxy was

@@ -336,6 +336,17 @@ function torbutton_prefs_save(doc) {
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
 
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+    var enumerator = wm.getEnumerator("navigator:browser");
+    while(enumerator.hasMoreElements()) {
+        var win = enumerator.getNext();
+        if(win != window && win.m_tb_is_main_window) {
+            torbutton_log(3, "Found main window for popup hack.");
+            win.torbutton_unique_pref_observer.did_toggle_warning = false;
+        }
+    }
+
     o_torprefs.setBoolPref('display_panel',   doc.getElementById('torbutton_displayStatusPanel').checked);
     o_torprefs.setCharPref('panel_style',     doc.getElementById('torbutton_panelStyle').value);
     o_torprefs.setCharPref('settings_method', doc.getElementById('torbutton_settingsMethod').value);
