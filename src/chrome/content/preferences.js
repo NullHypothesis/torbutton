@@ -93,6 +93,8 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_socksPort').value    = o_customprefs.getIntPref('socks_port');
         */
     }
+
+    doc.getElementById('torbutton_searchEngine').disabled = !doc.getElementById('torbutton_noCaptcha').checked;
 }
 
 function torbutton_prefs_init(doc) {
@@ -280,6 +282,24 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_blockNonTorFileNet').checked = o_torprefs.getBoolPref('block_nontor_file_net');
 
     doc.getElementById('torbutton_lockedMode').checked = o_torprefs.getBoolPref('locked_mode');
+
+    switch(o_torprefs.getIntPref('google_redir_url')) {
+        case 1:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine1');
+            break;
+        case 2:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine2');
+            break;
+        case 3:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine3');
+            break;
+    }
+    doc.getElementById('torbutton_noCaptcha').checked = o_torprefs.getBoolPref('dodge_google_captcha');
+    doc.getElementById('torbutton_searchEngine').disabled = !o_torprefs.getBoolPref('dodge_google_captcha');
+
     /*
     doc.getElementById('torbutton_jarCerts').checked = o_torprefs.getBoolPref('jar_certs');
     doc.getElementById('torbutton_jarCACerts').checked = o_torprefs.getBoolPref('jar_ca_certs');
@@ -465,15 +485,29 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('close_tor', doc.getElementById('torbutton_closeTor').checked);
     o_torprefs.setBoolPref('close_nontor', doc.getElementById('torbutton_closeNonTor').checked);
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
-    
+
     o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
     o_torprefs.setBoolPref('fakerefresh', doc.getElementById('torbutton_spoofRefresh').checked);
     o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
-    
+
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);
+
     o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
     if (doc.getElementById('torbutton_CustomReferer').selected)
        o_torprefs.setCharPref('customref',doc.getElementById('torbutton_CustomRef').value);
+
+    o_torprefs.setBoolPref('dodge_google_captcha', doc.getElementById('torbutton_noCaptcha').checked);
+
+    if(doc.getElementById('torbutton_searchEngine').selectedItem ==
+            doc.getElementById('torbutton_engine1')) {
+        o_torprefs.setIntPref('google_redir_url', 1);
+    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
+            doc.getElementById('torbutton_engine2')) {
+        o_torprefs.setIntPref('google_redir_url', 2);
+    } else {
+        o_torprefs.setIntPref('google_redir_url', 3);
+    }
+
     /*
     o_torprefs.setBoolPref('jar_certs', doc.getElementById('torbutton_jarCerts').checked);
     o_torprefs.setBoolPref('jar_ca_certs',
