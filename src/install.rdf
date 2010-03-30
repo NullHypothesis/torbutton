@@ -6,7 +6,7 @@
         <em:name>Torbutton</em:name>
         <em:creator>Mike Perry &amp; Scott Squires</em:creator>
         <em:id>{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}</em:id>
-        <em:version>1.2.5pre3</em:version>
+        <em:version>1.2.5pre5</em:version>
         <em:homepageURL>https://www.torproject.org/torbutton</em:homepageURL>
         <em:optionsURL>chrome://torbutton/content/preferences.xul</em:optionsURL>
         <em:iconURL>chrome://torbutton/skin/tor.png</em:iconURL>
