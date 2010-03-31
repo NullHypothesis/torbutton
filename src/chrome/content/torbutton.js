@@ -2731,7 +2731,7 @@ function torbutton_check_google_captcha(subject, topic, data) {
                   subject.URI.originCharset, null);
     redirURI = redirURI.QueryInterface(Components.interfaces.nsIURI);
     if (redirURI.host == "sorry.google.com") {
-      querymatch = subject.URI.path.match("[\?\&]q=([^&]+)[\&]");
+      querymatch = subject.URI.path.match("[\?\&]q=([^&]+)(?:[\&]|$)");
       if (!querymatch) {
         torbutton_safelog(4, "No Google query found for captcha in: ",
                 subject.URI.spec);
@@ -3073,7 +3073,7 @@ function torbutton_wrap_search_service()
           return sub;
         }
 
-        var querymatch = sub.uri.path.match("[\?\&](q=[^&]+)[\&]")[1];
+        var querymatch = sub.uri.path.match("[\?\&](q=[^&]+)(?:[\&]|$)")[1];
         var querypath = sub.uri.path.split("?")[0];
         torbutton_log(3, "Got submission call to Google search.");
 
