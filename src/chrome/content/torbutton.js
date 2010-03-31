@@ -269,7 +269,10 @@ var torbutton_unique_pref_observer =
                     var o_stringbundle = torbutton_get_stringbundle();
                     var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
                     this.did_toggle_warning = true;
-                    window.alert(warning);
+                    var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                               .getService(Components.interfaces.nsIWindowMediator);
+                    var chrome = wm.getMostRecentWindow("navigator:browser");
+                    chrome.alert(warning);
                 }
                 break;
 
@@ -280,7 +283,7 @@ var torbutton_unique_pref_observer =
                     var o_stringbundle = torbutton_get_stringbundle();
                     var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
                     this.did_toggle_warning = true;
-                    window.alert(warning);
+                    chrome.alert(warning);
                 }
                 break;
 
@@ -793,7 +796,10 @@ function torbutton_enable_tor(force)
   if(!force && m_tb_prefs.getBoolPref("extensions.torbutton.test_failed")) {
       var strings = torbutton_get_stringbundle();
       var warning = strings.GetStringFromName("torbutton.popup.test.confirm_toggle");
-      if(!window.confirm(warning)) {
+      var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                   .getService(Components.interfaces.nsIWindowMediator);
+      var chrome = wm.getMostRecentWindow("navigator:browser");
+      if(!chrome.confirm(warning)) {
           return;
       }
   }
@@ -2839,7 +2845,11 @@ function torbutton_check_google_captcha(subject, topic, data) {
         var launch = bundle.GetStringFromName("torbutton.popup.redirect");
         var cancel = bundle.GetStringFromName("torbutton.popup.no_redirect");
 
-        var result = prompts.confirmEx(window, title, ask, flags,
+        var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                   .getService(Components.interfaces.nsIWindowMediator);
+        var chrome = wm.getMostRecentWindow("navigator:browser");
+
+        var result = prompts.confirmEx(chrome, title, ask, flags,
                                        launch, cancel, "", dontask, check);
 
         if (check.value) {
@@ -3896,7 +3906,10 @@ function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
                             torbutton_eclog(2, 'Cleared document');
 
                             if(typeof(DOMWindow.__tb_kill_flag) == 'undefined') {
-                                window.alert(warning);
+                                var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                                           .getService(Components.interfaces.nsIWindowMediator);
+                                var chrome = wm.getMostRecentWindow("navigator:browser");
+                                chrome.alert(warning);
                                 DOMWindow.__tb_kill_flag = true;
                             }
                             // This doesn't seem to actually remove the child..
@@ -3910,7 +3923,10 @@ function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
                         }
                     } else {
                         torbutton_eclog(4, 'No progress for document cancel!');
-                        window.alert(warning);
+                        var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                                   .getService(Components.interfaces.nsIWindowMediator);
+                        var chrome = wm.getMostRecentWindow("navigator:browser");
+                        chrome.alert(warning);
                     }
                     torbutton_eclog(3, 'Killed plugin document');
                     return 0;
