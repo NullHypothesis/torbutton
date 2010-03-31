@@ -336,7 +336,9 @@
           <checkbox id="torbutton_jarCACerts" label="&torbutton.prefs.jar_ca_certs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
 -->
-          <checkbox id="torbutton_noReferer" label="&torbutton.prefs.disable_referer;" 
+          <checkbox id="torbutton_noReferer" label="&torbutton.prefs.disable_referer;"
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
+          <checkbox id="torbutton_fixGoogleSrch" label="&torbutton.prefs.fix_google_srch;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
           <spacer/>
           <checkbox id="torbutton_noCaptcha" label="&torbutton.prefs.dodge_google_captcha;"
