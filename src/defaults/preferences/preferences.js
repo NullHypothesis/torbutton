@@ -185,6 +185,7 @@ pref("extensions.torbutton.asked_google_captcha", false);
 pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.pl?query=");
 pref("extensions.torbutton.redir_url.2", "http://www.bing.com/search?q=");
 pref("extensions.torbutton.redir_url.3", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=");
+pref("extensions.torbutton.fix_google_srch", true);
 
 // User agent prefs:
 pref("extensions.torbutton.appname_override","Netscape");

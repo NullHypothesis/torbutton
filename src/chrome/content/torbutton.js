@@ -3131,6 +3131,46 @@ var torbutton_proxyservice = {
   }
 }
 
+function torbutton_wrap_search_service()
+{
+  var ss = Cc["@mozilla.org/browser/search-service;1"]
+                 .getService(Ci.nsIBrowserSearchService);
+  var junk = {"value":0};
+  var engines = ss.getEngines(junk);
+
+  for(var i = 0; i < engines.length; ++i) {
+    var origEngineObj = engines[i].wrappedJSObject;
+    torbutton_log(2, "Got engine: "+origEngineObj._name);
+    // hrmm.. could use
+    // searchForm.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+    if(origEngineObj._name.indexOf("Google") != -1) {
+      torbutton_log(3, "Found google search plugin to wrap.");
+      origEngineObj.oldGetSubmission=origEngineObj.getSubmission;
+      origEngineObj.getSubmission = function lmbd(aData, respType) {
+        var sub = this.oldGetSubmission(aData, respType);
+        if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+            || !m_tb_prefs.getBoolPref("extensions.torbutton.fix_google_srch")) {
+          return sub;
+        }
+
+        var querymatch = sub.uri.path.match("[\?\&](q=[^&]+)[\&]")[1];
+        var querypath = sub.uri.path.split("?")[0];
+        torbutton_log(3, "Got submission call to Google search.");
+
+        var newURI = Cc["@mozilla.org/network/standard-url;1"]
+                          .createInstance(Ci.nsIStandardURL);
+        newURI.init(Ci.nsIStandardURL.URLTYPE_STANDARD, 80,
+                sub.uri.scheme+"://"+sub.uri.host+querypath+"?"+querymatch,
+                sub.uri.originCharset, null);
+        newURI = newURI.QueryInterface(Components.interfaces.nsIURI);
+        sub._uri = newURI;
+        torbutton_log(3, "Returning new search url.");
+        return sub;
+      };
+    }
+  }
+}
+
 function torbutton_do_main_window_startup()
 {
     torbutton_log(3, "Torbutton main window startup");
@@ -3267,6 +3307,9 @@ function torbutton_do_startup()
           // Need to maybe generate google cookie if tor is enabled
           torbutton_new_google_cookie();
         }
+
+        // Wrap Google search service.
+        torbutton_wrap_search_service();
 
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
