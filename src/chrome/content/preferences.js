@@ -281,6 +281,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_blockTorFileNet').checked = o_torprefs.getBoolPref('block_tor_file_net');
     doc.getElementById('torbutton_blockNonTorFileNet').checked = o_torprefs.getBoolPref('block_nontor_file_net');
 
+    doc.getElementById('torbutton_fixGoogleSrch').checked = o_torprefs.getBoolPref('fix_google_srch');
     doc.getElementById('torbutton_lockedMode').checked = o_torprefs.getBoolPref('locked_mode');
 
     switch(o_torprefs.getIntPref('google_redir_url')) {
@@ -496,6 +497,7 @@ function torbutton_prefs_save(doc) {
     if (doc.getElementById('torbutton_CustomReferer').selected)
        o_torprefs.setCharPref('customref',doc.getElementById('torbutton_CustomRef').value);
 
+    o_torprefs.setBoolPref('fix_google_srch', doc.getElementById('torbutton_fixGoogleSrch').checked);
     o_torprefs.setBoolPref('dodge_google_captcha', doc.getElementById('torbutton_noCaptcha').checked);
 
     if(doc.getElementById('torbutton_searchEngine').selectedItem ==
