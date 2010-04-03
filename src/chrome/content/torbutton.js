@@ -2803,7 +2803,8 @@ function torbutton_check_google_captcha(subject, topic, data) {
       // Split url into [?&]q=...[&$]
       if (browser)
         browser.loadURI(newUrl+querymatch[1], null, subject.URI.originCharset);
-      httpChannel.setResponseHeader("Location", newUrl+querymatch[1], false);
+      else
+        httpChannel.setResponseHeader("Location", newUrl+querymatch[1], false);
       torbutton_log(4, "Got Google Captcha. Redirecting");
     }
   }
