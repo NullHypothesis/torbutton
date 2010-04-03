@@ -2143,6 +2143,8 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
         browser.__tb_tor_fetched = !tor_tag;
 
         // XXX: Do we need to remove this listener on tab close?
+        // No, but we probably do need to remove it on window close!
+        // FF3.5 may be throwing uncaught exceptions!
         var hlisten = new tbHistoryListener(browser);
 
         var sessionSetter = function() {
@@ -2731,6 +2733,31 @@ function torbutton_check_google_captcha(subject, topic, data) {
                   subject.URI.originCharset, null);
     redirURI = redirURI.QueryInterface(Components.interfaces.nsIURI);
     if (redirURI.host == "sorry.google.com") {
+      var browser = null;
+      if(m_tb_ff3 && subject.notificationCallbacks) {
+        // Arg. google.timers.load.t is fucking us up!
+        try {
+          var wind = subject.notificationCallbacks.QueryInterface(
+                  Components.interfaces.nsIInterfaceRequestor).getInterface(
+                      Components.interfaces.nsIDOMWindow);
+          var wm = Components.classes["@torproject.org/content-window-mapper;1"]
+             .getService(Components.interfaces.nsISupports)
+             .wrappedJSObject;
+          if(wind.top instanceof Components.interfaces.nsIDOMChromeWindow) {
+            if(wind.top.browserDOMWindow) {
+              // This never seems to work. Leaving it in just in case
+              // for optimizations sake.
+              torbutton_log(3, "Got browser window for 302");
+              browser = wind.top.getBrowser().selectedTab.linkedBrowser;
+            }
+          }
+          if (!browser)
+            browser = wm.getBrowserForContentWindow(wind.window.top);
+        } catch(e) {
+          torbutton_log(4, "Exception on google captcha logging: "+e);
+        }
+      }
+
       querymatch = subject.URI.path.match("[\?\&]q=([^&]+)(?:[\&]|$)");
       if (!querymatch) {
         torbutton_safelog(4, "No Google query found for captcha in: ",
@@ -2774,6 +2801,8 @@ function torbutton_check_google_captcha(subject, topic, data) {
         }
       }
       // Split url into [?&]q=...[&$]
+      if (browser)
+        browser.loadURI(newUrl+querymatch[1], null, subject.URI.originCharset);
       httpChannel.setResponseHeader("Location", newUrl+querymatch[1], false);
       torbutton_log(4, "Got Google Captcha. Redirecting");
     }
@@ -3065,7 +3094,12 @@ function torbutton_wrap_search_service()
     // searchForm.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
     if(origEngineObj._name.indexOf("Google") != -1) {
       torbutton_log(3, "Found google search plugin to wrap.");
-      origEngineObj.oldGetSubmission=origEngineObj.getSubmission;
+      if (typeof(origEngineObj.oldGetSubmission) == "undefined") {
+        torbutton_log(3, "Original window for google search");
+        origEngineObj.oldGetSubmission=origEngineObj.getSubmission;
+      } else {
+        torbutton_log(3, "Secondary window for google search");
+      }
       origEngineObj.getSubmission = function lmbd(aData, respType) {
         var sub = this.oldGetSubmission(aData, respType);
         if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
@@ -3106,6 +3140,9 @@ function torbutton_do_main_window_startup()
             //   Components.interfaces.nsIWebProgress.NOTIFY_ALL);
         Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
             Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
+
+    // Wrap Google search service.
+    torbutton_wrap_search_service();
 
     torbutton_unique_pref_observer.register();
     torbutton_uninstall_observer.register();
@@ -3227,9 +3264,6 @@ function torbutton_do_startup()
           // Need to maybe generate google cookie if tor is enabled
           torbutton_new_google_cookie();
         }
-
-        // Wrap Google search service.
-        torbutton_wrap_search_service();
 
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
