@@ -192,9 +192,10 @@ pref("extensions.torbutton.appname_override","Netscape");
 pref("extensions.torbutton.appversion_override","5.0 (Windows; LANG)");
 pref("extensions.torbutton.platform_override","Win32");
 pref("extensions.torbutton.oscpu_override", "Windows NT 6.1");
-pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 
-pref("extensions.torbutton.productsub_override","20100316");
+pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows; U; Windows NT 6.1; LANG; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3");
+
+pref("extensions.torbutton.productsub_override","20100401");
 pref("extensions.torbutton.buildID_override","0");
 pref("extensions.torbutton.useragent_vendor", "");
 pref("extensions.torbutton.useragent_vendorSub","");
