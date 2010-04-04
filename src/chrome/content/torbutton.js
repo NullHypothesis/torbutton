@@ -2833,22 +2833,13 @@ function torbutton_check_google_captcha(subject, topic, data) {
           var wm = Components.classes["@torproject.org/content-window-mapper;1"]
              .getService(Components.interfaces.nsISupports)
              .wrappedJSObject;
-          if(wind.top instanceof Components.interfaces.nsIDOMChromeWindow) {
-            if(wind.top.browserDOMWindow) {
-              // This never seems to work. Leaving it in just in case
-              // for optimizations sake.
-              torbutton_log(3, "Got browser window for 302");
-              browser = wind.top.getBrowser().selectedTab.linkedBrowser;
-            }
-          }
-          if (!browser)
-            browser = wm.getBrowserForContentWindow(wind.window.top);
+          browser = wm.getBrowserForContentWindow(wind.window.top);
         } catch(e) {
           torbutton_log(4, "Exception on google captcha logging: "+e);
         }
       }
 
-      querymatch = subject.URI.path.match("[\?\&]q=([^&]+)(?:[\&]|$)");
+      var querymatch = subject.URI.path.match("[\?\&]q=([^&]+)(?:[\&]|$)");
       if (!querymatch) {
         torbutton_safelog(4, "No Google query found for captcha in: ",
                 subject.URI.spec);
@@ -2856,6 +2847,8 @@ function torbutton_check_google_captcha(subject, topic, data) {
       }
       var newUrl = m_tb_prefs.getCharPref("extensions.torbutton.redir_url."+
                     m_tb_prefs.getIntPref("extensions.torbutton.google_redir_url"));
+      var query=newUrl+querymatch[1];
+      torbutton_safelog(3, "Got Google query: ",query);
 
       if (!m_tb_prefs.getBoolPref("extensions.torbutton.asked_google_captcha")) {
         var check = {value: false};
@@ -2890,11 +2883,12 @@ function torbutton_check_google_captcha(subject, topic, data) {
           return;
         }
       }
+      torbutton_safelog(3, "Still have Google query: ",query);
       // Split url into [?&]q=...[&$]
       if (browser)
-        browser.loadURI(newUrl+querymatch[1], null, subject.URI.originCharset);
+        browser.loadURI(query, null, subject.URI.originCharset);
       else
-        httpChannel.setResponseHeader("Location", newUrl+querymatch[1], false);
+        httpChannel.setResponseHeader("Location", query, false);
       torbutton_log(4, "Got Google Captcha. Redirecting");
     }
   }
