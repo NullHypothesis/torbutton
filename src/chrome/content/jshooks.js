@@ -97,6 +97,10 @@ window.__HookObjects = function() {
 
   // No pref for this.. Should be mostly harmless..
   if(true) {
+      var origHeight = window.innerHeight;
+      var origWidth = window.innerWidth;
+      window.__proto__.__defineGetter__("innerHeight", function() { return Math.round(origHeight/50.0)*50;});
+      window.__proto__.__defineGetter__("innerWidth", function() { return Math.round(origWidth/50.0)*50;});
       window.__proto__.__defineGetter__("outerWidth", function() { return window.innerWidth;});
       window.__proto__.__defineGetter__("outerHeight", function() { return window.innerHeight;});
       window.__proto__.__defineGetter__("screenX", function() { return 0;});
