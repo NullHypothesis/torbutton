@@ -171,12 +171,13 @@ ExternalWrapper.prototype =
     var title = bundle.GetStringFromName("torbutton.popup.external.title");
     var app = bundle.GetStringFromName("torbutton.popup.external.app");
     var note = bundle.GetStringFromName("torbutton.popup.external.note");
+    var suggest = bundle.GetStringFromName("torbutton.popup.external.suggest");
     var launch = bundle.GetStringFromName("torbutton.popup.launch");
     var cancel = bundle.GetStringFromName("torbutton.popup.cancel");
     var dontask = bundle.GetStringFromName("torbutton.popup.dontask");
 
-    var result = prompts.confirmEx(chrome, title, app+urispec+note+" ", flags, 
-                                   launch, cancel, "", dontask, check);
+    var result = prompts.confirmEx(chrome, title, app+urispec+note+suggest+" ",
+                                   flags, launch, cancel, "", dontask, check);
 
     if (check.value) {
       this._prefs.setBoolPref("extensions.torbutton.launch_warning", false);
