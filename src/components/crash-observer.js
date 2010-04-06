@@ -15,6 +15,7 @@ const Cr = Components.results;
 const kMODULE_NAME = "Session crash detector";
 const kMODULE_CONTRACTID = "@mozilla.org/browser/sessionstartup;1";
 const kMODULE_CID = Components.ID("9215354b-1787-4aef-9946-780f046c75a9");
+const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 
 /* Mozilla defined interfaces */
 const kREAL_STORE_CID = "{ec7a6c20-e081-11da-8ad9-0800200c9a66}";
@@ -22,14 +23,86 @@ const kREAL_STORE = Components.classesByID[kREAL_STORE_CID];
 const kStoreInterfaces = ["nsISessionStartup", "nsIObserver", 
                           "nsISupportsWeakReference"];
 
-var StartupObserver = {
-    observe: function(aSubject, aTopic, aData) {
-      if(aTopic == "final-ui-startup") {
+function AppObserver() {
+    this._uninstall = false;
+    this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
+         .getService(Components.interfaces.nsISupports).wrappedJSObject;
+    this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
+         .getService(Components.interfaces.nsIPrefBranch);
+    this.logger.log(3, "AppObserver created");
+}
+
+AppObserver.prototype = {
+    observe: function(subject, topic, data) {
+      if(topic == "final-ui-startup") {
+          this.logger.log(2, "final-ui-startup.");
           Components.classes["@mozilla.org/preferences-service;1"]
               .getService(Components.interfaces.nsIPrefBranch)
               .setBoolPref("extensions.torbutton.startup", true);
-      } 
-    },
+      } else if (topic == "em-action-requested") {
+        // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
+        subject.QueryInterface(Components.interfaces.nsIUpdateItem);
+        this.logger.log(2, "Uninstall: "+data+" "+subject.id.toUpperCase());
+
+        if (subject.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
+          this.logger.log(2, "Uninstall: "+data);
+          if (data == "item-uninstalled" || data == "item-disabled") {
+            this._uninstall = true;
+          } else if (data == "item-cancel-action") {
+            this._uninstall = false;
+          }
+        }
+      } else if (topic == "quit-application-granted") {
+        this.logger.log(2, "Got firefox quit event.");
+        var chrome = null;
+        try {
+            var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                         .getService(Components.interfaces.nsIWindowMediator);
+            var chrome = wm.getMostRecentWindow("navigator:browser");
+        } catch(e) {
+            this.logger.log(3, "Exception on shutdown window: "+e);
+        }
+        if (this._uninstall) {
+            if (chrome) {
+                chrome.torbutton_disable_tor();
+            } else {
+                this.logger.log(5,
+                        "User asked to uninstall, but we have no window!");
+            }
+        }
+
+        // Remove the cookie observer so clearing cookies below does not
+        // issue a new request.
+        if (chrome) chrome.torbutton_cookie_observer.unregister();
+
+        // Set pref in case this is just an upgrade (So we don't
+        // mess with cookies)
+        this._prefs.setBoolPref("extensions.torbutton.normal_exit", true);
+        this._prefs.setBoolPref("extensions.torbutton.crashed", false);
+        this._prefs.setBoolPref("extensions.torbutton.noncrashed", false);
+
+        if((this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
+            this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))
+            || this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
+            var selector =
+                Components.classes["@torproject.org/cookie-jar-selector;1"]
+                .getService(Components.interfaces.nsISupports)
+                .wrappedJSObject;
+            selector.clearCookies();
+            // clear the cookie jar by saving the empty cookies to it.
+            if(this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
+                if(this._prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
+                    selector.saveCookies("tor");
+                selector.saveCookies("nontor");
+            } else if(this._prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
+                selector.saveCookies("tor");
+            }
+        }
+        this.logger.log(3, "Torbutton normal exit.");
+        //this.unregister();
+      }
+    }
+
 };
 
 function StoreWrapper() {
@@ -49,6 +122,15 @@ function StoreWrapper() {
   };
 
   this.copyMethods(this._store());
+
+  this.ao = new AppObserver();
+
+  var observerService = Cc["@mozilla.org/observer-service;1"].
+          getService(Ci.nsIObserverService);
+  observerService.addObserver(this.ao, "em-action-requested", false);
+  observerService.addObserver(this.ao, "quit-application-granted", false);
+
+
 }
 
 StoreWrapper.prototype =
@@ -106,14 +188,14 @@ StoreWrapper.prototype =
 
   observe: function(aSubject, aTopic, aData) {
     if(aTopic == "app-startup") {
-      //dump("App startup\n");
+      dump("App startup\n");
       this.logger.log(3, "Got app-startup");
       this._startup = true;
       var observerService = Cc["@mozilla.org/observer-service;1"].
           getService(Ci.nsIObserverService);
 
-      observerService.addObserver(StartupObserver, "final-ui-startup", false);
-    } 
+      observerService.addObserver(this.ao, "final-ui-startup", false);
+    }
     this._store().observe(aSubject, aTopic, aData);
   },
 

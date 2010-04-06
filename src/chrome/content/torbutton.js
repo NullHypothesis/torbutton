@@ -2894,82 +2894,6 @@ function torbutton_check_google_captcha(subject, topic, data) {
   }
 }
 
-// Technique courtesy of:
-// http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
-// XXX: Exception here??
-const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
-var torbutton_uninstall_observer = {
-_uninstall : false,
-observe : function(subject, topic, data) {
-  if (topic == "em-action-requested") {
-    subject.QueryInterface(Components.interfaces.nsIUpdateItem);
-    torbutton_log(2, "Uninstall: "+data+" "+subject.id.toUpperCase());
-
-    if (subject.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
-      torbutton_log(2, "Uninstall: "+data);
-      if (data == "item-uninstalled" || data == "item-disabled") {
-        this._uninstall = true;
-      } else if (data == "item-cancel-action") {
-        this._uninstall = false;
-      }
-    }
-
-  } else if (topic == "quit-application-granted") {
-    if (this._uninstall) {
-        torbutton_disable_tor();
-    }
-
-    // Remove the cookie observer so clearing cookies does not
-    // issue a new request.
-    torbutton_cookie_observer.unregister();
-
-    // Set pref in case this is just an upgrade (So we don't
-    // mess with cookies)
-    torbutton_log(2, "Torbutton normal exit");
-    m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", true);
-    m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
-    m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
-
-    if((m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
-        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
-        || m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
-        var selector =
-            Components.classes["@torproject.org/cookie-jar-selector;1"]
-            .getService(Components.interfaces.nsISupports)
-            .wrappedJSObject;
-        selector.clearCookies();
-        // clear the cookie jar by saving the empty cookies to it.
-        if(m_tb_prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
-            if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
-                selector.saveCookies("tor");
-            selector.saveCookies("nontor");
-        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
-            selector.saveCookies("tor");
-        }
-    }
-    this.unregister();
-  }
-},
-register : function() {
- var observerService =
-   Components.classes["@mozilla.org/observer-service;1"].
-     getService(Components.interfaces.nsIObserverService);
- torbutton_log(3, "Observer register");
-
- observerService.addObserver(this, "em-action-requested", false);
- observerService.addObserver(this, "quit-application-granted", false);
- torbutton_log(3, "Observer register");
-},
-unregister : function() {
-  var observerService =
-    Components.classes["@mozilla.org/observer-service;1"].
-      getService(Components.interfaces.nsIObserverService);
-
-  observerService.removeObserver(this,"em-action-requested");
-  observerService.removeObserver(this,"quit-application-granted");
-}
-}
-
 // This observer is to catch some additional http load events
 // to deal with firefox bug 401296
 // TODO: One of these days we should probably unify these http observers
@@ -3230,7 +3154,6 @@ function torbutton_do_main_window_startup()
     torbutton_wrap_search_service();
 
     torbutton_unique_pref_observer.register();
-    torbutton_uninstall_observer.register();
     torbutton_http_observer.register();
     torbutton_cookie_observer.register();
     torbutton_proxyservice.register();
@@ -3243,6 +3166,7 @@ function torbutton_set_initial_state() {
                 m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
             } else {
                 // This happens if user decline to restore sessions after crashes
+                // XXX: This is causing false positives...
                 torbutton_log(4, "Conflict between noncrashed and normal_exit states.. Assuming crash but no session restore..");
                 m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
 
@@ -3515,7 +3439,6 @@ function torbutton_close_window(event) {
 
         progress.removeProgressListener(torbutton_weblistener);
         torbutton_unique_pref_observer.unregister();
-        torbutton_uninstall_observer.unregister();
         torbutton_http_observer.unregister();
         torbutton_cookie_observer.unregister();
         torbutton_proxyservice.unregister();
