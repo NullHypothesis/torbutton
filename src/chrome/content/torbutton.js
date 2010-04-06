@@ -3538,7 +3538,7 @@ function torbutton_update_tags(win, new_loc) {
         torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
             + win.location + ", under: "+win.top.location);
     } catch(e) {
-        torbutton_log(4, "Missing content window? "+str(e));
+        torbutton_log(4, "Missing content window: "+e);
     }
 
     // Base this tag off of proxies_applied, since we want to go
