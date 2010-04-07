@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Proxy Indstillinger">
 <!ENTITY torbutton.prefs.recommended_settings "Brug de anbefalede proxyindstillinger til min version af Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Brug Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Brug Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Brug brugerdefinerede proxyindstillinger">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
@@ -91,9 +91,16 @@
 <!ENTITY torbutton.prefs.tor_tabs "Faner blev indlæst i Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "Ingen Proxies for:">
+<!ENTITY torbutton.prefs.no_proxy_warning "Advarsel: Undgå at bruge enhver værtsnavne ovenfor">
 <!ENTITY torbutton.prefs.disable_livemarks "Deaktiver opdatering af livemarks, når Tor kører">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(anbefalet)">
+<!ENTITY torbutton.prefs.dtd_optional "(Valg frit)">
+<!ENTITY torbutton.prefs.dtd_crucial "(Vigtigt)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

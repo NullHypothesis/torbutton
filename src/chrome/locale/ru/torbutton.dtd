@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Настройки прокси">
 <!ENTITY torbutton.prefs.recommended_settings "Использовать параметры прокси, рекомендованные для данной версии Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Использовать Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Использовать Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Установить параметры прокси вручную">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP-прокси:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL-прокси:">
@@ -62,7 +62,7 @@
 <!ENTITY torbutton.prefs.block_tforms "Блокировать сохранение паролей и данных форм при использовании Tor (желательно)">
 <!ENTITY torbutton.prefs.block_ntforms "Блокировать сохранение паролей и данных форм при отключенном Tor (необяз.)">
 <!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "не-Tor">
+<!ENTITY torbutton.prefs.non_tor "Не-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Во время запуска, если восстанавливается сессия, установить состояние Tor в:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Восстанавливать/очищать cookies после аварии Firefox (желательно)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Хранить все cookies в защищенных файлах (опасно)">
@@ -93,7 +93,14 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Нет прокси для">
 <!ENTITY torbutton.prefs.no_proxy_warning "Внимание: Не вносите никаких имен доменов в поле выше">
-<!ENTITY torbutton.prefs.disable_livemarks "Отключить обновление livemarks во время работы в Tor">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.disable_livemarks "Отключить обновление Livemarks во время работы в Tor">
+<!ENTITY torbutton.prefs.dtd_recommended "(рекомендуется)">
+<!ENTITY torbutton.prefs.dtd_optional "(по желанию)">
+<!ENTITY torbutton.prefs.dtd_crucial "(критично)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

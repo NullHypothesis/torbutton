@@ -1,13 +1,13 @@
 <!ENTITY torbutton.prefs.title "Innstillinger for Torbutton">
 <!ENTITY torbutton.prefs.display_settings "Innstillinger for visning">
-<!ENTITY torbutton.prefs.display_panel "Vis proxy-innstilling for Tor i statuslinjen">
+<!ENTITY torbutton.prefs.display_panel "Vis proxyinnstillinger for Tor i statuslinjen">
 <!ENTITY torbutton.prefs.panel_format "Visningsformat for statuslinjen:">
 <!ENTITY torbutton.prefs.panel_text_format "Tekst">
 <!ENTITY torbutton.prefs.panel_icon_format "Ikon">
 <!ENTITY torbutton.prefs.tor_settings "Proxyinnstillinger">
 <!ENTITY torbutton.prefs.recommended_settings "Bruk anbefalte proxyinnstillinger for min versjon av Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Bruk Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Bruk Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Bruk egne proxyinnstillinger">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP-proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL-proxy:">
@@ -19,7 +19,7 @@
 <!ENTITY torbutton.pref_connection.notice "Deaktiver Torbutton for å endre på disse innstillingene.">
 <!ENTITY torbutton.pref_connection.more_info "Mer informasjon">
 <!ENTITY torbutton.pref_connection_more_info.title "Hjelp">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton er for øyeblikket aktivert. Hvis du vil endre på ikke-Tor-proxyinnstillinger, venneligst deaktiver Torbutton og returner hit. Hvis du vil endre på Tor-innstillingene, venneligst bruk Torbutton-innstillingsvinduet.">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton er for øyeblikket aktivert. Hvis du vil endre på ikke-Tor-proxyinnstillinger, vennligst deaktiver Torbutton og returner hit. Hvis du vil endre på Tor-innstillingene, vennligst bruk Torbutton-innstillingsvinduet.">
 <!ENTITY torbutton.context_menu.toggle "Endre Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Innstillinger...">
@@ -29,71 +29,78 @@
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Klikk for å initialisere Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Sikkerhetsinnstillinger">
-<!ENTITY torbutton.prefs.block_thread "Blokker historie-lesning under Tor (avgjørende)">
-<!ENTITY torbutton.prefs.block_thwrite "Blokker historie-skrivning under Tor (anbefales)">
-<!ENTITY torbutton.prefs.block_nthread "Blokker historie-lesning under ikke-Tor (valgfritt)">
-<!ENTITY torbutton.prefs.block_nthwrite "Blokker historie-skrivning under ikke-Tor (valgfritt)">
+<!ENTITY torbutton.prefs.block_thread "Blokker historielesing under Tor (avgjørende)">
+<!ENTITY torbutton.prefs.block_thwrite "Blokker historieskriving under Tor (anbefales)">
+<!ENTITY torbutton.prefs.block_nthread "Blokker historielesing under ikke-Tor (valgfritt)">
+<!ENTITY torbutton.prefs.block_nthwrite "Blokker historie-skriving under ikke-Tor (valgfritt)">
 <!ENTITY torbutton.prefs.clear_history "Slett historie på Tor toggle (valgfritt)">
 <!ENTITY torbutton.prefs.clear_cache "Blokker Tor disk cache og slett all cache på Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Blokker adgang til disk- og minne-cache under Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Lagre ikke-Tor-infokapsler i en beskyttet jar">
-<!ENTITY torbutton.prefs.mmm_cookies "Jeg vil manuelt administrere mine infokapsler (farlig)">
-<!ENTITY torbutton.prefs.clear_cookies "Slett infokapsler på Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Deaktiver plugins under Tor (avgjørende)">
-<!ENTITY torbutton.prefs.kill_bad_js '"Hook" farlige javascript (avgjørende)'>
+<!ENTITY torbutton.prefs.block_cache "Blokker adgang til disk og minne-cache under Tor">
+<!ENTITY torbutton.prefs.cookie_jars "Lagre ikke-Tor informasjonskapsler i en beskyttet jar">
+<!ENTITY torbutton.prefs.mmm_cookies "Jeg vil manuelt administrere mine informasjonskapsler (farlig)">
+<!ENTITY torbutton.prefs.clear_cookies "Slett informasjonskapsler på Tor toggle">
+<!ENTITY torbutton.prefs.disable_plugins "Deaktiver tillegg under Tor (avgjørende)">
+<!ENTITY torbutton.prefs.kill_bad_js "Fjern farlige javascript (avgjørende)">
 <!ENTITY torbutton.prefs.isolate_content "Isoler dynamisk innhold til Tor-tilstand (avgjørende)">
 <!ENTITY torbutton.prefs.no_updates "Deaktiver oppdateringer under Tor">
 <!ENTITY torbutton.prefs.set_uagent "Sett bruker-agent for bruk av Tor (avgjørende)">
 <!ENTITY torbutton.prefs.dynamic "Dynamisk Innhold">
-<!ENTITY torbutton.prefs.cookies "Infokapsler">
+<!ENTITY torbutton.prefs.cookies "Informasjonskapsler">
 <!ENTITY torbutton.prefs.cache "Hurtiglager">
 <!ENTITY torbutton.prefs.history "Historie">
 <!ENTITY torbutton.prefs.no_search "Deaktiver søkeforslag under Tor (anbefalt)">
 <!ENTITY torbutton.prefs.shutdown "Skru av">
-<!ENTITY torbutton.prefs.tor_shutdown "Slett Tor-infokapsler når nettleseren med Tor aktivert avsluttes">
-<!ENTITY torbutton.prefs.all_shutdown "Slett infokapsler hver gang nettleseren avsluttes">
-<!ENTITY torbutton.prefs.no_shutdown "Ikke slett infokapslene mine under avslutning">
-<!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
-<!ENTITY torbutton.prefs.headers "Headere">
-<!ENTITY torbutton.prefs.spoof_english "Spoof US Engelsk nettleser">
-<!ENTITY torbutton.prefs.disable_referer "Don't send referer during Tor usage (may break some sites)">
+<!ENTITY torbutton.prefs.tor_shutdown "Slett Tor-informasjonskapsler når nettleseren med Tor aktivert avsluttes">
+<!ENTITY torbutton.prefs.all_shutdown "Slett informasjonskapsler hver gang nettleseren avsluttes">
+<!ENTITY torbutton.prefs.no_shutdown "Ikke slett informasjonskapslene mine under avslutning">
+<!ENTITY torbutton.prefs.disable_sessionstore "Deaktiver lagring av sesjoner (anbefalt)">
+<!ENTITY torbutton.prefs.headers "Topptekst">
+<!ENTITY torbutton.prefs.spoof_english "Parodier US Engelsk nettleser">
+<!ENTITY torbutton.prefs.disable_referer "Ikke sende referer-forespørsel under Tor (kan gjøre at enkelte sider ikke fungerer)">
 <!ENTITY torbutton.prefs.disable_domstorage "Deaktiver DOM-lagring under Tor (avgjørende)">
 <!ENTITY torbutton.prefs.forms "Skjemaer">
-<!ENTITY torbutton.prefs.block_tforms "Blokker lagring av passord + skjema-informasjons under Tor (anbefalt)">
-<!ENTITY torbutton.prefs.block_ntforms "Blokker lagring av passord + skjema-informasjon under ikke-Tor (valgfritt)">
+<!ENTITY torbutton.prefs.block_tforms "Blokker lagring av passord + informasjon i skjema under Tor (anbefalt)">
+<!ENTITY torbutton.prefs.block_ntforms "Blokker lagring av passord + informasjon i skjema under ikke-Tor (valgfritt)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Ikke-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Under oppstart av en gjenopprettet sesjon, sett Tor-status til:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Last jar-en med inforkapsler på nytt / slett infokapsler når Firefox kræsjer (anbefalt)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "Lagre infokapsler for både Tor- og ikke-Tor i beskyttende jar (farlig)">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Last jar med informasjonskapsler på nytt / slett informasjonskapsler når Firefox kræsjer (anbefalt)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "Lagre informasjonskapsler for både Tor og ikke-Tor i beskyttende jar (farlig)">
 <!ENTITY torbutton.prefs.clear_http_auth "Slett HTTP-autentiserte sesjoner (anbefalt)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
+<!ENTITY torbutton.prefs.block_js_history "Isoler tilgang til historienavigering til Tor-status (kritisk)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Gjennopprett vinduer til størrelsen 50px under Tor (anbefalt)">
 <!ENTITY torbutton.prefs.close_tor "Lukk alle Tor-vinduer og faner på toggle (valgfritt)">
 <!ENTITY torbutton.prefs.close_nontor "Lukk alle ikke-tor-vinduer og faner på toggle (valgfritt)">
-<!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
+<!ENTITY torbutton.prefs.block_links "Blokker klikking av linker og oppdatering av sider fra forskjellige Tor-statuser (valgfritt)">
 <!ENTITY torbutton.prefs.jar_certs "Lagre SSL-sertifikater i forskjellige jars for Tor/ikke-Tor (anbefalt)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Lagre CA-sertifikater i forskjellige jars for Tor/ikke-Tor (anbefalt)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
+<!ENTITY torbutton.prefs.locked_mode "Deaktiver Knappen og Hurtigtaster for å unngå uhell med toggle">
 <!ENTITY torbutton.prefs.startup_state "Under normal oppstart, sett Tor-status til:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
+<!ENTITY torbutton.prefs.shutdown_state "Avslutningsmodus">
 <!ENTITY torbutton.prefs.startup "Oppstart">
 <!ENTITY torbutton.prefs.block_tor_file_net "Blokker Tor-tilgang til nettverket fra URL-er av typen file:// (anbefalt)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Blokker ikke-Tor-tilgang til nettverket fra URL-er av typen file://">
 <!ENTITY torbutton.prefs.restore_defaults "Gjenopprett standard">
 <!ENTITY torbutton.prefs.test_settings "Test innstillinger">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.test_auto "Test mine Tor-innstillinger etter første gang jeg aktiverer den hver gang Firefox starter opp">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Ikke skriv Tor-infokapsler til disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Ikke skriv ikke-Tor-infokapsler til disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
+<!ENTITY torbutton.prefs.tor_memory_jar "Ikke skriv Tor-informasjonskapsler til disk">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Ikke skriv ikke-Tor informasjonskapsler til disk">
+<!ENTITY torbutton.prefs.session_restore "La sesjonen lagre og gjennopprette følgende faner:">
 <!ENTITY torbutton.prefs.nontor_tabs "Faner lastet under ikke-Tor">
 <!ENTITY torbutton.prefs.tor_tabs "Faner lastet under Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "Ingen proxyer for:">
+<!ENTITY torbutton.prefs.no_proxy_warning "Advarsel: Unngå å bruke noen av vertsnavnene ovenfor">
 <!ENTITY torbutton.prefs.disable_livemarks "Deaktiver oppdateringer av live-bokmerker under Tor">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(anbefalt)">
+<!ENTITY torbutton.prefs.dtd_optional "(valgfritt)">
+<!ENTITY torbutton.prefs.dtd_crucial "(kritisk)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Configuración del Proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Usar la configuración de proxy recomendada para mi versión de Firefox.">
 <!ENTITY torbutton.prefs.use_privoxy "Usar Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Usar Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Usar una configuración de proxy personalizada">
 <!ENTITY torbutton.prefs.proxy.host.http "Proxy HTTP:">
 <!ENTITY torbutton.prefs.proxy.host.https "Proxy SSL:">
@@ -94,6 +94,13 @@
 <!ENTITY torbutton.prefs.no_proxies_on "No hay proxies para:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
 <!ENTITY torbutton.prefs.disable_livemarks "Deshabilitar las marcas de actualizaciones durante el uso de Tor">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_recommended "(recomendado)">
+<!ENTITY torbutton.prefs.dtd_optional "(opcional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

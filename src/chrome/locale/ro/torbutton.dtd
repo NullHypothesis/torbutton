@@ -1,34 +1,34 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
+<!ENTITY torbutton.prefs.title "Preferințe Torbutton">
+<!ENTITY torbutton.prefs.display_settings "Setări de vizualizare">
+<!ENTITY torbutton.prefs.display_panel "Arată setările proxy pentru Tor în bara de statut">
 <!ENTITY torbutton.prefs.panel_format "Status bar display format:">
 <!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Icon">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "About Torbutton">
+<!ENTITY torbutton.prefs.panel_icon_format "Iconiță">
+<!ENTITY torbutton.prefs.tor_settings "Setările pentru proxy">
+<!ENTITY torbutton.prefs.recommended_settings "Folosește setările pentru proxy recomandate pentru versiunea mea de Firefox">
+<!ENTITY torbutton.prefs.use_privoxy "Folosește Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Folosește Polipo">
+<!ENTITY torbutton.prefs.custom_settings "Folosește setări individualizate pentru proxy">
+<!ENTITY torbutton.prefs.proxy.host.http "Proxy HTTP:">
+<!ENTITY torbutton.prefs.proxy.host.https "Proxy SSL:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Proxy FTP:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Proxy Gopher:">
+<!ENTITY torbutton.prefs.proxy.host.socks "Host SOCKS:">
+<!ENTITY torbutton.prefs.proxy.port "Portul:">
+<!ENTITY torbutton.about.title "Despre Torbutton">
 <!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
 <!ENTITY torbutton.pref_connection.more_info "Informatii suplimentare">
 <!ENTITY torbutton.pref_connection_more_info.title "Ajutor">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
 <!ENTITY torbutton.context_menu.toggle "Comutarea starii Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Preferinte">
+<!ENTITY torbutton.context_menu.preferences "Preferințe">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "Despre Butonul Tor">
+<!ENTITY torbutton.context_menu.about "Despre Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
 <!ENTITY torbutton.button.label "Butonul Tor">
-<!ENTITY torbutton.button.tooltip "Click pentru initializarea Butonului Tor">
-<!ENTITY torbutton.prefs.sec_settings "Setari de securitate">
+<!ENTITY torbutton.button.tooltip "Apasă pentru pornirea Torbutton">
+<!ENTITY torbutton.prefs.sec_settings "Setări de securitate">
 <!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
 <!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
@@ -47,7 +47,7 @@
 <!ENTITY torbutton.prefs.dynamic "Conţinut dinamic ">
 <!ENTITY torbutton.prefs.cookies "Cookies">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "Cronologie (istorie)">
+<!ENTITY torbutton.prefs.history "Istoric">
 <!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
 <!ENTITY torbutton.prefs.shutdown "Inchide">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
@@ -94,6 +94,13 @@
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_recommended "(recomandat)">
+<!ENTITY torbutton.prefs.dtd_optional "(opțional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
