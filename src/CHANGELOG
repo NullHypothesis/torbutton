@@ -1,3 +1,21 @@
+1.2.5
+  08 Apr 2010
+  * bugfix: bug 1169: Fix blank popup conflict with CoolPreviews
+  * bugfix: bug 1246: Fix IST and other HH:30 timezone issues.
+  * bugfix: bug 1219: Fix the toggle warning loop issue on settings change.
+  * bugfix: bug 1321: Fix a session restore bug when closing the last window
+  * bugfix: bug 1302: Update useragent to FF3.6.3 on WinNT6.
+  * bugfix: bug 1157: Add logic to handle torbutton crashed state conflicts
+  * bugfix: bug 1235: Improve the 'changed-state' refresh warning message
+  * bugfix: bug 1337: Bind alert windows to correct browser window
+  * bugfix: bug 1055: Make the error console the default log output location
+  * bugfix: bug 1032: Fix an exception in the localhost proxy filter
+  * misc: Always tell a website our window size is rounded even if it's not
+  * misc: Add some suggestions to warning about loading external content
+  * new: Add option to always update Torbutton via Tor. On by default
+  * new: Redirect Google queries elsewhere on captcha (default ixquick)
+  * new: Strip identifying info off of Google searchbox queries
+
 1.2.4
   16 Dec 2009
   * bugfix: bug 1169: Fix blank popup conflict with Google Toolbar
