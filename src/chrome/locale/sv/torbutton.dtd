@@ -45,11 +45,11 @@
 <!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
 <!ENTITY torbutton.prefs.dynamic "Dynamic Content">
-<!ENTITY torbutton.prefs.cookies "Cookies">
+<!ENTITY torbutton.prefs.cookies "Kakor">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
-<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
-<!ENTITY torbutton.prefs.shutdown "Shutdown">
+<!ENTITY torbutton.prefs.history "Historia">
+<!ENTITY torbutton.prefs.no_search "Stäng av sökmotorers förslag under användning av Tor (rekommenderas)">
+<!ENTITY torbutton.prefs.shutdown "Stäng av">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
 <!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
@@ -97,3 +97,10 @@
 <!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
 <!ENTITY torbutton.prefs.dtd_optional "(optional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

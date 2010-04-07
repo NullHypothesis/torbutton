@@ -1,6 +1,6 @@
 <!ENTITY torbutton.prefs.title "Torbutton Asetukset">
 <!ENTITY torbutton.prefs.display_settings "Ulkoasu">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
+<!ENTITY torbutton.prefs.display_panel "Näytä Tor-välityspalvelimen asetukset tilarivillä">
 <!ENTITY torbutton.prefs.panel_format "Tilapalkin ulkoasu:">
 <!ENTITY torbutton.prefs.panel_text_format "Teksti">
 <!ENTITY torbutton.prefs.panel_icon_format "Kuva">
@@ -16,7 +16,7 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS-palvelin:">
 <!ENTITY torbutton.prefs.proxy.port "Portti:">
 <!ENTITY torbutton.about.title "Tietoja Torbuttonista">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
+<!ENTITY torbutton.pref_connection.notice "Poista Torbutton käytöstä muuttaakseen asetukset.">
 <!ENTITY torbutton.pref_connection.more_info "Lisää tietoja">
 <!ENTITY torbutton.pref_connection_more_info.title "Apua">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
@@ -29,17 +29,17 @@
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Turvallisuus">
-<!ENTITY torbutton.prefs.block_thread "Estä historiatietojen lukeminen Torin ollessa käytössä. (Tärkeää)">
-<!ENTITY torbutton.prefs.block_thwrite "Estä historiatietojen tallentaminen Torin ollessa käytössä. (Suositeltua)">
-<!ENTITY torbutton.prefs.block_nthread "Estä historiatietojen lukeminen Torin ollessa pois käytöstä. (Vapaaehtoista)">
-<!ENTITY torbutton.prefs.block_nthwrite "Estä historiatietojen tallentaminen Torin ollessa pois käytöstä. (Vapaaehtoista)">
-<!ENTITY torbutton.prefs.clear_history "Tyhjennä historiatiedot vaihdettaessa Tor-käytön tilaa. (Vapaaehtoista)">
+<!ENTITY torbutton.prefs.block_thread "Estä historiatietojen lukeminen Torin ollessa käytössä. (tärkeää)">
+<!ENTITY torbutton.prefs.block_thwrite "Estä historiatietojen tallentaminen Torin ollessa käytössä. (suositeltua)">
+<!ENTITY torbutton.prefs.block_nthread "Estä historiatietojen lukeminen Torin ollessa pois käytöstä. (valinnaista)">
+<!ENTITY torbutton.prefs.block_nthwrite "Estä historiatietojen tallentaminen Torin ollessa pois käytöstä. (valinnaista)">
+<!ENTITY torbutton.prefs.clear_history "Tyhjennä historiatiedot vaihdettaessa Tor-käytön tilaa. (valinnaista)">
 <!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
 <!ENTITY torbutton.prefs.block_cache "Estä levyn ja muistin välimuistiin pääsy Torin ollessa käytössä.">
 <!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.mmm_cookies "Huolehdin evästeistä käsin. (Vaarallista)">
+<!ENTITY torbutton.prefs.mmm_cookies "Huolehdin evästeistä käsin. (vaarallista)">
 <!ENTITY torbutton.prefs.clear_cookies "Poista evästeet vaihdettaessa Tor-käytön tilaa.">
-<!ENTITY torbutton.prefs.disable_plugins "Poista lisäosat toiminnasta Torin ollessa käytössä. (Tärkeää)">
+<!ENTITY torbutton.prefs.disable_plugins "Poista lisäosat toiminnasta Torin ollessa käytössä (tärkeää)">
 <!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
 <!ENTITY torbutton.prefs.no_updates "Estä päivitykset Torin ollessa käytössä.">
@@ -51,16 +51,16 @@
 <!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
 <!ENTITY torbutton.prefs.shutdown "Sammuta">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
-<!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
-<!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
+<!ENTITY torbutton.prefs.all_shutdown "Poista evästeet selaimen lopettaessa">
+<!ENTITY torbutton.prefs.no_shutdown "Älä poista evästeitä lopettaessa">
 <!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
-<!ENTITY torbutton.prefs.headers "Otsikko">
+<!ENTITY torbutton.prefs.headers "Tunnistetiedot">
 <!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">
 <!ENTITY torbutton.prefs.disable_referer "Don't send referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.disable_domstorage "Poista DOM-säilytys käytöstä kun Tor on käynnissä (kriittinen)">
 <!ENTITY torbutton.prefs.forms "Lomakkeet">
 <!ENTITY torbutton.prefs.block_tforms "Estä salasana+lomake tallennus kun Tor on käytössä (suositeltu)">
-<!ENTITY torbutton.prefs.block_ntforms "Estä salasana+lomake tallennus kun Tor ei ole käytössä (vaihtoehtoinen)">
+<!ENTITY torbutton.prefs.block_ntforms "Estä salasana+lomake tallennus kun Tor ei ole käytössä (valinnainen)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
@@ -69,16 +69,16 @@
 <!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
 <!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
 <!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.close_tor "Sulje kaikki Tor ikkunat ja välilehdet kun Tor poistetaan käytöstä (vaihtoehtoinen)">
-<!ENTITY torbutton.prefs.close_nontor "Sulje kaikki ikkunat ja välilehdet jotka eivät ole Tor ikkunoita tai välilehtiä kun Tor otetaan käyttöön (vaihtoehtoinen)">
+<!ENTITY torbutton.prefs.close_tor "Sulje kaikki Tor ikkunat ja välilehdet kun Tor poistetaan käytöstä (valinnainen)">
+<!ENTITY torbutton.prefs.close_nontor "Sulje kaikki ikkunat ja välilehdet jotka eivät ole Tor ikkunoita tai välilehtiä kun Tor otetaan käyttöön (valinnainen)">
 <!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
 <!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.locked_mode "Poista painike ja pikanäppäimet käytöstä estääkseen tahatonta käyttöönottoa/käytöstä poistamista">
 <!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
+<!ENTITY torbutton.prefs.shutdown_state "Lopetustila">
 <!ENTITY torbutton.prefs.startup "Käynnistys">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
+<!ENTITY torbutton.prefs.block_tor_file_net "Estä Tor-toiminnan pääsy osoitteisiin file:// (suositellaan)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Palauta Oletukset">
 <!ENTITY torbutton.prefs.test_settings "Koeta Asetuksia">
@@ -91,9 +91,16 @@
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "Ei välityspalvelimia osoitteille:">
+<!ENTITY torbutton.prefs.no_proxy_warning "Varoitus: Vältä yllä olevia osoitteita">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(suositeltu)">
+<!ENTITY torbutton.prefs.dtd_optional "(valinnainen)">
+<!ENTITY torbutton.prefs.dtd_crucial "(kriittinen)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

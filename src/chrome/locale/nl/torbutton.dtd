@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Proxy-instellingen">
 <!ENTITY torbutton.prefs.recommended_settings "De aanbevolen proxy-instellingen voor mijn versie van Firefox gebruiken">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy gebruiken">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Polipo gebruiken">
 <!ENTITY torbutton.prefs.custom_settings "Aangepaste proxy-instellingen gebruiken">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL proxy:">
@@ -28,22 +28,22 @@
 <!ENTITY torbutton.context_menu.about.key "O">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Klik hier om Torbutton te initialiseren">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
-<!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
+<!ENTITY torbutton.prefs.sec_settings "Beveiligingsinstellingen">
+<!ENTITY torbutton.prefs.block_thread "Blokkeer het lezen van de geschiedenis met Tor (cruciaal)">
+<!ENTITY torbutton.prefs.block_thwrite "Blokkeer het schrijven van de geschiedenis met Tor (aangeraden)">
+<!ENTITY torbutton.prefs.block_nthread "Blokkeer het lezen van de geschiedenis zonder Tor (optioneel)">
+<!ENTITY torbutton.prefs.block_nthwrite "Blokkeer het schrijven van de geschiedenis zonder Tor (optioneel)">
+<!ENTITY torbutton.prefs.clear_history "Verwijder de geschiedenis bij Tor-wissel (optioneel)">
+<!ENTITY torbutton.prefs.clear_cache "Blokkeer Tor schijf-cache en verwijder alle cachebestanden bij Tor-wissel">
+<!ENTITY torbutton.prefs.block_cache "Blokkeer Tor schijf- en geheugencache">
+<!ENTITY torbutton.prefs.cookie_jars "Sla de niet-Tor cookies op op een beveiligde plaats">
+<!ENTITY torbutton.prefs.mmm_cookies "Ik zal manueel de cookies beheren (gevaarlijk)">
+<!ENTITY torbutton.prefs.clear_cookies "Verwijder de cookies bij Tor-wissel">
+<!ENTITY torbutton.prefs.disable_plugins "Gebruik geen plug-ins bij Tor (cruciaal)">
+<!ENTITY torbutton.prefs.kill_bad_js "Pas gevaarlijke javascripts aan (cruciaal)">
+<!ENTITY torbutton.prefs.isolate_content "Isoleer dynamische inhoud binnen de Tor status (cruciaal)">
+<!ENTITY torbutton.prefs.no_updates "Doe geen updates bij Tor">
+<!ENTITY torbutton.prefs.set_uagent "Stel de user agent voor Torgebruik in (cruciaal)">
 <!ENTITY torbutton.prefs.dynamic "Dynamic Content">
 <!ENTITY torbutton.prefs.cookies "Cookies">
 <!ENTITY torbutton.prefs.cache "Cache">
@@ -97,3 +97,10 @@
 <!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
 <!ENTITY torbutton.prefs.dtd_optional "(optional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

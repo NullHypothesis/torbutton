@@ -63,7 +63,7 @@
 <!ENTITY torbutton.prefs.block_ntforms "Bloquear senhas + informações de formulários quando não usar o TOR (opcional)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Não-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
+<!ENTITY torbutton.prefs.restore_tor "Quando restaurar sessão, definir estado do Tor para:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recarregar cookie/limpar cookies em uma falha do Firefox (recomendado)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Armazene os cookies, sejam ou não de Tor, em recipientes protegidos (Perigoso)">
 <!ENTITY torbutton.prefs.clear_http_auth "Limpar as sessões HTTP autenticadas (recomendado)">
@@ -74,26 +74,33 @@
 <!ENTITY torbutton.prefs.block_links "Bloquear os link clicks e as recarga de páginas desde diferentes arquivos de estado de Tor (opcional)">
 <!ENTITY torbutton.prefs.jar_certs "Armazene certificados SSL em arquivos de estado de Tor separados para páginas Tor e não-Tor (recomendado)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Armazene certificados CA em arquivos de estado separados para páginas Tor e não-Tor (recomendado)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
+<!ENTITY torbutton.prefs.locked_mode "Desabilitar botões e atalhos para prevenir mudanças acidentais">
+<!ENTITY torbutton.prefs.startup_state "Durante inicio normal, definir estado do Tor para:">
+<!ENTITY torbutton.prefs.shutdown_state "Modo de desligamento">
+<!ENTITY torbutton.prefs.startup "Inicio">
+<!ENTITY torbutton.prefs.block_tor_file_net "Bloquear o acesso à rede a partir de urls do tipo file:// (recomendado)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Bloquear acesso não-Tor à rede a partir de urls do tipo file://">
+<!ENTITY torbutton.prefs.restore_defaults "Restaurar padrão">
 <!ENTITY torbutton.prefs.test_settings "Testar configurações">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.test_auto "Testar minhas configurações do Tor, quando houver alteração, durante o carregamento do Firefox">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.tor_memory_jar "Não gravar cookies do Tor no disco">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Não gravar cookies não-Tor no disco">
+<!ENTITY torbutton.prefs.session_restore "Salvar sessão e restaurar essas abas:">
+<!ENTITY torbutton.prefs.nontor_tabs "Abas não-Tor carregadas">
+<!ENTITY torbutton.prefs.tor_tabs "Abas carregadas no Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "Sem Proxy para: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Aviso: evite usar quaisquer dos hosts acima">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
+<!ENTITY torbutton.prefs.dtd_recommended "(recomendado)">
+<!ENTITY torbutton.prefs.dtd_optional "(opcional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

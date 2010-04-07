@@ -93,7 +93,14 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "不使用代理的地址:">
 <!ENTITY torbutton.prefs.no_proxy_warning "警告：请不要使用上述任何主机名。">
-<!ENTITY torbutton.prefs.disable_livemarks "使用 Tor 时禁用 Livemark(RSS书签) 更新">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.disable_livemarks "使用Tor时禁用Livemark更新(RSS书签)">
+<!ENTITY torbutton.prefs.dtd_recommended "(推荐)">
+<!ENTITY torbutton.prefs.dtd_optional "(可选)">
+<!ENTITY torbutton.prefs.dtd_crucial "(重要)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">

@@ -46,7 +46,7 @@
 <!ENTITY torbutton.prefs.set_uagent "Ορισμός user agent για χρήση  Tor (κρίσιμο)">
 <!ENTITY torbutton.prefs.dynamic "Δυναμικό περιεχόμενο">
 <!ENTITY torbutton.prefs.cookies "Cookies">
-<!ENTITY torbutton.prefs.cache "Λανθάνουσα">
+<!ENTITY torbutton.prefs.cache "Προσωρινή μνήμη cache">
 <!ENTITY torbutton.prefs.history "Ιστορικό">
 <!ENTITY torbutton.prefs.no_search "Απενεργοποίηση συμβουλών αναζήτησης κατά τη χρήση Tor (συνιστάται)">
 <!ENTITY torbutton.prefs.shutdown "Κλείσιμο">
@@ -55,7 +55,7 @@
 <!ENTITY torbutton.prefs.no_shutdown "Να μην γίνει εκκαθάριση cookies κατά το κλείσιμο">
 <!ENTITY torbutton.prefs.disable_sessionstore "Απενεργοποίηση αποθήκευσης συνεδρίας (συνιστάται)">
 <!ENTITY torbutton.prefs.headers "Κεφαλίδες">
-<!ENTITY torbutton.prefs.spoof_english "Πλαστογράφηση γλώσσας περιηγητή (σε US English)">
+<!ENTITY torbutton.prefs.spoof_english "Παραπλάνηση της γλώσσας US English του Περιηγητή">
 <!ENTITY torbutton.prefs.disable_referer "Να μην αποστέλεται referer κατά τη χρήση Tor (μπορεί να μην λειτουργούν σωστά ορισμένοι ιστότοποι)">
 <!ENTITY torbutton.prefs.disable_domstorage "Απενεργοποίηση αποθήκευσης DOM κατά τη χρήση Tor (κρίσιμο)">
 <!ENTITY torbutton.prefs.forms "Φόρμες">
@@ -63,8 +63,8 @@
 <!ENTITY torbutton.prefs.block_ntforms "Μπλοκάρισμα αποθήκευσης κωδικών + δεδομένων φορμών εκτός Tor (προαιρετικό)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Χωρίς Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Επαναφόρτωση cookie jar/ εκκαθάριση cookiew σε κατάρρευση του Firefox (συνιστάται)">
+<!ENTITY torbutton.prefs.restore_tor "Όταν γίνεται εκκίνηση με αποκατάσταση της συνεδρίας, τοποθέτηση του Tor σε κατάσταση:">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Επαναφόρτωση cookie jar/ εκκαθάριση cookiew σε περίπτωση κατάρρευσης του Firefox (συνίσταται)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Αποθήκευση cookies από και εκτός Tor σε προστατευμένα αρχεία jar (επικίνδυνο)">
 <!ENTITY torbutton.prefs.clear_http_auth "Εκκαθάριση πιστοποιημένων  συνεδριών HTTP (συνιστάται)">
 <!ENTITY torbutton.prefs.block_js_history "Απομόνωση πρόσβασης στο ιστορικό περιήγησης ανά κατάσταση Tor (κρίσιμο)">
@@ -74,26 +74,33 @@
 <!ENTITY torbutton.prefs.block_links "Μπλοκάρισμα κλικ σε δεσμούς και ανανέωσης σελίδων από διαφορετικές καταστάσεις λειτουργίας Tor (προαιρετικό)">
 <!ENTITY torbutton.prefs.jar_certs "Αποθήκευση πιστοποιητικών SSL σε ξεχωριστά αρχεία jar για χρήση με Tor/χωρίς Tor (συνιστάται)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Αποθήκευση πιστοποιητικών CA σε ξεχωριστά αρχεία jar για χρήση με Tor/χωρίς Tor (συνιστάται)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
+<!ENTITY torbutton.prefs.locked_mode "Απενεργοποίηση Κουμπιού και Συντομεύσεων πλήκτρων για αποφυγή απροσχεδίαστης εναλλαγής">
+<!ENTITY torbutton.prefs.startup_state "Όταν γίνει κανονική εκκίνηση, τοποθέτηση του Tor σε κατάσταση:">
+<!ENTITY torbutton.prefs.shutdown_state "Κατάσταση διακοπής λειτουργίας">
+<!ENTITY torbutton.prefs.startup "Εκκίνηση">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Απαγόρευση πρόσβασης στο δίκτυο με μη Tor πρόσβαση από URLs της μορφής file://">
+<!ENTITY torbutton.prefs.restore_defaults "Αποκατάσταση αρχικών ρυθμίσεων">
+<!ENTITY torbutton.prefs.test_settings "Έλεγχος ρυθμίσεων">
+<!ENTITY torbutton.prefs.test_auto "Να γίνεται έλεγχος των ρυθμίσεων του Tor μετά την πρώτη εναλλαγή, κάθε φορά που εκκινεί ο Firefox">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.tor_memory_jar "Να μην γράφονται Tor cookies στον δίσκο">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Να μην γράφονται μη Tor cookies στον δίσκο">
+<!ENTITY torbutton.prefs.session_restore "Αποθήκευση της συνεδρίας και επαναφορά των εξής καρτελών:">
+<!ENTITY torbutton.prefs.nontor_tabs "Καρτέλες που φορτώνονται σε μη Tor">
+<!ENTITY torbutton.prefs.tor_tabs "Καρτέλες που φορτώνονται στο Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.no_proxies_on "Δεν υπάρχουν πληρεξούσιοι διακομιστές proxy για:">
+<!ENTITY torbutton.prefs.no_proxy_warning "Ειδοποίηση: Αποφύγετε την  χρήση hostnames πιο πάνω">
+<!ENTITY torbutton.prefs.disable_livemarks "Απενεργοποίηση των ενημερώσεων του livemark όσο χρησιμοποιείται το Tor">
+<!ENTITY torbutton.prefs.dtd_recommended "(συνίσταται)">
+<!ENTITY torbutton.prefs.dtd_optional "(προεραιτικό)">
+<!ENTITY torbutton.prefs.dtd_crucial "(κρίσιμο)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha">
+<!ENTITY torbutton.prefs.search_engine "Search engine:">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "scroogle.org">
+<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
