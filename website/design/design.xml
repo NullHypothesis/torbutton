@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Dec 15 2009</pubdate>
+   <pubdate>Apr 10 2010</pubdate>
  </articleinfo>
 
 <sect1>
@@ -19,7 +19,7 @@
   <para>
 
 This document describes the goals, operation, and testing procedures of the
-Torbutton Firefox extension. It is current as of Torbutton 1.2.4.
+Torbutton Firefox extension. It is current as of Torbutton 1.2.5.
 
   </para>
   <sect2 id="adversary">
@@ -1202,7 +1202,7 @@ to retrieve the original screen values by using <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-sandbox-xpcnativewrapper.html">XPCNativeWrapper</ulink>
 or <ulink
 url="http://pseudo-flaw.net/tor/torbutton/unmask-components-lookupmethod.html">Components.lookupMethod</ulink>.
-We are still looking for a workaround as of Torbutton 1.2.4.
+We are still looking for a workaround as of Torbutton 1.2.5.
 
 <!-- FIXME: Don't forget to update this -->
 
@@ -1273,6 +1273,25 @@ This setting satisfies the <link
 linkend="updates">Update Safety</link> requirement.
 </para>
 </sect2>
+<sect2>
+<title>Redirect Torbutton Updates Via Tor (recommended)</title>
+
+  <para>Option: <command>extensions.torbutton.update_torbutton_via_tor</command></para>
+
+  <para>This setting causes Torbutton to install an
+
+<ulink
+url="https://developer.mozilla.org/en/nsIProtocolProxyFilter">nsIProtocolProxyFilter</ulink>
+in order to redirect all version update checks and Torbutton update downloads
+via Tor, regardless of if Tor is enabled or not. This was done both to address
+concerns about data retention done by <ulink
+url="https://www.addons.mozilla.org">addons.mozilla.org</ulink>, as well as to
+help censored users meet the <link linkend="undiscoverability">Tor
+Undiscoverability</link> requirement.
+
+  </para>
+</sect2>
+
 <sect2>
 
 <title>Disable Search Suggestions during Tor (recommended)</title>
@@ -1713,7 +1732,7 @@ cookie clearing, 1 means clear only during Tor-enabled shutdown, and 2 means
 clear for both Tor and Non-Tor shutdown. When set to 1 or 2, Torbutton listens
 for the <ulink
 url="http://developer.mozilla.org/en/docs/Observer_Notifications#Application_shutdown">quit-application-granted</ulink> event in
-<function>torbutton_uninstall_observer()</function> and use <ulink
+<function>https://git.torproject.org/checkout/torbutton/master/src/components/crash-observer.js</function> and use <ulink
 url="https://git.torproject.org/checkout/torbutton/master/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
 to clear out all cookies and all cookie jars upon shutdown.  </para>
 <para>
@@ -1770,7 +1789,7 @@ url="https://git.torproject.org/checkout/torbutton/master/src/components/crash-o
   <command>extensions.torbutton.crashed</command> pref). To confirm for
 false positives (such as session restore failures, upgrade, normal
 session restore, etc), Torbutton also sets the pref
-extensions.torbutton.normal_exit in torbutton_uninstall_observer() during 
+extensions.torbutton.normal_exit during
 Firefox exit and checks this value as well during startup.  
 </para>
 <para>
@@ -1925,6 +1944,67 @@ url="http://kb.mozillazine.org/Network.http.sendRefererHeader">network.http.send
 <para>
 This setting also does not directly satisfy any Torbutton requirement, but
 some may desire to mask their referrer for general privacy concerns.
+</para>
+</sect2>
+<sect2>
+  <title>Strip platform and language off of Google Search Box queries</title>
+
+<para>Option: <command>extensions.torbutton.fix_google_srch</command>
+</para>
+
+<para> 
+
+This option causes Torbutton to use the <ulink
+url="https://wiki.mozilla.org/Search_Service:API">@mozilla.org/browser/search-service;1</ulink>
+component to wrap the Google search plugin. On many platforms, notably Debian
+and Ubuntu, the Google search plugin is set to reveal a lot of language and
+platform information. This setting strips off that info while Tor is enabled.
+
+</para>
+<para>
+This setting helps Torbutton to fulfill its <link
+linkend="setpreservation">Anonymity Set Preservation</link> requirement.
+</para>
+</sect2>
+
+<sect2>
+  <title>Automatically use an alternate search engine when presented with a
+Google Captcha</title>
+
+<para>Options:
+<simplelist>
+ <member><command>extensions.torbutton.asked_google_captcha</command></member>
+ <member><command>extensions.torbutton.dodge_google_captcha</command></member>
+ <member><command>extensions.torbutton.google_redir_url</command></member>
+</simplelist>
+</para>
+
+<para>
+
+Google's earch engine has rate limiting features that cause it to
+<ulink
+url="http://googleonlinesecurity.blogspot.com/2007/07/reason-behind-were-sorry-message.html">present
+captchas</ulink> and sometimes even outright ban IPs that issue large numbers
+of search queries, especially if a lot of these queries appear to be searching
+for software vulnerabilities or unprotected comment areas.
+
+</para>
+<para>
+
+Despite multiple discussions with Google, we were unable to come to a solution
+or any form of compromise that would reduce the number of captchas and
+outright bans seen by Tor users issuing regular queries.
+
+</para>
+<para>
+As a result, we've implemented this option as an <ulink
+url="https://developer.mozilla.org/en/XUL_School/Intercepting_Page_Loads#HTTP_Observers">'http-on-modify-request'</ulink>
+http observer to optionally redirect banned or captcha-triggering Google
+queries to search engines that do not rate limit Tor users. The current
+options are ixquick.com, bing.com, yahoo.com and scroogle.org. These are
+encoded in the preferences
+<command>extensions.torbutton.redir_url.[1-4]</command>.
+
 </para>
 </sect2>
 
