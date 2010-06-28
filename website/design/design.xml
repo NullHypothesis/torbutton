@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Apr 10 2010</pubdate>
+   <pubdate>Jun 28 2010</pubdate>
  </articleinfo>
 
 <sect1>
@@ -1981,7 +1981,7 @@ Google Captcha</title>
 
 <para>
 
-Google's earch engine has rate limiting features that cause it to
+Google's search engine has rate limiting features that cause it to
 <ulink
 url="http://googleonlinesecurity.blogspot.com/2007/07/reason-behind-were-sorry-message.html">present
 captchas</ulink> and sometimes even outright ban IPs that issue large numbers
@@ -2065,12 +2065,15 @@ is currently not exposed via the preferences UI.
 
 Torbutton has to work around a number of Firefox bugs that impact its
 security. Most of these are mentioned elsewhere in this document, but they
-have also been gathered here for reference. Several of these have fixes in
-Firefox3.0/trunk, but are listed because they still have not been backported
-to FF2.0. In order of decreasing severity, they are:
+have also been gathered here for reference. In order of decreasing severity,
+they are:
 
    </para>
    <orderedlist>
+
+<!--
+
+XXX: We should just consider this one fixed. FF3.0 is pretty much at EOL.
 
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 392274 - Timezone
@@ -2094,28 +2097,52 @@ fulfill its <link linkend="location">Location Neutrality</link> requirement.
 
    </para>
    </listitem>
-<!--
-FIXME: This one is fixed, but we need to make use of the new API in FF3.5
-
-     <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=436250">Bug 436250 - Livemarks can't be
-disabled at runtime</ulink>
-      <para>
-
-The RSS Feed based "Livemarks"/"Live Bookmarks" update frequency is controlled
-by the pref <command>browser.bookmarks.livemark_refresh_seconds</command>.
-However, changing this preference does not cancel any pending timers, which
-means that at least one livemarks pref fetch will happen over Tor, and once
-this pref is set to disable livemarks for Tor, changing it back will never
-cause the service to start back up again. The
-leakage of Livemarks interferes with Torbutton's ability to fulfill
-the <link linkend="isolation">Network Isolation</link> requirement.
-
-      </para>
-     </listitem>
 -->
+    <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=429070">Bug 429070 - exposing
+Components.interfaces to untrusted content leaks information about installed
+extensions</ulink>
+     <para>
+<ulink url="http://pseudo-flaw.net/">Gregory Fleischer</ulink> demonstrated at Defcon 17 that these interfaces can
+also be used to <ulink
+url="http://pseudo-flaw.net/tor/torbutton/fingerprint-firefox.html">fingerprint
+Firefox down the to the minor version</ulink>. Note that his test has not been
+updated since 3.5.3, hence it reports 3.5.3 for more recent Firefoxes. This
+bug interferes with Torbutton's ability to satisfy its <link
+linkend="setpreservation">Anonymity Set Preservation</link> requirement.
+     </para>
+    </listitem>
 
-     <listitem><ulink
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=280661">Bug 280661 - SOCKS proxy server
+connection timeout hard-coded</ulink>
+    <para>
+
+This bug prevents us from using the Firefox SOCKS layer directly, and
+currently requires us to ship an auxiliary HTTP proxy called <ulink
+url="http://www.pps.jussieu.fr/~jch/software/polipo/">Polipo</ulink>. If this
+patch were landed, we would no longer need to ship Polipo, which has a number
+of privacy and security issues of its own (in addition to being unmaintained).
+
+    </para>
+   </listitem>
+   <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=418986">Bug 418986 - window.screen
+provides a large amount of identifiable information</ulink>
+   <para>
+
+As <link linkend="fingerprinting">mentioned above</link>, a large amount of
+information is available from <ulink
+url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>.
+Currently, there is no way to obscure this information without Javascript
+hooking. This bug is a feature request to provide some other method to change
+these values. This bug interferes with Torbutton's ability to fulfill its
+<link linkend="setpreservation">Anonymity Set Preservation</link>
+requirement.
+
+   </para>
+   </listitem>
+   <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=435159">Bug 435159 -
 nsNSSCertificateDB::DeleteCertificate has race conditions</ulink>
       <para>
@@ -2130,6 +2157,26 @@ error dialog), and worse, it would still be deleted after that.  The lack of
 this functionality is considered a Torbutton security bug because cert
 isolation is considered a <link linkend="state">State Separation</link>
 feature.
+
+      </para>
+     </listitem>
+
+     <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=575230">Bug 575230 - Provide option to
+reduce precision of Date()</ulink>
+      <para>
+
+Currently it is possible to <ulink
+url="http://arstechnica.com/tech-policy/news/2010/02/firm-uses-typing-cadence-to-finger-unauthorized-users.ars">fingerprint
+users based on their typing cadence</ulink> using the high precision timer
+available to javascript. Using this same precision, it is possible to compute
+an identifier based upon the clock drift of the client from some nominal
+source. The latter is not much of a concern for Tor users, as the variable
+delay to load and run a page is measured on the order of seconds, but the high
+precision timer can still be used to fingerprint aspects of a browser's
+javascript engine and processor, and apparently also a user's typing cadence.
+This bug hinders Torbutton's ability to satisfy its <link
+linkend="setpreservation">Anonymity Set Preservation</link> requirement.
 
       </para>
      </listitem>
@@ -2179,6 +2226,8 @@ The following bugs impact Torbutton and similar extensions' functionality.
    </para>
 
     <orderedlist>
+
+
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=445696">Bug 445696 -
 Extensions cannot determine if firefox is fullScreen</ulink>
@@ -2350,20 +2399,6 @@ livemarks fetches.
     </para>
     </listitem>
 -->
-   <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=418986">Bug 418986 - window.screen
-provides a large amount of identifiable information</ulink>
-   <para>
-
-As <link linkend="fingerprinting">mentioned above</link>, a large amount of
-information is available from <ulink
-url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>.
-Currently, there is no way to obscure this information without Javascript
-hooking. This bug is a feature request to provide some other method to change
-these values.
-
-   </para>
-   </listitem>
  
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=309524">Bug 309524</ulink>
@@ -2399,6 +2434,10 @@ Williams.
 
      </para>
      </listitem>
+<!--
+
+XXX: This is likely fixed with nsICrypto.logout()
+
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=448747">Bug 448747 -
 Provide Mechanism to clear TLS Session IDs</ulink>
@@ -2414,6 +2453,7 @@ thing.
 
      </para>
      </listitem>
+-->
 
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=419598">Bug 419598 - 'var
