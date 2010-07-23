@@ -145,7 +145,9 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_noProxiesOn').value = o_torprefs.getCharPref('no_proxies_on');
 
     // Transparent Torification magic
-    doc.getElementById('torbutton_transparentTor').selected = o_torprefs.getBoolPref('torbutton_transparentTor');
+    if (o_torprefs.getBoolPref('torbutton_transparentTor')) {
+        doc.getElementById('torbutton_settingsMethod').selectedItem = doc.getElementById('torbutton_transparentTor');
+    }
 
     // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
