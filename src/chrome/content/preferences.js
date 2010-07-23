@@ -144,6 +144,9 @@ function torbutton_prefs_init(doc) {
     }
     doc.getElementById('torbutton_noProxiesOn').value = o_torprefs.getCharPref('no_proxies_on');
 
+    // Transparent Torification magic
+    doc.getElementById('torbutton_transparentTor').selected = o_torprefs.getBoolPref('torbutton_transparentTor');
+
     // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
 
     doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
@@ -397,7 +400,9 @@ function torbutton_prefs_save(doc) {
     }
 
     o_torprefs.setCharPref('no_proxies_on',      doc.getElementById('torbutton_noProxiesOn').value);
-    
+
+    o_torprefs.setBoolPref('torbutton_transparentTor', doc.getElementById('torbutton_transparentTor').selected);
+
     if (doc.getElementById('torbutton_settingsMethod').value == 'custom') {
         // XXX: Is this even needed anymore? We don't read the
         // custom prefs at all it seems..
