@@ -26,6 +26,7 @@ pref("extensions.torbutton.locked_mode",false);
 pref("extensions.torbutton.test_url","https://check.torproject.org/?TorButton=true");
 pref("extensions.torbutton.test_failed",false);
 pref("extensions.torbutton.no_proxies_on","127.0.0.1");
+pref("extensions.torbutton.transparentTor",false);
 
 // XXX: wtf prefs? These seem not actually connected, but govern
 // if user wants own tor proxy settings
