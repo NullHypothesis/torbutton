@@ -127,13 +127,21 @@
                     </row>
                 </rows>
             </grid>
+
+        <!-- This is where we overload for maximum functionality and assume
+        transparent proxy settings -->
+
+        <radio id="torbutton_transparentTor"
+        label="&torbutton.prefs.transparentTor;"
+        oncommand="torbutton_prefs_set_field_attributes(document)"/>
+
         </radiogroup>
        
         
         <checkbox id="torbutton_lockedMode"
         label="&torbutton.prefs.locked_mode;"
         oncommand="torbutton_prefs_set_field_attributes(document)"/>
-        
+
         <hbox>
          <spacer flex="1"/>
          <button id="torbutton_testSettings"
