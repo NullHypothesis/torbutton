@@ -145,7 +145,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_noProxiesOn').value = o_torprefs.getCharPref('no_proxies_on');
 
     // Transparent Torification magic
-    if (o_torprefs.getBoolPref('transparentTor')) {
+    if (o_torprefs.getBoolPref('saved.transparentTor')) {
         doc.getElementById('torbutton_settingsMethod').selectedItem = doc.getElementById('torbutton_transparentTor');
     }
 
