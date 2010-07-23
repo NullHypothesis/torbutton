@@ -26,7 +26,6 @@ pref("extensions.torbutton.locked_mode",false);
 pref("extensions.torbutton.test_url","https://check.torproject.org/?TorButton=true");
 pref("extensions.torbutton.test_failed",false);
 pref("extensions.torbutton.no_proxies_on","127.0.0.1");
-pref("extensions.torbutton.transparentTor",false);
 
 // XXX: wtf prefs? These seem not actually connected, but govern
 // if user wants own tor proxy settings
@@ -92,6 +91,7 @@ pref("extensions.torbutton.saved.productsub_override","");
 pref("extensions.torbutton.saved.buildID_override","");
 pref("extensions.torbutton.saved.useragent_vendor", "");
 pref("extensions.torbutton.saved.useragent_vendorSub","");
+pref("extensions.torbutton.saved.transparentTor",false);
 // network.dns.disablePrefetch is a hidden option. It has no default value:
 //pref("extensions.torbutton.saved.dns_prefetch", false);
 
