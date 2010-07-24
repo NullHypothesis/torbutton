@@ -433,9 +433,7 @@ function torbutton_prefs_save(doc) {
         if (ret != 4) {
             var warning = strings.GetStringFromName("torbutton.popup.test.failure");
             window.alert(warning);
-        }
-
-        else {
+        } else {
             o_torprefs.setBoolPref('tor_enabled', true);
             // In theory this is where we unlock some things that are now "safe"
             // Unleash Flash on Tor users
