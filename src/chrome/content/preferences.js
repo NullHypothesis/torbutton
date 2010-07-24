@@ -403,7 +403,7 @@ function torbutton_prefs_save(doc) {
 
     o_torprefs.setCharPref('no_proxies_on',      doc.getElementById('torbutton_noProxiesOn').value);
 
-    o_torprefs.setBoolPref('torbutton_transparentTor', doc.getElementById('torbutton_transparentTor').selected);
+    o_torprefs.setBoolPref('saved.transparentTor', doc.getElementById('torbutton_transparentTor').selected);
     if (o_torprefs.getBoolPref('torbutton_transparentTor')) {
         var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
             .getService(Components.interfaces.nsIWindowMediator);
@@ -415,7 +415,7 @@ function torbutton_prefs_save(doc) {
         }
 
         else {
-            o_torprefs.setBoolPref('torbutton_tor_enabled', true);
+            o_torprefs.setBoolPref('tor_enabled', true);
             // In theory this is where we unlock some things that are now "safe"
             // Unleash Flash on Tor users
             // Ignore any proxy settings that the user has set
