@@ -15,7 +15,10 @@ function torbutton_prefs_set_field_attributes(doc)
     doc.getElementById('torbutton_panelStyleText').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleIcon').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     // Privoxy is always recommended for Firefoxes not supporting socks_remote_dns
-    if (!torbutton_check_socks_remote_dns()) {
+    if (doc.getElementById('torbutton_transparentTor').selected) {
+        doc.getElementById('torbutton_settingsMethod').value = 'transparent';
+    }
+      else if (!torbutton_check_socks_remote_dns()) {
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
     } else {
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
@@ -67,7 +70,25 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_socksPort').disabled = true;
         doc.getElementById('torbutton_socksGroup').disabled = true;
         doc.getElementById('torbutton_noProxiesOn').disabled = true;
+    } else if (doc.getElementById('torbutton_settingsMethod').value == 'transparent') {
+        // Mr. Larry was so lazy when he wrote the rest of this code
+        torbutton_log(2, "not using recommended settings");
+        torbutton_log(2, "using transparent settings");
+        doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
+        doc.getElementById('torbutton_httpProxy').disabled = true;
+        doc.getElementById('torbutton_httpPort').disabled = true;
+        doc.getElementById('torbutton_httpsProxy').disabled = true;
+        doc.getElementById('torbutton_httpsPort').disabled = true;
+        doc.getElementById('torbutton_ftpProxy').disabled = true;
+        doc.getElementById('torbutton_ftpPort').disabled = true;
+        doc.getElementById('torbutton_gopherProxy').disabled = true;
+        doc.getElementById('torbutton_gopherPort').disabled = true;
+        doc.getElementById('torbutton_socksHost').disabled = true;
+        doc.getElementById('torbutton_socksPort').disabled = true;
+        doc.getElementById('torbutton_socksGroup').disabled = true;
+        doc.getElementById('torbutton_noProxiesOn').disabled = true;
     } else {
+        torbutton_log(2, "using transparent settings");
         doc.getElementById('torbutton_httpProxy').disabled = false;
         doc.getElementById('torbutton_httpPort').disabled = false;
         doc.getElementById('torbutton_httpsProxy').disabled = false;
