@@ -175,10 +175,11 @@ pref("extensions.torbutton.xfer_google_cookies", true);
 pref("extensions.torbutton.google_redir_url", 1);
 pref("extensions.torbutton.dodge_google_captcha", true);
 pref("extensions.torbutton.asked_google_captcha", false);
-pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.pl?query=");
-pref("extensions.torbutton.redir_url.2", "http://www.bing.com/search?q=");
-pref("extensions.torbutton.redir_url.3", "http://search.yahoo.com/search?p=");
-pref("extensions.torbutton.redir_url.4", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=");
+pref("extensions.torbutton.redir_url.1", "https://duckduckgo.com/?q=");
+pref("extensions.torbutton.redir_url.2", "https://www.ixquick.com/do/metasearch.pl?query=");
+pref("extensions.torbutton.redir_url.3", "http://www.bing.com/search?q=");
+pref("extensions.torbutton.redir_url.4", "http://search.yahoo.com/search?p=");
+pref("extensions.torbutton.redir_url.5", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=");
 pref("extensions.torbutton.fix_google_srch", true);
 
 // User agent prefs:

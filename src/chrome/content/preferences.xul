@@ -353,6 +353,8 @@
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
               <radio id="torbutton_engine4" label="&torbutton.prefs.engine4;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              <radio id="torbutton_engine5" label="&torbutton.prefs.engine5;"
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
              </radiogroup>
             </hbox>
 
