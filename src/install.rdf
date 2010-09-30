@@ -10,9 +10,7 @@
         <em:homepageURL>https://www.torproject.org/torbutton/</em:homepageURL>
         <em:optionsURL>chrome://torbutton/content/preferences.xul</em:optionsURL>
         <em:iconURL>chrome://torbutton/skin/tor.png</em:iconURL>
-<!--        
-        <em:updateURL>https://torbutton.torproject.org/dev/update.rdf</em:updateURL>
--->
+        <em:updateURL>https://www.torproject.org/torbutton/update.rdf</em:updateURL>
         <!-- firefox -->
         <em:targetApplication>
             <Description>
