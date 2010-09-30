@@ -926,22 +926,38 @@ function torbutton_set_timezone(mode, startup) {
     }
 }
 
+function torbutton_get_general_useragent_locale() {
+   try {
+        var locale = m_tb_prefs.getCharPref("general.useragent.locale");
+        if (locale != "chrome://global/locale/intl.properties") {
+            return locale;
+        }
+
+        var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                                .getService(Components.interfaces.nsIStringBundleService);
+        var stringbundle = bundle.createBundle(locale);
+        return stringbundle.GetStringFromName("general.useragent.locale");
+    } catch(err) {
+        torbutton_log(4, "Error while getting general.useragent.locale:" + err);
+        return 'en-US';
+    }
+}
+
 function torbutton_set_uagent() {
     try {
         var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
         var lang = new RegExp("LANG", "gm");
         var appname = torprefs.getCharPref("appname_override");
         var appvers = torprefs.getCharPref("appversion_override");
+        var generalLocale = torbutton_get_general_useragent_locale();
         if(torprefs.getBoolPref("spoof_english")) {
             appname = appname.replace(lang, 
                     torprefs.getCharPref("spoof_locale"));
             appvers = appvers.replace(lang, 
                     torprefs.getCharPref("spoof_locale"));
         } else {
-            appname = appname.replace(lang, 
-                    m_tb_prefs.getCharPref("general.useragent.locale"));
-            appvers = appvers.replace(lang, 
-                    m_tb_prefs.getCharPref("general.useragent.locale"));
+            appname = appname.replace(lang, generalLocale);
+            appvers = appvers.replace(lang, generalLocale);
         }
         m_tb_prefs.setCharPref("general.appname.override", appname);
 
@@ -955,8 +971,7 @@ function torbutton_set_uagent() {
             agent = agent.replace(lang,
                     torprefs.getCharPref("spoof_locale"));
         } else {
-            agent = agent.replace(lang,
-                    m_tb_prefs.getCharPref("general.useragent.locale"));
+            agent = agent.replace(lang, generalLocale);
         }
         m_tb_prefs.setCharPref("general.useragent.override", agent);
 
