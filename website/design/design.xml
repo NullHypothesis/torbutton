@@ -2001,9 +2001,9 @@ As a result, we've implemented this option as an <ulink
 url="https://developer.mozilla.org/en/XUL_School/Intercepting_Page_Loads#HTTP_Observers">'http-on-modify-request'</ulink>
 http observer to optionally redirect banned or captcha-triggering Google
 queries to search engines that do not rate limit Tor users. The current
-options are ixquick.com, bing.com, yahoo.com and scroogle.org. These are
+options are duckduckgo.com, ixquick.com, bing.com, yahoo.com and scroogle.org. These are
 encoded in the preferences
-<command>extensions.torbutton.redir_url.[1-4]</command>.
+<command>extensions.torbutton.redir_url.[1-5]</command>.
 
 </para>
 </sect2>

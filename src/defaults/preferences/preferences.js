@@ -186,6 +186,7 @@ pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.
 pref("extensions.torbutton.redir_url.2", "http://www.bing.com/search?q=");
 pref("extensions.torbutton.redir_url.3", "http://search.yahoo.com/search?p=");
 pref("extensions.torbutton.redir_url.4", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=");
+pref("extensions.torbutton.redir_url.5", "https://duckduckgo.com/?q=");
 pref("extensions.torbutton.fix_google_srch", true);
 
 // User agent prefs:

@@ -327,6 +327,10 @@ function torbutton_prefs_init(doc) {
             doc.getElementById("torbutton_searchEngine").selectedItem =
                 doc.getElementById('torbutton_engine4');
             break;
+        case 5:
+            doc.getElementById("torbutton_searchEngine").selectedItem =
+                doc.getElementById('torbutton_engine5');
+            break;
 
     }
     doc.getElementById('torbutton_noCaptcha').checked = o_torprefs.getBoolPref('dodge_google_captcha');
@@ -558,8 +562,11 @@ function torbutton_prefs_save(doc) {
     } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
             doc.getElementById('torbutton_engine3')) {
         o_torprefs.setIntPref('google_redir_url', 3);
-    } else {
+    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
+            doc.getElementById('torbutton_engine4')) {
         o_torprefs.setIntPref('google_redir_url', 4);
+    } else {
+        o_torprefs.setIntPref('google_redir_url', 5);
     }
 
     /*

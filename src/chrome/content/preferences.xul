@@ -360,6 +360,8 @@
              <radiogroup align="center" orient="horizontal" id="torbutton_searchEngine">
               <radio id="torbutton_engine1" label="&torbutton.prefs.engine1;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              <radio id="torbutton_engine5" label="&torbutton.prefs.engine5;"
+                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
               <radio id="torbutton_engine2" label="&torbutton.prefs.engine2;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
               <radio id="torbutton_engine3" label="&torbutton.prefs.engine3;"
