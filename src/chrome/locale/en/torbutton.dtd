@@ -99,9 +99,9 @@
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
-<!ENTITY torbutton.prefs.engine1 "duckduckgo.com">
-<!ENTITY torbutton.prefs.engine2 "ixquick.com">
-<!ENTITY torbutton.prefs.engine3 "Bing.com">
-<!ENTITY torbutton.prefs.engine4 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine5 "scroogle.org">
+<!ENTITY torbutton.prefs.engine1 "ixquick.com">
+<!ENTITY torbutton.prefs.engine2 "Bing.com">
+<!ENTITY torbutton.prefs.engine3 "Yahoo.com">
+<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
