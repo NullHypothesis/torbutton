@@ -26,6 +26,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Про Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections.key "C">
+<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Клацніть для запуску Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Налаштування безпеки">
@@ -37,6 +45,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Блокувати дисковий кеш та чистити кеш при зміні стану Tor">
 <!ENTITY torbutton.prefs.block_cache "Блокувати доступ до дискового та кешу у пам’яті при використанні Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Зберігати не-Tor куки у захищеному стані">
+<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
 <!ENTITY torbutton.prefs.mmm_cookies "Я хочу сам керувати своїми куками (небезпечно)">
 <!ENTITY torbutton.prefs.clear_cookies "Чистити куки при зміні стану Tor">
 <!ENTITY torbutton.prefs.disable_plugins "Вимикати плагіни при використанні Tor (критично)">
@@ -56,7 +65,10 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Не дозволяти збереження сесій (рекомендовано)">
 <!ENTITY torbutton.prefs.headers "Заголовки">
 <!ENTITY torbutton.prefs.spoof_english "Прикидатися переглядачем US English">
-<!ENTITY torbutton.prefs.disable_referer "Не висилати референтів при використанні Tor (може завадити роботі деяких сторінок)">
+<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
+<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Вимкнути збереження DOM при використанні Tor (критично)">
 <!ENTITY torbutton.prefs.forms "Форми">
 <!ENTITY torbutton.prefs.block_tforms "Блокувати збереження паролів та форм при використанні Tor (рекомендовано)">
@@ -93,6 +105,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
+<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
+<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
+<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
+<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
+<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
+<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
+<!ENTITY torbutton.cookiedialog.lockCol "Protected">
+<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.pathCol "Path">
+<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
 <!ENTITY torbutton.prefs.dtd_optional "(optional)">
@@ -103,4 +132,6 @@
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
+<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">

@@ -26,6 +26,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "y">
 <!ENTITY torbutton.context_menu.about "Thông tin về Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections.key "C">
+<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Nhấn để nhận diện Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Thiết lập Bảo mật">
@@ -37,6 +45,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Chặn bộ đệm đĩa Tor và xóa tất cả các tập tin đệm khi bật tắt Tor">
 <!ENTITY torbutton.prefs.block_cache "Chặn truy cập bộ đệm trên đĩa và bộ nhớ trong quá trình Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Lưu trữ cookie Không-Tor trong một tập tin jar được bảo vệ">
+<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
 <!ENTITY torbutton.prefs.mmm_cookies "Tôi sẽ tự quản lí cookie của tôi (nguy hiểm)">
 <!ENTITY torbutton.prefs.clear_cookies "Xóa cookie khi bật tắt Tor">
 <!ENTITY torbutton.prefs.disable_plugins "Vô hiệu hóa phần bổ trợ trong quá trình dùng Tor (cấp thiết)">
@@ -56,7 +65,10 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Vô hiệu hóa Lưu Phiên Duyệt Web (khuyến cáo)">
 <!ENTITY torbutton.prefs.headers "Đầu đề">
 <!ENTITY torbutton.prefs.spoof_english "Bắt chước Trình duyệt Tiếng Anh-Mỹ">
-<!ENTITY torbutton.prefs.disable_referer "Không gửi referer trong quá trình dùng Tor (có thể gây lỗi trên một số trang)">
+<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
+<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Vô hiệu hóa Lưu trữ DOM trong quá trình dùng Tor (cấp thiết)">
 <!ENTITY torbutton.prefs.forms "Biểu mẫu">
 <!ENTITY torbutton.prefs.block_tforms "Chặn việc lưu biểu mẫu+mật khẩu trong quá trình Tor (khuyến cáo)">
@@ -93,6 +105,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Không có Ủy nhiệm cho:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Cảnh báo: Tránh sử dụng bất kỳ tên máy chủ ở trên">
+<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
+<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
+<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
+<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
+<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
+<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
+<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
+<!ENTITY torbutton.cookiedialog.lockCol "Protected">
+<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.pathCol "Path">
+<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Vô hiệu hóa việc cập nhật đánh-dấu-động trong quá trình dùng Tor">
 <!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
 <!ENTITY torbutton.prefs.dtd_optional "(optional)">
@@ -103,4 +132,6 @@
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
+<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">

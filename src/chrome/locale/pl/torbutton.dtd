@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Ustawienia proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Użyj zalecanych ustawień proxy dla tej wersji Firefoksa">
 <!ENTITY torbutton.prefs.use_privoxy "Użyj Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Używaj Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Użyj spersonalizowanych ustawień proxy.">
 <!ENTITY torbutton.prefs.proxy.host.http "Serwer proxy HTTP:">
 <!ENTITY torbutton.prefs.proxy.host.https "Serwer proxy SSL:">
@@ -26,6 +26,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "U">
 <!ENTITY torbutton.context_menu.about "O Torbutton">
 <!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections.key "C">
+<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Kliknij tutaj, aby uruchomić Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Ustawienia bezpieczeństwa">
@@ -37,6 +45,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Blokuj pamięć podręczną Tora i wyczyść ją przy wł/wył Tora">
 <!ENTITY torbutton.prefs.block_cache "Blokuj dostęp do pamięci podręcznej (dysk/pamięć) gdy Tor jest włączony">
 <!ENTITY torbutton.prefs.cookie_jars "Zapamiętuj ciasteczka z trybu zwykłego w zabezpieczonych magazynach">
+<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
 <!ENTITY torbutton.prefs.mmm_cookies "Będę sam zarządzał ciasteczkami (niebezpieczne)">
 <!ENTITY torbutton.prefs.clear_cookies "Czyść ciasteczka przy zmianie trybu Tor">
 <!ENTITY torbutton.prefs.disable_plugins "Wyłącz wtyczki podczas użycia Tor (krytyczne)">
@@ -56,7 +65,10 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Blokuj zapisywanie sesji przeglądarki (zalecane)">
 <!ENTITY torbutton.prefs.headers "Nagłówki">
 <!ENTITY torbutton.prefs.spoof_english "Udawaj przeglądarkę z USA">
-<!ENTITY torbutton.prefs.disable_referer "Nie wysyłaj adresu polecającego podczas używania Tora (niektóre strony mogą nie działać)">
+<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
+<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Blokuj zapisywanie DOM podczas używania Tora (krytyczne)">
 <!ENTITY torbutton.prefs.forms "Formularze">
 <!ENTITY torbutton.prefs.block_tforms "Blokuj zapamiętywanie haseł z formularzy (zalecane)">
@@ -91,16 +103,35 @@
 <!ENTITY torbutton.prefs.tor_tabs "Zakładki otwarte w trybie Tora">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
-<!ENTITY torbutton.prefs.disable_livemarks "Wyłącz uaktualnienia livemarks podczas używania Tora">
+<!ENTITY torbutton.prefs.no_proxies_on "Brak proxy dla: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Uwaga: Unikaj podawania nazw hostów powyżej">
+<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
+<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
+<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
+<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
+<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
+<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
+<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
+<!ENTITY torbutton.cookiedialog.lockCol "Protected">
+<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.pathCol "Path">
+<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.prefs.disable_livemarks "Wyłącz aktualizacje livemarks podczas używania Tora">
 <!ENTITY torbutton.prefs.dtd_recommended "(zalecane)">
 <!ENTITY torbutton.prefs.dtd_optional "(opcjonalne)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
-<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
-<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
+<!ENTITY torbutton.prefs.dtd_crucial "(ważne)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Przekieruj aktualizajce Torbutton przez Tora">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Automatycznie używaj alternatywnej wyszukiwarki, gdy natrafisz na Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
-<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
+<!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
+<!ENTITY torbutton.prefs.fix_google_srch "Usuń nazwę systemu i język z zapytań Google">
+<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">

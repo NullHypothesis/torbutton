@@ -1,30 +1,30 @@
-<!ENTITY torbutton.prefs.title "Inställningar för Torbutton">
+<!ENTITY torbutton.prefs.title "Torbutton Preferences">
 <!ENTITY torbutton.prefs.display_settings "Display Settings">
-<!ENTITY torbutton.prefs.display_panel "Visa inställningar för Tor proxy i statusraden">
+<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
 <!ENTITY torbutton.prefs.panel_format "Status bar display format:">
 <!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikon">
-<!ENTITY torbutton.prefs.tor_settings "Inställningar för proxy">
-<!ENTITY torbutton.prefs.recommended_settings "Använd dom inställningar som rekommenderas för min version av Firefox för att ställa in proxyn">
-<!ENTITY torbutton.prefs.use_privoxy "Använd Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Använd Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Använd egen inställning för proxyn">
-<!ENTITY torbutton.prefs.proxy.host.http "Proxy för HTTP:">
-<!ENTITY torbutton.prefs.proxy.host.https "Proxy för SSL:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "Proxy för FTP:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Proxy för Gopher:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS-host:">
+<!ENTITY torbutton.prefs.panel_icon_format "Icon">
+<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
+<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
+<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
 <!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "Om Torbutton">
-<!ENTITY torbutton.pref_connection.notice "Avaktivera Torbutton för att ändra dessa inställningar.">
-<!ENTITY torbutton.pref_connection.more_info "Mer information">
-<!ENTITY torbutton.pref_connection_more_info.title "Hjälp">
+<!ENTITY torbutton.about.title "About Torbutton">
+<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
+<!ENTITY torbutton.pref_connection.more_info "More information">
+<!ENTITY torbutton.pref_connection_more_info.title "Help">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
-<!ENTITY torbutton.context_menu.toggle "Slå på/av Tor">
+<!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Inställningar...">
+<!ENTITY torbutton.context_menu.preferences "Preferences...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "Om Torbutton...">
+<!ENTITY torbutton.context_menu.about "About Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
@@ -35,30 +35,30 @@
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Klicka för att installera Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Säkerhetsinställningar">
-<!ENTITY torbutton.prefs.block_thread "Blockera läsning av historik medan Tor är aktiverat (kritiskt)">
-<!ENTITY torbutton.prefs.block_thwrite "Blockera lagring av historik medan Tor är aktiverat (rekommenderat)">
-<!ENTITY torbutton.prefs.block_nthread "Blockera läsning av historik medan Tor är avaktiverat (valfritt)">
-<!ENTITY torbutton.prefs.block_nthwrite "Blockera lagring av historik medan Tor är avaktiverat (valfritt)">
-<!ENTITY torbutton.prefs.clear_history "Rensa historik vid på/avslagning av Tor (valfritt)">
-<!ENTITY torbutton.prefs.clear_cache "Rensa diskcache vid på/avslagning av Tor">
-<!ENTITY torbutton.prefs.block_cache "Blockera åtkomst till disk- och minnescache medan Tor är aktiverat">
+<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
+<!ENTITY torbutton.prefs.sec_settings "Security Settings">
+<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
+<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
+<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
+<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
+<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
 <!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
-<!ENTITY torbutton.prefs.mmm_cookies "Jag sköter cookies manuellt (farligt)">
-<!ENTITY torbutton.prefs.clear_cookies "Rensa cookies vid på/avaktivering av Tor">
-<!ENTITY torbutton.prefs.disable_plugins "Avaktivera plugins när Tor används (kritiskt)">
-<!ENTITY torbutton.prefs.kill_bad_js "Fånga farligt javascript (kritiskt)">
+<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
+<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
+<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
+<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
 <!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
 <!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
 <!ENTITY torbutton.prefs.dynamic "Dynamic Content">
-<!ENTITY torbutton.prefs.cookies "Kakor">
+<!ENTITY torbutton.prefs.cookies "Cookies">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "Historia">
-<!ENTITY torbutton.prefs.no_search "Stäng av sökmotorers förslag under användning av Tor (rekommenderas)">
-<!ENTITY torbutton.prefs.shutdown "Stäng av">
+<!ENTITY torbutton.prefs.history "History">
+<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
+<!ENTITY torbutton.prefs.shutdown "Shutdown">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
 <!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
 <!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
@@ -132,6 +132,4 @@
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
-<!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
