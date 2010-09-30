@@ -2719,7 +2719,7 @@ function torbutton_check_google_captcha(subject, topic, data) {
     return;
 
   var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
-  var hostmatch = subject.URI.host.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
+  var hostmatch = subject.URI.host.match(/^(encrypted|www)\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
 
   // check nsIURI
   if (hostmatch && httpChannel.responseStatus == 302) {
