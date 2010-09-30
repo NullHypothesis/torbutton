@@ -70,7 +70,6 @@ pref("extensions.torbutton.saved.download_retention", 2);
 pref("extensions.torbutton.saved.formfill", true);
 pref("extensions.torbutton.saved.remember_signons", true);
 pref("extensions.torbutton.saved.sendSecureXSiteReferrer", true);
-pref("extensions.torbutton.saved.sendRefererHeader", 2);
 pref("extensions.torbutton.saved.dom_storage", true);
 pref("extensions.torbutton.saved.mem_cache", true);
 pref("extensions.torbutton.saved.offline_cache", true);
@@ -136,7 +135,7 @@ pref("extensions.torbutton.spoof_english",true);
 pref("extensions.torbutton.spoof_charset",'iso-8859-1,*,utf-8');
 pref("extensions.torbutton.spoof_language",'en-us, en');
 pref("extensions.torbutton.spoof_locale",'en-US');
-pref("extensions.torbutton.disable_referer",false);
+pref("extensions.torbutton.refererspoof", 0); //0=smart referer, 1=blank, 2=no spoofing
 pref("extensions.torbutton.shutdown_method",1); // 0=none, 1=tor, 2=all
 pref("extensions.torbutton.block_tforms",true);
 pref("extensions.torbutton.block_ntforms",false);

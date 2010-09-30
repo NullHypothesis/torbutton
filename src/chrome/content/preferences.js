@@ -274,7 +274,7 @@ function torbutton_prefs_init(doc) {
     doc.getElementById('torbutton_closeTor').checked = o_torprefs.getBoolPref('close_tor');
     doc.getElementById('torbutton_closeNonTor').checked = o_torprefs.getBoolPref('close_nontor');
     doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
-    doc.getElementById('torbutton_spoofRefresh').checked = o_torprefs.getBoolPref('fakerefresh');
+    doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof');
     doc.getElementById('torbutton_spoofEnglish').checked = o_torprefs.getBoolPref('spoof_english');
     doc.getElementById('torbutton_clearHttpAuth').checked = o_torprefs.getBoolPref('clear_http_auth');
     doc.getElementById('torbutton_blockJSHistory').checked = o_torprefs.getBoolPref('block_js_history');
@@ -387,7 +387,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setIntPref('gopher_port',      doc.getElementById('torbutton_gopherPort').value);
     o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
     o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
-
+    o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
     if(doc.getElementById('torbutton_socksGroup').selectedItem ==
             doc.getElementById('torbutton_socksv4')) {
         o_torprefs.setIntPref('socks_version', 4); 
@@ -421,7 +421,7 @@ function torbutton_prefs_save(doc) {
         }
     }
     // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
-
+  o_torprefs.setIntPref('refererspoof', doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
     o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_disablePlugins').checked);
     o_torprefs.setBoolPref('clear_history', doc.getElementById('torbutton_clearHistory').checked);
     o_torprefs.setBoolPref('kill_bad_js', doc.getElementById('torbutton_killBadJS').checked);
@@ -493,7 +493,6 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
 
     o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
-    o_torprefs.setBoolPref('fakerefresh', doc.getElementById('torbutton_spoofRefresh').checked);
     o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
 
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);

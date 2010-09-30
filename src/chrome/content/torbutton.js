@@ -257,7 +257,6 @@ var torbutton_unique_pref_observer =
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
                         true);
-            case "extensions.torbutton.disable_referer":
             case "extensions.torbutton.disable_domstorage":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
@@ -1178,7 +1177,8 @@ function torbutton_update_status(mode, force_update) {
 
     // FIXME: This is not ideal, but the refspoof method is not compatible
     // with FF2.0
-    if(torprefs.getBoolPref("disable_referer")) {
+    // Taken out when updated to smart referer method -KK
+    /*if(torprefs.getIntPref("")) {
         torbutton_setBoolPref("network.http.sendSecureXSiteReferrer", 
                 "sendSecureXSiteReferrer", !mode, mode, changed);
         torbutton_setIntPref("network.http.sendRefererHeader", 
@@ -1188,7 +1188,7 @@ function torbutton_update_status(mode, force_update) {
                 "sendSecureXSiteReferrer", true, mode, changed);
         torbutton_setIntPref("network.http.sendRefererHeader", 
                 "sendRefererHeader", 2, mode, changed);
-    }
+    }*/
 
     if(torprefs.getBoolPref("disable_domstorage")) {
         torbutton_setBoolPref("dom.storage.enabled", 

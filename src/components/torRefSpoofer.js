@@ -1,8 +1,8 @@
 function LOG(text)
 {
  var logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
- logger.log("RefSpoof " + text);
-  /*var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+ logger.log("RefSpoof: " + text);
+/*  var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                         .getService(Components.interfaces.nsIPromptService);
   prompt.alert(null, "debug", text);
  */
@@ -35,45 +35,48 @@ var refObserver = {
   },
   onModifyRequest: function(oHttpChannel)
   {
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-    .getService(Components.interfaces.nsIPrefBranch);
-    var fake_refresh = prefs.getBoolPref("extensions.torbutton.fakerefresh");        
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+    
     var spoofmode = prefs.getIntPref("extensions.torbutton.refererspoof");
-    try {
-    oHttpChannel.QueryInterface(Components.interfaces.nsIChannel);
-    var requestURI = oHttpChannel.URI;
     
-    
-      switch(spoofmode)
-      {
-         //no spoof, should give the regular referer (not recommended)        
-        case 0:
-          return;        
-        //spoof document root  
-        case 1:
-          var path = requestURI.path.substr(0,requestURI.path.lastIndexOf("/")+1);            
-          this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host + path);        
-        break;
-        //spoof domain
-        case 2:
-          this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host);
-        break;
-        //spoof no referer
-        case 3:
-          this.adjustRef(oHttpChannel, "");
-        break; 
-        case 4:
-          this.adjustRef(oHttpChannel, prefs.getCharPref("extensions.torbutton.customref"));
-        break;     
-      }
-      if (fake_refresh)      
-        oHttpChannel.setRequestHeader("If-Modified-Since","Sat, 29 Oct 1989 19:43:31 GMT",false);
-        //this will make the server think it is a refresh      
+    var ios = Components.classes["@mozilla.org/network/io-service;1"]
+                    .getService(Components.interfaces.nsIIOService);
 
+    if (spoofmode == 0)
+    try {
+      oHttpChannel.QueryInterface(Components.interfaces.nsIChannel);
+      var referer;
+      try{
+        referer = oHttpChannel.getRequestHeader("Referer");
+        referer = ios.newURI(referer,null,null);//make a nsIURI object for referer
+      }catch(referr) {
+        return;//no referer available or invalid uri
+      }
+      var requestURI = oHttpChannel.URI; //request nsIURI object
+      var refererHost = referer.host; //referer host w/o scheme
+      var requestHost = oHttpChannel.URI.host;//request host without scheme
       
-    } catch (ex) {
+      //get rid of www. to compare root domain
+      if (refererHost.match("^www."))
+        refererHost = refererHost.substring(4);
+      
+      if (requestHost.match("^www."))
+        requestHost = requestHost.substring(4);
+ 
+      //if they're in the same domain(if we can tell) or have the same host, keep the referer     
+      if (requestHost.split(".").length >= refererHost.split(".").length && requestHost.match(refererHost))
+        return;
+      else if (refererHost.split(".").length >= requestHost.split(".").length && refererHost.match(requestHost))
+        return;
+      //if they do not have the same host
+      this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host);      
+        LOG("Adjusting Referer from " + refererHost + " to " + requestURI.host);
+    }
+     catch (ex) {
       LOG("onModifyRequest: " + ex);
     }
+    else if (spoofmode == 2)
+      this.adjustRef(oHttpChannel, "");
   },
   adjustRef: function(oChannel, sRef)
   {
