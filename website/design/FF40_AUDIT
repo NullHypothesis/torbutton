@@ -1,0 +1,36 @@
+- Major compatibility issues:
+  http://blog.mozilla.com/addons/2010/11/11/making-add-on-compatible-firefox-4/
+  https://developer.mozilla.org/en/Extensions/Updating_extensions_for_Firefox_4
+  https://developer.mozilla.org/en/XPCOM/XPCOM_changes_in_Gecko_2.0
+
+- Key high level concerns:
+  - WebThreads
+    - https://developer.mozilla.org/En/Using_web_workers
+    - Network activity blocked by content policy
+  - What the hell is a blob url?
+    - https://developer.mozilla.org/en/DOM/window.createBlobURL
+    - https://developer.mozilla.org/en/DOM/window.revokeBlobURL
+    - Seems only relevent to FS injection..
+  - WebSockets
+  - New window.history functions may allow state smuggling
+    - https://developer.mozilla.org/en/DOM/Manipulating_the_browser_history
+  - New screen attributes
+    - https://developer.mozilla.org/en/DOM/window.mozInnerScreenX, Y
+  - Bounding rectangles -> window sizes?
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=396392
+  - Mouse events reveal desktop coordinates?
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=503943
+    - https://developer.mozilla.org/en/DOM/Event/UIEvent/MouseEvent
+  - DocShell and plugins inside createHTMLDocument?
+    - https://developer.mozilla.org/en/DOM/DOMImplementation.createHTMLDocument
+  - Media attributes
+    - "buffered"
+    - "preload"
+    - new codecs?
+
+
+
+- New fingerprinting threats:
+  - Lots of things are now available to CSS :(
+
+
