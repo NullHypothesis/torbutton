@@ -67,6 +67,9 @@ contract @torproject.org/cookie-jar-selector;1 {e6204253-b690-4159-bfe8-d4eedab6
 component {23f4d9ba-023a-94ab-eb75-67aed7562a18} components/cssblocker.js
 contract @torproject.org/cssblocker;1 {23f4d9ba-023a-94ab-eb75-67aed7562a18}
 
+component {f36d72c9-9718-4134-b550-e109638331d7} components/torbutton-logger.js
+contract @torproject.org/torbutton-logger;1 {f36d72c9-9718-4134-b550-e109638331d7}
+
 category content-policy ContentPolicy @torproject.org/cssblocker;1
 category profile-after-change CookieJarSelector @torproject.org/cookie-jar-selector;1
 

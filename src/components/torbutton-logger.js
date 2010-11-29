@@ -78,6 +78,8 @@ TorbuttonLogger.prototype =
 
   // method of nsIClassInfo
   classDescription: "TorbuttonLogger",
+  classID: kMODULE_CID,
+  contractID: kMODULE_CONTRACTID,
 
   // method of nsIClassInfo
   getInterfaces: function(count) {
@@ -157,56 +159,12 @@ TorbuttonLogger.prototype =
   }
 }
 
-var TorbuttonLoggerInstance = null;
-var TorbuttonLoggerFactory = new Object();
-
-TorbuttonLoggerFactory.createInstance = function (outer, iid)
-{
-  if (outer != null) {
-    Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
-    return null;
-  }
-  if (!iid.equals(nsIClassInfo) &&
-      !iid.equals(nsISupports)) {
-    Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
-    return null;
-  }
-  if(TorbuttonLoggerInstance == null)
-      TorbuttonLoggerInstance = new TorbuttonLogger();
-
-  return TorbuttonLoggerInstance;
-}
-
-var TorbuttonLoggerModule = new Object();
-
-TorbuttonLoggerModule.registerSelf = 
-function (compMgr, fileSpec, location, type)
-{
-  compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
-  compMgr.registerFactoryLocation(kMODULE_CID,
-                                  kMODULE_NAME,
-                                  kMODULE_CONTRACTID,
-                                  fileSpec, 
-                                  location, 
-                                  type);
-}
-
-TorbuttonLoggerModule.getClassObject = function (compMgr, cid, iid)
-{
-  if (cid.equals(kMODULE_CID))
-    return TorbuttonLoggerFactory;
-
-
-  Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
-  return null;
-}
-
-TorbuttonLoggerModule.canUnload = function (compMgr)
-{
-  return true;
-}
-
-function NSGetModule(compMgr, fileSpec)
-{
-  return TorbuttonLoggerModule;
-}
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([TorbuttonLogger]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([TorbuttonLogger]);
