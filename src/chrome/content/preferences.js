@@ -429,7 +429,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setCharPref('no_proxies_on',      doc.getElementById('torbutton_noProxiesOn').value);
 
     o_torprefs.setBoolPref('saved.transparentTor', doc.getElementById('torbutton_transparentTor').selected);
-    if (o_torprefs.getBoolPref('torbutton_transparentTor')) {
+    if (o_torprefs.getBoolPref('saved.transparentTor')) {
         var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
             .getService(Components.interfaces.nsIWindowMediator);
         var chrome = wm.getMostRecentWindow("navigator:browser");
@@ -547,9 +547,6 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);
 
     o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
-    if (doc.getElementById('torbutton_CustomReferer').selected)
-       o_torprefs.setCharPref('customref',doc.getElementById('torbutton_CustomRef').value);
-
     o_torprefs.setBoolPref('fix_google_srch', doc.getElementById('torbutton_fixGoogleSrch').checked);
     o_torprefs.setBoolPref('dodge_google_captcha', doc.getElementById('torbutton_noCaptcha').checked);
 
