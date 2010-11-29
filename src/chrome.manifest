@@ -60,3 +60,9 @@ locale torbutton zh-TW chrome/locale/zh-TW/
 
 skin torbutton classic/1.0 chrome/skin/
 style chrome://global/content/customizeToolbar.xul chrome://torbutton/skin/torbutton.css
+
+component {e6204253-b690-4159-bfe8-d4eedab6b3be} components/cookie-jar-selector.js
+contract @torproject.org/cookie-jar-selector;1 {e6204253-b690-4159-bfe8-d4eedab6b3be}
+
+category profile-after-change CookieJarSelector @torproject.org/cookie-jar-selector;1
+

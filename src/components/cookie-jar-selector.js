@@ -504,12 +504,6 @@ function CookieJarSelector() {
 
 }
 
-/**
- * JS XPCOM component registration goop:
- *
- * Everything below is boring boilerplate and can probably be ignored.
- */
-
 const nsISupports = Components.interfaces.nsISupports;
 const nsIClassInfo = Components.interfaces.nsIClassInfo;
 const nsIObserver = Components.interfaces.nsIObserver;
@@ -530,12 +524,15 @@ CookieJarSelector.prototype =
     }
     return this;
   },
+
   wrappedJSObject: null,  // Initialized by constructor
 
   // make this an nsIClassInfo object
   flags: nsIClassInfo.DOM_OBJECT,
 
-  // method of nsIClassInfo
+  _xpcom_categories: [{category:"profile-after-change"}],
+  classID: kMODULE_CID,
+  contractID: kMODULE_CONTRACTID,
   classDescription: "CookieJarSelector",
 
   // method of nsIClassInfo
@@ -560,20 +557,13 @@ CookieJarSelector.prototype =
               this.addProtectedCookie(aSubject.QueryInterface(Components.interfaces.nsICookie2));//protect the new cookie!    
             }
             break;
-        case "app-startup": 
+        case "profile-after-change":
             var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(nsIObserverService);
-            obsSvc.addObserver(this, "profile-after-change", false); 
-            obsSvc.addObserver(this, "quit-application", false); 
-            obsSvc.addObserver(this, "cookie-changed", false); 
-            break;
-        case "profile-after-change": 
+            obsSvc.addObserver(this, "cookie-changed", false);
             // after profil loading, initialize a timer to call timerCallback
             // at a specified interval
             this.timer.initWithCallback(this.timerCallback, 60 * 1000, nsITimer.TYPE_REPEATING_SLACK); // 1 minute
             break;
-        // put some stuff you want applied at firefox shutdown
-        case "quit-application":
-        break;
        }
   },
 
@@ -581,65 +571,12 @@ CookieJarSelector.prototype =
 
 }
 
-var CookieJarSelectorFactory = new Object();
-
-CookieJarSelectorFactory.createInstance = function (outer, iid)
-{
-  if (outer != null) {
-    Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
-    return null;
-  }
-  if (!iid.equals(nsIClassInfo) &&
-      !iid.equals(nsIObserver) &&
-      !iid.equals(nsISupports)) {
-    Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
-    return null;
-  }
-  return new CookieJarSelector();
-}
-
-var CookieJarSelectorModule = new Object();
-
-CookieJarSelectorModule.registerSelf = 
-function (compMgr, fileSpec, location, type)
-{
-  compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
-  compMgr.registerFactoryLocation(kMODULE_CID,
-                                  kMODULE_NAME,
-                                  kMODULE_CONTRACTID,
-                                  fileSpec, 
-                                  location, 
-                                  type);
-   var catman = Components.classes['@mozilla.org/categorymanager;1'].getService(nsICategoryManager);
-   catman.addCategoryEntry("app-startup", kMODULE_NAME, kMODULE_CONTRACTID, true, true);
-}
-
-CookieJarSelectorModule.unregisterSelf = 
-function (compMgr, fileSpec, location, type)
-{
-   var catman = Components.classes['@mozilla.org/categorymanager;1'].getService(nsICategoryManager);
-   catman.deleteCategoryEntry("app-startup", kMODULE_NAME, true);
-  compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
-  compMgr.unregisterFactoryLocation(kMODULE_CID,
-                                  fileSpec);
-}
-
-CookieJarSelectorModule.getClassObject = function (compMgr, cid, iid)
-{
-  if (cid.equals(kMODULE_CID))
-    return CookieJarSelectorFactory;
-
-
-  Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
-  return null;
-}
-
-CookieJarSelectorModule.canUnload = function (compMgr)
-{
-  return true;
-}
-
-function NSGetModule(compMgr, fileSpec)
-{
-  return CookieJarSelectorModule;
-}
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([CookieJarSelector]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([CookieJarSelector]);
