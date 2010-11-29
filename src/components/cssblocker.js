@@ -440,94 +440,21 @@ ContentPolicy.prototype = {
     // API to add another addon to be protected from discovery
     addProtectedChromeHost: function(name) {
         protectedChromeHosts[name] = true;
-    }
+    },
+
+    _xpcom_categories: [{category:"content-policy"}],
+    classID: CSSB_CID,
+    contractID: CSSB_CONTRACTID,
+    classDescription: "Torbutton Content Policy"
+
 };
 
-/*
- * Factory object
- */
-
-var ContentPolicyInstance = null;
-
-const factory = {
-	// nsIFactory interface implementation
-	createInstance: function(outer, iid) {
-		if (outer != null) {
-           Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
-           return null;
-       }
-
-        if (!iid.equals(Components.interfaces.nsIContentPolicy) &&
-                !iid.equals(Components.interfaces.nsISupports)) {
-            Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;          
-            return null;
-        }
-
-        if(!ContentPolicyInstance)
-            ContentPolicyInstance = new ContentPolicy();
-
-		return ContentPolicyInstance;
-	},
-
-	// nsISupports interface implementation
-	QueryInterface: function(iid) {
-		if (iid.equals(Components.interfaces.nsISupports) ||
-				iid.equals(Components.interfaces.nsIModule) ||
-				iid.equals(Components.interfaces.nsIFactory))
-			return this;
-
-        /*
-		if (!iid.equals(Components.interfaces.nsIClassInfo))
-			dump("CSS Blocker: factory.QI to an unknown interface: " + iid + "\n");
-        */
-
-        Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;          
-        return null;   
-	}
-};
-
-
-/*
- * Module object
- */
-const module = {
-	registerSelf: function(compMgr, fileSpec, location, type) {
-		compMgr = compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
-		compMgr.registerFactoryLocation(CSSB_CID, 
-										"Torbutton content policy",
-										CSSB_CONTRACTID,
-										fileSpec, location, type);
-
-		var catman = Components.classes["@mozilla.org/categorymanager;1"]
-					 .getService(Components.interfaces.nsICategoryManager);
-		catman.addCategoryEntry("content-policy", CSSB_CONTRACTID,
-							CSSB_CONTRACTID, true, true);
-	},
-
-	unregisterSelf: function(compMgr, fileSpec, location) {
-		compMgr = compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
-
-		compMgr.unregisterFactoryLocation(CSSB_CID, fileSpec);
-		var catman = Components.classes["@mozilla.org/categorymanager;1"]
-					   .getService(Components.interfaces.nsICategoryManager);
-		catman.deleteCategoryEntry("content-policy", CSSB_CONTRACTID, true);
-	},
-
-	getClassObject: function(compMgr, cid, iid) {
-		if (cid.equals(CSSB_CID))
-            return factory;
-
-        Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
-        return null;
-	},
-
-	canUnload: function(compMgr) {
-		return true;
-	}
-};
-
-function NSGetModule(comMgr, fileSpec) {
-	return module;
-}
-
-
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([ContentPolicy]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([ContentPolicy]);

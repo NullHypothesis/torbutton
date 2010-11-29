@@ -57,12 +57,18 @@ locale torbutton zh-CN chrome/locale/zh-CN/
 locale torbutton zh-HK chrome/locale/zh-HK/
 locale torbutton zh-TW chrome/locale/zh-TW/
 
-
 skin torbutton classic/1.0 chrome/skin/
 style chrome://global/content/customizeToolbar.xul chrome://torbutton/skin/torbutton.css
 
+# Firefox 4-style component registration
 component {e6204253-b690-4159-bfe8-d4eedab6b3be} components/cookie-jar-selector.js
 contract @torproject.org/cookie-jar-selector;1 {e6204253-b690-4159-bfe8-d4eedab6b3be}
 
+component {23f4d9ba-023a-94ab-eb75-67aed7562a18} components/cssblocker.js
+contract @torproject.org/cssblocker;1 {23f4d9ba-023a-94ab-eb75-67aed7562a18}
+
+category content-policy ContentPolicy @torproject.org/cssblocker;1
 category profile-after-change CookieJarSelector @torproject.org/cookie-jar-selector;1
+
+
 
