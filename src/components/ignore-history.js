@@ -356,8 +356,10 @@ HistoryWrapperModule.canUnload = function (compMgr)
   return true;
 };
 
+// We only need to support Firefox 3.x here. Firefox 4's history behavior
+// is now tunable into a safe state for Tor that actually matches
+// our own internal options. Yay, progress.
 function NSGetModule(compMgr, fileSpec)
 {
   return HistoryWrapperModule;
 }
-

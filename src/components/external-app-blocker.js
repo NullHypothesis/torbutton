@@ -266,8 +266,17 @@ ExternalWrapperModule.canUnload = function (compMgr)
   return true;
 };
 
-function NSGetModule(compMgr, fileSpec)
-{
-  return ExternalWrapperModule;
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+if (XPCOMUtils.generateNSGetFactory) {
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([ExternalWrapper]);
+} else {
+    function NSGetModule(compMgr, fileSpec)
+    {
+      return ExternalWrapperModule;
+    }
 }
 

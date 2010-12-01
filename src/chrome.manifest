@@ -61,6 +61,11 @@ skin torbutton classic/1.0 chrome/skin/
 style chrome://global/content/customizeToolbar.xul chrome://torbutton/skin/torbutton.css
 
 # Firefox 4-style component registration
+component {3da0269f-fc29-4e9e-a678-c3b1cafcf13f} components/external-app-blocker.js
+contract @mozilla.org/mime;1 {3da0269f-fc29-4e9e-a678-c3b1cafcf13f}
+contract @mozilla.org/uriloader/external-protocol-service;1 {3da0269f-fc29-4e9e-a678-c3b1cafcf13f}
+contract @mozilla.org/uriloader/external-helper-app-service;1 {3da0269f-fc29-4e9e-a678-c3b1cafcf13f}
+
 component {e6204253-b690-4159-bfe8-d4eedab6b3be} components/cookie-jar-selector.js
 contract @torproject.org/cookie-jar-selector;1 {e6204253-b690-4159-bfe8-d4eedab6b3be}
 
