@@ -79,61 +79,19 @@ Protocol.prototype =
         return ios.newChannelFromURI(aURI);
     }      
   },
+
+  // method of nsIClassInfo
+  classDescription: "Tor protocol handler",
+  classID: kPROTOCOL_CID,
+  contractID: kPROTOCOL_CONTRACTID,
 }
-
-var ProtocolFactory = new Object();
-
-ProtocolFactory.createInstance = function (outer, iid)
-{
-  if (outer != null)
-    throw Components.results.NS_ERROR_NO_AGGREGATION;
-
-  if (!iid.equals(nsIProtocolHandler) &&
-      !iid.equals(nsISupports))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-
-  return new Protocol();
-}
-
 
 /**
- * JS XPCOM component registration goop:
- *
- * We set ourselves up to observe the xpcom-startup category.  This provides
- * us with a starting point.
- */
-
-var TestModule = new Object();
-
-TestModule.registerSelf = function (compMgr, fileSpec, location, type)
-{
-  compMgr = compMgr.QueryInterface(Components.interfaces.nsIComponentRegistrar);
-  compMgr.registerFactoryLocation(kPROTOCOL_CID,
-                                  kPROTOCOL_NAME,
-                                  kPROTOCOL_CONTRACTID,
-                                  fileSpec, 
-                                  location, 
-                                  type);
-}
-
-TestModule.getClassObject = function (compMgr, cid, iid)
-{
-  if (!cid.equals(kPROTOCOL_CID))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-
-  if (!iid.equals(Components.interfaces.nsIFactory))
-    throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
-    
-  return ProtocolFactory;
-}
-
-TestModule.canUnload = function (compMgr)
-{
-  return true;
-}
-
-function NSGetModule(compMgr, fileSpec)
-{
-  return TestModule;
-}
-
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([Protocol]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([Protocol]);

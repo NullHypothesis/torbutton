@@ -563,6 +563,7 @@ CookieJarSelector.prototype =
             // after profil loading, initialize a timer to call timerCallback
             // at a specified interval
             this.timer.initWithCallback(this.timerCallback, 60 * 1000, nsITimer.TYPE_REPEATING_SLACK); // 1 minute
+            this.logger.log(3, "Cookie jar selector got profile-after-change");
             break;
        }
   },

@@ -73,8 +73,18 @@ contract @torproject.org/torbutton-logger;1 {f36d72c9-9718-4134-b550-e109638331d
 component {b985e49c-12cb-4f29-9d14-b62603332ec4} components/window-mapper.js
 contract @torproject.org/content-window-mapper;1 {b985e49c-12cb-4f29-9d14-b62603332ec4}
 
+component {65be2be0-ceb4-44c2-91a5-9c75c53430bf} components/torRefSpoofer.js
+contract @torproject.org/torRefSpoofer;1 {65be2be0-ceb4-44c2-91a5-9c75c53430bf}
+
+component {52183e20-4d4b-11de-8a39-0800200c9a66} components/tor-protocol.js
+contract @mozilla.org/network/protocol;1?name=tor {52183e20-4d4b-11de-8a39-0800200c9a66}
+
+component {a5a4bc50-5e8d-11de-8a39-0800200c9a66} components/tors-protocol.js
+contract @mozilla.org/network/protocol;1?name=tors {a5a4bc50-5e8d-11de-8a39-0800200c9a66}
+
 category content-policy ContentPolicy @torproject.org/cssblocker;1
 category profile-after-change CookieJarSelector @torproject.org/cookie-jar-selector;1
+category profile-after-change RefSpoofer @torproject.org/torRefSpoofer;1
 
 
 
