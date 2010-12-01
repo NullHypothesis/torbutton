@@ -1,6 +1,19 @@
 var m_tb_torlog = Components.classes["@torproject.org/torbutton-logger;1"]
 .getService(Components.interfaces.nsISupports).wrappedJSObject;
 
+// This is sort of hacky and random..
+var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+    .getService(Components.interfaces.nsIXULAppInfo);
+var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+    .getService(Components.interfaces.nsIVersionComparator);
+var m_tb_ff4 = false;
+
+if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
+    m_tb_ff4 = true;
+} else {
+    m_tb_ff4 = false;
+}
+
 
 function torbutton_eclog(nLevel, sMsg) {
     m_tb_torlog.eclog(nLevel, sMsg);
@@ -122,10 +135,6 @@ function torbutton_check_status() {
          torbutton_log(1, "ftp proxy") &&
          (liveprefs.getIntPref("ftp_port")      == torprefs.getIntPref('ftp_port'))      &&
          torbutton_log(1, "ftp port") &&
-         (liveprefs.getCharPref("gopher")       == torprefs.getCharPref('gopher_proxy')) &&
-         torbutton_log(1, "gopher proxy") &&
-         (liveprefs.getIntPref("gopher_port")   == torprefs.getIntPref('gopher_port'))   &&
-         torbutton_log(1, "gopher port") &&
          (liveprefs.getCharPref("socks")        == torprefs.getCharPref('socks_host'))   &&
          torbutton_log(1, "socks proxy") &&
          (liveprefs.getIntPref("socks_port")    == torprefs.getIntPref('socks_port'))    &&
@@ -159,8 +168,10 @@ function torbutton_activate_tor_settings()
   liveprefs.setCharPref('ftp',          torprefs.getCharPref('ftp_proxy'));
   liveprefs.setIntPref('ftp_port',      torprefs.getIntPref('ftp_port'));
   torbutton_log(1, 'Half-way there');
-  liveprefs.setCharPref('gopher',       torprefs.getCharPref('gopher_proxy'));
-  liveprefs.setIntPref('gopher_port',   torprefs.getIntPref('gopher_port'));
+  if (!m_tb_ff4) {
+      liveprefs.setCharPref('gopher',       torprefs.getCharPref('gopher_proxy'));
+      liveprefs.setIntPref('gopher_port',   torprefs.getIntPref('gopher_port'));
+  }
   liveprefs.setCharPref('socks',        torprefs.getCharPref('socks_host'));
   liveprefs.setIntPref('socks_port',    torprefs.getIntPref('socks_port'));
   liveprefs.setIntPref('socks_version', torprefs.getIntPref('socks_version'));
