@@ -2,8 +2,14 @@
  * Crash observer (JavaScript XPCOM component)
  *
  * Provides the chrome with a notification ("extensions.torbutton.crashed"
- * pref event) that the browser in fact crashed. Does this by hooking
- * the sessionstore.
+ * pref event) that the browser in fact crashed.
+ *
+ * XXX: Cases to test (each during Tor and Non-Tor)
+ *    0. Crash (watch cookies!)
+ *    1. Fresh install
+ *    2. Uninstall
+ *    3. Upgrade
+ *    4. Profile restore without crash
  *
  *************************************************************************/
 
@@ -13,32 +19,39 @@ const Cr = Components.results;
 
 // Module specific constants
 const kMODULE_NAME = "Session crash detector";
-const kMODULE_CONTRACTID = "@mozilla.org/browser/sessionstartup;1";
-const kMODULE_CID = Components.ID("9215354b-1787-4aef-9946-780f046c75a9");
+const kMODULE_CONTRACTID = "@torproject.org/crash-observer;1";
+const kMODULE_CID = Components.ID("06322def-6fde-4c06-aef6-47ae8e799629");
 const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 
-/* Mozilla defined interfaces */
-const kREAL_STORE_CID = "{ec7a6c20-e081-11da-8ad9-0800200c9a66}";
-const kREAL_STORE = Components.classesByID[kREAL_STORE_CID];
-const kStoreInterfaces = ["nsISessionStartup", "nsIObserver", 
-                          "nsISupportsWeakReference"];
-
-function AppObserver() {
+function CrashObserver() {
     this._uninstall = false;
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
          .getService(Components.interfaces.nsISupports).wrappedJSObject;
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
          .getService(Components.interfaces.nsIPrefBranch);
     this.logger.log(3, "AppObserver created");
+
+    var observerService = Cc["@mozilla.org/observer-service;1"].
+            getService(Ci.nsIObserverService);
+    observerService.addObserver(this, "em-action-requested", false);
+    observerService.addObserver(this, "quit-application-granted", false);
 }
 
-AppObserver.prototype = {
+CrashObserver.prototype = {
     observe: function(subject, topic, data) {
-      if(topic == "final-ui-startup") {
+      if(topic == "profile-after-change") {
+        if(this._prefs.getBoolPref("extensions.torbutton.fresh_install")) {
+          this._prefs.setBoolPref("extensions.torbutton.normal_exit", true);
+        }
+      } else if(topic == "final-ui-startup") {
           this.logger.log(2, "final-ui-startup.");
-          Components.classes["@mozilla.org/preferences-service;1"]
-              .getService(Components.interfaces.nsIPrefBranch)
-              .setBoolPref("extensions.torbutton.startup", true);
+          this._prefs.setBoolPref("extensions.torbutton.startup", true);
+          if (this._prefs.getBoolPref("extensions.torbutton.normal_exit")) {
+            this._prefs.setBoolPref("extensions.torbutton.noncrashed", true);
+          } else {
+            this._prefs.setBoolPref("extensions.torbutton.crashed", true);
+          }
+          this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
       } else if (topic == "em-action-requested") {
         // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
         subject.QueryInterface(Components.interfaces.nsIUpdateItem);
@@ -101,189 +114,37 @@ AppObserver.prototype = {
         this.logger.log(3, "Torbutton normal exit.");
         //this.unregister();
       }
-    }
-
-};
-
-function StoreWrapper() {
-  this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
-      .getService(Components.interfaces.nsISupports).wrappedJSObject;
-  this.logger.log(3, "Component Load 4: New StoreWrapper "+kMODULE_CONTRACTID);
-
-  this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
-      .getService(Components.interfaces.nsIPrefBranch);
-
-  this._store = function() {
-    var store = kREAL_STORE.getService();
-    for (var i = 0; i < kStoreInterfaces.length; i++) {
-      store.QueryInterface(Components.interfaces[kStoreInterfaces[i]]);
-    }
-    return store;
-  };
-
-  this.copyMethods(this._store());
-
-  this.ao = new AppObserver();
-
-  var observerService = Cc["@mozilla.org/observer-service;1"].
-          getService(Ci.nsIObserverService);
-  observerService.addObserver(this.ao, "em-action-requested", false);
-  observerService.addObserver(this.ao, "quit-application-granted", false);
-
-
-}
-
-StoreWrapper.prototype =
-{
+    },
   QueryInterface: function(iid) {
-
     if (iid.equals(Components.interfaces.nsISupports)) {
         return this;
     }
-
     if(iid.equals(Components.interfaces.nsIClassInfo)) {
-      var ret = this._store().QueryInterface(iid);
-      //dump("classInfo: "+ret.classID);
-      return ret;
-    }
-
-    try {
-        var store = this._store().QueryInterface(iid);
-        if (store) this.copyMethods(store);
-    } catch(e) {
-        //dump("Exception on QI for crash detector\n");
-        Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
-        return null;
+      return this;
     }
     return this;
   },
 
-  /* 
-   * Copies methods from the true sessionstore object we are wrapping
-   */
-  copyMethods: function(wrapped) {
-    var mimic = function(newObj, method) {
-      if(typeof(wrapped[method]) == "function") {
-          // Code courtesy of timeless: 
-          // http://www.webwizardry.net/~timeless/windowStubs.js
-          var params = [];
-          params.length = wrapped[method].length;
-          var x = 0;
-          if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
-          else call = "()";
-          var fun = "(function "+call+"{"+
-            "if (arguments.length < "+wrapped[method].length+")"+
-            "  throw Components.results.NS_ERROR_XPC_NOT_ENOUGH_ARGS;"+
-            "return wrapped."+method+".apply(wrapped, arguments);})";
-          newObj[method] = eval(fun);
-      } else {
-          newObj.__defineGetter__(method, function() { return wrapped[method]; });
-          newObj.__defineSetter__(method, function(val) { wrapped[method] = val; });
-      }
-    };
-    for (var method in wrapped) {
-      if(typeof(this[method]) == "undefined") mimic(this, method);
-    }
+  // method of nsIClassInfo
+  classDescription: "Torbutton Crash Observer",
+  classID: kMODULE_CID,
+  contractID: kMODULE_CONTRACTID,
+
+  getInterfaces: function(count) {
+    var interfaceList = [nsIClassInfo];
+    count.value = interfaceList.length;
+    return interfaceList;
   },
+  getHelperForLanguage: function(count) { return null; }
 
-  observe: function(aSubject, aTopic, aData) {
-    if(aTopic == "app-startup") {
-      dump("App startup\n");
-      this.logger.log(3, "Got app-startup");
-      this._startup = true;
-      var observerService = Cc["@mozilla.org/observer-service;1"].
-          getService(Ci.nsIObserverService);
-
-      observerService.addObserver(this.ao, "final-ui-startup", false);
-    }
-    this._store().observe(aSubject, aTopic, aData);
-  },
-
-  doRestore: function() {
-    var ret = false;
-    // FIXME: This happens right after an extension upgrade too. But maybe
-    // that's what we want.
-
-    // This is so lame. But the exposed API is braindead so it 
-    // must be hacked around
-    //dump("new doRestore\n");
-    this.logger.log(3, "Got doRestore");
-    ret = this._store().doRestore();
-    if(this._startup) {
-        if(ret) {
-           this._prefs.setBoolPref("extensions.torbutton.crashed", true);
-        } else {
-           this._prefs.setBoolPref("extensions.torbutton.noncrashed", true);
-        }
-    } 
-    this._startup = false;
-    return ret;
-  },
 };
- 
-const StoreWrapperFactory = {
-
-  createInstance: function(aOuter, aIID) {
-    if (aOuter != null) {
-      Components.returnCode = Cr.NS_ERROR_NO_AGGREGATION;
-      return null;
-    }
-    
-    return (new StoreWrapper()).QueryInterface(aIID);
-  },
-  
-  lockFactory: function(aLock) { },
-  
-  QueryInterface: function(aIID) {
-    if (!aIID.equals(Ci.nsISupports) && !aIID.equals(Ci.nsIModule) &&
-        !aIID.equals(Ci.nsIFactory) && !aIID.equals(Ci.nsISessionStore)) {
-      Components.returnCode = Cr.NS_ERROR_NO_INTERFACE;
-      return null;
-    }
-    
-    return this;
-  }
-};
-
-
 
 /**
- * JS XPCOM component registration goop:
- *
- * Everything below is boring boilerplate and can probably be ignored.
- */
-
-var StoreWrapperModule = new Object();
-
-StoreWrapperModule.registerSelf = 
-function (compMgr, fileSpec, location, type){
-  var nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;
-  compMgr = compMgr.QueryInterface(nsIComponentRegistrar);
-  compMgr.registerFactoryLocation(kMODULE_CID,
-                                  kMODULE_NAME,
-                                  kMODULE_CONTRACTID,
-                                  fileSpec, 
-                                  location, 
-                                  type);
-  //dump("Registered crash observer\n");
-};
-
-StoreWrapperModule.getClassObject = function (compMgr, cid, iid)
-{
-  if (cid.equals(kMODULE_CID)) {
-      return StoreWrapperFactory;
-  }
-  Components.returnCode = Cr.NS_ERROR_NOT_REGISTERED;
-  return null;
-};
-
-StoreWrapperModule.canUnload = function (compMgr)
-{
-  return true;
-};
-
-function NSGetModule(compMgr, fileSpec)
-{
-  return StoreWrapperModule;
-}
-
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([CrashObserver]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([CrashObserver]);

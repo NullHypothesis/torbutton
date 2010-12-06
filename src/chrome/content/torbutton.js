@@ -2374,23 +2374,6 @@ function torbutton_crash_recover()
 
     // Crash detection code (works w/ components/crash-observer.js)
     if(m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
-        // This may run on first install and wipe the user's cookies
-        // It may also run on upgrade
-        try {
-            if(m_tb_prefs.getBoolPref("extensions.torbutton.normal_exit")) {
-                m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
-                m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
-                torbutton_log(3, "False positive crash recovery. Setting tor state");
-                if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
-                    torbutton_conditional_set(true);
-                else
-                    torbutton_conditional_set(false);
-                return;
-            }
-        } catch(e) {
-            torbutton_log(4, "Exception on crash check: "+e);
-        }
-
         torbutton_log(4, "Crash detected, attempting recovery");
 
         /* These prefs get set in this order during toggle: */
@@ -3191,23 +3174,6 @@ function torbutton_do_main_window_startup()
 
 function torbutton_set_initial_state() {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
-        try {
-            if(m_tb_prefs.getBoolPref("extensions.torbutton.normal_exit")) {
-                m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", false);
-            } else {
-                // This happens if user decline to restore sessions after crashes
-                // XXX: This is causing false positives...
-                torbutton_log(4, "Conflict between noncrashed and normal_exit states.. Assuming crash but no session restore..");
-                m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
-
-                // This will cause torbutton_crash_recover to get called:
-                m_tb_prefs.setBoolPref("extensions.torbutton.crashed", true);
-                return;
-            }
-        } catch(e) {
-            torbutton_log(4, "Exception on noncrashed check: "+e);
-        }
-
         var startup_state = m_tb_prefs.getIntPref("extensions.torbutton.startup_state");
         
         torbutton_log(3, "Setting initial state to: "+startup_state);
@@ -3225,10 +3191,6 @@ function torbutton_set_initial_state() {
 function torbutton_do_fresh_install() 
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.fresh_install")) {
-        // Set normal_exit, because the session store will soon run and
-        // cause us to think a crash happened
-        m_tb_prefs.setBoolPref("extensions.torbutton.normal_exit", true);
-
         if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
             // Make our cookie prefs more closely match the user's 
             // so we don't change people's settings on install.
