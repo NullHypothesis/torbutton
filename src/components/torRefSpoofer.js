@@ -66,11 +66,11 @@ RefSpoofer.prototype = {
         return;
       //if they do not have the same host
       this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host);      
-      this.loger.safe_log(3, "Adjusting Referer, ",
+      this.logger.safe_log(3, "Adjusting Referer, ",
                           "from " + refererHost + " to " + requestURI.host);
     }
      catch (ex) {
-      this.loger.log(5, "RefSpoof onModifyRequest: " +ex);
+      this.logger.log(5, "RefSpoof onModifyRequest: " +ex);
     }
     else if (spoofmode == 2)
       this.adjustRef(oHttpChannel, "");
@@ -86,7 +86,7 @@ RefSpoofer.prototype = {
       return true;
     } 
     catch (ex) {
-      this.loger.log(5, "RefSpoof adjustRef: " +ex);
+      this.logger.log(5, "RefSpoof adjustRef: " +ex);
     }
     return false;
   },
