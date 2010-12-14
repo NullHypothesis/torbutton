@@ -2115,7 +2115,7 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
         // Defensive programming to tag this window here to 
         // an alternate tor state. It wil lmake this window totally
         // useless, but that is better than some undefined state
-        browser.__tb_tor_fetched = !tor_enabled;
+        torbutton_apply_tab_tag(browser, !tor_enabled);
     }
 
     /* Solution from: https://bugzilla.mozilla.org/show_bug.cgi?id=409737 */
@@ -2246,6 +2246,30 @@ tbHistoryListener.prototype = {
     OnHistoryReload: function(uri,flags) { return this.f1(); }
 };
 
+function torbutton_apply_tab_tag(browser, tag) {
+   if (typeof(browser["__tb_tor_fetched"]) == "undefined" ||
+           browser.__tb_tor_fetched != tag) {
+     // Only update the browser's session store tag if the tag has changed.
+     // This is an expensive operation.
+     var ss = Components.classes["@mozilla.org/browser/sessionstore;1"]
+                             .getService(Components.interfaces.nsISessionStore);
+
+     // http://stackoverflow.com/questions/3374056/firefox-gbrowser-getbrowserfortab-but-no-gbrowser-gettabforbrowser
+     var mTabs = gBrowser.mTabContainer.childNodes;
+     var tab = null;
+     for (var i=0; i<mTabs.length; i++) {
+         if (mTabs[i].linkedBrowser == browser) {
+             tab = mTabs[i];
+         }
+     }
+     if (tab)
+       ss.setTabValue(tab, "__tb_tor_fetched", tag.toString());
+     else
+       torbutton_log(5, "No tab found for session store tag.");
+   }
+   browser.__tb_tor_fetched = tag;
+}
+
 function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     if (!tor_tag && no_plugins) {
         browser.docShell.allowPlugins = tor_tag;
@@ -2260,7 +2284,7 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     // Only tag new windows
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         torbutton_log(3, "Tagging new window: "+tor_tag);
-        browser.__tb_tor_fetched = !tor_tag;
+        torbutton_apply_tab_tag(browser, !tor_tag);
 
         // XXX: Do we need to remove this listener on tab close?
         // No, but we probably do need to remove it on window close!
@@ -2333,7 +2357,7 @@ function torbutton_conditional_set(state) {
                     }
                 }
             }
-            b.__tb_tor_fetched = state;
+            torbutton_apply_tab_tag(b, state);
         }
     }
 
@@ -3560,7 +3584,7 @@ function torbutton_update_tags(win, new_loc) {
             // Defensive programming to tag this window here to 
             // an alternate tor state. It wil lmake this window totally
             // useless, but that is better than some undefined state
-            browser.__tb_tor_fetched = tor_tag;
+            torbutton_apply_tab_tag(browser, tor_tag);
         }
         if(browser.__tb_tor_fetched != !tor_tag) {
             // Purge session history every time we fetch a new doc 
@@ -3591,7 +3615,7 @@ function torbutton_update_tags(win, new_loc) {
             }
         }
 
-        browser.__tb_tor_fetched = !tor_tag;
+        torbutton_apply_tab_tag(browser, !tor_tag);
         browser.docShell.allowPlugins = tor_tag || !kill_plugins;
 
         /* We want to disable allowDNSPrefetch on Tor-loaded tabs
