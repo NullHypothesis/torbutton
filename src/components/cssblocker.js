@@ -33,6 +33,8 @@ const Cr = Components.results;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
 // Retrieves the window object for a node or returns null if it isn't possible
 function getWindow(node) {
     if (node && node.nodeType != DNode.DOCUMENT_NODE)
@@ -445,7 +447,13 @@ ContentPolicy.prototype = {
     _xpcom_categories: [{category:"content-policy"}],
     classID: CSSB_CID,
     contractID: CSSB_CONTRACTID,
-    classDescription: "Torbutton Content Policy"
+    classDescription: "Torbutton Content Policy",
+
+    // QueryInterface implementation, e.g. using the generateQI helper
+    QueryInterface: XPCOMUtils.generateQI(
+            [ Components.interfaces.nsIObserver,
+            Components.interfaces.nsISupports,
+            Components.interfaces.nsIContentPolicy ])
 
 };
 
@@ -453,7 +461,6 @@ ContentPolicy.prototype = {
 * XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
 * XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
 */
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 if (XPCOMUtils.generateNSGetFactory)
     var NSGetFactory = XPCOMUtils.generateNSGetFactory([ContentPolicy]);
 else
