@@ -39,6 +39,7 @@ function TorbuttonLogger() {
 
     // This JSObject is exported directly to chrome
     this.wrappedJSObject = this;
+    this.log(3, "Torbutton debug output ready");
 }
 
 /**
