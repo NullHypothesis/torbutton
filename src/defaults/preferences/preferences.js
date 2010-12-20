@@ -66,6 +66,7 @@ pref("extensions.torbutton.saved.safebrowsing",true);
 pref("extensions.torbutton.saved.search_suggest",true);
 pref("extensions.torbutton.saved.enable_java", true);
 pref("extensions.torbutton.saved.expire_history", 9);
+pref("extensions.torbutton.saved.places_enabled", true);
 pref("extensions.torbutton.saved.download_retention", 2);
 pref("extensions.torbutton.saved.formfill", true);
 pref("extensions.torbutton.saved.remember_signons", true);

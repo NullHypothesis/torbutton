@@ -74,6 +74,9 @@ var torbutton_unique_pref_observer =
         this._branch.addObserver("network.proxy", this, false);
         this._branch.addObserver("network.cookie", this, false);
         this._branch.addObserver("general.useragent", this, false);
+        if (m_tb_ff4) {
+          this._branch.addObserver("places.history", this, false);
+        }
     },
 
     unregister: function()
@@ -83,6 +86,9 @@ var torbutton_unique_pref_observer =
         this._branch.removeObserver("network.proxy", this);
         this._branch.removeObserver("network.cookie", this);
         this._branch.removeObserver("general.useragent", this);
+        if (m_tb_ff4) {
+          this._branch.removeObserver("places.history", this);
+        }
     },
 
     // topic:   what event occurred
@@ -123,6 +129,47 @@ var torbutton_unique_pref_observer =
             case "network.proxy.type":
                 torbutton_log(1, "Got update message, setting status");
                 torbutton_set_status();
+                break;
+
+            case "places.history.enabled":
+                // This code keeps our prefs in sync with the places global pref
+                var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+                var he = m_tb_prefs.getBoolPref("places.history.enabled");
+                if(tor_mode) {
+                    if (he) {
+                       // User just enabled places. They must want us to stop blocking it...
+                       m_tb_prefs.setBoolPref("extensions.torbutton.block_thwrite", false);
+                    } else {
+                       m_tb_prefs.setBoolPref("extensions.torbutton.block_thwrite", true);
+                    }
+                } else {
+                    if (he) {
+                       m_tb_prefs.setBoolPref("extensions.torbutton.block_nthwrite", false);
+                    } else {
+                       m_tb_prefs.setBoolPref("extensions.torbutton.block_nthwrite", true);
+                    }
+                }
+                break;
+
+            case "extensions.torbutton.block_thwrite":
+            case "extensions.torbutton.block_nthwrite":
+                // This code keeps our prefs in sync with the places global pref for ff4
+                if (m_tb_ff4) {
+                    var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+                    if (tor_mode) {
+                        if (m_tb_prefs.getBoolPref("extensions.torbutton.block_thwrite")) {
+                            m_tb_prefs.setBoolPref("places.history.enabled", false);
+                        } else {
+                            m_tb_prefs.setBoolPref("places.history.enabled", true);
+                        }
+                    } else {
+                        if (m_tb_prefs.getBoolPref("extensions.torbutton.block_nthwrite")) {
+                            m_tb_prefs.setBoolPref("places.history.enabled", false);
+                        } else {
+                            m_tb_prefs.setBoolPref("places.history.enabled", true);
+                        }
+                    }
+                }
                 break;
 
             case "network.cookie.lifetimePolicy":
@@ -1380,6 +1427,14 @@ function torbutton_update_status(mode, force_update) {
             torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
                     false, mode, changed);
         }
+
+        if (m_tb_ff4) {
+            if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
+                m_tb_prefs.setBoolPref("places.history.enabled", false);
+            } else {
+                m_tb_prefs.setBoolPref("places.history.enabled", true);
+            }
+        }
     } else {
         if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
             m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
@@ -1398,6 +1453,13 @@ function torbutton_update_status(mode, force_update) {
                     false, mode, changed);
             torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
                     false, mode, changed);
+        }
+        if (m_tb_ff4) {
+            if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
+                m_tb_prefs.setBoolPref("places.history.enabled", false);
+            } else {
+                m_tb_prefs.setBoolPref("places.history.enabled", true);
+            }
         }
     }
 
