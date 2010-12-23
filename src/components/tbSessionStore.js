@@ -66,7 +66,7 @@ TBSessionBlocker.prototype =
 
   _walkObj: function(soFar, obj) {
     for (let m in obj) {
-      this.logger.log(3, soFar+"."+m);
+      this.logger.log(2, soFar+"."+m);
       if (obj[m] != obj)
         this._walkObj(soFar+"."+m, obj[m]);
     }
@@ -141,11 +141,11 @@ TBSessionBlocker.prototype =
          }
       }
       subject.data = "("+this._toJSONString(state)+")";
-      this.logger.log(3, "Filtered Session Store JSON: "+subject);
+      this.logger.log(2, "Filtered Session Store JSON: "+subject);
 
       // XXX: This is all debugging and should be removed
       var state = this._safeJSONparse(subject);
-      this.logger.log(3, "Parsed Session Store: "+state);
+      this.logger.log(2, "Parsed Session Store: "+state);
       this._walkObj("state", state);
   },
 
