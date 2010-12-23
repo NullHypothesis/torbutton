@@ -108,6 +108,7 @@ pref("extensions.torbutton.asked_ca_disable",false);
 pref("extensions.torbutton.warned_ff3",false);
 pref("extensions.torbutton.fresh_install",true);
 pref("extensions.torbutton.normal_exit",false);
+pref("extensions.torbutton.inserted_button",false);
 
 // Security prefs:
 pref("extensions.torbutton.no_tor_plugins",true);

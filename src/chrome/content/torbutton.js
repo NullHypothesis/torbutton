@@ -354,7 +354,9 @@ function torbutton_set_panel_view() {
     o_prefbranch = torbutton_get_prefbranch('extensions.torbutton.');
     if (!o_statuspanel || !o_prefbranch) return;
 
-    var display_panel = o_prefbranch.getBoolPref('display_panel');
+    // Firefox 4 has no toolbar panel
+    var display_panel = o_prefbranch.getBoolPref('display_panel')
+        && !m_tb_ff4;
     torbutton_log(2, 'setting panel visibility');
     o_statuspanel.setAttribute('collapsed', !display_panel);
 }
@@ -506,8 +508,28 @@ function torbutton_init() {
     var contextMenu = document.getElementById("contentAreaContextMenu");
     if (contextMenu)
       contextMenu.addEventListener("popupshowing", torbutton_check_contextmenu, false);
-    
-    
+
+    // Add toolbutton to the bar.
+    // This should maybe be in the startup function, but we want to add
+    // the button to the panel before it's state (color) is set..
+    if (!m_tb_prefs.getBoolPref("extensions.torbutton.inserted_button")) {
+      torbutton_log(3, 'Adding button');
+      try {
+        var toolbutton = torbutton_get_button_from_toolbox();
+        var navbar = document.getElementById("nav-bar");
+        // XXX: Will probably fail on fennec. Also explicitly forbidden
+        // by MDC style guides (for good reason). Fix later..
+        var urlbar = document.getElementById("urlbar-container");
+        navbar.insertBefore(toolbutton, urlbar);
+        navbar.setAttribute("currentset", navbar.currentSet);
+        document.persist("nav-bar", "currentset");
+        torbutton_log(3, 'Button added');
+        m_tb_prefs.setBoolPref("extensions.torbutton.inserted_button", true);
+      } catch(e) {
+        torbutton_log(4, 'Failed to add Torbutton to toolbar: '+e);
+      }
+    }
+
     torbutton_set_panel_view();
     torbutton_log(1, 'setting torbutton status from proxy prefs');
     torbutton_set_status();
@@ -515,6 +537,7 @@ function torbutton_init() {
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
     torbutton_log(3, 'init completed');
+
 }
 
 //this function checks to see if the context menu is being clicked on a link.
@@ -651,6 +674,15 @@ function torbutton_init_prefs() {
     // m_tb_prefs.setIntPref('extensions.torbutton.gopher_port',   m_gopher_port);
     // m_tb_prefs.setCharPref('extensions.torbutton.socks_host',   m_socks_host);
     // m_tb_prefs.setIntPref('extensions.torbutton.socks_port',    m_socks_port);
+}
+
+function torbutton_get_button_from_toolbox() {
+    var toolbox = document.getElementById("navigator-toolbox");
+    for (var child = toolbox.palette.firstChild; child; child = child.nextSibling)
+        if (child.id == "torbutton-button")
+            return child;
+    torbutton_log(3, "Could not find toolbox button, trying in window DOM");
+    return torbutton_get_toolbutton();
 }
 
 function torbutton_get_toolbutton() {
@@ -3372,19 +3404,17 @@ function torbutton_get_plugin_mimetypes()
 
 
 function torbutton_new_tab(event)
-{ 
+{
     // listening for new tabs
-    torbutton_log(2, "New tab");
+    torbutton_log(3, "New tab");
 
     var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
-    var browser = event.currentTarget;
+    // Changed in FF4...
+    //var browser = event.currentTarget;
+    var browser = gBrowser.getBrowserForTab(event.target);
 
-    // Fucking garbage.. event is delivered to the current tab, not the 
-    // newly created one. Need to traverse the current window for it.
-    for (var i = 0; i < browser.browsers.length; ++i) {
-        torbutton_tag_new_browser(browser.browsers[i], tor_tag, no_plugins);
-    }
+    torbutton_tag_new_browser(browser, tor_tag, no_plugins);
 }
 
 // Returns true if the window wind is neither maximized, full screen,
@@ -3464,10 +3494,14 @@ function torbutton_new_window(event)
 {
     torbutton_log(3, "New window");
     var browser = getBrowser();
+
     if(!browser) {
       torbutton_log(5, "No browser for new window.");
       return;
     }
+
+    // Add tab open listener..
+    browser.tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
 
     m_tb_window_height = window.outerHeight;
     m_tb_window_width = window.outerWidth;
@@ -3533,7 +3567,9 @@ function torbutton_close_window(event) {
 
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
-getBrowser().addEventListener("TabOpen", torbutton_new_tab, false);
+// getBrowser() is not available at this point for FF4..
+// XXX: This registration is possibly related to why TabMixPlus fails.
+//getBrowser().tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
 
 
 // ----------- JAVASCRIPT HOOKING + EVENT HANDLERS ----------------

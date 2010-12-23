@@ -19,14 +19,13 @@
 
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton 
-            id="torbutton-button" 
-            class="toolbarbutton-1" 
+            id="torbutton-button"
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
             label="Torbutton"
-            tooltiptext="&torbutton.button.tooltip;" 
+            tooltiptext="&torbutton.button.tooltip;"
             context="torbutton-context-menu"
             oncommand="torbutton_toggle(false);" />
     </toolbarpalette>
-
     <commandset id="mainCommandSet">
         <command id="torbutton-toggle-cmd" oncommand="torbutton_toggle(false);"/>
     </commandset>
