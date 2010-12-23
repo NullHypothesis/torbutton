@@ -24,6 +24,7 @@ const kMODULE_CID = Components.ID("06322def-6fde-4c06-aef6-47ae8e799629");
 const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 
 function CrashObserver() {
+    dump("Crash observer\n\n\n");
     this._uninstall = false;
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
          .getService(Components.interfaces.nsISupports).wrappedJSObject;
@@ -33,6 +34,7 @@ function CrashObserver() {
 
     var observerService = Cc["@mozilla.org/observer-service;1"].
             getService(Ci.nsIObserverService);
+    observerService.addObserver(this, "final-ui-startup", false);
     observerService.addObserver(this, "em-action-requested", false);
     observerService.addObserver(this, "quit-application-granted", false);
 }
@@ -129,6 +131,9 @@ CrashObserver.prototype = {
   classDescription: "Torbutton Crash Observer",
   classID: kMODULE_CID,
   contractID: kMODULE_CONTRACTID,
+
+  // Hack to get us registered early to observe recovery
+  _xpcom_categories: [{category:"profile-after-change"}],
 
   getInterfaces: function(count) {
     var interfaceList = [nsIClassInfo];

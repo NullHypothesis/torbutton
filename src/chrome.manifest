@@ -97,6 +97,4 @@ category content-policy ContentPolicy @torproject.org/cssblocker;1
 category profile-after-change CookieJarSelector @torproject.org/cookie-jar-selector;1
 category profile-after-change RefSpoofer @torproject.org/torRefSpoofer;1
 category profile-after-change TBSessionBlocker @torproject.org/torbutton-ss-blocker;1
-
-
-
+category profile-after-change CrashObserver @torproject.org/crash-observer;1
