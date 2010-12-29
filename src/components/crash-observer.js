@@ -5,9 +5,7 @@
  * pref event) that the browser in fact crashed.
  *
  * XXX: Cases to test (each during Tor and Non-Tor)
- *    0. Crash
- *       * XXX: Sometimes just saves window list..
- *    2. Upgrade
+ *    2. Upgrade: XXX: Fails to reset tor state.. no crash detected..
  *    1. Uninstall
  *    3. Profile restore without crash
  *    4. Fresh install
@@ -25,17 +23,15 @@ const kMODULE_CID = Components.ID("06322def-6fde-4c06-aef6-47ae8e799629");
 const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 
 function CrashObserver() {
-    dump("Crash observer\n\n\n");
     this._uninstall = false;
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
          .getService(Components.interfaces.nsISupports).wrappedJSObject;
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
          .getService(Components.interfaces.nsIPrefBranch);
-    this.logger.log(3, "AppObserver created");
+    this.logger.log(3, "Crash Observer created");
 
     var observerService = Cc["@mozilla.org/observer-service;1"].
             getService(Ci.nsIObserverService);
-    observerService.addObserver(this, "final-ui-startup", false);
     observerService.addObserver(this, "em-action-requested", false);
     observerService.addObserver(this, "quit-application-granted", false);
 }
@@ -46,22 +42,20 @@ CrashObserver.prototype = {
         if(this._prefs.getBoolPref("extensions.torbutton.fresh_install")) {
           this._prefs.setBoolPref("extensions.torbutton.normal_exit", true);
         }
-      } else if(topic == "final-ui-startup") {
-          this.logger.log(2, "final-ui-startup.");
-          this._prefs.setBoolPref("extensions.torbutton.startup", true);
-          if (this._prefs.getBoolPref("extensions.torbutton.normal_exit")) {
-            this._prefs.setBoolPref("extensions.torbutton.noncrashed", true);
-          } else {
-            this._prefs.setBoolPref("extensions.torbutton.crashed", true);
-          }
-          this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
+        this._prefs.setBoolPref("extensions.torbutton.startup", true);
+        if (this._prefs.getBoolPref("extensions.torbutton.normal_exit")) {
+          this._prefs.setBoolPref("extensions.torbutton.noncrashed", true);
+        } else {
+          this._prefs.setBoolPref("extensions.torbutton.crashed", true);
+        }
+        this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
       } else if (topic == "em-action-requested") {
         // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
         subject.QueryInterface(Components.interfaces.nsIUpdateItem);
-        this.logger.log(2, "Uninstall: "+data+" "+subject.id.toUpperCase());
+        this.logger.log(3, "Uninstall: "+data+" "+subject.id.toUpperCase());
 
         if (subject.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
-          this.logger.log(2, "Uninstall: "+data);
+          this.logger.log(3, "Uninstall: "+data);
           if (data == "item-uninstalled" || data == "item-disabled") {
             this._uninstall = true;
           } else if (data == "item-cancel-action") {
@@ -69,7 +63,7 @@ CrashObserver.prototype = {
           }
         }
       } else if (topic == "quit-application-granted") {
-        this.logger.log(2, "Got firefox quit event.");
+        this.logger.log(3, "Got firefox quit event.");
         var chrome = null;
         try {
             var wm = Cc["@mozilla.org/appshell/window-mediator;1"]

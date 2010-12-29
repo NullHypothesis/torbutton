@@ -259,16 +259,6 @@ var torbutton_unique_pref_observer =
 
                 break;
 
-            // These two are set from the Torbutton crash-observer component
-            // (which itself just wrappes the sessionstartup firefox
-            // component to get doRestore notification)
-            case "extensions.torbutton.crashed":
-                torbutton_crash_recover();
-                break;
-            case "extensions.torbutton.noncrashed":
-               torbutton_set_initial_state();
-               break;
-
             case "extensions.torbutton.set_uagent":
                 // If the user turns off the pref, reset their user agent to
                 // vanilla
@@ -3309,9 +3299,9 @@ function torbutton_do_main_window_startup()
 
 function torbutton_set_initial_state() {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
-        var restore_tor = m_tb_prefs.getIntPref("extensions.torbutton.restore_tor");
+        var restore_tor = m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor");
         
-        torbutton_log(3, "Setting initial state to: "+restore_tor);
+        torbutton_log(3, "Setting initial tor state to: "+restore_tor);
 
         torbutton_conditional_set(restore_tor);
 
@@ -3401,6 +3391,7 @@ function torbutton_do_startup()
           // Need to maybe generate google cookie if tor is enabled
           torbutton_new_google_cookie();
         }
+
 
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
@@ -3530,6 +3521,7 @@ function torbutton_new_window(event)
 
     torbutton_do_startup();
     torbutton_crash_recover();
+    torbutton_set_initial_state();
 
     torbutton_get_plugin_mimetypes();
 
