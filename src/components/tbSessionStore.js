@@ -26,6 +26,20 @@ function TBSessionBlocker() {
     obsSvc.addObserver(this, "sessionstore-state-write", false);
     this.prefs = Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
+
+    // Determine if we are firefox 4 or not.. The session store formats broke
+    // in a backwards-incompatible way.
+    var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+        .getService(Components.interfaces.nsIXULAppInfo);
+    var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+        .getService(Components.interfaces.nsIVersionComparator);
+
+    if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
+        this.is_ff4 = true;
+    } else {
+        this.is_ff4 = false;
+    }
+
     this.wrappedJSObject = this;
 }
 
@@ -81,6 +95,7 @@ TBSessionBlocker.prototype =
       if (topic != "sessionstore-state-write") return;
       this.logger.log(3, "Got Session Store observe: "+topic);
       subject = subject.QueryInterface(Ci.nsISupportsString);
+      this.logger.log(2, "Parsing JSON: "+subject);
 
       var state = this._safeJSONparse(subject);
       if (!"windows" in state) {
@@ -89,6 +104,11 @@ TBSessionBlocker.prototype =
       }
       var bypass_tor = this.prefs.getBoolPref("extensions.torbutton.notor_sessionstore");
       var bypass_nontor = this.prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore");
+
+      // This is all debugging and should be removed
+      //this.logger.log(2, "Parsed Session Store: "+state);
+      //this._walkObj("state", state);
+
       // XXX: It appears that if we filter out everything, firefox quits after restoring the
       // blank store
       for (let w in state.windows) {
@@ -140,7 +160,7 @@ TBSessionBlocker.prototype =
            }
          }
       }
-      subject.data = "("+this._toJSONString(state)+")";
+      subject.data = this._toJSONString(state);
       this.logger.log(2, "Filtered Session Store JSON: "+subject);
 
       // This is all debugging and should be removed
@@ -150,7 +170,11 @@ TBSessionBlocker.prototype =
   },
 
   _safeJSONparse: function(aStr) {
-    return Cu.evalInSandbox(aStr, new Cu.Sandbox("about:blank"));
+    if (this.is_ff4) {
+      return JSON.parse(aStr);
+    } else {
+      return Cu.evalInSandbox(aStr, new Cu.Sandbox("about:blank"));
+    }
   },
 
   /**
@@ -162,16 +186,20 @@ TBSessionBlocker.prototype =
   _toJSONString: function(aJSObject) {
     // XXXzeniko drop the following keys used only for internal bookkeeping:
     //           _tabStillLoading, _hosts, _formDataSaved
-    let jsonString = JSON.stringify(aJSObject);
+    if (this.is_ff4) {
+      return JSON.stringify(aJSObject);
+    } else {
+      let jsonString = JSON.stringify(aJSObject);
 
-    if (/[\u2028\u2029]/.test(jsonString)) {
-      // work-around for bug 485563 until we can use JSON.parse
-      // instead of evalInSandbox everywhere
-      jsonString = jsonString.replace(/[\u2028\u2029]/g,
-                                      function($0) "\\u" + $0.charCodeAt(0).toString(16));
+      if (/[\u2028\u2029]/.test(jsonString)) {
+        // work-around for bug 485563 until we can use JSON.parse
+        // instead of evalInSandbox everywhere
+        jsonString = jsonString.replace(/[\u2028\u2029]/g,
+                                        function($0) "\\u" + $0.charCodeAt(0).toString(16));
+      }
+
+      return "("+jsonString+")";
     }
-
-    return jsonString;
   }
 };
 
