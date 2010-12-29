@@ -282,6 +282,7 @@
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
              -->
             <vbox>
+            <!--
             <hbox>
              <label value="&torbutton.prefs.startup_state;" control="torbutton_startupStateGroup"/>
              <radiogroup align="center" orient="horizontal" id="torbutton_startupStateGroup">
@@ -296,9 +297,9 @@
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
              </radiogroup>
             </hbox>
-
+            -->
             <hbox>
-             <label value="&torbutton.prefs.restore_tor;" control="torbutton_restoreTorGroup"/>
+             <label value="&torbutton.prefs.startup_tor;" control="torbutton_restoreTorGroup"/>
              <radiogroup align="center" orient="horizontal" id="torbutton_restoreTorGroup">
               <radio id="torbutton_restoreTor" 
                    label="&torbutton.prefs.tor;" 

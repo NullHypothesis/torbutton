@@ -441,6 +441,7 @@ function torbutton_set_status() {
 
 function torbutton_init_toolbutton(event)
 {
+    // XXX: This fails on FF4
     if (event.originalTarget && event.originalTarget.getAttribute('id') == 'torbutton-button')
        torbutton_update_toolbutton(torbutton_check_status());
 }
@@ -3308,15 +3309,11 @@ function torbutton_do_main_window_startup()
 
 function torbutton_set_initial_state() {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
-        var startup_state = m_tb_prefs.getIntPref("extensions.torbutton.startup_state");
+        var restore_tor = m_tb_prefs.getIntPref("extensions.torbutton.restore_tor");
         
-        torbutton_log(3, "Setting initial state to: "+startup_state);
+        torbutton_log(3, "Setting initial state to: "+restore_tor);
 
-        if(startup_state == 0) {
-            torbutton_conditional_set(false); // must be boolean
-        } else if(startup_state == 1) {
-            torbutton_conditional_set(true);
-        } // 2 means leave it as it was
+        torbutton_conditional_set(restore_tor);
 
         m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
 

@@ -265,6 +265,7 @@ function torbutton_prefs_init(doc) {
             doc.getElementById('torbutton_restoreNonTor');
     }
 
+    /*
     switch(o_torprefs.getIntPref('startup_state')) {
         case 0: // non-tor
             doc.getElementById("torbutton_startupStateGroup").selectedItem =
@@ -278,7 +279,7 @@ function torbutton_prefs_init(doc) {
             doc.getElementById("torbutton_startupStateGroup").selectedItem =
                 doc.getElementById('torbutton_startPrevious');
             break;
-    }
+    }*/
     
     if ((doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof'))==4)
       doc.getElementById('torbutton_CustomRef').value = o_torprefs.getCharPref('customref');
@@ -516,6 +517,7 @@ function torbutton_prefs_save(doc) {
             doc.getElementById('torbutton_restoreTorGroup').selectedItem ==
             doc.getElementById('torbutton_restoreTor'));
 
+    /*
     if(doc.getElementById('torbutton_startupStateGroup').selectedItem ==
             doc.getElementById('torbutton_startNonTor')) {
         o_torprefs.setIntPref('startup_state', 0);
@@ -524,7 +526,7 @@ function torbutton_prefs_save(doc) {
         o_torprefs.setIntPref('startup_state', 1);
     } else {
         o_torprefs.setIntPref('startup_state', 2);
-    }
+    }*/
 
     o_torprefs.setBoolPref('notor_sessionstore', !doc.getElementById('torbutton_torSessionStore').checked);
     o_torprefs.setBoolPref('nonontor_sessionstore', !doc.getElementById('torbutton_nonTorSessionStore').checked);
