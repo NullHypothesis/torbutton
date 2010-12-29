@@ -1519,8 +1519,13 @@ function torbutton_update_status(mode, force_update) {
     }
 
     // No need to clear cookies if just updating prefs
-    if(!changed && force_update)
+    if(!changed && force_update) {
+        // Force prefs to be synced to disk
+        var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+            .getService(Components.interfaces.nsIPrefService);
+        prefService.savePrefFile(null);
         return;
+    }
 
     torbutton_set_timezone(mode, false);
 
@@ -1590,6 +1595,12 @@ function torbutton_update_status(mode, force_update) {
     }
 
     m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", mode);
+
+    // Force prefs to be synced to disk
+    var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefService);
+    prefService.savePrefFile(null);
+
     torbutton_log(3, "Settings applied for mode: "+mode);
 }
 
@@ -2564,6 +2575,11 @@ function torbutton_crash_recover()
         }
 
         m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
+
+        // Force prefs to be synced to disk
+        var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                                           .getService(Components.interfaces.nsIPrefService);
+        prefService.savePrefFile(null);
     }
 
     torbutton_log(3, "End crash recover check");
@@ -3303,6 +3319,11 @@ function torbutton_set_initial_state() {
         } // 2 means leave it as it was
 
         m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
+
+        // Force prefs to be synced to disk
+        var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                                           .getService(Components.interfaces.nsIPrefService);
+        prefService.savePrefFile(null);
     }
 }
 

@@ -717,4 +717,9 @@ function torbutton_prefs_reset_defaults() {
 
     torbutton_log(4, "Preferences reset to defaults");
     torbutton_prefs_init(window.document);
+
+    // In all cases, force prefs to be synced to disk
+    var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefService);
+    prefService.savePrefFile(null);
 }

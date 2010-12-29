@@ -5,11 +5,12 @@
  * pref event) that the browser in fact crashed.
  *
  * XXX: Cases to test (each during Tor and Non-Tor)
- *    0. Crash (watch cookies!)
- *    1. Fresh install
- *    2. Uninstall
- *    3. Upgrade
- *    4. Profile restore without crash
+ *    0. Crash
+ *       * XXX: Sometimes just saves window list..
+ *    2. Upgrade
+ *    1. Uninstall
+ *    3. Profile restore without crash
+ *    4. Fresh install
  *
  *************************************************************************/
 
@@ -116,6 +117,11 @@ CrashObserver.prototype = {
         this.logger.log(3, "Torbutton normal exit.");
         //this.unregister();
       }
+
+      // In all cases, force prefs to be synced to disk
+      var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+          .getService(Components.interfaces.nsIPrefService);
+      prefService.savePrefFile(null);
     },
   QueryInterface: function(iid) {
     if (iid.equals(Components.interfaces.nsISupports)) {
