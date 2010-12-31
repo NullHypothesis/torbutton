@@ -4,10 +4,13 @@
  * Provides the chrome with a notification ("extensions.torbutton.crashed"
  * pref event) that the browser in fact crashed.
  *
- * XXX: Cases to test (each during Tor and Non-Tor)
- *    2. Upgrade: XXX: Fails to reset tor state.. no crash detected..
- *    1. Uninstall
- *    3. Profile restore without crash
+ * Cases tested (each during Tor and Non-Tor, FF4 and FF3.6)
+ *    1. Crash
+ *    2. Upgrade
+ *    3. Uninstall:
+ *       XXX: Currently broken. Need
+ *       https://developer.mozilla.org/en/Addons/Add-on_Manager/AddonListener#onOperationCancelled%28%29
+ *       https://developer.mozilla.org/en/Addons/Add-on_Manager/AddonManager#addAddonListener%28%29
  *    4. Fresh install
  *
  *************************************************************************/
@@ -32,11 +35,66 @@ function CrashObserver() {
 
     var observerService = Cc["@mozilla.org/observer-service;1"].
             getService(Ci.nsIObserverService);
-    observerService.addObserver(this, "em-action-requested", false);
     observerService.addObserver(this, "quit-application-granted", false);
+
+    // Determine if we are firefox 4 or not.. They changed the addon listeners
+    // in a backwards-incompatible way...
+    var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+        .getService(Components.interfaces.nsIXULAppInfo);
+    var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+        .getService(Components.interfaces.nsIVersionComparator);
+
+    if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
+        this.is_ff4 = true;
+    } else {
+        this.is_ff4 = false;
+    }
+
+    if (this.is_ff4) {
+      Components.utils.import("resource://gre/modules/AddonManager.jsm");
+      this.onEnabling = this.onOperationCancelled;
+      this.onDisabling = this.onUninstalling;
+      AddonManager.addAddonListener(this);
+    } else {
+      observerService.addObserver(this, "em-action-requested", false);
+    }
 }
 
 CrashObserver.prototype = {
+    // AddonListeners. We need to listen to see if we are about to be
+    // disabled or uninstalled. We also need to track this, and listen
+    // for an arbitrary "cancel" event that changes the current state.
+    // This is for FF4 and above. The logic in em-action-requested handles
+    // it for earlier versions
+    // XXX: If firefox crashes before quit here, and still manages to uninstall
+    // us somehow, we will leave the browser in a sorry state... Let's hope they
+    // have the sense not to uninstall addons after an improper shutdown/crash
+    // (or at least give us this event again in that case).
+    onUninstalling: function(addon, needsRestart) {
+      if (addon.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
+        this._uninstall = true;
+        this.logger.log(4, "User requested disable/uninstall of Torbutton. Preparing for death.");
+
+        if (!needsRestart) {
+          this.logger.log(5,
+                  "Torbutton uninstalled/disabled, but a restart is not needed? How can this happen?");
+        }
+      }
+    },
+
+    // This is done in the constructor. JS doesn't allow this...
+    //onDisabling: this.onUninstalling,
+
+    onOperationCancelled: function(addon) {
+      if (addon.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
+         this.logger.log(4, "Uninstall of Torbutton canceled. Hurray!");
+         this._uninstall = false;
+      }
+    },
+
+    // This is done in the constructor. JS doesn't allow this...
+    //onEnabling: this.onOperationCancelled,
+
     observe: function(subject, topic, data) {
       if(topic == "profile-after-change") {
         if(this._prefs.getBoolPref("extensions.torbutton.fresh_install")) {
@@ -50,6 +108,7 @@ CrashObserver.prototype = {
         }
         this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
       } else if (topic == "em-action-requested") {
+        this.logger.log(3, "Uninstall action requested..");
         // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
         subject.QueryInterface(Components.interfaces.nsIUpdateItem);
         this.logger.log(3, "Uninstall: "+data+" "+subject.id.toUpperCase());
@@ -72,9 +131,12 @@ CrashObserver.prototype = {
         } catch(e) {
             this.logger.log(3, "Exception on shutdown window: "+e);
         }
+
         if (this._uninstall) {
             if (chrome) {
                 chrome.torbutton_disable_tor();
+                this.logger.log(4,
+                        "Disabling Torbutton prior to uninstall.");
             } else {
                 this.logger.log(5,
                         "User asked to uninstall, but we have no window!");
@@ -117,6 +179,7 @@ CrashObserver.prototype = {
           .getService(Components.interfaces.nsIPrefService);
       prefService.savePrefFile(null);
     },
+
   QueryInterface: function(iid) {
     if (iid.equals(Components.interfaces.nsISupports)) {
         return this;
