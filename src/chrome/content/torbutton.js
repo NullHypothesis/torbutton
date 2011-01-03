@@ -3672,6 +3672,12 @@ function torbutton_update_tags(win, new_loc) {
 
     // This sometimes happens with CoolPreviews..
     try {
+        // XXX: sometimes we get a dialog window here in FF4?
+        if (!browser.contentWindow) {
+          torbutton_log(3, "No content window for: "+browser.location);
+          return;
+        }
+
         torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
             + win.location + ", under: "+win.top.location);
     } catch(e) {
