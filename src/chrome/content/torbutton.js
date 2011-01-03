@@ -429,11 +429,24 @@ function torbutton_set_status() {
     }
 }
 
-function torbutton_init_toolbutton(event)
+function torbutton_init_toolbutton()
 {
-    // XXX: This fails on FF4
-    if (event.originalTarget && event.originalTarget.getAttribute('id') == 'torbutton-button')
-       torbutton_update_toolbutton(torbutton_check_status());
+    try {
+      torbutton_log(3, "Initializing the Torbutton button.");
+      // Prevent the FF4 status bar from making our menu invisible...
+      /* Not needed
+      var o_toolbutton = torbutton_get_toolbutton();
+      if (o_toolbutton) {
+        var context = document.getElementById('torbutton-context-menu');
+        context.style.visibility = "visible";
+        context.hidden = false;
+        torbutton_log(3, "Set new context menu.");
+      }
+      */
+      torbutton_update_toolbutton(torbutton_check_status());
+    } catch(e) {
+      torbutton_log(4, "Error Initializing Torbutton button: "+e);
+    }
 }
 
 function torbutton_init() {
@@ -476,10 +489,7 @@ function torbutton_init() {
     torbutton_set_panel_style();
 
     // listen for our toolbar button being added so we can initialize it
-    if (torbutton_gecko_compare("1.8") <= 0) {
-        document.getElementById('navigator-toolbox')
-                .addEventListener('DOMNodeInserted', torbutton_init_toolbutton, false);
-    }
+    torbutton_init_toolbutton();
 
     if (!m_tb_wasinited) { 
         // Runs every time a new window is opened
