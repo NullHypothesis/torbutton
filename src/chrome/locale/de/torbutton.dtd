@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Nicht-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Setze Tor-Modus bei Session-Wiederherstellung zu:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Lade die Cookiedatei/Lösche Cookies beim Absturz (empfohlen)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Speichere alle Cookies (Verbindungen über Tor oder nicht) in geschützten Dateien (gefährlich)">
 <!ENTITY torbutton.prefs.clear_http_auth "Lösche Sitzungen mit Authentifizierung (empfohlen)">

@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Saat memulai browser dengan sesi dipulihkan, tetapkan kondisi Tor:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Muat ulang cookie jar/bersihkan cookie saat Firefox mengalami kerusakan (disarankan)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Simpan baik cookie Tor maupun Non-Tor dalam jar terproteksi (berbahaya)">
 <!ENTITY torbutton.prefs.clear_http_auth "Bersihkan sesi HTTP terotorisasi (disarankan)">

@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Sin Tor">
 <!ENTITY torbutton.prefs.restore_tor "En el arranque de la restauración de la sesión, establecer el estado de Tor a:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recargar jar de cookies/eliminar cookies al fallar Firefox (recomendado)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Almacenar cookies con Tor y sin Tor en jars protegidos (peligroso)">
 <!ENTITY torbutton.prefs.clear_http_auth "Eliminar sesiones de autenticación HTTP (recomendado)">

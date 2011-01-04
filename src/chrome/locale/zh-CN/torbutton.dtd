@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "使用 Tor">
 <!ENTITY torbutton.prefs.non_tor "不用 Tor">
 <!ENTITY torbutton.prefs.restore_tor "浏览器恢复进程时，设置 Tor 的状态为">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Firefox 崩溃后重载 cookie jar/清除 cookie(推荐)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "在受保护的 jar 文件中同时保存使用 Tor 和不用 Tor 时的 cookies(危险)">
 <!ENTITY torbutton.prefs.clear_http_auth "清除 HTTP 认证进程(推荐)">

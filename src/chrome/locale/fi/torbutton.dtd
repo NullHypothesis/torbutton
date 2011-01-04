@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Ei-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Palautettaessa kaatunutta istuntoa, aseta Tor tilaksi:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Lataa ja poista evästeet kun FF kaatuu (suositeltava)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Tallenna sekä Tor että Ei-Tor evästeet suojattuun hakemistoon(vaarallista)">
 <!ENTITY torbutton.prefs.clear_http_auth "Poista HTTP tunnistetut istunnot (suositeltava)">

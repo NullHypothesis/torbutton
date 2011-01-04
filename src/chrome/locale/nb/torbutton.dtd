@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Ikke-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Under oppstart av en gjenopprettet sesjon, sett Tor-status til:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Last jar med informasjonskapsler på nytt / slett informasjonskapsler når Firefox kræsjer (anbefalt)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Lagre informasjonskapsler for både Tor og ikke-Tor i beskyttende jar (farlig)">
 <!ENTITY torbutton.prefs.clear_http_auth "Slett HTTP-autentiserte sesjoner (anbefalt)">

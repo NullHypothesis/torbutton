@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "التور">
 <!ENTITY torbutton.prefs.non_tor "التور معطل">
 <!ENTITY torbutton.prefs.restore_tor "خلال بدء استعادة الجلسة، اضبط حالة التور إلى:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "أعد تحميل وعاء الكعكات/امسح الكعكات عند انهيار فيرفكس (محبّذ)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "احفظ الكعكات عن تفعيل تور وعند تعطيله في أوعية محمية (خطر)">
 <!ENTITY torbutton.prefs.clear_http_auth "امسح جلسات المصادقة لـ HTTP (محبّذ)">

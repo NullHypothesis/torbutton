@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "bez Tora">
 <!ENTITY torbutton.prefs.restore_tor "Po przywróceniu sesji, ustaw stan Tora na:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Usuń ciasteczka z magazynów przy nieoczekiwanym zamknięciu Firefoxa (zalecane)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Zapisuj wszystkie ciasteczka w zabezpieczonych magazynach(niebezpieczne)">
 <!ENTITY torbutton.prefs.clear_http_auth "Czyść sesje autentykacji HTTP (zalecane)">

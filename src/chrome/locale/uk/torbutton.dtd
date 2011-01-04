@@ -76,6 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "не-Tor">
 <!ENTITY torbutton.prefs.restore_tor "При відновленні сесії, встановлювати стан Tor як:">
+<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Перевантажити куки/очистити куки при падінні Фірефоху (рекомендовано)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Зберігати як Tor, так і не-Tor куки у захищеному стані (небезпечно)">
 <!ENTITY torbutton.prefs.clear_http_auth "Очистити сесії HTTP аутентифікації (рекомендовано)">
