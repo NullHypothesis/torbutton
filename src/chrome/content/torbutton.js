@@ -537,8 +537,30 @@ function torbutton_init() {
     var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
-    torbutton_log(3, 'init completed');
 
+    torbutton_log(3, 'init completed');
+}
+
+// Asks the user whether Torbutton should make "English requests", and updates
+// the extensions.torbutton.spoof_english preference accordingly.
+function torbutton_prompt_for_language_preference() {
+  var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
+      .getService(Components.interfaces.nsIPromptService);
+
+  // Display two buttons, both with string titles.
+  var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
+      prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING;
+
+  var strings = torbutton_get_stringbundle();
+  var message = strings.GetStringFromName("torbutton.popup.prompted_language");
+
+  var response = prompts.confirmEx(null, "", message, flags, "Yes", "No", null,
+      null, {value: false});
+
+  // Update preferences to reflect their response and to prevent the prompt from
+  // being displayed again.
+  m_tb_prefs.setBoolPref("extensions.torbutton.spoof_english", response == 0);
+  m_tb_prefs.setBoolPref("extensions.torbutton.prompted_language", true);
 }
 
 //this function checks to see if the context menu is being clicked on a link.
@@ -549,6 +571,7 @@ function torbutton_check_contextmenu() {
     var torwin = document.getElementById("torcontext-opentorwin");
     torurl.hidden = tortab.hidden = torwin.hidden = (document.popupNode.localName != "A") 
 }
+
 function torbutton_copy_link() {
   var element = document.popupNode;
   var myURI = Components.classes["@mozilla.org/network/io-service;1"]
@@ -3402,7 +3425,6 @@ function torbutton_do_startup()
           torbutton_new_google_cookie();
         }
 
-
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
 }
@@ -3434,6 +3456,17 @@ function torbutton_new_tab(event)
     var browser = gBrowser.getBrowserForTab(event.target);
 
     torbutton_tag_new_browser(browser, tor_tag, no_plugins);
+
+    // XXX: This is possibly slightly the wrong place to do this check,
+    // but we know the TabOpen effect is late enough to provide the popup
+    // after firefox is visible, which makes it more clear who's popup this is.
+    //
+    // Ask the user if they want to make "English requests" if their default
+    // language isn't English and the prompt hasn't been displayed before.
+    if (torbutton_get_general_useragent_locale().substring(0, 2) != "en" &&
+        !m_tb_prefs.getBoolPref("extensions.torbutton.prompted_language")) {
+      torbutton_prompt_for_language_preference();
+    }
 }
 
 // Returns true if the window wind is neither maximized, full screen,
