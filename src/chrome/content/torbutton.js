@@ -3853,16 +3853,26 @@ function torbutton_hookdoc(win, doc) {
     str2 += m_tb_jshooks;
 
     try {
+        var s = null;
         torbutton_log(2, "Type of window: " + typeof(win));
         torbutton_log(2, "Type of wrapped window: " + typeof(win.wrappedJSObject));
-        var s = new Components.utils.Sandbox(win.wrappedJSObject);
+        
+        // Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=627494
+        // https://developer.mozilla.org/en/Components.utils.Sandbox#Optional_parameter
+        
+        if (m_tb_ff4) {
+           s = new Components.utils.Sandbox(win.wrappedJSObject,
+                   {  sandboxPrototype: win.wrappedJSObject,
+                      wantXrays: false });
+        } else {
+           s = new Components.utils.Sandbox(win.wrappedJSObject);
+        }
+
         // FIXME: FF3 issues 
         // http://developer.mozilla.org/en/docs/XPConnect_wrappers#XPCSafeJSObjectWrapper
         // http://developer.mozilla.org/en/docs/Code_snippets:Interaction_between_privileged_and_non-privileged_pages
         s.window = win.wrappedJSObject; 
-//        s.__proto__ = win.wrappedJSObject;
-        //var result = Components.utils.evalInSandbox('var origDate = Date; window.alert(new origDate())', s);
-        //result = 23;
+//s.__proto__ = win.wrappedJSObject;
         var result = Components.utils.evalInSandbox(str2, s);
         if(result === 23) { // secret confirmation result code.
             torbutton_log(3, "Javascript hooks applied successfully at: " + win.location);
