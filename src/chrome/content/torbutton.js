@@ -3459,7 +3459,7 @@ function torbutton_new_tab(event)
 
     // XXX: This is possibly slightly the wrong place to do this check,
     // but we know the TabOpen effect is late enough to provide the popup
-    // after firefox is visible, which makes it more clear who's popup this is.
+    // after firefox is visible, which makes it more clear whose popup this is.
     //
     // Ask the user if they want to make "English requests" if their default
     // language isn't English and the prompt hasn't been displayed before.
