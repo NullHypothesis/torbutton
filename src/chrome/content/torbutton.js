@@ -2873,7 +2873,9 @@ function torbutton_xfer_google_cookies(subject, topic, data) {
                   /^(\.www|www|)\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
         }
         // Copy all relevent cookies (except for ssl)
-        if (hostmatched && !cookie.isSecure) {
+        // only copy captcha cookie ("S"?)
+        if (hostmatched && !cookie.isSecure
+                && (cookie.name in {"S":1,"NID":1,"PREF":1,"GDSESS":1,"SNID":1})) {
           copy_cookies.push(cookie);
         }
       }
