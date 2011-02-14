@@ -164,6 +164,11 @@ pref("extensions.torbutton.fakerefresh", false);
 pref("extensions.torbutton.customeref","");
 pref("extensions.torbutton.disable_livemarks",true);
 pref("extensions.torbutton.update_torbutton_via_tor",true);
+// Opt out of Firefox addon pings:
+// https://developer.mozilla.org/en/Addons/Working_with_AMO
+pref("extensions.e0204bd5-9d31-402b-a99d-a6aa8ffebdca.getAddons.cache.enabled", false);
+pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.getAddons.cache.enabled", false);
+
 
 // Google Captcha prefs
 // FIXME: NID cookie?
