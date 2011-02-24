@@ -3,6 +3,7 @@ window.__HookObjects = function() {
       return false;
   }
 
+
   /* For reference/debugging only:
   if(false && window.__tb_set_uagent===true) {
       var tmp_oscpu = window.__tb_oscpu;
@@ -326,11 +327,14 @@ window.__HookObjects = function() {
   // to be a 'Window' but is not the same class as 'window'...) and 
   // hide XPCNativeWrapper there.
   // This seems no longer necessary in FF2.0.0.13+, and may break FF3?
-  with(window.valueOf.call().__proto__) {
-      XPCNativeWrapper = function(a) { return a; };
-  }
+  //with(window.valueOf.call().__proto__) {
+  //    XPCNativeWrapper = function(a) { return a; };
+  //}
 
-  window.__proto__ = null; // Prevent delete from unmasking our properties.
+  // FIXME: Commenting this may open us to unmasking, but allows the hooks to
+  // work on FF4. Since we lost the bulletproof resolution masking battle to
+  // CSS3 anyways, let's just do what we can.
+  //window.__proto__ = null; // Prevent delete from unmasking our properties.
   return true;
 }
 
