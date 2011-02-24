@@ -259,6 +259,19 @@ ContentPolicy.prototype = {
                         }
                     }
 
+                    // Fix bug #2359: Firefox now loads dtd's from
+                    // resource urls with a valid host. We must
+                    // check for this and allow it.
+                    if (contentLocation.scheme == "resource") {
+                      try {
+                        targetHost = contentLocation.host;
+                      } catch(e) {
+                        this.logger.safe_log(3, "No resource host from: ",
+                                requestOrigin.spec + " for: " +
+                                contentLocation.spec);
+                      }
+                    }
+
                     if (("about:blank" == contentLocation.spec)) {
                         // ok, but don't return
                     } else if (("chrome" == targetScheme) && (targetHost in browserSources)) {
@@ -266,8 +279,9 @@ ContentPolicy.prototype = {
                                           requestOrigin.spec + " for: " +
                                           contentLocation.spec);
                         return ok;
-                    } else if ("file" == targetScheme) {
-                        // This fix is for bug 1014. XHTML documents need to source
+                    } else if ("file" == targetScheme ||
+                          ("resource" == targetScheme && targetHost == "gre")) {
+                        // This fix is for bugs 1014+2359. XHTML documents need to source
                         // a special dtd as a file url. The same origin policy should
                         // prevent other access to file urls, so this should be ok
                         // to just allow.
