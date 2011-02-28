@@ -314,7 +314,6 @@ window.__HookObjects = function() {
   }
 
   } // window.__tb_hook_date == true
-  
 
   with(window) {
       XPCNativeWrapper = function(a) { return a; };

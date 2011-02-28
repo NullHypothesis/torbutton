@@ -2393,7 +2393,9 @@ function torbutton_apply_tab_tag(browser, tag) {
      else
        torbutton_log(5, "No tab found for session store tag.");
    }
+   var oldtag = browser.__tb_tor_fetched;
    browser.__tb_tor_fetched = tag;
+   return oldtag != tag;
 }
 
 function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
@@ -3692,6 +3694,7 @@ function torbutton_is_same_origin(win, source, target) { // unused.
 
 
 function torbutton_update_tags(win, new_loc) {
+    var tag_change = false;
     torbutton_eclog(2, "Updating tags.");
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
@@ -3743,6 +3746,7 @@ function torbutton_update_tags(win, new_loc) {
             torbutton_apply_tab_tag(browser, tor_tag);
         }
         if(browser.__tb_tor_fetched != !tor_tag) {
+            tag_change = true;
             // Purge session history every time we fetch a new doc 
             // in a new tor state
             torbutton_log(2, "Purging session history");
@@ -3807,6 +3811,7 @@ function torbutton_update_tags(win, new_loc) {
     }
 
     torbutton_log(2, "Tags updated.");
+    return tag_change;
 }
 
 // Same-origin policy may prevent our hooks from applying
@@ -3825,7 +3830,7 @@ function torbutton_update_tags(win, new_loc) {
 //    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
 //  - pure javascript pages/non-text/html pages
 //  - Messing with variables/existing hooks
-function torbutton_hookdoc(win, doc) {
+function torbutton_hookdoc(win, doc, state_change) {
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
         return;
@@ -3857,7 +3862,7 @@ function torbutton_hookdoc(win, doc) {
     // the insertion function returning before the injected code is evaluated.
     // This code seems to do what we want.
 
-    var str2 = "";
+    var str2 = "window.__tb_state_changed="+state_change+";\r\n";
     if(m_tb_ff3) {
         str2 += "window.__tb_set_uagent=false;\r\n";
         str2 += "window.__tb_hook_date=false;\r\n";
@@ -3899,13 +3904,15 @@ function torbutton_hookdoc(win, doc) {
         } else {
            s = new Components.utils.Sandbox(win.wrappedJSObject);
         }
+        torbutton_log(2, "Type of sandbox: " + typeof(s));
 
         // FIXME: FF3 issues 
         // http://developer.mozilla.org/en/docs/XPConnect_wrappers#XPCSafeJSObjectWrapper
         // http://developer.mozilla.org/en/docs/Code_snippets:Interaction_between_privileged_and_non-privileged_pages
         s.window = win.wrappedJSObject; 
-//s.__proto__ = win.wrappedJSObject;
+        //s.__proto__ = win.wrappedJSObject;
         var result = Components.utils.evalInSandbox(str2, s);
+        torbutton_log(2, "Type of result: " + typeof(result));
         if(result === 23) { // secret confirmation result code.
             torbutton_log(3, "Javascript hooks applied successfully at: " + win.location);
         } else if(result === 13) {
@@ -4079,9 +4086,9 @@ function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
         var doc = DOMWindow.document;
         try {
             if(doc) {
-                torbutton_update_tags(DOMWindow.window, new_loc);
+                var tag_change = torbutton_update_tags(DOMWindow.window, new_loc);
                 if(doc.domain) {
-                    torbutton_hookdoc(DOMWindow.window, doc);
+                    torbutton_hookdoc(DOMWindow.window, doc, tag_change);
                 }
             }
         } catch(e) {
