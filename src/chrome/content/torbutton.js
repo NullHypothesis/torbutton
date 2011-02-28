@@ -2260,6 +2260,16 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
         torbutton_log(4, "Failed to disable JS events: "+e)
     }
 
+    try {
+        // My estimation is that this does not get the inner iframe windows,
+        // but that does not matter, because iframes should be destroyed
+        // on the next load.
+        browser.contentWindow.name = null;
+        browser.contentWindow.window.name = null;
+    } catch(e) {
+        torbutton_log(4, "Failed to reset window.name: "+e)
+    }
+
     if(browser.__tb_tor_fetched == tor_enabled) { // States match, js ok 
         browser.docShell.allowJavascript = js_enabled;
         if (eventSuppressor)
