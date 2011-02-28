@@ -4,6 +4,7 @@ const kMODULE_CONTRACTID = "@torproject.org/torRefSpoofer;1";
 function RefSpoofer() {
  this.logger = Components.classes["@torproject.org/torbutton-logger;1"].getService(Components.interfaces.nsISupports).wrappedJSObject;
  this.logger.log(3, "RefSpoof component created");
+ this.specials = /[-[\]{}()*+?.,\\^$|#\s]/g;
 }
 
 
@@ -49,25 +50,31 @@ RefSpoofer.prototype = {
         return;//no referer available or invalid uri
       }
       var requestURI = oHttpChannel.URI; //request nsIURI object
-      var refererHost = referer.host; //referer host w/o scheme
-      var requestHost = oHttpChannel.URI.host;//request host without scheme
-      
-      //get rid of www. to compare root domain
-      if (refererHost.match("^www."))
-        refererHost = refererHost.substring(4);
-      
-      if (requestHost.match("^www."))
-        requestHost = requestHost.substring(4);
- 
-      //if they're in the same domain(if we can tell) or have the same host, keep the referer     
-      if (requestHost.split(".").length >= refererHost.split(".").length && requestHost.match(refererHost))
+      var destHost = referer.host; //referer host w/o scheme
+      var srcHost = oHttpChannel.URI.host;//request host without scheme
+
+      // match is not what we want, unless we escape dots:
+      var destHostMatch = destHost.replace(this.specials, "\\$&");
+      var srcHostMatch = srcHost.replace(this.specials, "\\$&");
+
+      // FIXME: This isn't exactly bulletproof security here, but it still
+      // may need to be more lenient not to break sites...
+      //
+      // If we suspect issues, we can try doing the following first:
+      // 1. Strip off all TLD suffixes, up to but not including '.'
+      // 2. If more than one domain part is till left, strip off prefix
+
+      //if they're in the same domain(if we can tell) or have the same host, keep the referer
+      if (srcHost.split(".").length >= destHost.split(".").length
+          && srcHost.match(destHostMatch)) // dest is a substring of src
         return;
-      else if (refererHost.split(".").length >= requestHost.split(".").length && refererHost.match(requestHost))
+      else if (destHost.split(".").length >= srcHost.split(".").length
+          && destHost.match(srcHostMatch)) // src is a substring of dest
         return;
       //if they do not have the same host
       this.adjustRef(oHttpChannel, requestURI.scheme + "://" + requestURI.host);      
       this.logger.safe_log(3, "Adjusting Referer, ",
-                          "from " + refererHost + " to " + requestURI.host);
+                          "from " + destHost + " to " + requestURI.host);
     }
      catch (ex) {
       this.logger.log(5, "RefSpoof onModifyRequest: " +ex);
