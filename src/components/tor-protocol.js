@@ -48,12 +48,16 @@ Protocol.prototype =
 
   newChannel: function(aURI)
   {
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefBranch);
+    if (!prefs.getBoolPref("extensions.torbutton.tor_urls")) {
+      throw Components.results.NS_ERROR_UNKNOWN_PROTOCOL;
+    }
+
     /*The protocol has been called, therefore we want to enable tor, wait for it to activate return the new channel with the scheme of http.*/
     var ios = Components.classes[kIOSERVICE_CONTRACTID].getService(nsIIOService);
     var prompt = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                         .getService(Components.interfaces.nsIPromptService);
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-        .getService(Components.interfaces.nsIPrefBranch);
     var tor_enabled = prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                          .getService(Components.interfaces.nsIWindowMediator);
