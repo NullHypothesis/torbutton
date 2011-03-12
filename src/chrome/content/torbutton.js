@@ -1562,13 +1562,22 @@ function torbutton_update_status(mode, force_update) {
         auth.clearAll();
     }
 
-    // This clears the SSL Identifier Cache.
-    // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747 and
-    // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134
-    m_tb_prefs.setBoolPref("security.enable_ssl2", 
-            !m_tb_prefs.getBoolPref("security.enable_ssl2"));
-    m_tb_prefs.setBoolPref("security.enable_ssl2", 
-            !m_tb_prefs.getBoolPref("security.enable_ssl2"));
+    try {
+      var secMgr = Cc["@mozilla.org/security/crypto;1"].
+                   getService(Ci.nsIDOMCrypto);
+      secMgr.logout();
+      torbutton_log(3, "nsIDOMCrypto logout succeeded");
+    } catch(e) {
+      torbutton_log(4, "Failed to use nsIDOMCrypto to clear SSL Session ids. Falling back to old method. Error: "+e);
+
+      // This clears the SSL Identifier Cache.
+      // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747 and
+      // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134
+      m_tb_prefs.setBoolPref("security.enable_ssl2", 
+          !m_tb_prefs.getBoolPref("security.enable_ssl2"));
+      m_tb_prefs.setBoolPref("security.enable_ssl2", 
+          !m_tb_prefs.getBoolPref("security.enable_ssl2"));
+    }
 
     // This clears the undo tab history.
     var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
