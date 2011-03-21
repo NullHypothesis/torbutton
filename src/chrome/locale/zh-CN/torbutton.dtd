@@ -19,33 +19,33 @@
 <!ENTITY torbutton.pref_connection.notice "禁用 Torbutton 来改变这些设置。">
 <!ENTITY torbutton.pref_connection.more_info "更多信息">
 <!ENTITY torbutton.pref_connection_more_info.title "帮助">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton 目前使用中。如果您想改变非 Tor 代理设置，请禁用 Torbutton 后回到这里。如果您想改变 Tor 代理设置，请使用 Torbutton 偏好设置。">
+<!ENTITY torbutton.pref_connection_more_info.text "如果您想改变平常的代理设置，请在 Torbutton 禁用时修改。如果您想改变使用 TorButton 时的代理设置，请在 Torbutton 偏好设置中修改。如果这里的设置与 Torbutton 偏好设置中的不同 Torbutton 会被自动禁用。">
 <!ENTITY torbutton.context_menu.toggle "转换 Tor 状态">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "首选项...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "关于 Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie 隐私保护">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "复制 Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "在新标签中打开Tor URL">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "在新窗口中打开Tor URL">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "点击初始化 Torbutton">
+<!ENTITY torbutton.button.tooltip "点此初始化 Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "安全选项">
 <!ENTITY torbutton.prefs.block_thread "使用 Tor 时禁止读取历史(重要)">
 <!ENTITY torbutton.prefs.block_thwrite "使用 Tor 时禁止写入历史(推荐)">
 <!ENTITY torbutton.prefs.block_nthread "不用 Tor 时禁止读取历史(可选)">
 <!ENTITY torbutton.prefs.block_nthwrite "不用 Tor 时禁止写入历史(可选)">
-<!ENTITY torbutton.prefs.clear_history "切换 Tor 时清除历史(可选)">
+<!ENTITY torbutton.prefs.clear_history "切换 Tor 状态时清除历史(可选)">
 <!ENTITY torbutton.prefs.clear_cache "使用 Tor 时禁用硬盘缓存并在切换时清除缓存">
 <!ENTITY torbutton.prefs.block_cache "使用 Tor 时禁止访问硬盘缓存和内存缓存">
 <!ENTITY torbutton.prefs.cookie_jars "在受保护的jar中保存不用 Tor 时的cookie">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "请在 Cookie 隐私保护对话框内选择">
 <!ENTITY torbutton.prefs.mmm_cookies "我要自己手动管理 cookies (危险)">
 <!ENTITY torbutton.prefs.clear_cookies "切换 Tor 时清除 cookies">
 <!ENTITY torbutton.prefs.disable_plugins "使用 Tor 时禁用插件(重要)">
@@ -65,9 +65,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "禁用 Firefox 的会话保存(推荐)">
 <!ENTITY torbutton.prefs.headers "Header">
 <!ENTITY torbutton.prefs.spoof_english "伪装浏览器语言为美国英语">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Referer 欺骗">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "使用Tor时智能欺骗Referer(欺骗跨域Referer)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "使用 Tor 时禁用浏览器的 DOM 储存(重要)">
 <!ENTITY torbutton.prefs.forms "表单">
@@ -76,7 +76,7 @@
 <!ENTITY torbutton.prefs.tor "使用 Tor">
 <!ENTITY torbutton.prefs.non_tor "不用 Tor">
 <!ENTITY torbutton.prefs.restore_tor "浏览器恢复进程时，设置 Tor 的状态为">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "浏览器启动时,设置Tor的状态为:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Firefox 崩溃后重载 cookie jar/清除 cookie(推荐)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "在受保护的 jar 文件中同时保存使用 Tor 和不用 Tor 时的 cookies(危险)">
 <!ENTITY torbutton.prefs.clear_http_auth "清除 HTTP 认证进程(推荐)">
@@ -106,23 +106,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "不使用代理的地址:">
 <!ENTITY torbutton.prefs.no_proxy_warning "警告：请不要使用上述任何主机名。">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.prefs.spoofreresh "不干预页面自动刷新">
+<!ENTITY torbutton.prefs.refereroptions "Referer 欺骗 选项">
+<!ENTITY torbutton.prefs.nospoof "不干预 Referer">
+<!ENTITY torbutton.prefs.spoofroot "发送页面的当前路径作为 Referer">
+<!ENTITY torbutton.prefs.spoofdomain "发送主域名作为 Referer">
+<!ENTITY torbutton.prefs.spoofblank "清空 Referer">
+<!ENTITY torbutton.cookiedialog.title "管理受保护的 Cookie">
+<!ENTITY torbutton.cookiedialog.lockCol "受保护">
+<!ENTITY torbutton.cookiedialog.domainCol "服务器">
+<!ENTITY torbutton.cookiedialog.nameCol "名称">
+<!ENTITY torbutton.cookiedialog.pathCol "路径">
+<!ENTITY torbutton.cookiedialog.protectCookie "保护Cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "移除Cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "停止保护Cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "仅保留受保护的Cookie，其他移除全部">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "保护新的Cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "不保护新的">
 <!ENTITY torbutton.prefs.disable_livemarks "使用 Tor 时禁用 Livemark 更新(RSS书签)">
 <!ENTITY torbutton.prefs.dtd_recommended "(推荐)">
 <!ENTITY torbutton.prefs.dtd_optional "(可选)">
@@ -135,4 +135,4 @@
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "在 Google 搜索栏搜索时分割平台和语言信息。">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.transparentTor "Tor透明代理(需要自设透明代理或Tor路由程序的支持)">

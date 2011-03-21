@@ -26,13 +26,13 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "À propos de Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Protections de cookies">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "Copier l'URL Tor">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "Ouvrir l'URL Tor dans un nouvel onglet">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "Ouvrir l'URL Tor dans une nouvelle fenêtre">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Cliquez pour lancer Torbutton">
@@ -45,7 +45,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Bloquer la mémoire tampon du disque Tor et vider tous les caches à l'activation/désactivation de Tor">
 <!ENTITY torbutton.prefs.block_cache "Bloquer la mémoire tampon du disque et l'accès à la mémoire tampon pendant l'utilisation de Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Conserver les cookies non-Tor dans une cookie-jar sécurisée">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Choisir parmi la boîte de dialogue des Protections de cookies">
 <!ENTITY torbutton.prefs.mmm_cookies "Je gérerai mes cookies manuellement (dangereux)">
 <!ENTITY torbutton.prefs.clear_cookies "Supprimer les cookies à l'activation/désactivation de Tor">
 <!ENTITY torbutton.prefs.disable_plugins "Désactiver les plugins pendant l'utilisation de Tor (indispensable)">
@@ -65,9 +65,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Désactiver la fonction de sauvegarde de session (recommandé)">
 <!ENTITY torbutton.prefs.headers "Entêtes">
 <!ENTITY torbutton.prefs.spoof_english "Imiter un navigateur anglais US">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Altération d'adresse référente">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Altération intelligente de l'adresse référente lorsque Tor est actif (altère les réferences aux domaines externes)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Désactiver le stockage DOM pendant l'utilisation de Tor (crucial)">
 <!ENTITY torbutton.prefs.forms "Formulaires">
@@ -76,7 +76,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Lors d'une restauration de session, mettre Tor en état:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "Au démarrage, mettre Tor en état :">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recharger la cookie jar et supprimer cookies lors d'un plantage de Firefox (recommandé)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Stocker les cookies Tor et non-Tor dans des cookie-jars sécurisés (dangereux)">
 <!ENTITY torbutton.prefs.clear_http_auth "Supprimer les sessions HTTP authentifiées (recommandé)">
@@ -106,23 +106,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Pas de Proxy pour: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Attention: Évitez d'utiliser les noms d'hôtes ci-dessus">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.prefs.spoofreresh "Actualiser l'altération">
+<!ENTITY torbutton.prefs.refereroptions "Options d'altération de l'adresse référente">
+<!ENTITY torbutton.prefs.nospoof "Ne pas altérer l'adresse référente">
+<!ENTITY torbutton.prefs.spoofroot "Altérer le dossier contenant la page">
+<!ENTITY torbutton.prefs.spoofdomain "Utiliser le domaine comme adresse référente">
+<!ENTITY torbutton.prefs.spoofblank "Supprimer l'adresse référente">
+<!ENTITY torbutton.cookiedialog.title "Gérer les protections de cookies">
+<!ENTITY torbutton.cookiedialog.lockCol "Protégé">
+<!ENTITY torbutton.cookiedialog.domainCol "Hôte">
+<!ENTITY torbutton.cookiedialog.nameCol "Nom">
+<!ENTITY torbutton.cookiedialog.pathCol "Chemin">
+<!ENTITY torbutton.cookiedialog.protectCookie "Protéger le cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "Supprimer le cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Déprotéger le cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Supprimer tous les cookies non protégés">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Protéger les nouveaux cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Ne pas protéger les nouveaux cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Désactiver les marques-pages dynamiques durant l'utilisation de Tor">
 <!ENTITY torbutton.prefs.dtd_recommended "(recommandé)">
 <!ENTITY torbutton.prefs.dtd_optional "(optionnel)">
@@ -135,4 +135,4 @@
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Supprimer les informations relatives à la plateforme et à la langue des champs de recherche Google">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.transparentTor "Torification transparente (requiert un transproxy personnalisé ou un routeur Tor)">
