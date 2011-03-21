@@ -139,16 +139,8 @@ function CookieJarSelector() {
             var isSession = (xml.@isSession == 1);
             var isHttpOnly = (xml.@isHttpOnly == 1);
             //this.logger.log(2, "Loading cookie: "+host+":"+cname+" until: "+expiry);
-            try {
-                cookieManager.add(host, path, cname, value, isSecure, isSession,
-                        expiry);
-            } catch(e) {
-                // Api changed to add httpOnly cookies support. see mozilla bug #379408
-                if (e.result == Cr.NS_ERROR_XPC_NOT_ENOUGH_ARGS) {
-                    cookieManager.add(host, path, cname, value, isSecure, 
-                            isHttpOnly, isSession, expiry);
-                } 
-            }
+            cookieManager.add(host, path, cname, value, isSecure,
+                    isHttpOnly, isSession, expiry);
         }
   }
 
