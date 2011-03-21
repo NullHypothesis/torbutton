@@ -3,7 +3,7 @@
 
 LOCALEDIR="../src/chrome/locale"
 
-poDir="pootle" 
+poDir="po" 
 directories="`ls -1 ./$poDir|tr _ -`"
 mozDir="moz"
 input="en"
