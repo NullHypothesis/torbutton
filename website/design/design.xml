@@ -11,7 +11,7 @@
      <address><email>mikeperry.fscked/org</email></address>
     </affiliation>
    </author>
-   <pubdate>Jun 28 2010</pubdate>
+   <pubdate>Mar 25 2011</pubdate>
  </articleinfo>
 
 <sect1>
@@ -2070,34 +2070,6 @@ they are:
 
    </para>
    <orderedlist>
-
-<!--
-
-XXX: We should just consider this one fixed. FF3.0 is pretty much at EOL.
-
-   <listitem><ulink
-url="https://bugzilla.mozilla.org/show_bug.cgi?id=392274">Bug 392274 - Timezone
-config/chrome API</ulink>
-   <para>
-
-The lack of a config or API to configure the timezone requires Torbutton to
-<link linkend="jshooks">insert client content window javascript</link> to hook
-the Date object. Additionally, a way to <ulink
-url="http://pseudo-flaw.net/tor/torbutton/unmask-date.html">remove the Date
-hooks</ulink> was discovered by Greg Fleischer. Worse, on Firefox 3,
-javascript sandboxing prevents most of the javascript hooks from being
-installed, including the Date hooks. On Windows and Linux, you can set the TZ
-environment variable to "UTC" as a workaround. Firefox will obey this
-environment variable for your Timezone on those platforms, but on Windows this
-does not take effect until browser restart. A fix for this has landed in
-Firefox 3.5, but still has not been backported to Firefox 3.0. The lack of an
-easy way to reliably spoof the timezone interferes with Torbutton's ability to
-fulfill its <link linkend="location">Location Neutrality</link> requirement.
-
-
-   </para>
-   </listitem>
--->
     <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=429070">Bug 429070 - exposing
 Components.interfaces to untrusted content leaks information about installed
@@ -2134,11 +2106,16 @@ provides a large amount of identifiable information</ulink>
 As <link linkend="fingerprinting">mentioned above</link>, a large amount of
 information is available from <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>.
+The most sensative data to anonymity is actually that which is not used in
+rendering - such as desktop resolution, and window decoration size.
 Currently, there is no way to obscure this information without Javascript
-hooking. This bug is a feature request to provide some other method to change
-these values. This bug interferes with Torbutton's ability to fulfill its
-<link linkend="setpreservation">Anonymity Set Preservation</link>
-requirement.
+hooking. In addition, many of this same desktop and window decoration
+resolution information is available via <ulink
+url="https://developer.mozilla.org/En/CSS/Media_queries">CSS Media
+Queries</ulink>, so perhaps some more lower-level rendering controls or
+preferences need to be provided. These issues interfere with Torbutton's
+ability to fulfill its <link linkend="setpreservation">Anonymity Set
+Preservation</link> requirement.
 
    </para>
    </listitem>
@@ -2180,6 +2157,18 @@ linkend="setpreservation">Anonymity Set Preservation</link> requirement.
 
       </para>
      </listitem>
+    <listitem><ulink
+url="https://bugzilla.mozilla.org/show_bug.cgi?id=122752">SOCKS
+Username/Password Support</ulink>
+    <para>
+We need <ulink url="https://developer.mozilla.org/en/nsIProxyInfo">Firefox
+APIs</ulink> or about:config settings to conrol the SOCKS Username and
+Password fields. The reason why we need this support is to utilize an (as yet
+unimplemented) scheme to separate Tor traffic based <ulink
+url="https://gitweb.torproject.org/torspec.git/blob_plain/HEAD:/proposals/171-separate-streams.txt">on
+SOCKS username/password</ulink>.
+    </para>
+    </listitem>
 
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=409737">Bug 409737 -
