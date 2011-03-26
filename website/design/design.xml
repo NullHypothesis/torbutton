@@ -2137,7 +2137,29 @@ feature.
 
       </para>
      </listitem>
+     <listitem>Give more visibility into and control over TLS
+negotiation
+     <para>
 
+There are several <ulink
+url="https://trac.torproject.org/projects/tor/ticket/2482">TLS issues
+impacting Torbutton security</ulink>. It is not clear if these should be one
+Firefox bug or several, but in particular we need better control over various
+aspects of TLS connections. Firefox currently provides no observer capable of
+extracting TLS parameters or certificates early enough to cancel a TLS
+request. We would like to be able to provide <ulink
+url="https://www.eff.org/https-everywhere">HTTPS-Everywhere</ulink> users with
+the ability to <ulink
+url="https://trac.torproject.org/projects/tor/wiki/HTTPSEverywhere/SSLObservatorySubmission">have
+their certificates audited</ulink> by a <ulink
+url="http://www.networknotary.org/">Perspectives</ulink>-style set of
+notaries. The problem with this is that the API observer points do not exist
+for any Firefox addon to actually block authentication token submission over a
+TLS channel, so every addon to date (including Perspectives) is actually
+providing users with notification *after* their authentication tokens have
+already been compromised. This obviously needs to be fixed.
+     </para>
+     </listitem>
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=575230">Bug 575230 - Provide option to
 reduce precision of Date()</ulink>
