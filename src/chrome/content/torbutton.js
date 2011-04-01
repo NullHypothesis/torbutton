@@ -1579,6 +1579,16 @@ function torbutton_update_status(mode, force_update) {
           !m_tb_prefs.getBoolPref("security.enable_ssl2"));
     }
 
+    // This clears the OCSP cache.
+    //
+    // nsNSSComponent::Observe() watches security.OCSP.enabled, which calls
+    // setOCSPOptions(), which if set to 0, calls CERT_DisableOCSPChecking(),
+    // which calls CERT_ClearOCSPCache().
+    // See: http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp
+    var ocsp = m_tb_prefs.getIntPref("security.OCSP.enabled");
+    m_tb_prefs.setIntPref("security.OCSP.enabled", 0);
+    m_tb_prefs.setIntPref("security.OCSP.enabled", ocsp);
+
     // This clears the undo tab history.
     var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
     m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
