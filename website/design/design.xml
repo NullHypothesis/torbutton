@@ -541,7 +541,7 @@ and page loading in general can generate hundreds of these lookups, this
 result is cached inside the component.
 </para>
 </sect3>
-<sect3>
+<sect3 id="crashobserver">
  <title><ulink
 url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/crash-observer.js">@torproject.org/crash-observer;1</ulink></title>
   <para>
@@ -554,24 +554,41 @@ immediately.
 
   </para>
 </sect3>
-<sect3>
+<sect3 id="tbsessionstore">
  <title><ulink
 url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/tbSessionStore.js">@torproject.org/torbutton-ss-blocker;1</ulink></title>
   <para>
 
-This component subscribes to the Firefox
-<ulink
+This component subscribes to the Firefox <ulink
 url="https://developer.mozilla.org/en/Observer_Notifications#Session_Store">sessionstore-state-write</ulink>
 observer event to filter out URLs from tabs loaded during Tor, to prevent them
-from being written to disk. This is a rather expensive operation that involves
-potentially very large JSON evaluations and object tree traversals, but it
-preferable to replacing the Firefox session store with our own implementation,
-which is what was done in years past.
+from being written to disk. To do this, it checks the
+<command>__tb_tor_fetched</command> tag of tab objects before writing them out. If
+the tag is from a blocked Tor state, the tab is not written to disk.  This is
+a rather expensive operation that involves potentially very large JSON
+evaluations and object tree traversals, but it preferable to replacing the
+Firefox session store with our own implementation, which is what was done in
+years past.
 
   </para>
 </sect3>
 
-<!-- XXX: Document torRefSpoofer -->
+<sect3 id="refspoofer">
+ <title><ulink
+url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/torRefSpoofer.js">@torproject.org/torRefSpoofer;1</ulink></title>
+ <para>
+This component handles optional referer spoofing for Torbuton. It implements a
+form of "smart" referer spoofing using <ulink
+url="https://developer.mozilla.org/en/Setting_HTTP_request_headers">http-on-modify-request</ulink>
+to modify the Referrer header. The code sends the default browser referrer
+header only if the destination domain is a suffix of the source, or if the
+source is a suffix of the destination. Otherwise, it sends no referer. This
+strange suffix logic is used as a heuristic: some rare sites on the web block
+requests without proper referer headers, and this logic is an attempt to cater
+to them. Unfortunately, it may not be enough. For example, google.fr will not
+send a referer to google.com using this logic. Hence, it is off by default.
+ </para>
+</sect3>
 
 <!-- FIXME: tor-protocol, tors-protocol need documenting, but
 they are disabled by default for now, so no reason to add the
@@ -1862,16 +1879,12 @@ linkend="state">State Separation</link> requirement.
   <para>Options:
    <command>extensions.torbutton.restore_tor</command>
   </para>
-<!-- XXX: This has changed -->
 
-  <para>This option works with the Torbutton <ulink
-url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/crash-observer.js">crash-observer.js</ulink> 
-  to set the Tor state after a crash is detected (via the 
-  <command>extensions.torbutton.crashed</command> pref). To confirm for
-false positives (such as session restore failures, upgrade, normal
-session restore, etc), Torbutton also sets the pref
-extensions.torbutton.normal_exit during
-Firefox exit and checks this value as well during startup.  
+  <para>This option governs what Tor state tor is loaded in to.
+<function>torbutton_set_initial_state()</function> covers the case where the
+browser did not crash, and <function>torbutton_crash_recover()</function>
+covers the case where the <link linkend="crashobserver">crash observer</link>
+detected a crash.
 </para>
 <para>
 
@@ -1885,7 +1898,6 @@ settings and saved sessions are reloaded from a fixed Tor state.
 
 
 <sect3>
-<!-- XXX: This has changed -->
   <title>Prevent session store from saving Non-Tor/Tor-loaded tabs</title>
 
   <para>Options: 
@@ -1895,11 +1907,11 @@ settings and saved sessions are reloaded from a fixed Tor state.
   </simplelist>
   </para>
 
-  <para>If these options are enabled, the <ulink
-url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/nsSessionStore3.js">replacement nsSessionStore.js</ulink>
-  component checks the <command>__tb_tor_fetched</command> tag of tabs before writing them
-  out. If the tag is from a blocked Tor state, the tab is not written to disk.
-  </para>
+  <para>If these options are enabled, the <link
+linkend="tbsessionstore">tbSessionStore.js</link> component uses the session
+store listeners to filter out the appropriate tabs before writing the session
+store data to disk.
+</para>
 <para>
 This setting helps to satisfy the <link linkend="disk">Disk Avoidance</link>
 requirement, and also helps to satisfy the <link
@@ -1924,9 +1936,10 @@ cookie clearing, 1 means clear only during Tor-enabled shutdown, and 2 means
 clear for both Tor and Non-Tor shutdown. When set to 1 or 2, Torbutton listens
 for the <ulink
 url="http://developer.mozilla.org/en/docs/Observer_Notifications#Application_shutdown">quit-application-granted</ulink> event in
-<function>https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/crash-observer.js</function> and use <ulink
+<link linkend="crashobserver">crash-observer.js</link> and use <ulink
 url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/cookie-jar-selector.js">@torproject.org/cookie-jar-selector;2</ulink>
-to clear out all cookies and all cookie jars upon shutdown.  </para>
+to clear out all cookies and all cookie jars upon shutdown.
+</para>
 <para>
 This setting helps to satisfy the <link
 linkend="state">State Separation</link> requirement.
@@ -2021,11 +2034,11 @@ linkend="location">Location Neutrality</link> requirements.
 <para>Option: <command>extensions.torbutton.refererspoof</command>
 </para>
 
-<!-- XXX: Now three options.. Describe better + code link -->
 <para>
 This option variable has three values. If it is 0, "smart" referer spoofing is
 enabled. If it is 1, the referer behaves as normal. If it is 2, no referer is
-sent.
+sent. The default value is 1. The smart referer spoofing is implemented by the
+<link linkend="refspoofer">torRefSpoofer</link> component.
 
 </para>
 <para>
