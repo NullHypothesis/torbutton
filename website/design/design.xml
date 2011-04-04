@@ -153,7 +153,7 @@ a user's non-Tor IP address. Javascript
 also allows the adversary to execute <ulink
 url="http://whattheinternetknowsaboutyou.com/">history disclosure attacks</ulink>:
 to query the history via the different attributes of 'visited' links to search
-for particular google queries, sites, or even to <ulink
+for particular Google queries, sites, or even to <ulink
 url="http://www.mikeonads.com/2008/07/13/using-your-browser-url-history-estimate-gender/">profile
 users based on gender and other classifications</ulink>. Finally,
 Javascript can be used to query the user's timezone via the
@@ -248,9 +248,9 @@ by a factor of 5 (for each of the major desktop taskbars - Windows, OSX, KDE
 and Gnome, and None). Subtracting the browser content window
 size from the browser outer window size provide yet more information.
 Firefox toolbar presence gives about a factor of 8 (3 toolbars on/off give
-2<superscript>3</superscript>=8). Interface effects such as titlebar fontsize
+2<superscript>3</superscript>=8). Interface effects such as title bar font size
 and window manager settings gives a factor of about 9 (say 3 common font sizes
-for the titlebar and 3 common sizes for browser GUI element fonts).
+for the title bar and 3 common sizes for browser GUI element fonts).
 Multiply this all out, and you have (1280-640)*(1024-480)*5*5*8*9 ~=
 2<superscript>29</superscript>, or a 29 bit identifier based on resolution
 information alone. </para>
@@ -577,7 +577,7 @@ years past.
  <title><ulink
 url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/torRefSpoofer.js">@torproject.org/torRefSpoofer;1</ulink></title>
  <para>
-This component handles optional referer spoofing for Torbuton. It implements a
+This component handles optional referrer spoofing for Torbuton. It implements a
 form of "smart" referer spoofing using <ulink
 url="https://developer.mozilla.org/en/Setting_HTTP_request_headers">http-on-modify-request</ulink>
 to modify the Referrer header. The code sends the default browser referrer
@@ -888,7 +888,7 @@ the Tor state has actually changed, and sets
 <command>extensions.torbutton.proxies_applied</command> to the appropriate Tor
 state value, and ensures that
 <command>extensions.torbutton.tor_enabled</command> is also set to the correct
-value. This is decoupled from the button click functionalty via the pref
+value. This is decoupled from the button click functionality via the pref
 observer so that other addons (such as SwitchProxy) can switch the proxy
 settings between multiple proxies.
 
@@ -903,7 +903,7 @@ The next stage is also handled by
 <function>torbutton_update_status()</function>. This function sets scores of
 Firefox preferences, saving the original values to prefs under
 <command>extensions.torbutton.saved.*</command>, and performs the <link
-linkend="cookiejar">cookie jaring</link>, state clearing (such as window.name
+linkend="cookiejar">cookie jarring</link>, state clearing (such as window.name
 and DOM storage), and <link linkend="preferences">preference
 toggling</link><!--, and ssl certificate jaring work of Torbutton-->. At the
 end of its work, it sets
@@ -2210,7 +2210,7 @@ provides a large amount of identifiable information</ulink>
 As <link linkend="fingerprinting">mentioned above</link>, a large amount of
 information is available from <ulink
 url="http://developer.mozilla.org/en/docs/DOM:window.screen">window.screen</ulink>.
-The most sensative data to anonymity is actually that which is not used in
+The most sensitive data to anonymity is actually that which is not used in
 rendering - such as desktop resolution, and window decoration size.
 Currently, there is no way to obscure this information without Javascript
 hooking. In addition, many of this same desktop and window decoration
@@ -2288,7 +2288,7 @@ url="https://bugzilla.mozilla.org/show_bug.cgi?id=122752">SOCKS
 Username/Password Support</ulink>
     <para>
 We need <ulink url="https://developer.mozilla.org/en/nsIProxyInfo">Firefox
-APIs</ulink> or about:config settings to conrol the SOCKS Username and
+APIs</ulink> or about:config settings to control the SOCKS Username and
 Password fields. The reason why we need this support is to utilize an (as yet
 unimplemented) scheme to separate Tor traffic based <ulink
 url="https://gitweb.torproject.org/torspec.git/blob_plain/HEAD:/proposals/171-separate-streams.txt">on
@@ -2345,7 +2345,7 @@ The following bugs impact Torbutton and similar extensions' functionality.
 
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=445696">Bug 445696 -
-Extensions cannot determine if firefox is fullScreen</ulink>
+Extensions cannot determine if Firefox is full screen</ulink>
    <para>
 
 The windowState property of <ulink
@@ -2367,7 +2367,7 @@ to registering XPCOM category managers such as the nsIContentPolicy, which
 make it difficult to do a straight-forward port of Torbutton or
 HTTPS-Everywhere to Firefox Mobile.  It probably also has similar issues with
 wrapping existing <link linkend="hookedxpcom">Firefox XPCOM components</link>,
-which will also cause more problems for porting TOrbutton.
+which will also cause more problems for porting Torbutton.
 
     </para>
    </listitem>
