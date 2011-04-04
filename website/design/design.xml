@@ -571,7 +571,9 @@ which is what was done in years past.
   </para>
 </sect3>
 
-<!-- FIXME: torrefspoofer, tor-protocol, tors-protocol need documenting, but
+<!-- XXX: Document torRefSpoofer -->
+
+<!-- FIXME: tor-protocol, tors-protocol need documenting, but
 they are disabled by default for now, so no reason to add the
 clutter+confusion. -->
 
@@ -1435,7 +1437,6 @@ Undiscoverability</link> requirement.
   </para>
 
 <para>
-<!-- XXX: This is done differently -->
 
 This option causes Torbutton to prevent Firefox from loading <ulink
 url="http://www.mozilla.com/firefox/livebookmarks.html">Livemarks</ulink> during
@@ -1487,10 +1488,6 @@ files to arbitrary sites just generally seems like a bad idea.
 
 </para>
 </sect3>
-
-<!-- XXX: Redirect Torbutton updates through tor -->
-
-<!-- XXX: Disable updates during tor usage -->
 
 <sect3>
 
@@ -1577,7 +1574,6 @@ requirements.
 <title>History Access Settings</title>
 
   <para>Options:
-<!-- XXX: Firefox 4 changes these. We sync them with places.history.enabled -->
   <simplelist>
    <member><command>extensions.torbutton.block_thread</command></member>
    <member><command>extensions.torbutton.block_nthread</command></member>
@@ -1586,7 +1582,7 @@ requirements.
   </simplelist>
   </para>
 
-<para>These four settings govern the behavior of the <ulink
+<para>On Firefox 3.x, these four settings govern the behavior of the <ulink
 url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/ignore-history.js">components/ignore-history.js</ulink>
 history blocker component mentioned above. By hooking the browser's view of
 the history itself via the <ulink
@@ -1603,6 +1599,15 @@ both the <ulink
 url="http://developer.mozilla.org/en/docs/Places_migration_guide#History">Places
 Database</ulink> and the older Firefox 2 mechanisms.
 
+</para>
+
+<para>
+On Firefox 4, Mozilla finally <ulink
+url="https://developer.mozilla.org/en/CSS/Privacy_and_the_%3avisited_selector">addressed
+these issues</ulink>, so we can effectively ignore the "read" pair of the
+above prefs. We then only need to link the write prefs to
+<command>places.history.enabled</command>, which disabled writing to the
+history store while set.
 </para>
 
 <para>
@@ -1852,18 +1857,12 @@ linkend="state">State Separation</link> requirement.
  </sect2>
  <sect2>
   <title>Startup Settings</title>
-<!-- XXX: On browser startup: -->
-<!-- XXX: Session Store stores+loads -->
-<!-- XXX: These have all been simplified -->
 <sect3>
-  <title>On crash recovery or session restored startup, restore via: Tor, Non-Tor</title>
+  <title>On Browser Startup, set Tor state to: Tor, Non-Tor</title>
   <para>Options:
-  <simplelist>
-   <member><command>extensions.torbutton.restore_tor</command></member>
-   <member><command>extensions.torbutton.crashed</command></member>
-   <member><command>extensions.torbutton.normal_exit</command></member>
-  </simplelist>
+   <command>extensions.torbutton.restore_tor</command>
   </para>
+<!-- XXX: This has changed -->
 
   <para>This option works with the Torbutton <ulink
 url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/crash-observer.js">crash-observer.js</ulink> 
@@ -1884,32 +1883,9 @@ settings and saved sessions are reloaded from a fixed Tor state.
 </para>
 </sect3>
 
-<!-- XXX: Have changed -->
-<sect3>
-  <title>On normal startup, set state to: Tor, Non-Tor, Shutdown State</title>
-
-  <para>Options:
-  <simplelist>
-   <member><command>extensions.torbutton.startup_state</command></member>
-  <member><command>extensions.torbutton.noncrashed</command></member>
-   <member><command>extensions.torbutton.normal_exit</command></member>
-  </simplelist>
-  </para>
-
-  <para>This option also works with the Torbutton <ulink
-url="https://gitweb.torproject.org/torbutton.git/blob_plain/HEAD:/src/components/crash-observer.js">crash-observer.js</ulink> 
-  to set the Tor state after a normal startup is detected (via the 
-  <command>extensions.torbutton.noncrashed</command> pref). To confirm for
-false positives
-(such as session restore failures, etc), Torbutton also sets the pref
-extensions.torbutton.normal_exit in torbutton_uninstall_observer() during
-Firefox exit and checks this value as well during startup.
-  
-</para>
-
-</sect3>
 
 <sect3>
+<!-- XXX: This has changed -->
   <title>Prevent session store from saving Non-Tor/Tor-loaded tabs</title>
 
   <para>Options: 
@@ -2038,26 +2014,25 @@ linkend="location">Location Neutrality</link> requirements.
 </para>
 
 </sect3>
+
 <sect3>
+  <title>Referer Spoofing Options</title>
 
-  <title>Don't send referrer during Tor Usage</title>
-
-<para>Option: <command>extensions.torbutton.disable_referer</command>
+<para>Option: <command>extensions.torbutton.refererspoof</command>
 </para>
 
+<!-- XXX: Now three options.. Describe better + code link -->
 <para>
-This option causes Torbutton to set <ulink
-url="http://kb.mozillazine.org/Network.http.sendSecureXSiteReferrer">network.http.sendSecureXSiteReferrer</ulink> and
-<ulink
-url="http://kb.mozillazine.org/Network.http.sendRefererHeader">network.http.sendRefererHeader</ulink> during Tor usage.</para>
+This option variable has three values. If it is 0, "smart" referer spoofing is
+enabled. If it is 1, the referer behaves as normal. If it is 2, no referer is
+sent.
 
+</para>
 <para>
 This setting also does not directly satisfy any Torbutton requirement, but
 some may desire to mask their referrer for general privacy concerns.
 </para>
 </sect3>
-
-<!-- XXX: Smart referer spoofing -->
 
 <sect3>
   <title>Strip platform and language off of Google Search Box queries</title>
