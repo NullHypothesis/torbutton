@@ -1,36 +1,44 @@
-- Major compatibility issues:
-  http://blog.mozilla.com/addons/2010/11/11/making-add-on-compatible-firefox-4/
-  https://developer.mozilla.org/en/Extensions/Updating_extensions_for_Firefox_4
-  https://developer.mozilla.org/en/XPCOM/XPCOM_changes_in_Gecko_2.0
+- Review of https://developer.mozilla.org/en/Firefox_4_for_developers
+  - Potential proxy issues
+    - DocShell and plugins inside createHTMLDocument?
+      - https://developer.mozilla.org/en/DOM/DOMImplementation.createHTMLDocument
+    - WebSockets?
+    - Media attributes?
+      - "buffered"
+      - "preload"
+      - new codecs?
+    - What the hell is a blob url?
+      - https://developer.mozilla.org/en/DOM/window.createBlobURL
+      - https://developer.mozilla.org/en/DOM/window.revokeBlobURL
+      - Seems only relevent to FS injection..
+    - WebThreads are OK:
+      - https://developer.mozilla.org/En/Using_web_workers
+      - Network activity blocked by content policy
+  - Fingerprinting issues:
+    - New screen attributes
+      - https://developer.mozilla.org/en/DOM/window.mozInnerScreenX, Y
+    - Bounding rectangles -> window sizes?
+      - Maybe not display sizes, but seems possible to fingerprint rendered
+        content size.. ugh.
+        - https://developer.mozilla.org/en/DOM/element.getBoundingClientRect
+        - https://developer.mozilla.org/en/dom:range
+    - CSS resize, media queries, etc..
+    - WebGL may also expose screen properties and video card properties:
+      - https://developer.mozilla.org/en/WebGL
+      - https://www.khronos.org/registry/webgl/specs/1.0/#5.2
+      - https://www.khronos.org/registry/webgl/specs/1.0/#5.11
+    - SVG needs auditing. It may also expose absolute coords, but appears OK
+      - https://developer.mozilla.org/en/SVG/SVG_animation_with_SMIL
+    - Mouse events reveal desktop coordinates
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=503943
+      - https://developer.mozilla.org/en/DOM/Event/UIEvent/MouseEvent
+      - Actual screen dimensions not exposed
+  - Identifier Storage
+    - Content Secuity Properties may need clearing:
+      - https://developer.mozilla.org/en/Security/CSP
+    - STS cache needs clearing
+    - New window.history functions may allow state smuggling
+      - https://developer.mozilla.org/en/DOM/Manipulating_the_browser_history
 
-- Key high level concerns:
-  - WebThreads
-    - https://developer.mozilla.org/En/Using_web_workers
-    - Network activity blocked by content policy
-  - What the hell is a blob url?
-    - https://developer.mozilla.org/en/DOM/window.createBlobURL
-    - https://developer.mozilla.org/en/DOM/window.revokeBlobURL
-    - Seems only relevent to FS injection..
-  - WebSockets
-  - New window.history functions may allow state smuggling
-    - https://developer.mozilla.org/en/DOM/Manipulating_the_browser_history
-  - New screen attributes
-    - https://developer.mozilla.org/en/DOM/window.mozInnerScreenX, Y
-  - Bounding rectangles -> window sizes?
-    - https://bugzilla.mozilla.org/show_bug.cgi?id=396392
-  - Mouse events reveal desktop coordinates?
-    - https://bugzilla.mozilla.org/show_bug.cgi?id=503943
-    - https://developer.mozilla.org/en/DOM/Event/UIEvent/MouseEvent
-  - DocShell and plugins inside createHTMLDocument?
-    - https://developer.mozilla.org/en/DOM/DOMImplementation.createHTMLDocument
-  - Media attributes
-    - "buffered"
-    - "preload"
-    - new codecs?
-
-
-
-- New fingerprinting threats:
-  - Lots of things are now available to CSS :(
-
-
+- New Javascript hooking options may help improve Date() hooks:
+  - https://developer.mozilla.org/en/JavaScript/New_in_JavaScript/1.8.5
