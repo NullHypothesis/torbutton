@@ -332,13 +332,13 @@ acceptable style.. Don't really want to make my own stylesheet -->
  <listitem id="proxy"><command>Proxy Obedience</command> 
  <para>The browser
 MUST NOT bypass Tor proxy settings for any content.</para></listitem>
- <listitem id="isolation"><command>Network Isolation</command>
- <para>Pages MUST NOT perform any network activity in a Tor state different
- from the state they were originally loaded in.</para></listitem>
  <listitem id="state"><command>State Separation</command>
  <para>Browser state (cookies, cache, history, 'DOM storage'), accumulated in
  one Tor state MUST NOT be accessible via the network in
  another Tor state.</para></listitem>
+ <listitem id="isolation"><command>Network Isolation</command>
+ <para>Pages MUST NOT perform any network activity in a Tor state different
+ from the state they were originally loaded in.</para></listitem>
  <listitem id="undiscoverability"><command>Tor Undiscoverability</command><para>With
 the advent of bridge support in Tor 0.2.0.x, there are now a class of Tor
 users whose network fingerprint does not obviously betray the fact that they
@@ -349,7 +349,8 @@ reveal its presence while Tor is disabled.</para></listitem>
  <listitem id="location"><command>Location Neutrality</command><para>The browser SHOULD NOT leak location-specific information, such as
  timezone or locale via Tor.</para></listitem>
  <listitem id="setpreservation"><command>Anonymity Set
-Preservation</command><para>The browser SHOULD NOT leak any other anonymity set reducing information 
+Preservation</command><para>The browser SHOULD NOT leak any other anonymity
+set reducing or fingerprinting information
  (such as user agent, extension presence, and resolution information)
 automatically via Tor. The assessment of the attacks above should make it clear
 that anonymity set reduction is a very powerful method of tracking and
