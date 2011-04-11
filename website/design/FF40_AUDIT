@@ -17,6 +17,12 @@
   - Fingerprinting issues:
     - New screen attributes
       - https://developer.mozilla.org/en/DOM/window.mozInnerScreenX, Y
+    - High Res Animation Timers:
+      - https://developer.mozilla.org/en/DOM/window.mozAnimationStartTime
+      - https://developer.mozilla.org/en/DOM/Animations_using_MozBeforePaint
+        - 50-60hz max.. Can we leverage this?
+    - timeStamps on keystroke events
+      - https://developer.mozilla.org/en/DOM/event.timeStamp
     - Bounding rectangles -> window sizes?
       - Maybe not display sizes, but seems possible to fingerprint rendered
         content size.. ugh.
