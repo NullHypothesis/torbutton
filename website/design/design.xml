@@ -338,12 +338,20 @@ MUST NOT bypass Tor proxy settings for any content.</para></listitem>
  another Tor state.</para></listitem>
  <listitem id="isolation"><command>Network Isolation</command>
  <para>Pages MUST NOT perform any network activity in a Tor state different
- from the state they were originally loaded in.</para></listitem>
+ from the state they were originally loaded in.</para>
+ <para>Note that this requirement is
+being de-emphasized due to the coming shift to supporting only the Tor Browser
+Bundles, which do not support a Toggle operation.</para></listitem>
  <listitem id="undiscoverability"><command>Tor Undiscoverability</command><para>With
 the advent of bridge support in Tor 0.2.0.x, there are now a class of Tor
 users whose network fingerprint does not obviously betray the fact that they
 are using Tor. This should extend to the browser as well - Torbutton MUST NOT 
-reveal its presence while Tor is disabled.</para></listitem>
+reveal its presence while Tor is disabled.
+</para>
+ <para>Note that this requirement is
+being de-emphasized due to the coming shift to supporting only the Tor Browser
+Bundles, which do not support a Toggle operation.</para>
+</listitem>
  <listitem id="disk"><command>Disk Avoidance</command><para>The browser SHOULD NOT write any Tor-related state to disk, or store it
  in memory beyond the duration of one Tor toggle.</para></listitem>
  <listitem id="location"><command>Location Neutrality</command><para>The browser SHOULD NOT leak location-specific information, such as
@@ -1336,6 +1344,7 @@ url="http://pseudo-flaw.net/tor/torbutton/unmask-components-lookupmethod.html">C
 We are still looking for a workaround as of Torbutton 1.3.2.
 
 <!-- FIXME: Don't forget to update this -->
+<!-- XXX: Date() issue now fixed by TZ variable! -->
 
 </para>
 </sect3>
@@ -2162,9 +2171,34 @@ is currently not exposed via the preferences UI.
 <sect1 id="FirefoxBugs">
   <title>Relevant Firefox Bugs</title>
   <para>
-
+Future releases of Torbutton are going to be designed around supporting only
+<ulink url="https://www.torproject.org/projects/torbrowser.html.en">Tor
+Browser Bundle</ulink>, which greatly simplifies the number and nature of Firefox
+bugs we must fix. This allows us to abandon the complexities of <link
+linkend="state">State
+Separation</link> and <link linkend="isolation">Network Isolation</link> requirements
+associated with the Toggle Model.
   </para>
-  <sect2 id="FirefoxSecurity">
+  <sect2 id="TorBrowserBugs">
+   <title>Tor Browser Bugs</title>
+   <para>
+The list of Firefox patches we must create to improve privacy on the
+Tor Browser Bundle are collected in the Tor Bug Tracker under <ulink
+url="https://trac.torproject.org/projects/tor/ticket/2871">ticket
+#2871</ulink>. These bugs are also applicable to the Toggle Model, and
+should be considered higher priority than all Toggle Model specific bugs
+below.
+   </para>
+  </sect2>
+  <sect2 id="ToggleModelBugs">
+   <title>Toggle Model Bugs</title>
+   <para>
+In addition to the Tor Browser bugs, the Torbutton Toggle Model suffers from
+additional bugs specific to the need to isolate state across the toggle.
+Toggle model bugs are considered a lower priority than the bugs against the
+Tor Browser model.
+   </para>
+  <sect3 id="FirefoxSecurity">
    <title>Bugs impacting security</title>
    <para>
 
@@ -2175,6 +2209,8 @@ they are:
 
    </para>
    <orderedlist>
+<!--
+Duplicated in toggle model.
     <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=429070">Bug 429070 - exposing
 Components.interfaces to untrusted content leaks information about installed
@@ -2189,7 +2225,6 @@ bug interferes with Torbutton's ability to satisfy its <link
 linkend="setpreservation">Anonymity Set Preservation</link> requirement.
      </para>
     </listitem>
-<!--
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=280661">Bug 280661 - SOCKS proxy server
 connection timeout hard-coded</ulink>
@@ -2203,7 +2238,6 @@ of privacy and security issues of its own (in addition to being unmaintained).
 
     </para>
    </listitem>
--->
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=418986">Bug 418986 - window.screen
 provides a large amount of identifiable information</ulink>
@@ -2225,6 +2259,7 @@ Preservation</link> requirement.
 
    </para>
    </listitem>
+-->
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=435159">Bug 435159 -
 nsNSSCertificateDB::DeleteCertificate has race conditions</ulink>
@@ -2266,6 +2301,8 @@ providing users with notification *after* their authentication tokens have
 already been compromised. This obviously needs to be fixed.
      </para>
      </listitem>
+<!--
+This is under the Tor Browser model.
      <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=575230">Bug 575230 - Provide option to
 reduce precision of Date()</ulink>
@@ -2285,6 +2322,7 @@ linkend="setpreservation">Anonymity Set Preservation</link> requirement.
 
       </para>
      </listitem>
+-->
     <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=122752">Bug 122752 - SOCKS
 Username/Password Support</ulink>
@@ -2335,9 +2373,9 @@ requirement on Firefox 3.
      </para>
      </listitem>
     </orderedlist>
-  </sect2>
+  </sect3>
 <!-- XXX: Need to create a bug for DOM storage APIs at some point -->
-  <sect2 id="FirefoxWishlist">
+  <sect3 id="FirefoxWishlist">
    <title>Bugs blocking functionality</title>
    <para>
 The following bugs impact Torbutton and similar extensions' functionality.
@@ -2472,8 +2510,8 @@ subset of the <link linkend="requirements">requirements</link> is of course fine
 
 
   </orderedlist>
-  </sect2>
-  <sect2 id="FirefoxMiscBugs">
+  </sect3>
+  <sect3 id="FirefoxMiscBugs">
    <title>Low Priority Bugs</title>
    <para>
 The following bugs have an effect upon Torbutton, but are superseded by more
@@ -2576,6 +2614,8 @@ Williams.
 
      </para>
      </listitem>
+<!--
+Actually, ECMAScript 5 handles this correctly now.
    <listitem><ulink
 url="https://bugzilla.mozilla.org/show_bug.cgi?id=419598">Bug 419598 - 'var
 Date' is deletable</ulink>
@@ -2623,9 +2663,10 @@ the Date object though.
 
      </para>
     </listitem>
-
+-->
   </orderedlist>
-  </sect2>
+  </sect3>
+ </sect2>
 </sect1>
 
 <sect1 id="TestPlan">
