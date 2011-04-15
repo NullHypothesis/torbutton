@@ -53,7 +53,7 @@ function initDialog() {
   cookiesTree = document.getElementById("cookiesTree");
   prefs =Components.classes["@mozilla.org/preferences-service;1"]
         .getService(Components.interfaces.nsIPrefBranch);
-  selector = Components.classes["@stanford.edu/cookie-jar-selector;1"]
+  selector = Components.classes["@torproject.org/cookie-jar-selector;1"]
                     .getService(Components.interfaces.nsISupports)
                     .wrappedJSObject;
   var tor_enabled = prefs.getBoolPref("extensions.torbutton.tor_enabled");
