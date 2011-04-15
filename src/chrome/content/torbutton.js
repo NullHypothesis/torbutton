@@ -3431,6 +3431,7 @@ function torbutton_do_startup()
         }
         var tor_enabled = torbutton_check_status();
 
+        // XXX: There is a timer at startup. this is not enough..
         if(m_tb_ff35 &&
            m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
           var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
@@ -3668,8 +3669,14 @@ function torbutton_init_jshooks() {
     torbutton_log(2, "torbutton_init_jshooks()");
     var nsio = Components.classes["@mozilla.org/network/io-service;1"]
                 .getService(Components.interfaces.nsIIOService);
-    var chan = nsio.newChannel("chrome://torbutton/content/jshooks.js", 
+    var chan = null;
+    if (m_tb_ff4) {
+        chan = nsio.newChannel("chrome://torbutton/content/jshooks4.js", 
                                null, null);
+    } else {
+        chan = nsio.newChannel("chrome://torbutton/content/jshooks.js", 
+                               null, null);
+    }
     var istream = Components.classes["@mozilla.org/scriptableinputstream;1"].
             createInstance(Components.interfaces.nsIScriptableInputStream);
 
