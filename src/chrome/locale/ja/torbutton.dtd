@@ -7,19 +7,19 @@
 <!ENTITY torbutton.prefs.tor_settings "プロクシ設定">
 <!ENTITY torbutton.prefs.recommended_settings "Firefoxのプロクシ設定を使う">
 <!ENTITY torbutton.prefs.use_privoxy "プロクシを使う">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
+<!ENTITY torbutton.prefs.use_polipo "Polipoを使う">
+<!ENTITY torbutton.prefs.custom_settings "カスタム設定のプロキシを使う">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTPプロキシ">
+<!ENTITY torbutton.prefs.proxy.host.https "SSLプロキシ">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTPプロキシ">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopherプロキシ">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKSホスト">
+<!ENTITY torbutton.prefs.proxy.port "ポート">
 <!ENTITY torbutton.about.title "Torbuttonについて">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
+<!ENTITY torbutton.pref_connection.notice "これらの設定を変更するにはTorbuttonをオフにしてください">
 <!ENTITY torbutton.pref_connection.more_info "詳細情報">
 <!ENTITY torbutton.pref_connection_more_info.title "ヘルプ">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbuttonは現在オンになっています。もし、非Torの設定を変更する場合は、まずTorbuttonをオフにしてください。Torの設定を変更する場合にはTorbutton設定ウィンドウを使ってください。">
 <!ENTITY torbutton.context_menu.toggle "Torのステータスを変更">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "設定...">
