@@ -93,6 +93,7 @@ pref("extensions.torbutton.saved.buildID_override","");
 pref("extensions.torbutton.saved.useragent_vendor", "");
 pref("extensions.torbutton.saved.useragent_vendorSub","");
 pref("extensions.torbutton.saved.transparentTor",false);
+pref("extensions.torbutton.saved.webgl_disabled", false);
 // network.dns.disablePrefetch is a hidden option. It has no default value:
 //pref("extensions.torbutton.saved.dns_prefetch", false);
 
