@@ -3035,7 +3035,8 @@ function torbutton_check_google_captcha(subject, topic, data) {
     redirURI.init(Ci.nsIStandardURL.URLTYPE_STANDARD, 80, redir,
                   subject.URI.originCharset, null);
     redirURI = redirURI.QueryInterface(Components.interfaces.nsIURI);
-    if (redirURI.host == "sorry.google.com") {
+    if (redirURI.host == "sorry.google.com"
+            || redirURI.path.match("^/sorry/")) {
       var browser = null;
       if(m_tb_ff3 && subject.notificationCallbacks) {
         // Arg. google.timers.load.t is fucking us up!
