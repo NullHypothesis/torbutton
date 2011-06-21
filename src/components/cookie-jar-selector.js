@@ -167,7 +167,7 @@ function CookieJarSelector() {
     var name = tor_enabled? "tor" : "nontor";
     var cookies = this.getProtectedCookies(name);
     
-    if (cookies.toString() == "" || cookies == null)
+    if (cookies == null || cookies.toString() == "")
       cookies = new XML('<cookies/>');
     var xml = <cookie>{cookie.value}</cookie>;
     xml.@name = cookie.name;
