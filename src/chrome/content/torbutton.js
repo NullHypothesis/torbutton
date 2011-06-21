@@ -1594,6 +1594,16 @@ function torbutton_update_status(mode, force_update) {
     m_tb_prefs.setIntPref("security.OCSP.enabled", 0);
     m_tb_prefs.setIntPref("security.OCSP.enabled", ocsp);
 
+    // This clears the STS cache and site permissions on Tor Browser
+    // XXX: Tie to some kind of disk-ok pref?
+    try {
+      m_tb_prefs.setBoolPref('permissions.memory_only', mode);
+    } catch(e) {
+      // Actually, this catch does not appear to be needed. Leaving it in for
+      // safety though.
+      torbutton_log(3, "Can't clear STS/Permissions: Not Tor Browser: "+e);
+    }
+
     // This clears the undo tab history.
     var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
     m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
