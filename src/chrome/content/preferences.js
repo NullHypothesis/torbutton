@@ -14,26 +14,34 @@ function torbutton_prefs_set_field_attributes(doc)
     doc.getElementById('torbutton_panelStyle').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleText').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
     doc.getElementById('torbutton_panelStyleIcon').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
+
     // Privoxy is always recommended for Firefoxes not supporting socks_remote_dns
     if (doc.getElementById('torbutton_transparentTor').selected) {
         doc.getElementById('torbutton_settingsMethod').value = 'transparent';
-    }
-      else if (!torbutton_check_socks_remote_dns()) {
+    } else if (!torbutton_check_socks_remote_dns()) {
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
     } else {
       doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", doc.getElementById('torbutton_settingsMethod').value != 'recommended');
     }
-    var proxy_port;
-    var proxy_host;
-    if (doc.getElementById('torbutton_usePrivoxy').checked) {
-        proxy_host = '127.0.0.1';
-        proxy_port = 8118;
-    } else {
-        proxy_host = '';
-        proxy_port = 0;
-    }
 
     if (doc.getElementById('torbutton_settingsMethod').value == 'recommended') {
+        var proxy_port;
+        var proxy_host;
+        if (torbutton_has_good_socks()) {
+          doc.getElementById('torbutton_usePrivoxy').checked = false;
+          doc.getElementById('torbutton_usePrivoxy').setAttribute("disabled", true);
+          proxy_host = '';
+          proxy_port = 0;
+        } else {
+          if (doc.getElementById('torbutton_usePrivoxy').checked) {
+            proxy_host = '127.0.0.1';
+            proxy_port = 8118;
+          } else {
+            proxy_host = '';
+            proxy_port = 0;
+          }
+        }
+
         torbutton_log(2, "using recommended settings");
         if (!torbutton_check_socks_remote_dns()) {
             doc.getElementById('torbutton_httpProxy').value = proxy_host;
@@ -55,8 +63,21 @@ function torbutton_prefs_set_field_attributes(doc)
             doc.getElementById('torbutton_gopherProxy').value = '';
             doc.getElementById('torbutton_gopherPort').value = 0;
         }
-        doc.getElementById('torbutton_socksHost').value = '127.0.0.1';
-        doc.getElementById('torbutton_socksPort').value = 9050;
+
+        var environ = Components.classes["@mozilla.org/process/environment;1"]
+                   .getService(Components.interfaces.nsIEnvironment);
+
+        if (environ.exists("TOR_SOCKS_PORT")) {
+          doc.getElementById('torbutton_socksPort').value = parseInt(environ.get("TOR_SOCKS_PORT"));
+        } else {
+          doc.getElementById('torbutton_socksPort').value = 9050;
+        }
+
+        if (environ.exists("TOR_SOCKS_HOST")) {
+          doc.getElementById('torbutton_socksHost').value = environ.get("TOR_SOCKS_HOST");
+        } else {
+          doc.getElementById('torbutton_socksHost').value = '127.0.0.1';
+        }
 
         doc.getElementById('torbutton_httpProxy').disabled = true;
         doc.getElementById('torbutton_httpPort').disabled = true;

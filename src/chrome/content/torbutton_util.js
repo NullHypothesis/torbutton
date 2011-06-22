@@ -6,12 +6,18 @@ var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
     .getService(Components.interfaces.nsIXULAppInfo);
 var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
     .getService(Components.interfaces.nsIVersionComparator);
+var m_tb_ff5 = false;
 var m_tb_ff4 = false;
 
 if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
     m_tb_ff4 = true;
 } else {
     m_tb_ff4 = false;
+}
+if(versionChecker.compare(appInfo.version, "5.0a1") >= 0) {
+    m_tb_ff5 = true;
+} else {
+    m_tb_ff5 = false;
 }
 
 
@@ -95,6 +101,21 @@ function torbutton_check_socks_remote_dns()
         torbutton_log(4, "socks_remote_dns is unavailable");
         return false;
     }
+}
+
+function torbutton_has_good_socks() {
+  if(m_tb_ff5) {
+    return true;
+  }
+
+  // TBB will set this pref if it has the SOCKS timeout patch applied
+  var environ = Components.classes["@mozilla.org/process/environment;1"]
+      .getService(Components.interfaces.nsIEnvironment);
+
+  if (environ.exists("TOR_SOCKS_PORT"))
+    return true;
+
+  return false;
 }
 
 function torbutton_check_status() {
