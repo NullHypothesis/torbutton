@@ -634,6 +634,8 @@ function torbutton_open_link_as_tor(tabFlag) {
 // this function duplicates a lot of code in preferences.js for deciding our
 // recommended settings.  figure out a way to eliminate the redundancy.
 // TODO: Move it to torbutton_util.js?
+
+// XXX: Still doesn't help torbrowser...
 function torbutton_init_prefs() {
     var torprefs = false;
     var proxy_port;
@@ -641,26 +643,26 @@ function torbutton_init_prefs() {
     torbutton_log(2, "called init_prefs()");
     torprefs = torbutton_get_prefbranch('extensions.torbutton.');
 
-    // Privoxy is always recommended for Firefoxes not supporting socks_remote_dns
-    if (!torbutton_check_socks_remote_dns())
-        torprefs.setBoolPref('use_privoxy', true);
-
-    if (torprefs.getBoolPref('use_privoxy'))
-    {
-        proxy_host = '127.0.0.1';
-        proxy_port = 8118;
-    }
-    else
-    {
-        proxy_host = '';
-        proxy_port = 0;
-    }
-
-    if (torprefs.getCharPref('settings_method') == 'recommended')
-    {
+    if (torprefs.getCharPref('settings_method') == 'recommended') {
         torbutton_log(2, "using recommended settings");
-        if (torbutton_check_socks_remote_dns())
-        {
+        if (torbutton_has_good_socks()) {
+            proxy_host = '';
+            proxy_port = 0;
+        } else {
+            // Privoxy is always recommended for Firefoxes not supporting socks_remote_dns
+            if (!torbutton_check_socks_remote_dns())
+                torprefs.setBoolPref('use_privoxy', true);
+
+            if (torprefs.getBoolPref('use_privoxy')) {
+                proxy_host = '127.0.0.1';
+                proxy_port = 8118;
+            } else {
+                proxy_host = '';
+                proxy_port = 0;
+            }
+        }
+
+        if (torbutton_check_socks_remote_dns()) {
             torprefs.setCharPref('http_proxy', proxy_host);
             torprefs.setCharPref('https_proxy', proxy_host);
             torprefs.setCharPref('ftp_proxy', '');
@@ -683,21 +685,25 @@ function torbutton_init_prefs() {
             torprefs.setIntPref('https_port', proxy_port);
             torprefs.setIntPref('ftp_port', proxy_port);
         }
-        torprefs.setCharPref('socks_host', '127.0.0.1');
-        torprefs.setIntPref('socks_port', 9050);
+
+        var environ = Components.classes["@mozilla.org/process/environment;1"]
+                   .getService(Components.interfaces.nsIEnvironment);
+
+        if (environ.exists("TOR_SOCKS_PORT")) {
+          torprefs.setIntPref('socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
+        } else {
+          torprefs.setIntPref('socks_port', 9050);
+        }
+
+        if (environ.exists("TOR_SOCKS_HOST")) {
+          torprefs.setCharPref('socks_host', environ.get("TOR_SOCKS_HOST"));
+        } else {
+          torprefs.setCharPref('socks_host', '127.0.0.1');
+        }
+
     }
 
     torbutton_log(1, 'http_port='+torprefs.getIntPref('http_port'));
-    // m_tb_prefs.setCharPref('extensions.torbutton.http_proxy',   m_http_proxy);
-    // m_tb_prefs.setIntPref('extensions.torbutton.http_port',     m_http_port);
-    // m_tb_prefs.setCharPref('extensions.torbutton.https_proxy',  m_https_proxy);
-    // m_tb_prefs.setIntPref('extensions.torbutton.https_port',    m_https_port);
-    // m_tb_prefs.setCharPref('extensions.torbutton.ftp_proxy',    m_ftp_proxy);
-    // m_tb_prefs.setIntPref('extensions.torbutton.ftp_port',      m_ftp_port);
-    // m_tb_prefs.setCharPref('extensions.torbutton.gopher_proxy', m_gopher_proxy);
-    // m_tb_prefs.setIntPref('extensions.torbutton.gopher_port',   m_gopher_port);
-    // m_tb_prefs.setCharPref('extensions.torbutton.socks_host',   m_socks_host);
-    // m_tb_prefs.setIntPref('extensions.torbutton.socks_port',    m_socks_port);
 }
 
 function torbutton_get_button_from_toolbox() {
