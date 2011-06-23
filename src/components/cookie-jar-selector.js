@@ -78,7 +78,7 @@ function CookieJarSelector() {
     } catch(e) {
         this.logger.log(4, "Cookie clearing exception: "+e);
     }
-  }
+  };
 
   // json would be a fine alternative to e4x, but is only available from
   // gecko1.9
@@ -118,7 +118,7 @@ function CookieJarSelector() {
             cookiesAsXml.appendChild(xml);
     }
     return cookiesAsXml;
-  }
+  };
 
   this._loadCookiesFromXml = function(cookiesAsXml) {
         if (typeof(cookiesAsXml) == "undefined" || !cookiesAsXml)
@@ -142,32 +142,35 @@ function CookieJarSelector() {
             cookieManager.add(host, path, cname, value, isSecure,
                     isHttpOnly, isSession, expiry);
         }
-  }
+  };
 
   this._cookiesToFile = function(name) {
     var file = getProfileFile("cookies-" + name + ".xml");
     var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
           .createInstance(Ci.nsIFileOutputStream);
-    foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
+    foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0);
     var data = this["cookiesobj-" + name].toString();
     foStream.write(data, data.length);
     foStream.close();
-  }
+  };
+
   this._protectedCookiesToFile = function(name) {
     var file = getProfileFile("protected-" + name + ".xml");
     var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
         .createInstance(Ci.nsIFileOutputStream);
-    foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0); 
+    foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0);
     var data = this["protected-" + name].toString();
     foStream.write(data, data.length);
     foStream.close();
-  }
+  };
+
   this.addProtectedCookie = function(cookie) {
     var tor_enabled = this.prefs.getBoolPref("extensions.torbutton.tor_enabled");
     var name = tor_enabled? "tor" : "nontor";
     var cookies = this.getProtectedCookies(name);
-    
-    if (cookies == null || cookies.toString() == "")
+
+    if (typeof(cookies) == "undefined" || cookies == null
+            || cookies.toString() == "")
       cookies = new XML('<cookies/>');
     var xml = <cookie>{cookie.value}</cookie>;
     xml.@name = cookie.name;
@@ -186,15 +189,29 @@ function CookieJarSelector() {
     if (cookie.isHttpOnly)
       xml.@isHttpOnly = 1;
 
-    
     cookies.appendChild(xml);
     this["protected-" + name] = cookies;
-    this._protectedCookiesToFile(name);
-  }
+
+    if (!this.prefs.getBoolPref("extensions.torbutton." + name + "_memory_jar")) {
+      // save protected cookies to file
+      this._protectedCookiesToFile(name);
+    } else {
+      try {
+        var file = getProfileFile("protected-" + name + ".xml");
+        if (file.exists()) {
+          file.remove(false);
+        }
+      } catch(e) {
+        this.logger.log(5, "Can't remove "+name+" cookie file: "+e);
+      }
+    }
+  };
+
   this.getProtectedCookies = function(name) {
       var file = getProfileFile("protected-" + name + ".xml");
-      if (!file.exists())
-        return null;
+      if (!file.exists()) {
+        return this["protected-" + name];
+      }
       var data = "";
       var fstream = Cc["@mozilla.org/network/file-input-stream;1"]
           .createInstance(Ci.nsIFileInputStream);
@@ -223,13 +240,27 @@ function CookieJarSelector() {
           }
       }
       return ret;
-  }
+  };
+
   this.protectCookies = function(cookies) {
     var tor_enabled = this.prefs.getBoolPref("extensions.torbutton.tor_enabled");
-    var protname = tor_enabled? "tor" : "nontor";
-    this._writeProtectCookies(cookies,protname);
-    this._protectedCookiesToFile(protname);  
-  }
+    var name = tor_enabled? "tor" : "nontor";
+    this._writeProtectCookies(cookies,name);
+    if (!this.prefs.getBoolPref("extensions.torbutton." + name + "_memory_jar")) {
+      // save protected cookies to file
+      this._protectedCookiesToFile(name);
+    } else {
+      try {
+        var file = getProfileFile("protected-" + name + ".xml");
+        if (file.exists()) {
+          file.remove(false);
+        }
+      } catch(e) {
+        this.logger.log(5, "Can't remove "+name+" cookie file: "+e);
+      }
+    }
+  };
+
   this._writeProtectCookies = function(cookies, name) {
     var cookieManager =
       Cc["@mozilla.org/cookiemanager;1"]
@@ -261,6 +292,7 @@ function CookieJarSelector() {
     }
     this["protected-" + name] = cookiesAsXml;
   };
+
   this._cookiesFromFile = function(name) {
       var file = getProfileFile("cookies-" + name + ".xml");
       if (!file.exists())
@@ -293,7 +325,7 @@ function CookieJarSelector() {
           }
       }
       return ret;
-  }
+  };
 
   this.saveCookies = function(name) {
     // transition removes old tor-style cookie file
@@ -323,54 +355,52 @@ function CookieJarSelector() {
             this.logger.log(5, "Can't remove "+name+" cookie file "+e);
         }
     }
-    
+
     // ok, everything's fine
     this.logger.log(2, "Cookies saved");
   };
+
   this.clearUnprotectedCookies = function(name) {
-  try {
-  
-    var cookiesAsXml = this.getProtectedCookies(name);
-    if (cookiesAsXml == null)
-      return;//file does not exist - no protected cookies
-    var cookiemanager =
-      Cc["@mozilla.org/cookiemanager;1"]
-      .getService(Ci.nsICookieManager2);
-    
-    var enumerator = cookiemanager.enumerator;
-    var count = 0;
-    var protcookie = false;
+    try {
+      var cookiesAsXml = this.getProtectedCookies(name);
+      if (cookiesAsXml == null || typeof(cookiesAsXml) == "undefined"
+              || cookiesAsXml.toString() == "")
+        return;//file does not exist - no protected cookies
+      var cookiemanager =
+        Cc["@mozilla.org/cookiemanager;1"]
+        .getService(Ci.nsICookieManager2);
 
-    while (enumerator.hasMoreElements()) {
-    var nextCookie = enumerator.getNext();
-    if (!nextCookie) break;
-      nextCookie = nextCookie.QueryInterface(Components.interfaces.nsICookie);
-  
-     
-    for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
-      var xml = cookiesAsXml.cookie[i];
-      var cvalue = xml.toString();
-      var cname = xml.@name; 
-      var chost = xml.@host;
-      var cpath = xml.@path;
+      var enumerator = cookiemanager.enumerator;
+      var count = 0;
+      var protcookie = false;
 
-      protcookie = protcookie || (nextCookie.host == chost && nextCookie.name == cname && nextCookie.path == cpath);  
+      while (enumerator.hasMoreElements()) {
+        var nextCookie = enumerator.getNext();
+        if (!nextCookie) break;
+
+        nextCookie = nextCookie.QueryInterface(Components.interfaces.nsICookie);
+        for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
+          var xml = cookiesAsXml.cookie[i];
+          var cvalue = xml.toString();
+          var cname = xml.@name;
+          var chost = xml.@host;
+          var cpath = xml.@path;
+
+          protcookie = protcookie || (nextCookie.host == chost && nextCookie.name == cname && nextCookie.path == cpath);
+        }
+
+        if (!protcookie) {
+          cookiemanager.remove(nextCookie.host,
+                             nextCookie.name,
+                             nextCookie.path, false);
+        }
+        protcookie = false;
+      }
+    } catch (e) {
+      this.logger.log(3, "Error deleting unprotected cookies: " + e);
     }
-    if (!protcookie)
-    {
-      cookiemanager.remove(nextCookie.host,
-                         nextCookie.name,
-                         nextCookie.path, false);
-    }
-    protcookie = false;      
-   }
-   }
-   catch (e)
-   {
-      this.logger.log(2, "Error deleting unprotected cookies. " + e);
-   }                   
-  }
-  
+  };
+
   this._oldLoadCookies = function(name, deleteSavedCookieJar) {
     var cookieManager =
       Cc["@mozilla.org/cookiemanager;1"]
@@ -428,7 +458,7 @@ function CookieJarSelector() {
     // load cookies from xml objects
     this._loadCookiesFromXml(this["cookiesobj-"+name]);
     this._loadCookiesFromXml(this["session-cookiesobj-"+name]);
-    
+
     // XXX: send a profile-do-change event?
 
     // ok, everything's fine
@@ -482,7 +512,7 @@ function CookieJarSelector() {
            jarThis.logger.log(3, "Neat. Timer fired during transition.");
            return;
        }
-       
+
        this.cookie_changed = false;
 
        if(tor_enabled) {
@@ -492,7 +522,7 @@ function CookieJarSelector() {
        }
        jarThis.logger.log(2, "Timer done. Cookies saved");
     }
-  }
+  };
 
 }
 
