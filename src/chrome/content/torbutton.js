@@ -2498,7 +2498,7 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 }
 
-function torbutton_conditional_set(state) {
+function torbutton_set_launch_state(state, session_restore) {
     if (!m_tb_wasinited) torbutton_init();
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
             
@@ -2515,7 +2515,7 @@ function torbutton_conditional_set(state) {
         var browser = win.getBrowser();
         if(!browser) {
           // XXX: Could add a location here..
-          torbutton_log(5, "No browser for plugin window in conditional_set.");
+          torbutton_log(5, "No browser for plugin window in set_launch_state.");
           continue;
         }
         var browsers = browser.browsers;
@@ -2546,11 +2546,35 @@ function torbutton_conditional_set(state) {
         }
     }
 
-    torbutton_log(4, "Restoring tor state");
-    if (torbutton_check_status() == state) return;
-    
-    if(state) torbutton_enable_tor(true);
-    else  torbutton_disable_tor();
+
+    if (torbutton_check_status() == state) {
+      // Do a quick toggle if tor is always enabled to ensure we update prefs properly
+      // in the event of an upgrade, offline proxy change, etc
+      if (state) {
+        torbutton_disable_tor();
+        torbutton_enable_tor(true);
+        torbutton_log(4, "Tor state updated.");
+
+        // Load our homepage again. We just killed it via the toggle.
+        if (!session_restore) {
+          var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
+          gBrowser.loadURI(homepage, null, null);
+        }
+      } else {
+        torbutton_log(3, "Leaving tor disabled");
+      }
+    } else {
+        torbutton_log(4, "Restoring proper tor state");
+
+        if(state) torbutton_enable_tor(true);
+        else  torbutton_disable_tor();
+
+        // Load our homepage again. We just killed it via the toggle.
+        if (!session_restore) {
+            var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
+            gBrowser.loadURI(homepage, null, null);
+        }
+    }
 }
 
 function torbutton_restore_cookies(tor_enabled)
@@ -2645,9 +2669,9 @@ function torbutton_crash_recover()
         m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", state);
 
         if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
-            torbutton_conditional_set(true);
+            torbutton_set_launch_state(true, !m_tb_prefs.getBoolPref("extensions.torbutton.notor_sessionstore"));
         else
-            torbutton_conditional_set(false);
+            torbutton_set_launch_state(false, !m_tb_prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"));
 
         if (state) {
           // Need to maybe generate google cookie if tor is enabled
@@ -3395,7 +3419,7 @@ function torbutton_set_initial_state() {
         
         torbutton_log(3, "Setting initial tor state to: "+restore_tor);
 
-        torbutton_conditional_set(restore_tor);
+        torbutton_set_launch_state(restore_tor, false);
 
         m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
 
