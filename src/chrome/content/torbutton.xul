@@ -20,7 +20,7 @@
     <!-- Place the context menu in the nav bar, so that the lack
          of the status bar on FF4 doesn't make it invisible -->
     <toolbar id="nav-bar">
-        <popup id="torbutton-context-menu"/>
+        <menupopup id="torbutton-context-menu"/>
     </toolbar>
 
     <toolbarpalette id="BrowserToolbarPalette">

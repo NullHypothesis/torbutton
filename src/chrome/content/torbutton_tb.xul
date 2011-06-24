@@ -52,6 +52,6 @@
                         context="torbutton-context-menu"
             onclick="if (event.button == 0) torbutton_toggle(false)"/>
 
-        <popup id="torbutton-context-menu"/>
+        <menupopup id="torbutton-context-menu"/>
    </statusbar>
 </overlay>

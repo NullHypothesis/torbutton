@@ -9,7 +9,7 @@
     <stringbundleset id="torbutton-stringbundleset">
         <stringbundle id="torbutton-bundle" src="chrome://torbutton/locale/torbutton.properties"/>
     </stringbundleset>
-    <popup id="torbutton-context-menu" onpopupshowing="torbutton_check_protections();">
+    <menupopup id="torbutton-context-menu" onpopupshowing="torbutton_check_protections();">
         <menuitem id="torbutton-toggle"
                   label="&torbutton.context_menu.toggle;"
                   accesskey="&torbutton.context_menu.toggle.key;"
@@ -31,6 +31,6 @@
                   accesskey="&torbutton.context_menu.about.key;"
                   insertafter="context-stop"
                   oncommand="torbutton_open_about_dialog()"/>
-    </popup>
+    </menupopup>
 
 </overlay>
