@@ -189,7 +189,7 @@ pref("extensions.torbutton.regen_google_cookies", false);
 pref("extensions.torbutton.xfer_google_cookies", true);
 
 // Google redirect prefs
-pref("extensions.torbutton.google_redir_url", 1);
+pref("extensions.torbutton.google_redir_url", 5);
 pref("extensions.torbutton.dodge_google_captcha", true);
 pref("extensions.torbutton.asked_google_captcha", false);
 pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.pl?query=");
