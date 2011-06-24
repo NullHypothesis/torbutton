@@ -205,7 +205,7 @@ pref("extensions.torbutton.appversion_override","5.0 (Windows)");
 pref("extensions.torbutton.platform_override","Win32");
 pref("extensions.torbutton.oscpu_override", "Windows NT 6.1");
 
-pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows NT 6.1; rv:2.0) Gecko/20100101 Firefox/4.0");
+pref("extensions.torbutton.useragent_override", "Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.0");
 
 pref("extensions.torbutton.productsub_override","20100101");
 pref("extensions.torbutton.buildID_override","0");
