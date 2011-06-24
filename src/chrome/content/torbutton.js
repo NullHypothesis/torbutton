@@ -3466,7 +3466,19 @@ function torbutton_do_startup()
         // in torbutton_do_main_window_startup to avoid
         // popup notification.
         torbutton_do_fresh_install();
-       
+
+        // The cookie protections pref was added recently, and we would like
+        // it to be the new default. We must update the older prefs to match
+        // if it is set, to handle upgrade inconsistencies.
+        //
+        // We do this before the pref observers get registered to avoid
+        // popups and non-tor policy changes.
+        if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections')) {
+          m_tb_prefs.setBoolPref('extensions.torbutton.cookie_jars', false);
+          m_tb_prefs.setBoolPref('extensions.torbutton.dual_cookie_jars', true);
+          m_tb_prefs.setBoolPref('extensions.torbutton.clear_cookies', false);
+        }
+
         torbutton_do_main_window_startup();
 
         // This is due to Bug 908: UserAgent Switcher is resetting
