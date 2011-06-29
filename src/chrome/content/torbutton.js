@@ -1726,15 +1726,10 @@ function torbutton_close_on_toggle(mode) {
 
 function torbutton_check_protections()
 {
-  var pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections");
-  // XXX: This should always be visible if the user enabled it. It does seem to have
-  // other bugs though.
-  /* && ((!m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar")
-                  && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
-              || (!m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar")
-                  && !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")));
-                  */
-  document.getElementById("torbutton-cookie-protector").disabled = !pref; 
+  var cookie_pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections");
+  var locked_pref = m_tb_prefs.getBoolPref("extensions.torbutton.locked_mode")
+  document.getElementById("torbutton-cookie-protector").disabled = !cookie_pref;
+  document.getElementById("torbutton-toggle").collapsed = locked_pref;
 }
 
 function torbutton_open_cookie_dialog() {

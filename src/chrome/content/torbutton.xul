@@ -29,9 +29,10 @@
             class="toolbarbutton-1 chromeclass-toolbar-additional"
             label="Torbutton"
             tooltiptext="&torbutton.button.tooltip;"
-            context="torbutton-context-menu"
-            oncommand="torbutton_toggle(false);" />
+            menu="torbutton-context-menu"
+            context="torbutton-context-menu"/>
     </toolbarpalette>
+    <!--
     <commandset id="mainCommandSet">
         <command id="torbutton-toggle-cmd" oncommand="torbutton_toggle(false);"/>
     </commandset>
@@ -40,12 +41,12 @@
         <key id="torbutton-toggle-key" modifiers="control" key="2"
              command="torbutton-toggle-cmd"/>
     </keyset>
-
+    -->
     <statusbar id="status-bar">
         <statusbarpanel id="torbutton-panel"
             insertbefore="statusbar-updates"
-                        context="torbutton-context-menu"
-            onclick="if (event.button == 0) torbutton_toggle(false)"/>
+                        menu="torbutton-context-menu"
+                        context="torbutton-context-menu" />
 <!--        <statusbarpanel context="clipmenu" class="statusbarpanel-iconic" id="plugins-status" tooltip="plugin-tooltip" onclick="torbutton_toggle_plugins();"/> -->
    </statusbar>
    <popup id="contentAreaContextMenu">
