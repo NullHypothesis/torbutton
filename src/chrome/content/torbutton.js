@@ -3584,6 +3584,8 @@ function torbutton_is_windowed(wind) {
     return true;
 }
 
+// XXX: This function is unused. We can't make it work
+// without a way to tell when the user has stopped resizing..
 function torbutton_do_resize(ev)
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
@@ -3595,8 +3597,19 @@ function torbutton_do_resize(ev)
                 m_tb_window_width != window.outerWidth) && 
                 torbutton_is_windowed(window)) {
             torbutton_log(3, "Resizing window on event: "+window.windowState);
-            bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
-            bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+            /*
+             * Instead of direct adjustment, we must update the outer window
+             * size, because firefox is sloppy about repositioning widgets
+             * properly after inner size changes.
+               bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
+               bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+            */
+            var hDelta = Math.round(bWin.innerHeight/50.0)*50 - bWin.innerHeight;
+            var wDelta = Math.round(bWin.innerWidth/50.0)*50 - bWin.innerWidth;
+
+            bWin.resizeBy(wDelta,hDelta);
+            torbutton_log(2, "Resized window: ("+window.outerHeight+","+window.outerWidth+") ?= ("
+                    +bWin.innerHeight+","+bWin.innerWidth+")");
         }
     }
 
@@ -3606,11 +3619,11 @@ function torbutton_do_resize(ev)
 
 function torbutton_check_round(browser) 
 {
-    // FIXME: Not called???
     if(torbutton_is_windowed(window)
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-        
+
+        /*
         if(Math.abs(browser.contentWindow.innerHeight - 
            Math.floor(Math.round(browser.contentWindow.innerHeight/50.0)*50))
            > 0.1) {
@@ -3625,11 +3638,30 @@ function torbutton_check_round(browser)
                 window.outerWidth = m_tb_window_width;
             }
         }
+        */
 
         // Always round.
         torbutton_log(3, "Resizing window on load: "+window.windowState);
-        browser.contentWindow.innerHeight = Math.round(browser.contentWindow.innerHeight/50.0)*50;
-        browser.contentWindow.innerWidth = Math.round(browser.contentWindow.innerWidth/50.0)*50;
+        var bWin = browser.contentWindow;
+        /*
+         * Instead of direct adjustment, we must update the outer window
+         * size, because firefox is sloppy about repositioning widgets
+         * properly after inner size changes.
+           bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
+           bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
+         */
+
+        var hDelta = Math.round(bWin.innerHeight/50.0)*50 - bWin.innerHeight;
+        var wDelta = Math.round(bWin.innerWidth/50.0)*50 - bWin.innerWidth;
+
+        window.resizeBy(wDelta,hDelta);
+        torbutton_log(2, "Resized window: ("+window.outerHeight+","+window.outerWidth+") ?= ("
+            +bWin.innerHeight+","+bWin.innerWidth+")");
+                //+bWin.screen.availHeight+","+bWin.screen.availWidth+")");
+
+        m_tb_window_height = window.outerHeight;
+        m_tb_window_width = window.outerWidth;
+
     }
 }
 
@@ -3663,7 +3695,7 @@ function torbutton_new_window(event)
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
-    window.addEventListener("resize", torbutton_do_resize, true);
+    //window.addEventListener("resize", torbutton_do_resize, true);
 }
 
 function torbutton_close_window(event) {
