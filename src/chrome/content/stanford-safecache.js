@@ -24,9 +24,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 // Constants
 
 const kSSC_ENABLED_PREF = "extensions.torbutton.safecache";
+const kSSC_SC_ENABLED_PREF = "extensions.torbutton.dual_key_cookies";
 const kSSC_TORBUTTON_PREF = "extensions.torbutton.tor_enabled";
 const kSSC_COOKIE_JS_PREF = "extensions.torbutton.cookie_js_allow";
-const kSSC_COOKIE_BEHAVIOR_PREF = "network.cookie.cookieBehavior";
 
 ////////////////////////////////////////////////////////////////////////////
 // Debug stuff
@@ -96,18 +96,18 @@ SSC_RequestListener.prototype =
   },
 
   onModifyRequest: function(channel) {
-    
     var parent = window.content.location;
     if (channel.documentURI && channel.documentURI == channel.URI) {
       parent = null;  // first party interaction
     }
-    
 
-    var cookie;
-    try{
-        cookie = channel.getRequestHeader("Cookie");
-        //SSC_dump("Cookie: " + cookie);
-    } catch(e) {cookie = null;}
+    var cookie = null;
+    if (this.controller.getSafeCookieEnabled()) {
+        try{
+            cookie = channel.getRequestHeader("Cookie");
+            //SSC_dump("Cookie: " + cookie);
+        } catch(e) {cookie = null;}
+    }
 
     // Same-origin policy
     var referrer;
@@ -188,24 +188,10 @@ SSC_RequestListener.prototype =
         channel.setRequestHeader("Cookie", newHeader, false);
     }
 
-    // Third-party blocking policy
-    switch(this.controller.getCookieBehavior()) {
-      case this.controller.ACCEPT_COOKIES:
-        break;
-      case this.controller.NO_FOREIGN_COOKIES:
-        if(parent && parent.hostname != channel.URI.host) {
-          //SSC_dump("Third party cache blocked for " + channel.URI.spec +
-                   //" content loaded by " + parent.spec);
-          this.bypassCache(channel);
-        }
-        break;
-      case this.controller.REJECT_COOKIES:
+    if(parent && parent.hostname != channel.URI.host) {
+        //SSC_dump("Third party cache blocked for " + channel.URI.spec +
+        //" content loaded by " + parent.spec);
         this.bypassCache(channel);
-        break;
-      default:
-        SSC_dump(controller.getCookieBehavior() + 
-                 " is not a valid cookie behavior.");
-        break;
     }
   },
 
@@ -298,6 +284,12 @@ SSC_Controller.prototype = {
                      .getIntPref(kSSC_ENABLED_PREF));
   },
 
+  getSafeCookieEnabled: function() {
+    return (Components.classes["@mozilla.org/preferences-service;1"]
+                     .getService(Components.interfaces.nsIPrefService)
+                     .getBoolPref(kSSC_SC_ENABLED_PREF));
+  },
+
   getTorButton: function() {
     return (Components.classes["@mozilla.org/preferences-service;1"]
                      .getService(Components.interfaces.nsIPrefBranch)
@@ -310,22 +302,15 @@ SSC_Controller.prototype = {
                      .getBoolPref(kSSC_COOKIE_JS_PREF));  
   },
 
-  // Returns the value of the network.cookie.cookieBehavior pref
-  ACCEPT_COOKIES: 0,
-  NO_FOREIGN_COOKIES: 1,
-  REJECT_COOKIES: 2,
-  getCookieBehavior: function() {
-    return Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefService)
-                     .getIntPref(kSSC_COOKIE_BEHAVIOR_PREF);
-  },
-
   addListener: function(listener) {
     var observerService = 
       Components.classes["@mozilla.org/observer-service;1"]
         .getService(Components.interfaces.nsIObserverService);
     observerService.addObserver(listener, "http-on-modify-request", false);
-    observerService.addObserver(listener, "http-on-examine-response", false);
+    // XXX: We need an observer to add this listener when the pref gets set
+    if (this.getSafeCookieEnabled()) {
+      observerService.addObserver(listener, "http-on-examine-response", false);
+    }
   },
 
   removeListener: function(listener) {
@@ -333,7 +318,9 @@ SSC_Controller.prototype = {
       Components.classes["@mozilla.org/observer-service;1"]
         .getService(Components.interfaces.nsIObserverService);
     observerService.removeObserver(listener, "http-on-modify-request");
-    observerService.removeObserver(listener, "http-on-examine-response");
+    if (this.getSafeCookieEnabled()) {
+      observerService.removeObserver(listener, "http-on-examine-response");
+    }
   },
 }
 
