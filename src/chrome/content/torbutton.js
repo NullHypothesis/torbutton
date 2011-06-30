@@ -3649,14 +3649,20 @@ function torbutton_set_window_size(bWin) {
     if (m_tb_prefs.getBoolPref("extensions.torbutton.resize_new_windows")
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && torbutton_is_windowed(window)) {
+        var screenMan = Components.classes["@mozilla.org/gfx/screenmanager;1"]
+                            .getService(Components.interfaces.nsIScreenManager);
+        var junk = {}, availWidth = {}, availHeight = {};
+        screenMan.primaryScreen.GetRect(junk, junk, availWidth, availHeight);
+
         // We need to set the inner width to an initial value because it has none
         // at this point...
         bWin.innerWidth = 200;
         bWin.innerHeight = 200;
-        torbutton_log(2, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight+" in state "+window.windowState);
+        torbutton_log(2, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight
+                +" in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
 
-        var maxHeight = window.screen.availHeight - (window.outerHeight - bWin.innerHeight) - 1;
-        var maxWidth = window.screen.availWidth - (window.outerWidth - bWin.innerWidth) -1;
+        var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 101;
+        var maxWidth = availWidth.value - (window.outerWidth - bWin.innerWidth);
 
         var width;
         var height;
