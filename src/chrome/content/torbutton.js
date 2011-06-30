@@ -3563,7 +3563,7 @@ function torbutton_new_tab(event)
 // Returns true if the window wind is neither maximized, full screen,
 // ratpoisioned/evilwmed, nor minimized.
 function torbutton_is_windowed(wind) {
-    torbutton_log(2, "Window: ("+wind.outerHeight+","+wind.outerWidth+") ?= ("
+    torbutton_log(3, "Window: ("+wind.outerHeight+","+wind.outerWidth+") ?= ("
             +wind.screen.availHeight+","+wind.screen.availWidth+")");
     if(wind.windowState == Components.interfaces.nsIDOMChromeWindow.STATE_MINIMIZED
       || wind.windowState == Components.interfaces.nsIDOMChromeWindow.STATE_MAXIMIZED) {
@@ -3623,14 +3623,15 @@ function torbutton_check_round(browser)
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
         var bWin = browser.contentWindow;
-        torbutton_log(2, "About to resize load window: "+bWin.innerWidth+"x"+bWin.innerHeight+" in state "+window.windowState);
+        var height = Math.round((bWin.innerHeight)/50.0)*50;
+        var width = Math.round((bWin.innerWidth)/50.0)*50;
 
-        var height = Math.round(bWin.innerHeight/50.0)*50;
-        var width = Math.round(bWin.innerWidth/50.0)*50;
+        torbutton_log(3, "About to resize load window: "+bWin.innerWidth
+                +"x"+bWin.innerHeight+" -> "+width+"x"+height+" in state "
+                +window.windowState);
 
-        // This is fun. any attempt to resize the inner window actually resizes the outer width first.
-        // This hack seems to do the trick:
-        bWin.resizeTo(width,height);
+        // This is fun. any attempt to directly set the inner window actually resizes the outer width
+        // to that value instead. Must use resizeBy() instead of assignment or resizeTo()
         bWin.resizeBy(width-bWin.innerWidth,height-bWin.innerHeight);
         torbutton_log(3, "Resized window on load to: "+bWin.innerWidth+"x"+bWin.innerHeight+" in state "+window.windowState);
 
@@ -3658,8 +3659,9 @@ function torbutton_set_window_size(bWin) {
         // at this point...
         bWin.innerWidth = 200;
         bWin.innerHeight = 200;
-        torbutton_log(2, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight
-                +" in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
+        torbutton_log(3, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight
+                +" inner: "+bWin.innerWidth+"x"+bWin.innerHeight+
+                " in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
 
         var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 101;
         var maxWidth = availWidth.value - (window.outerWidth - bWin.innerWidth);
@@ -3675,9 +3677,8 @@ function torbutton_set_window_size(bWin) {
 
         height = Math.floor(maxHeight/100.0)*100;
 
-        // This is fun. any attempt to resize the inner window actually resizes the outer width first.
-        // This hack seems to do the trick:
-        bWin.resizeTo(width,height);
+        // This is fun. any attempt to directly set the inner window actually resizes the outer width
+        // to that value instead. Must use resizeBy() instead of assignment or resizeTo()
         bWin.resizeBy(width-bWin.innerWidth,height-bWin.innerHeight);
         torbutton_log(3, "Resized new window from: "+bWin.innerWidth+"x"+bWin.innerHeight+" to "+width+"x"+height+" in state "+window.windowState);
     }
