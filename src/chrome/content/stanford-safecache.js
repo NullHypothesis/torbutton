@@ -34,7 +34,7 @@ const kSSC_COOKIE_JS_PREF = "extensions.torbutton.cookie_js_allow";
 /**
  * Dump information to the console?
  */
-var SSC_debug = false;
+var SSC_debug = true;
 
 /**
  * Sends data to the console if we're in debug mode
@@ -42,7 +42,7 @@ var SSC_debug = false;
  */
 function SSC_dump(msg) {
   if (SSC_debug)
-    dump("|||||||||| SSC: " + msg + "\n");
+    torbutton_log(3, "SSC: " + msg);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -84,29 +84,32 @@ SSC_RequestListener.prototype =
     channel.loadFlags |= channel.LOAD_BYPASS_CACHE;  
       // INHIBIT_PERSISTENT_CACHING instead?
     channel.cacheKey = this.newCacheKey(0);
-    SSC_dump("Bypassed cache for " + channel.URI.spec + "\n");
+    SSC_dump("Bypassed cache for " + channel.URI.spec);
   },
 
   setCacheKey: function(channel, str) {
     var oldData = this.readCacheKey(channel.cacheKey);
     var newKey = this.newCacheKey(this.getHash(str) + oldData);
     channel.cacheKey = newKey;
-     //SSC_dump("Set cache key to hash(" + str + ") = " + 
-              //newKey.data + "\n   for " + channel.URI.spec + "\n");
+    SSC_dump("Set cache key to hash(" + str + ") = " + 
+              newKey.data + " for " + channel.URI.spec);
   },
 
   onModifyRequest: function(channel) {
-    var parent = window.content.location;
-    if (channel.documentURI && channel.documentURI == channel.URI) {
-      parent = null;  // first party interaction
+    var parent = null;
+    if (channel.notificationCallbacks) {
+        try {
+            var wind = channel.notificationCallbacks.QueryInterface(
+                    Components.interfaces.nsIInterfaceRequestor).getInterface(
+                        Components.interfaces.nsIDOMWindow);
+            parent = wind.window.top.location;
+        } catch(e) {
+        }
+        SSC_dump("Parent "+parent+" for "+ channel.URI.spec);
     }
 
-    var cookie = null;
-    if (this.controller.getSafeCookieEnabled()) {
-        try{
-            cookie = channel.getRequestHeader("Cookie");
-            //SSC_dump("Cookie: " + cookie);
-        } catch(e) {cookie = null;}
+    if (channel.documentURI && channel.documentURI == channel.URI) {
+      parent = null;  // first party interaction
     }
 
     // Same-origin policy
@@ -124,7 +127,22 @@ SSC_RequestListener.prototype =
         // SSC_dump("Existing cache key detected; leaving it unchanged.");
       }
     }
-    
+
+    // Always apply policy
+    if(parent && parent.hostname != channel.URI.host) {
+        //SSC_dump("Third party cache blocked for " + channel.URI.spec +
+        //" content loaded by " + parent.spec);
+        this.bypassCache(channel);
+    }
+
+    var cookie = null;
+    if (this.controller.getSafeCookieEnabled()) {
+        try{
+            cookie = channel.getRequestHeader("Cookie");
+            //SSC_dump("Cookie: " + cookie);
+        } catch(e) {cookie = null;}
+    }
+
     if(cookie) {
         //Strip the secondary key from every referrer-matched cookie
         var newHeader = "";
@@ -188,11 +206,6 @@ SSC_RequestListener.prototype =
         channel.setRequestHeader("Cookie", newHeader, false);
     }
 
-    if(parent && parent.hostname != channel.URI.host) {
-        //SSC_dump("Third party cache blocked for " + channel.URI.spec +
-        //" content loaded by " + parent.spec);
-        this.bypassCache(channel);
-    }
   },
 
   onExamineResponse: function(channel) {
@@ -202,7 +215,14 @@ SSC_RequestListener.prototype =
     } catch(e) {setCookie = null;}
     
     if(setCookie) {
-        var parent = window.content.location;
+        var parent = null;
+        if (channel.notificationCallbacks) {
+            var wind = channel.notificationCallbacks.QueryInterface(
+                    Components.interfaces.nsIInterfaceRequestor).getInterface(
+                        Components.interfaces.nsIDOMWindow);
+            parent = wind.window.top.location;
+        }
+
         if (channel.documentURI && channel.documentURI == channel.URI) {
             parent = null;  // first party interaction
         }
@@ -303,6 +323,7 @@ SSC_Controller.prototype = {
   },
 
   addListener: function(listener) {
+    this.listener = listener;
     var observerService = 
       Components.classes["@mozilla.org/observer-service;1"]
         .getService(Components.interfaces.nsIObserverService);
@@ -313,13 +334,13 @@ SSC_Controller.prototype = {
     }
   },
 
-  removeListener: function(listener) {
+  removeListener: function() {
     var observerService = 
       Components.classes["@mozilla.org/observer-service;1"]
         .getService(Components.interfaces.nsIObserverService);
-    observerService.removeObserver(listener, "http-on-modify-request");
+    observerService.removeObserver(this.listener, "http-on-modify-request");
     if (this.getSafeCookieEnabled()) {
-      observerService.removeObserver(listener, "http-on-examine-response");
+      observerService.removeObserver(this.listener, "http-on-examine-response");
     }
   },
 }
@@ -330,9 +351,7 @@ SSC_Controller.prototype = {
 
 var SSC_controller;
 
-function SSC_startup(event) {
+function SSC_startup() {
   if(!SSC_controller) SSC_controller = new SSC_Controller();
   SSC_dump("Loaded controller");
 }
-
-window.addEventListener("load", SSC_startup, false);

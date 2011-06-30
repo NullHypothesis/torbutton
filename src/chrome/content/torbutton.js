@@ -3406,6 +3406,9 @@ function torbutton_do_main_window_startup()
     torbutton_http_observer.register();
     torbutton_cookie_observer.register();
     torbutton_proxyservice.register();
+
+    // XXX: We should fold this into our code
+    SSC_startup();
 }
 
 function torbutton_set_initial_state() {
@@ -3750,6 +3753,9 @@ function torbutton_close_window(event) {
         torbutton_http_observer.unregister();
         torbutton_cookie_observer.unregister();
         torbutton_proxyservice.unregister();
+
+        // XXX: We should fold this into our code..
+        SSC_controller.removeListener();
 
         if(m_tb_is_main_window) { // main window not reset above
             // This happens on Mac OS because they allow firefox
