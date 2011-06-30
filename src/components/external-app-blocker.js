@@ -107,7 +107,7 @@ ExternalWrapper.prototype =
           var call;
           if(params.length) call = "("+params.join().replace(/(?:)/g,function(){return "p"+(++x)})+")";
           else call = "()";
-          if(method == "getTypeFromFile" || method == "getTypeFromExtension") {
+          if(method == "getTypeFromFile" || method == "getTypeFromExtension" || method == "getTypeFromURI") {
            // XXX: Due to https://developer.mozilla.org/en/Exception_logging_in_JavaScript
            // this is necessary to prevent error console noise on the return to C++ code.
            // It is not technically correct, but as far as I can tell, returning null
