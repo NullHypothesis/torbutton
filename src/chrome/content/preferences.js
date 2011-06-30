@@ -208,24 +208,6 @@ function torbutton_prefs_init(doc) {
         o_torprefs.setBoolPref('block_cache', true);
         o_torprefs.setBoolPref('clear_cache', false);
     }
-    
-    switch(o_torprefs.getIntPref('safecache')) {
-        case 0: // always
-            doc.getElementById("torbutton_safecacheGroup").selectedItem =
-                doc.getElementById('torbutton_safecacheAlways');
-            break;
-        case 1: // during tor
-            doc.getElementById("torbutton_safecacheGroup").selectedItem =
-                doc.getElementById('torbutton_safecacheDuringTor');
-            break;
-        case 2: // never
-            doc.getElementById("torbutton_safecacheGroup").selectedItem =
-                doc.getElementById('torbutton_safecacheNever');
-            break;
-    }
-    
-    doc.getElementById('torbutton_cookie_js_allow').checked = 
-        o_torprefs.getBoolPref('cookie_js_allow');
 
     if(o_torprefs.getBoolPref('clear_cookies')) {
         doc.getElementById('torbutton_cookieGroup').selectedItem = 
@@ -519,19 +501,7 @@ function torbutton_prefs_save(doc) {
 
     o_torprefs.setBoolPref('clear_cache', doc.getElementById('torbutton_clearCache').selected);
     o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
-    
-    if(doc.getElementById('torbutton_safecacheGroup').selectedItem ==
-            doc.getElementById('torbutton_safecacheAlways')) {
-        o_torprefs.setIntPref('safecache', 0);
-    } else if(doc.getElementById('torbutton_safecacheGroup').selectedItem ==
-            doc.getElementById('torbutton_safecacheDuringTor')) {
-        o_torprefs.setIntPref('safecache', 1);
-    } else {
-        o_torprefs.setIntPref('safecache', 2);
-    }
-    
-    o_torprefs.setBoolPref('cookie_js_allow', doc.getElementById('torbutton_cookie_js_allow').checked);
-    
+
     o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').selected);
     o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
     o_torprefs.setBoolPref('dual_cookie_jars', doc.getElementById('torbutton_dualCookieJars').selected || doc.getElementById('torbutton_cookieProtections').selected);

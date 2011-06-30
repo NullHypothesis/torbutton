@@ -238,22 +238,6 @@
                    label="&torbutton.prefs.block_cache;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
             </radiogroup>
-            <hbox>
-             <label value="&torbutton.prefs.safecache;" control="torbutton_safecacheGroup"/>
-             <radiogroup align="center" orient="horizontal" id="torbutton_safecacheGroup">
-              <radio id="torbutton_safecacheAlways" 
-                   label="&torbutton.prefs.always;" 
-                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-              <radio id="torbutton_safecacheDuringTor" 
-                   label="&torbutton.prefs.during_tor;" 
-                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-              <radio id="torbutton_safecacheNever" 
-                   label="&torbutton.prefs.never;" 
-                   oncommand="torbutton_prefs_set_field_attributes(document)"/>
-             </radiogroup>
-            </hbox>
-            <checkbox id="torbutton_cookie_js_allow" label="&torbutton.prefs.cookie_js_allow;" 
-                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
            </vbox>
           </tabpanel>
           <tabpanel id="cookies">
