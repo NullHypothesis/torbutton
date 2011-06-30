@@ -3622,46 +3622,58 @@ function torbutton_check_round(browser)
     if(torbutton_is_windowed(window)
             && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
             && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-
-        /*
-        if(Math.abs(browser.contentWindow.innerHeight - 
-           Math.floor(Math.round(browser.contentWindow.innerHeight/50.0)*50))
-           > 0.1) {
-            if(m_tb_window_height < 100 && m_tb_window_width < 100) {
-                torbutton_log(3, "Window size damn near zero: ("+
-                        m_tb_window_height+", "+m_tb_window_width+")");
-                m_tb_window_height = window.outerHeight;
-                m_tb_window_width = window.outerWidth;
-            } else {
-                torbutton_log(3, "Restoring orig window size: "+window.windowState);
-                window.outerHeight = m_tb_window_height;
-                window.outerWidth = m_tb_window_width;
-            }
-        }
-        */
-
-        // Always round.
-        torbutton_log(3, "Resizing window on load: "+window.windowState);
         var bWin = browser.contentWindow;
-        /*
-         * Instead of direct adjustment, we must update the outer window
-         * size, because firefox is sloppy about repositioning widgets
-         * properly after inner size changes.
-           bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
-           bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
-         */
+        torbutton_log(2, "About to resize load window: "+bWin.innerWidth+"x"+bWin.innerHeight+" in state "+window.windowState);
 
-        var hDelta = Math.round(bWin.innerHeight/50.0)*50 - bWin.innerHeight;
-        var wDelta = Math.round(bWin.innerWidth/50.0)*50 - bWin.innerWidth;
+        var height = Math.round(bWin.innerHeight/50.0)*50;
+        var width = Math.round(bWin.innerWidth/50.0)*50;
 
-        window.resizeBy(wDelta,hDelta);
-        torbutton_log(2, "Resized window: ("+window.outerHeight+","+window.outerWidth+") ?= ("
-            +bWin.innerHeight+","+bWin.innerWidth+")");
-                //+bWin.screen.availHeight+","+bWin.screen.availWidth+")");
+        // This is fun. any attempt to resize the inner window actually resizes the outer width first.
+        // This hack seems to do the trick:
+        bWin.resizeTo(width,height);
+        bWin.resizeBy(width-bWin.innerWidth,height-bWin.innerHeight);
+        torbutton_log(3, "Resized window on load to: "+bWin.innerWidth+"x"+bWin.innerHeight+" in state "+window.windowState);
 
         m_tb_window_height = window.outerHeight;
         m_tb_window_width = window.outerWidth;
 
+    }
+}
+
+function torbutton_set_window_size(bWin) {
+    if (!bWin || typeof(bWin) == "undefined") {
+        torbutton_log(5, "No initial browser content window?");
+        return;
+    }
+
+    if (m_tb_prefs.getBoolPref("extensions.torbutton.resize_new_windows")
+            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+            && torbutton_is_windowed(window)) {
+        // We need to set the inner width to an initial value because it has none
+        // at this point...
+        bWin.innerWidth = 200;
+        bWin.innerHeight = 200;
+        torbutton_log(2, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight+" in state "+window.windowState);
+
+        var maxHeight = window.screen.availHeight - (window.outerHeight - bWin.innerHeight) - 1;
+        var maxWidth = window.screen.availWidth - (window.outerWidth - bWin.innerWidth) -1;
+
+        var width;
+        var height;
+
+        if (maxWidth > 1000) {
+            width = 1000;
+        } else {
+            width = Math.floor(maxWidth/200.0)*200;
+        }
+
+        height = Math.floor(maxHeight/100.0)*100;
+
+        // This is fun. any attempt to resize the inner window actually resizes the outer width first.
+        // This hack seems to do the trick:
+        bWin.resizeTo(width,height);
+        bWin.resizeBy(width-bWin.innerWidth,height-bWin.innerHeight);
+        torbutton_log(3, "Resized new window from: "+bWin.innerWidth+"x"+bWin.innerHeight+" to "+width+"x"+height+" in state "+window.windowState);
     }
 }
 
@@ -3675,15 +3687,14 @@ function torbutton_new_window(event)
       return;
     }
 
-    // Add tab open listener..
-    browser.tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
-
     m_tb_window_height = window.outerHeight;
     m_tb_window_width = window.outerWidth;
 
     if (!m_tb_wasinited) {
         torbutton_init();
     }
+    // Add tab open listener..
+    browser.tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
 
     torbutton_do_startup();
     torbutton_crash_recover();
@@ -3694,6 +3705,8 @@ function torbutton_new_window(event)
     torbutton_tag_new_browser(browser.browsers[0], 
             !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
             m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+
+    torbutton_set_window_size(browser.contentWindow);
 
     //window.addEventListener("resize", torbutton_do_resize, true);
 }

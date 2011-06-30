@@ -149,6 +149,7 @@ pref("extensions.torbutton.close_tor",false);
 pref("extensions.torbutton.close_nontor",false);
 pref("extensions.torbutton.block_js_history",true);
 pref("extensions.torbutton.resize_on_toggle",true);
+pref("extensions.torbutton.resize_new_windows",true);
 pref("extensions.torbutton.banned_ports","8118,8123,9050,9051");
 pref("extensions.torbutton.block_tor_file_net",true);
 pref("extensions.torbutton.block_nontor_file_net",false);
