@@ -939,11 +939,11 @@ function torbutton_update_toolbutton(mode)
   var tooltip = "";
 
   if (mode) {
-      tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.enabled");
+      tooltip = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
       o_toolbutton.setAttribute('tbstatus', 'on');
       o_toolbutton.setAttribute('tooltiptext', tooltip);
   } else {
-      tooltip = o_stringbundle.GetStringFromName("torbutton.button.tooltip.disabled");
+      tooltip = o_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
       o_toolbutton.setAttribute('tbstatus', 'off');
       o_toolbutton.setAttribute('tooltiptext', tooltip);
   }
