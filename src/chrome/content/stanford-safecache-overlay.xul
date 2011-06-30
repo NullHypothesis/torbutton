@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<overlay id="stanford-safecache-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<script src="chrome://torbutton/content/stanford-safecache.js" />
+<script src="chrome://torbutton/content/md5.js" />
+
+</overlay>

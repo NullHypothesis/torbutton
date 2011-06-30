@@ -136,3 +136,8 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
 <!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.safecache "Enforce same-origin policy on cookies and cache:">
+<!ENTITY torbutton.prefs.always "Always">
+<!ENTITY torbutton.prefs.during_tor "During Tor">
+<!ENTITY torbutton.prefs.never "Never">
+<!ENTITY torbutton.prefs.cookie_js_allow "Allow cookies set with Javascript (unknown origin)">

@@ -6,6 +6,11 @@
 
 <overlay id="torbutton-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!-- SAFECACHE -->
+    <script src="chrome://torbutton/content/stanford-safecache.js" />
+    <script src="chrome://torbutton/content/md5.js" />
+
     <script type="application/x-javascript" src="chrome://torbutton/content/torbutton_util.js" />
     <script type="application/x-javascript" src="chrome://torbutton/content/torbutton.js" />
     <script language="JavaScript">
