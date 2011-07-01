@@ -17,6 +17,7 @@
   * misc: Squelch exception from app launcher in error console.
   * misc: Make DuckDuckGo the default Google Captcha redirect destination.
   * misc: Make it harder to accidentally toggle torbutton.
+  * misc: T(A)ILS was renamed to Tails.
 
 1.3.3-alpha
   01 May 2011
