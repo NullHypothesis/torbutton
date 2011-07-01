@@ -30,7 +30,7 @@
                   label="&torbutton.context_menu.about;"
                   accesskey="&torbutton.context_menu.about.key;"
                   insertafter="context-stop"
-                  oncommand="torbutton_open_about_dialog()"/>
+                  oncommand="window.open('chrome://torbutton/content/about.xul', '', 'chrome,centerscreen');"/>
     </menupopup>
 
 </overlay>
