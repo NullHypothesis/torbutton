@@ -279,10 +279,28 @@ SSC_RequestListener.prototype =
     return cacheKey;
   },
 
+  strMD5: function(str) {
+    var converter =
+        Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].
+        createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+
+    // nsIURI.host is UTF-8
+    converter.charset = "UTF-8";
+    // result.value will contain the array length
+    var result = {};
+    // data is an array of bytes
+    var data = converter.convertToByteArray(str, result);
+    var ch = Components.classes["@mozilla.org/security/hash;1"]
+        .createInstance(Components.interfaces.nsICryptoHash);
+    ch.init(ch.MD5);
+    ch.update(data, data.length);
+    return ch.finish(false);
+  },
+
   // Get an integer hash of a string
   getHash: function(str) {
-    var hash = str_md5(str); 
-    var intHash = 0;    
+    var hash = this.strMD5(str);
+    var intHash = 0;
     for(var i = 0; i < hash.length && i < 8; i++)
       intHash += hash.charCodeAt(i) << (i << 3);
     return intHash;
