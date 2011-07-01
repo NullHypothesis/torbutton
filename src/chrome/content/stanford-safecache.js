@@ -42,7 +42,7 @@ var SSC_debug = true;
  */
 function SSC_dump(msg) {
   if (SSC_debug)
-    torbutton_log(3, "SSC: " + msg);
+    torbutton_log(2, "SSC: " + msg);
 }
 
 ////////////////////////////////////////////////////////////////////////////
