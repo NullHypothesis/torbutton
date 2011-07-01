@@ -115,8 +115,8 @@ SSC_RequestListener.prototype =
     // Same-origin policy
     var referrer;
     if (parent && parent.hostname != channel.URI.host) {
-      //SSC_dump("Segmenting " + channel.URI.host + 
-               //" content loaded by " + parent.host);
+      SSC_dump("Segmenting " + channel.URI.host + 
+               " content loaded by " + parent.host);
       this.setCacheKey(channel, parent.hostname);
       referrer = parent.hostname;
     } else {
@@ -124,15 +124,16 @@ SSC_RequestListener.prototype =
       if(!this.readCacheKey(channel.cacheKey)) {
         this.setCacheKey(channel, channel.URI.host);
       } else {
-        // SSC_dump("Existing cache key detected; leaving it unchanged.");
+        SSC_dump("Existing cache key detected; leaving it unchanged.");
       }
     }
 
-    // Always apply policy
-    if(parent && parent.hostname != channel.URI.host) {
-        //SSC_dump("Third party cache blocked for " + channel.URI.spec +
-        //" content loaded by " + parent.spec);
-        this.bypassCache(channel);
+    if (this.controller.getBlockThirdPartyCache()) {
+      if(parent && parent.hostname != channel.URI.host) {
+          //SSC_dump("Third party cache blocked for " + channel.URI.spec +
+          //" content loaded by " + parent.spec);
+          this.bypassCache(channel);
+      }
     }
 
     var cookie = null;
@@ -311,33 +312,32 @@ SSC_RequestListener.prototype =
  * Master control object. Adds and removes the RequestListener
  */
 function SSC_Controller() {
+  this.prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                           .getService(Components.interfaces.nsIPrefService);
   this.addListener(new SSC_RequestListener(this));
 }
 
 SSC_Controller.prototype = {
 
   getEnabled: function() {
-    return (Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefService)
-                     .getIntPref(kSSC_ENABLED_PREF));
+    return (this.prefs.getIntPref(kSSC_ENABLED_PREF));
   },
 
   getSafeCookieEnabled: function() {
-    return (Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefService)
-                     .getBoolPref(kSSC_SC_ENABLED_PREF));
+    return (this.prefs.getBoolPref(kSSC_SC_ENABLED_PREF));
+  },
+
+  getBlockThirdPartyCache: function() {
+    // Meh, no pref for now. Always allow.
+    return false;
   },
 
   getTorButton: function() {
-    return (Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefBranch)
-                     .getBoolPref(kSSC_TORBUTTON_PREF));  
+    return (this.prefs.getBoolPref(kSSC_TORBUTTON_PREF));  
   },
   
   getCookieJS: function() {
-      return (Components.classes["@mozilla.org/preferences-service;1"]
-                     .getService(Components.interfaces.nsIPrefBranch)
-                     .getBoolPref(kSSC_COOKIE_JS_PREF));  
+      return (this.prefs.getBoolPref(kSSC_COOKIE_JS_PREF));  
   },
 
   addListener: function(listener) {
