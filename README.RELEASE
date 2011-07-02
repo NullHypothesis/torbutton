@@ -1,0 +1,74 @@
+#             Magical Torbutton Release Process Incantations
+#
+#   "May this part of my job one day be replaced by a small shell script"
+#
+
+#. Decide the version number.
+
+   export VERSION="1.4.0"
+
+#. Test upgrades of candidate XPI in latest Firefox and TBB product matrix
+
+   # TODO: Currently manual
+
+#. Generate changelog from git shortlog
+
+   # TODO: Currently manual
+
+#. tx noise: https://svn.torproject.org/svn/translation/trunk/documentation/howto.txt
+
+   cd torbutton.git/trans_tools/po
+   torsocks svn up
+   torsocks tx pull -a
+   cd ..
+   ./validate_all.sh | less
+   torsocks ./new_tb_strings.sh
+   ./mkmoz.sh
+   ./mvmoz.sh
+   cd ..
+   git diff .
+   git commit .
+
+#. Tag the release:
+
+   git tag -s ${VERSION}
+   torsocks git push origin-push --tags
+
+#. Create the .xpi
+
+   cd /tmp/
+   torsocks git clone git://git.torproject.org/git/torbutton.git torbutton-release
+   cd torbutton-release
+   git tag -v ${VERSION}   # verify signature against git protocol haaAAXXXX
+   git checkout -b tag-${VERSION} ${VERSION}
+   sh makexpi.sh
+
+#. SHA1 + Sign the .xpi
+
+   gpg -abs ./pkg/torbutton-${VERSION}.xpi
+   sha1sum ./pkg/torbutton-${VERSION}.xpi
+
+#. Upload .xpi to website
+
+   torsocks scp ./pkg/torbutton-${VERSION}.xpi* vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/
+   torsocks scp ./pkg/torbutton-${VERSION}.xpi vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi
+   torsocks scp ./pkg/torbutton-${VERSION}.xpi.asc vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi.asc
+
+#. Update website
+
+   cd website-svn
+   vim ./include/versions.wmi   # Add sha1 and version
+   vim ./torbutton/update.rdf   # Add <li> and <description> w/ sha1 and version
+   torsocks svn up .
+   torsocks svn commit .
+
+#. Test firefox autoupdate
+
+   # Wait for mirrors to sync first.. Pester phobos/weasel/helix/Sebastian for
+   # website push + dist chown + mirror update.
+   # TODO: Currently manual
+
+#. Announce on tor-talk
+
+   # FIXME: May need eventual minor improvements
+   echo "Troll food." | mail tor-talk@lists.torproject.org -s "Feed the trolls"
