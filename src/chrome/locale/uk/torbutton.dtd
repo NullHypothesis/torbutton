@@ -1,24 +1,31 @@
 <!ENTITY torbutton.prefs.title "Налаштування Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Показати опції">
+<!ENTITY torbutton.prefs.display_settings "Показати параметри">
 <!ENTITY torbutton.prefs.display_panel "Показувати стан проксі Tor у рядку стану">
 <!ENTITY torbutton.prefs.panel_format "Формат поля у рядку стану">
 <!ENTITY torbutton.prefs.panel_text_format "Текст">
-<!ENTITY torbutton.prefs.panel_icon_format "Іконка">
-<!ENTITY torbutton.prefs.tor_settings "Властивості проксі">
-<!ENTITY torbutton.prefs.recommended_settings "Використовувати рекомендовані значення для моєї версії Фірефоху">
+<!ENTITY torbutton.prefs.panel_icon_format "Значок">
+<!ENTITY torbutton.prefs.tor_settings "Параметри проксі">
+<!ENTITY torbutton.prefs.recommended_settings "Використовувати рекомендовані параметри для моєї версії Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Використовувати Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Використовувати Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Використовувати звичайні налаштування проксі">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP проксі:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL проксі:">
 <!ENTITY torbutton.prefs.proxy.host.ftp "FTP проксі:">
 <!ENTITY torbutton.prefs.proxy.host.gopher "Gopher проксі:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS хост:">
+<!ENTITY torbutton.prefs.proxy.host.socks "Вузол SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "Порт:">
 <!ENTITY torbutton.about.title "Про Torbutton">
+<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
+<!ENTITY torbutton.about.code "Code Contributors:">
+<!ENTITY torbutton.about.maintainer "Maintainer:">
+<!ENTITY torbutton.about.security_review "Security Review:">
+<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
+<!ENTITY torbutton.about.make_donation "making a donation.">
 <!ENTITY torbutton.pref_connection.notice "Вимкніть Torbutton, щоб змінити ці налаштування">
 <!ENTITY torbutton.pref_connection.more_info "Більше інформації">
-<!ENTITY torbutton.pref_connection_more_info.title "Допомога">
+<!ENTITY torbutton.pref_connection_more_info.title "Довідка">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton зараз увімкнено. Якщо Ви бажаєте змінити налаштування проксі (не Tor-проксі), прошу вимкнути Torbutton та повернутися сюди. Якщо ж бажана зміна торкатиметься Tor-проксі, прошу це робити через вікно налаштування Torbutton.">
 <!ENTITY torbutton.context_menu.toggle "Змінити стан Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -26,17 +33,17 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Про Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Захист куки">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "Копіювати адресу Tor">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "Відкрити адресу Tor у новій вкладці">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "Відкрити адресу Tor у новому вікні">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Клацніть для запуску Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Налаштування безпеки">
+<!ENTITY torbutton.prefs.sec_settings "Параметри безпеки">
 <!ENTITY torbutton.prefs.block_thread "Блокувати читання історії під час використання Tor (критично)">
 <!ENTITY torbutton.prefs.block_thwrite "Блокувати запис історії під час використання Tor (рекомендовано)">
 <!ENTITY torbutton.prefs.block_nthread "Блокувати читання історії без використання Tor (на Ваш вибір)">
@@ -45,13 +52,13 @@
 <!ENTITY torbutton.prefs.clear_cache "Блокувати дисковий кеш та чистити кеш при зміні стану Tor">
 <!ENTITY torbutton.prefs.block_cache "Блокувати доступ до дискового та кешу у пам’яті при використанні Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Зберігати не-Tor куки у захищеному стані">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Використовувати для вибору діалог захисту куків">
 <!ENTITY torbutton.prefs.mmm_cookies "Я хочу сам керувати своїми куками (небезпечно)">
 <!ENTITY torbutton.prefs.clear_cookies "Чистити куки при зміні стану Tor">
-<!ENTITY torbutton.prefs.disable_plugins "Вимикати плагіни при використанні Tor (критично)">
+<!ENTITY torbutton.prefs.disable_plugins "Вимикати модулі протягом використання Tor (критично)">
 <!ENTITY torbutton.prefs.kill_bad_js "Захоплювати небезпеки у javascript (критично)">
 <!ENTITY torbutton.prefs.isolate_content "Ізолювати динамічний вміст до одного стану Tor (критично)">
-<!ENTITY torbutton.prefs.no_updates "Не дозволяти оновлень при використанні Tor">
+<!ENTITY torbutton.prefs.no_updates "Вимкнути оновлення протягом використання Tor">
 <!ENTITY torbutton.prefs.set_uagent "Встановити юзер агент для використання Tor (критично)">
 <!ENTITY torbutton.prefs.dynamic "Динамічний вміст">
 <!ENTITY torbutton.prefs.cookies "Куки">

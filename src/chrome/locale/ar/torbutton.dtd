@@ -16,6 +16,13 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "وسيط SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "المنفذ:">
 <!ENTITY torbutton.about.title "عن زر تور">
+<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
+<!ENTITY torbutton.about.code "Code Contributors:">
+<!ENTITY torbutton.about.maintainer "Maintainer:">
+<!ENTITY torbutton.about.security_review "Security Review:">
+<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
+<!ENTITY torbutton.about.make_donation "making a donation.">
 <!ENTITY torbutton.pref_connection.notice "عطل زر تور لتغيير هذه الإعدادات.">
 <!ENTITY torbutton.pref_connection.more_info "مزيد من المعلومات">
 <!ENTITY torbutton.pref_connection_more_info.title "التعليمات">
@@ -26,13 +33,13 @@
 <!ENTITY torbutton.context_menu.preferences.key "ف">
 <!ENTITY torbutton.context_menu.about "عن زر تور...">
 <!ENTITY torbutton.context_menu.about.key "ح">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "كعكة الحماية">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "نسخ رابط تور">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "فتح عنوان تور في علامة تبويب جديدة">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "فتح عنوان تور في نافذة جديدة">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "زر تور">
 <!ENTITY torbutton.button.tooltip "انقر لبدء زر تور">
@@ -45,7 +52,7 @@
 <!ENTITY torbutton.prefs.clear_cache "امنع الاختزان على القرص مع تور وامسح كل البيانات عند تبديل حالة تور">
 <!ENTITY torbutton.prefs.block_cache "امنع الولوج إلى بيانات تور على القرص و الذاكرة أثناء عمل تور">
 <!ENTITY torbutton.prefs.cookie_jars "احفظ كعكات سوى تور في وعاء آمن ">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "استخدام حوار كعكة الحماية للاختيار">
 <!ENTITY torbutton.prefs.mmm_cookies "سأدير الكعكات يدويًا (حَرِج)">
 <!ENTITY torbutton.prefs.clear_cookies "امسح الكعكات عند تبديل حالة تور">
 <!ENTITY torbutton.prefs.disable_plugins "عطّل الملحقات أثناء عمل التور (حَرِج)">
@@ -65,9 +72,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "عطّل حفظ الجلسة (محبّذ)">
 <!ENTITY torbutton.prefs.headers "الترويسات">
 <!ENTITY torbutton.prefs.spoof_english "انتحل متصفحًا إنجليزيًا أمريكيًا">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "مرجعية خداعه">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "محاكاة ساخرة ذكية للتحويل أثناء عمل تور (سخرية المجال المرجعي المتقاطع)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "عطّل تخزين DOM أثناء عمل التور (حَرِج)">
 <!ENTITY torbutton.prefs.forms "الإكمال التلقائي">
@@ -76,7 +83,7 @@
 <!ENTITY torbutton.prefs.tor "التور">
 <!ENTITY torbutton.prefs.non_tor "التور معطل">
 <!ENTITY torbutton.prefs.restore_tor "خلال بدء استعادة الجلسة، اضبط حالة التور إلى:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "عند بدء التشغيل المتصفح ، تعيين جالة تور إلى:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "أعد تحميل وعاء الكعكات/امسح الكعكات عند انهيار فيرفكس (محبّذ)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "احفظ الكعكات عن تفعيل تور وعند تعطيله في أوعية محمية (خطر)">
 <!ENTITY torbutton.prefs.clear_http_auth "امسح جلسات المصادقة لـ HTTP (محبّذ)">
@@ -106,23 +113,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "لا وسيط ل:">
 <!ENTITY torbutton.prefs.no_proxy_warning "تحذير: تجنب استخدام أي من أسماء المضيف المذكورة أعلاه">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.prefs.spoofreresh "تحديث المحاكاة الساخرة">
+<!ENTITY torbutton.prefs.refereroptions "خيارات المرجعية الساخرة">
+<!ENTITY torbutton.prefs.nospoof "لا تستخدم محاكاة مرجعية ساخرة">
+<!ENTITY torbutton.prefs.spoofroot "محاكاة ساخرة المجلد الذي يحتوي على الصفحة">
+<!ENTITY torbutton.prefs.spoofdomain "محاكاة ساخرة المجال مثل المرجعية">
+<!ENTITY torbutton.prefs.spoofblank "إجعل المرجعية فارغة">
+<!ENTITY torbutton.cookiedialog.title "إدارة كعكات الحماية">
+<!ENTITY torbutton.cookiedialog.lockCol "محمية">
+<!ENTITY torbutton.cookiedialog.domainCol "استضافة">
+<!ENTITY torbutton.cookiedialog.nameCol "اسم">
+<!ENTITY torbutton.cookiedialog.pathCol "المسار">
+<!ENTITY torbutton.cookiedialog.protectCookie "كعكة الحماية">
+<!ENTITY torbutton.cookiedialog.removeCookie "إزالة الكعك">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "إلغاء كعكة الحماية">
+<!ENTITY torbutton.cookiedialog.removeAllBut "إزالة الكل لكن استمر في الحماية">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "كعكة حماية جديدة">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "لا تحمي الكعكات الجديدة">
 <!ENTITY torbutton.prefs.disable_livemarks "تعطيل العلامات الحية خلال إستعمال التور">
 <!ENTITY torbutton.prefs.dtd_recommended "(محبّذ)">
 <!ENTITY torbutton.prefs.dtd_optional "(اختياري)">

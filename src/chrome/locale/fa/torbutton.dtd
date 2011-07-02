@@ -16,6 +16,13 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "ميزبان SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "درگاهی (Port):">
 <!ENTITY torbutton.about.title "دربارۀ دکمه تُر">
+<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
+<!ENTITY torbutton.about.code "Code Contributors:">
+<!ENTITY torbutton.about.maintainer "Maintainer:">
+<!ENTITY torbutton.about.security_review "Security Review:">
+<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
+<!ENTITY torbutton.about.make_donation "making a donation.">
 <!ENTITY torbutton.pref_connection.notice "غيرفعال کردن دکمه تُر جهت تغيير دراين تنظيمات.">
 <!ENTITY torbutton.pref_connection.more_info "اطلاعات بيشتر">
 <!ENTITY torbutton.pref_connection_more_info.title "راهنما">

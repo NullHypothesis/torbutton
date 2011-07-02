@@ -16,6 +16,13 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS 代理：">
 <!ENTITY torbutton.prefs.proxy.port "端口：">
 <!ENTITY torbutton.about.title "关于 Torbutton">
+<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
+<!ENTITY torbutton.about.code "Code Contributors:">
+<!ENTITY torbutton.about.maintainer "Maintainer:">
+<!ENTITY torbutton.about.security_review "Security Review:">
+<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
+<!ENTITY torbutton.about.make_donation "making a donation.">
 <!ENTITY torbutton.pref_connection.notice "禁用 Torbutton 来改变这些设置。">
 <!ENTITY torbutton.pref_connection.more_info "更多信息">
 <!ENTITY torbutton.pref_connection_more_info.title "帮助">
