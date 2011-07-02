@@ -13,11 +13,11 @@
   * bug #1282: Set fixed window size for each new window.
   * bug #3508: Apply Stanford SafeCache patch (thanks Edward, Collin et al).
   * bug #2361: Make about window work again on FF4+.
+  * bug #3436: T(A)ILS was renamed to Tails.
   * bugfix: Fix a transparent context menu issue on Linux FF4+.
   * misc: Squelch exception from app launcher in error console.
   * misc: Make DuckDuckGo the default Google Captcha redirect destination.
   * misc: Make it harder to accidentally toggle torbutton.
-  * misc: T(A)ILS was renamed to Tails.
 
 1.3.3-alpha
   01 May 2011
