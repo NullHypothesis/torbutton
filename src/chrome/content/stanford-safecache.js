@@ -97,19 +97,29 @@ SSC_RequestListener.prototype =
 
   onModifyRequest: function(channel) {
     var parent = null;
-    if (channel.notificationCallbacks) {
-        try {
-            var wind = channel.notificationCallbacks.QueryInterface(
-                    Components.interfaces.nsIInterfaceRequestor).getInterface(
-                        Components.interfaces.nsIDOMWindow);
-            parent = wind.window.top.location;
-        } catch(e) {
-        }
-        SSC_dump("Parent "+parent+" for "+ channel.URI.spec);
+    if (channel.notificationCallbacks ||
+           channel.loadGroup && channel.loadGroup.notificationCallbacks) {
+      var callbacks = null;
+      if (channel.notificationCallbacks) {
+        callbacks = channel.notificationCallbacks;
+      } else {
+        callbacks = channel.loadGroup.notificationCallbacks;
+      }
+      try {
+          var wind = callbacks.QueryInterface(
+                  Components.interfaces.nsIInterfaceRequestor).getInterface(
+                      Components.interfaces.nsIDOMWindow);
+          parent = wind.window.top.location;
+      } catch(e) {
+      }
+      SSC_dump("Parent "+parent+" for "+ channel.URI.spec);
     }
 
     if (channel.documentURI && channel.documentURI == channel.URI) {
       parent = null;  // first party interaction
+    } else if(!parent) {
+      // Questionable first party interaction..
+      SSC_dump("No parent parent for "+ channel.URI.spec);
     }
 
     // Same-origin policy
