@@ -42,7 +42,7 @@ var SSC_debug = true;
  */
 function SSC_dump(msg) {
   if (SSC_debug)
-    torbutton_log(2, "SSC: " + msg);
+    torbutton_log(3, "SSC: " + msg);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ SSC_RequestListener.prototype =
         subject.QueryInterface(Components.interfaces.nsICachingChannel);
         this.onExamineResponse(subject);
       }
-    } catch(e) {try {SSC_dump(e);} catch(ex) {}} 
+    } catch(e) {try {torbutton_log(4, "SSC: "+e);} catch(ex) {}} 
   },
 
   bypassCache: function(channel) {
@@ -96,7 +96,7 @@ SSC_RequestListener.prototype =
   },
 
   onModifyRequest: function(channel) {
-    var parent = null;
+    var parent_host = null;
     if (channel.notificationCallbacks ||
            channel.loadGroup && channel.loadGroup.notificationCallbacks) {
       var callbacks = null;
@@ -109,26 +109,30 @@ SSC_RequestListener.prototype =
           var wind = callbacks.QueryInterface(
                   Components.interfaces.nsIInterfaceRequestor).getInterface(
                       Components.interfaces.nsIDOMWindow);
-          parent = wind.window.top.location;
+          parent_host = wind.window.top.location.hostname;
       } catch(e) {
       }
-      SSC_dump("Parent "+parent+" for "+ channel.URI.spec);
+      SSC_dump("Parent "+parent_host+" for "+ channel.URI.spec);
     }
 
     if (channel.documentURI && channel.documentURI == channel.URI) {
-      parent = null;  // first party interaction
-    } else if(!parent) {
+      parent_host = null;  // first party interaction
+    } else if(!parent_host) {
       // Questionable first party interaction..
-      SSC_dump("No parent parent for "+ channel.URI.spec);
+      if (!channel.referrer) {
+        torbutton_safelog(3, "SSC: No parent for ", channel.URI.spec);
+      } else {
+        parent_host = channel.referrer.host;
+      }
     }
 
     // Same-origin policy
     var referrer;
-    if (parent && parent.hostname != channel.URI.host) {
+    if (parent_host && parent_host != channel.URI.host) {
       SSC_dump("Segmenting " + channel.URI.host + 
-               " content loaded by " + parent.host);
-      this.setCacheKey(channel, parent.hostname);
-      referrer = parent.hostname;
+               " content loaded by " + parent_host);
+      this.setCacheKey(channel, parent_host);
+      referrer = parent_host;
     } else {
       referrer = channel.URI.host;  
       if(!this.readCacheKey(channel.cacheKey)) {
@@ -139,9 +143,9 @@ SSC_RequestListener.prototype =
     }
 
     if (this.controller.getBlockThirdPartyCache()) {
-      if(parent && parent.hostname != channel.URI.host) {
+      if(parent_host && parent_host != channel.URI.host) {
           //SSC_dump("Third party cache blocked for " + channel.URI.spec +
-          //" content loaded by " + parent.spec);
+          //" content loaded by " + parent_host);
           this.bypassCache(channel);
       }
     }
@@ -227,6 +231,7 @@ SSC_RequestListener.prototype =
     
     if(setCookie) {
         var parent = null;
+        // XXX: need to use loadGroup here if null..
         if (channel.notificationCallbacks) {
             var wind = channel.notificationCallbacks.QueryInterface(
                     Components.interfaces.nsIInterfaceRequestor).getInterface(
