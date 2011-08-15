@@ -147,6 +147,7 @@ pref("extensions.torbutton.block_ntforms",false);
 pref("extensions.torbutton.clear_http_auth",true);
 pref("extensions.torbutton.close_tor",false);
 pref("extensions.torbutton.close_nontor",false);
+pref("extensions.torbutton.close_newnym",true);
 pref("extensions.torbutton.block_js_history",true);
 pref("extensions.torbutton.resize_on_toggle",true);
 pref("extensions.torbutton.resize_new_windows",true);

@@ -19,6 +19,10 @@ var m_tb_ff35 = false;
 var m_tb_ff36 = false;
 var m_tb_ff4 = false;
 
+var m_tb_control_port = null;
+var m_tb_control_host = null;
+var m_tb_control_pass = null;
+
 var torbutton_window_pref_observer =
 {
     register: function()
@@ -382,10 +386,10 @@ function torbutton_toggle(force) {
     if (torbutton_check_status()) {
         // Close on toggle before actually changing proxy settings
         // as additional safety precaution
-        torbutton_close_on_toggle(false);
+        torbutton_close_on_toggle(false, false);
         torbutton_disable_tor();
     } else {
-        torbutton_close_on_toggle(true);
+        torbutton_close_on_toggle(true, false);
         torbutton_enable_tor(false);
     }
 }
@@ -480,6 +484,23 @@ function torbutton_init() {
         m_tb_ff36 = true;
     } else {
         m_tb_ff36 = false;
+    }
+
+    var environ = Components.classes["@mozilla.org/process/environment;1"]
+                   .getService(Components.interfaces.nsIEnvironment);
+
+    if (environ.exists("TOR_CONTROL_PASSWD")) {
+        m_tb_control_pass = environ.get("TOR_CONTROL_PASSWD");
+    }
+
+    if (environ.exists("TOR_CONTROL_PORT")) {
+        m_tb_control_port = environ.get("TOR_CONTROL_PORT");
+    }
+
+    if (environ.exists("TOR_CONTROL_HOST")) {
+        m_tb_control_host = environ.get("TOR_CONTROL_HOST");
+    } else {
+        m_tb_control_host = "127.0.0.1";
     }
 
     // initialize preferences before we start our prefs observer
@@ -630,6 +651,9 @@ function torbutton_open_link_as_tor(tabFlag) {
    else
     mainWindow.open(myURI.spec);    
 }
+
+
+
 
 // this function duplicates a lot of code in preferences.js for deciding our
 // recommended settings.  figure out a way to eliminate the redundancy.
@@ -1190,6 +1214,209 @@ function torbutton_set_uagent() {
     }
 }
 
+function torbutton_socket_readline(input) {
+  var str = "";
+  var bytes;
+  while((bytes = input.readBytes(1)) != "\n") {
+    str += bytes;
+  }
+  return str;
+}
+
+// Executes a command on the control port.
+// Return 0 in error, 1 for success.
+function torbutton_send_ctrl_cmd(command) {
+  try {
+    var socketTransportService = Components.classes["@mozilla.org/network/socket-transport-service;1"]
+        .getService(Components.interfaces.nsISocketTransportService);
+    var socket = socketTransportService.createTransport(null, 0, m_tb_control_host, m_tb_control_port, null);
+    var input = socket.openInputStream(3, 0, 0); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
+    var output = socket.openOutputStream(3, 0, 0); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
+
+    inputStream     = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
+    outputStream    = Cc["@mozilla.org/binaryoutputstream;1"].createInstance(Ci.nsIBinaryOutputStream);
+
+    inputStream.setInputStream(input);
+    outputStream.setOutputStream(output);
+
+    var auth_cmd = "AUTHENTICATE "+m_tb_control_pass+"\r\n";
+    outputStream.writeBytes(auth_cmd, auth_cmd.length);
+
+    var bytes = torbutton_socket_readline(inputStream);
+
+    if (bytes.indexOf("250") != 0) {
+      torbutton_safelog(4, "Unexpected auth response on control port "+m_tb_control_port+":", bytes);
+      return 0;
+    }
+
+    outputStream.writeBytes(command, command.length);
+    bytes = torbutton_socket_readline(inputStream);
+    if(bytes.indexOf("250") != 0) {
+      torbutton_safelog(4, "Unexpected command response on control port "+m_tb_control_port+":", bytes);
+      return 0;
+    }
+
+    socket.close(1);
+    return 1;
+  } catch(e) {
+    torbutton_log(4, "Exception on control port "+e);
+    return 0;
+  }
+}
+
+/* The "New Identity" implementation does the following:
+ *   1. Tag all tabs as non-tor
+ *   2. Disables Javascript and plugins on all tabs
+ *   3. Clears state:
+ *      a. OCSP
+ *      b. Cache
+ *      c. Site-specific zoom
+ *      d. Cookies+DOM Storage+safe browsing key
+ *      e. google wifi geolocation token
+ *      f. http auth
+ *      g. SSL Session IDs
+ *      h. last open location url
+ *   4. Sends tor the NEWNYM signal to get a new circuit
+ *
+ * XXX: intermediate SSL certificates are not cleared.
+ */
+function torbutton_new_identity() {
+  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+      .getService(Components.interfaces.nsIWindowMediator);
+  var enumerator = wm.getEnumerator("navigator:browser");
+  var closeWins = new Array();
+  while(enumerator.hasMoreElements()) {
+      var win = enumerator.getNext();
+      var browser = win.getBrowser();
+      if(!browser) {
+          torbutton_log(5, "No browser for possible closed window");
+          continue;
+      }
+      var tabs = browser.browsers.length;
+
+      torbutton_log(3, "Length: "+browser.browsers.length);
+
+      for(var i = 0; i < tabs; i++) {
+        torbutton_apply_tab_tag(browser.browsers[i], false);
+      }
+  }
+
+  torbutton_toggle_jsplugins(true, true, true);
+
+  m_tb_prefs.setBoolPref("browser.zoom.siteSpecific",
+                         !m_tb_prefs.getBoolPref("browser.zoom.siteSpecific"));
+  m_tb_prefs.setBoolPref("browser.zoom.siteSpecific",
+                         !m_tb_prefs.getBoolPref("browser.zoom.siteSpecific"));
+
+  if(m_tb_ff35) {
+      try {
+          if(m_tb_prefs.prefHasUserValue("geo.wifi.access_token")) {
+              m_tb_prefs.clearUserPref("geo.wifi.access_token");
+          }
+      } catch(e) {
+          torbutton_log(3, "Exception on wifi token clear: "+e);
+      }
+  }
+
+  try {
+      if(m_tb_prefs.prefHasUserValue("general.open_location.last_url")) {
+          m_tb_prefs.clearUserPref("general.open_location.last_url");
+      }
+  } catch(e) {
+      torbutton_log(3, "Exception on wifi token clear: "+e);
+  }
+
+  torbutton_close_on_toggle(true, true);
+
+  if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
+      var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
+          getService(Components.interfaces.nsIHttpAuthManager);
+      auth.clearAll();
+  }
+
+  try {
+      var secMgr = Cc["@mozilla.org/security/crypto;1"].
+          getService(Ci.nsIDOMCrypto);
+      secMgr.logout();
+      torbutton_log(3, "nsIDOMCrypto logout succeeded");
+  } catch(e) {
+      torbutton_log(4, "Failed to use nsIDOMCrypto to clear SSL Session ids. Falling back to old method. Error: "+e);
+
+      // This clears the SSL Identifier Cache.
+      // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747 and
+      // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134
+      m_tb_prefs.setBoolPref("security.enable_ssl2", 
+              !m_tb_prefs.getBoolPref("security.enable_ssl2"));
+      m_tb_prefs.setBoolPref("security.enable_ssl2", 
+              !m_tb_prefs.getBoolPref("security.enable_ssl2"));
+  }
+
+  // This clears the OCSP cache.
+  //
+  // nsNSSComponent::Observe() watches security.OCSP.enabled, which calls
+  // setOCSPOptions(), which if set to 0, calls CERT_DisableOCSPChecking(),
+  // which calls CERT_ClearOCSPCache().
+  // See: http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp
+  var ocsp = m_tb_prefs.getIntPref("security.OCSP.enabled");
+  m_tb_prefs.setIntPref("security.OCSP.enabled", 0);
+  m_tb_prefs.setIntPref("security.OCSP.enabled", ocsp);
+
+  // This clears the STS cache and site permissions on Tor Browser
+  // XXX: Tie to some kind of disk-ok pref?
+  try {
+      m_tb_prefs.setBoolPref('permissions.memory_only', false);
+      m_tb_prefs.setBoolPref('permissions.memory_only', true);
+  } catch(e) {
+      // Actually, this catch does not appear to be needed. Leaving it in for
+      // safety though.
+      torbutton_log(3, "Can't clear STS/Permissions: Not Tor Browser: "+e);
+  }
+
+  // This clears the undo tab history.
+  var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
+  m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
+  m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
+
+  var cache = Components.classes["@mozilla.org/network/cache-service;1"].
+      getService(Components.interfaces.nsICacheService);
+  try {
+      cache.evictEntries(0);
+  } catch(e) {
+      torbutton_log(5, "Exception on cache clearing: "+e);
+  }
+
+  if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections')) {
+    var selector = Components.classes["@torproject.org/cookie-jar-selector;1"]
+                    .getService(Components.interfaces.nsISupports)
+                    .wrappedJSObject;
+    // This emits "cookie-changed", "cleared", which kills DOM storage
+    // and the safe browsing API key
+    selector.clearUnprotectedCookies("tor");
+  } else {
+    torbutton_clear_cookies();
+  }
+
+  // Force prefs to be synced to disk
+  var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefService);
+  prefService.savePrefFile(null);
+
+  // We only support TBB for newnym.
+  if (!m_tb_control_pass || !m_tb_control_port) {
+    var o_stringbundle = torbutton_get_stringbundle();
+    var warning = o_stringbundle.GetStringFromName("torbutton.popup.no_newnym");
+    torbutton_log(5, "Torbutton cannot safely newnym. It does not have access to the Tor Control Port.");
+    window.alert(warning);
+  } else {
+    if(torbutton_send_ctrl_cmd("SIGNAL NEWNYM\r\n") == 0) {
+      torbutton_log(5, "Torbutton was unable to request a new circuit from Tor");
+    }
+  }
+
+  torbutton_log(3, "New identity successful");
+
+}
+
 
 // NOTE: If you touch any additional prefs in here, be sure to update
 // the list in torbutton_util.js::torbutton_reset_browser_prefs()
@@ -1565,7 +1792,7 @@ function torbutton_update_status(mode, force_update) {
     torbutton_set_timezone(mode, false);
 
     // This call also has to be here for 3rd party proxy changers.
-    torbutton_close_on_toggle(mode);
+    torbutton_close_on_toggle(mode, false);
 
     if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
         var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
@@ -1668,11 +1895,16 @@ function torbutton_update_status(mode, force_update) {
     torbutton_log(3, "Settings applied for mode: "+mode);
 }
 
-function torbutton_close_on_toggle(mode) {
+function torbutton_close_on_toggle(mode, newnym) {
     var close_tor = m_tb_prefs.getBoolPref("extensions.torbutton.close_tor");
     var close_nontor = m_tb_prefs.getBoolPref("extensions.torbutton.close_nontor");
+    var close_newnym = m_tb_prefs.getBoolPref("extensions.torbutton.close_newnym");
 
-    if((!close_tor && !mode) || (mode && !close_nontor)) {
+    if (newnym) {
+      if (!close_newnym) {
+        torbutton_log(3, "Not closing tabs");
+      }
+    } else if((mode && !close_nontor) || (!mode && !close_tor)) {
         torbutton_log(3, "Not closing tabs");
         return;
     }
@@ -1730,6 +1962,9 @@ function torbutton_check_protections()
   var locked_pref = m_tb_prefs.getBoolPref("extensions.torbutton.locked_mode")
   document.getElementById("torbutton-cookie-protector").disabled = !cookie_pref;
   document.getElementById("torbutton-toggle").collapsed = locked_pref;
+
+  if (!m_tb_control_pass || !m_tb_control_port)
+    document.getElementById("torbutton-new-identity").disabled = true;
 }
 
 function torbutton_open_cookie_dialog() {

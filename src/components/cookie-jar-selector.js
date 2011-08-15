@@ -396,6 +396,10 @@ function CookieJarSelector() {
         }
         protcookie = false;
       }
+      // Emit cookie-changed event. This instructs other components to clear their identifiers
+      // (Specifically DOM storage and safe browsing, but possibly others)
+      var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(nsIObserverService);
+      obsSvc.notifyObservers(this, "cookie-changed", "cleared");
     } catch (e) {
       this.logger.log(3, "Error deleting unprotected cookies: " + e);
     }
