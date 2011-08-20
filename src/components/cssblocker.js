@@ -312,6 +312,11 @@ ContentPolicy.prototype = {
 			wind = node;
 		}
 
+        /*
+         * This clause does in fact occurr. It causes us to break hotmail
+         * by blocking some of their javascript..
+         *
+         * https://trac.torproject.org/projects/tor/ticket/3580
         if (contentType == 5) { // Object
             // Never seems to happen.. But it would be nice if we 
             // could handle it either here or shouldProcess, instead of in 
@@ -322,6 +327,7 @@ ContentPolicy.prototype = {
                 return block;
             }
         }
+        */
 
         if (!wind || !wind.top.location || !wind.top.location.href) {
             this.logger.safe_log(4, "Skipping no location: ",
