@@ -55,6 +55,7 @@ function SSC_dump(msg) {
 
 function SSC_RequestListener(controller) {
   this.controller = controller;
+  this.cookie_permissions = Cc["@mozilla.org/cookie/permission;1"].getService(Ci.nsICookiePermission);
 }
 
 SSC_RequestListener.prototype =
@@ -119,10 +120,16 @@ SSC_RequestListener.prototype =
       parent_host = null;  // first party interaction
     } else if(!parent_host) {
       // Questionable first party interaction..
-      if (!channel.referrer) {
-        torbutton_safelog(3, "SSC: No parent for ", channel.URI.spec);
-      } else {
-        parent_host = channel.referrer.host;
+      try {
+        var anuri = this.cookie_permissions.getOriginatingURI(channel);
+        parent_host = anuri.host;
+      } catch(e) {
+        torbutton_safelog(2, "Cookie API failed to get parent: "+e,channel.URI.spec);
+        if (!channel.referrer) {
+          torbutton_safelog(3, "SSC: No parent for ", channel.URI.spec);
+        } else {
+          parent_host = channel.referrer.host;
+        }
       }
     }
 
