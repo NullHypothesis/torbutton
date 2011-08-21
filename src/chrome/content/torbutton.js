@@ -4177,7 +4177,7 @@ function torbutton_update_tags(win, new_loc) {
 //    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
 //  - pure javascript pages/non-text/html pages
 //  - Messing with variables/existing hooks
-function torbutton_hookdoc(win, doc, state_change) {
+function torbutton_hookdoc(win, doc, state_change, referrer) {
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
         return;
@@ -4187,6 +4187,21 @@ function torbutton_hookdoc(win, doc, state_change) {
     if(doc && doc.doctype) {
         torbutton_log(2, "Type: "+doc.doctype.name);
     }
+
+    try {
+        // Ticket #3414: Apply referer policy to window.name.
+        //
+        // This keeps window.name clean between fresh urls.
+        // It should also apply to iframes because hookdoc gets called for all
+        // frames and subdocuments.
+        if (!referrer || referrer.spec == "") {
+            win.name = null;
+            win.window.name = null;
+        }
+    } catch(e) {
+        torbutton_log(4, "Failed to reset window.name: "+e)
+    }
+
     
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
 
@@ -4435,7 +4450,12 @@ function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
             if(doc) {
                 var tag_change = torbutton_update_tags(DOMWindow.window, new_loc);
                 if(doc.domain) {
-                    torbutton_hookdoc(DOMWindow.window, doc, tag_change);
+                    var referrer = null;
+                    try {
+                        var hreq = aRequest.QueryInterface(Ci.nsIHttpChannel);
+                        referrer = hreq.referrer;
+                    } catch(e) {}
+                    torbutton_hookdoc(DOMWindow.window, doc, tag_change, referrer);
                 }
             }
         } catch(e) {
