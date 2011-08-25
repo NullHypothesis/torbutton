@@ -18,6 +18,7 @@ var m_tb_ff3 = false;
 var m_tb_ff35 = false;
 var m_tb_ff36 = false;
 var m_tb_ff4 = false;
+var m_tb_tbb = false;
 
 var m_tb_control_port = null;
 var m_tb_control_host = null;
@@ -491,6 +492,10 @@ function torbutton_init() {
 
     if (environ.exists("TOR_CONTROL_PASSWD")) {
         m_tb_control_pass = environ.get("TOR_CONTROL_PASSWD");
+
+        // FIXME: We might want a check to use to set this in the future,
+        // but this works fine for now.
+        m_tb_tbb = true;
     }
 
     if (environ.exists("TOR_CONTROL_PORT")) {
@@ -1417,6 +1422,17 @@ function torbutton_new_identity() {
 
 }
 
+// toggles plugins: true for disabled, false for enabled
+function torbutton_toggle_plugins(disable_plugins) {
+  if (m_tb_tbb) {
+    var PH=Cc["@mozilla.org/plugin/host;1"].getService(Ci.nsIPluginHost);
+    var P=PH.getPluginTags({});
+    for(var i=0; i<P.length; i++) {
+        P[i].disabled=disable_plugins;
+    }
+  }
+}
+
 
 // NOTE: If you touch any additional prefs in here, be sure to update
 // the list in torbutton_util.js::torbutton_reset_browser_prefs()
@@ -1462,6 +1478,8 @@ function torbutton_update_status(mode, force_update) {
     // Toggle JS state early, since content window JS runs in a different
     // thread
     torbutton_log(2, 'Toggling JS state');
+
+    torbutton_toggle_plugins(mode && torprefs.getBoolPref("no_tor_plugins"));
 
     torbutton_toggle_jsplugins(mode, 
             changed && torprefs.getBoolPref("isolate_content"),
@@ -2541,10 +2559,12 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
         if (b && b.docShell) {
             // Only allow plugins if the tab load was from an 
             // non-tor state and the current tor state is off.
-            if(kill_plugins) 
-                b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
-            else 
-                b.docShell.allowPlugins = true;
+            if (!m_tb_tbb) {
+              if(kill_plugins) 
+                  b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
+              else 
+                  b.docShell.allowPlugins = true;
+            }
 
             // Likewise for DNS prefetch
             if(m_tb_ff35) {
@@ -2644,7 +2664,7 @@ function torbutton_apply_tab_tag(browser, tag) {
 }
 
 function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
-    if (!tor_tag && no_plugins) {
+    if (!tor_tag && no_plugins && !m_tb_tbb) {
         browser.docShell.allowPlugins = tor_tag;
     }
 
@@ -2713,7 +2733,7 @@ function torbutton_set_launch_state(state, session_restore) {
 
             if (state) {
                 if(b && b.docShell){
-                    if(no_plugins) b.docShell.allowPlugins = false;
+                    if(no_plugins && !m_tb_tbb) b.docShell.allowPlugins = false;
                     if(m_tb_ff35) {
                         if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
                           b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
@@ -3706,6 +3726,10 @@ function torbutton_do_startup()
                 torbutton_log(3, "Remoting window closed.");
             }
         }
+    
+        torbutton_toggle_plugins(tor_enabled
+                && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+
 
         if (tor_enabled) {
           // Need to maybe generate google cookie if tor is enabled
@@ -4123,7 +4147,10 @@ function torbutton_update_tags(win, new_loc) {
         }
 
         torbutton_apply_tab_tag(browser, !tor_tag);
-        browser.docShell.allowPlugins = tor_tag || !kill_plugins;
+
+        if (!m_tb_tbb) {
+          browser.docShell.allowPlugins = tor_tag || !kill_plugins;
+        }
 
         /* We want to disable allowDNSPrefetch on Tor-loaded tabs
          * before the load, because we don't want prefetch to be enabled
