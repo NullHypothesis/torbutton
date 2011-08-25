@@ -347,7 +347,7 @@
           <checkbox id="torbutton_jarCACerts" label="&torbutton.prefs.jar_ca_certs;" 
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
 -->
-           <radiogroup id="torbutton_refererSpoofGroup" label="&torbutton.prefs.refererspoofing;">
+           <radiogroup id="torbutton_refererSpoofGroup" label="&torbutton.prefs.refererspoofing;" collapsed="true">
               <radio id="torbutton_smartSpoof" label="&torbutton.prefs.smartspoof;" oncommand="torbutton_prefs_set_field_attributes(document)" />              
               <radio id="torbutton_noRefSpoof" label="&torbutton.prefs.nospoof;" oncommand="torbutton_prefs_set_field_attributes(document)" />
               <radio id="torbutton_blankReferer" label="&torbutton.prefs.spoofblank;" oncommand="torbutton_prefs_set_field_attributes(document)" />
