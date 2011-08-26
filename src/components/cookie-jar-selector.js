@@ -364,8 +364,11 @@ function CookieJarSelector() {
     try {
       var cookiesAsXml = this.getProtectedCookies(name);
       if (cookiesAsXml == null || typeof(cookiesAsXml) == "undefined"
-              || cookiesAsXml.toString() == "")
-        return;//file does not exist - no protected cookies
+              || cookiesAsXml.toString() == "") {
+        //file does not exist - no protected cookies. Clear them all.
+        this.clearCookies();
+        return;
+      }
       var cookiemanager =
         Cc["@mozilla.org/cookiemanager;1"]
         .getService(Ci.nsICookieManager2);
