@@ -1281,6 +1281,7 @@ function torbutton_send_ctrl_cmd(command) {
  *      f. http auth
  *      g. SSL Session IDs
  *      h. last open location url
+ *      i. clear content prefs
  *   4. Sends tor the NEWNYM signal to get a new circuit
  *
  * XXX: intermediate SSL certificates are not cleared.
@@ -1400,6 +1401,10 @@ function torbutton_new_identity() {
   } else {
     torbutton_clear_cookies();
   }
+
+  var cps = Cc["@mozilla.org/content-pref/service;1"].
+      createInstance(Ci.nsIContentPrefService);
+  cps.removeGroupedPrefs();
 
   // Force prefs to be synced to disk
   var prefService = Components.classes["@mozilla.org/preferences-service;1"]
