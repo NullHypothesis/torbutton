@@ -1302,7 +1302,7 @@ function torbutton_new_identity() {
       torbutton_log(3, "Length: "+browser.browsers.length);
 
       for(var i = 0; i < tabs; i++) {
-        torbutton_apply_tab_tag(browser.browsers[i], false);
+        torbutton_apply_tab_tag(browser, browser.browsers[i], false);
       }
   }
 
@@ -2483,7 +2483,7 @@ function torbutton_jar_certs(mode) {
 
 // -------------- JS/PLUGIN HANDLING CODE ---------------------
 
-function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
+function torbutton_check_js_tag(tabbrowser, browser, tor_enabled, js_enabled) {
     var eventSuppressor = null;
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         try {
@@ -2494,7 +2494,7 @@ function torbutton_check_js_tag(browser, tor_enabled, js_enabled) {
         // Defensive programming to tag this window here to 
         // an alternate tor state. It wil lmake this window totally
         // useless, but that is better than some undefined state
-        torbutton_apply_tab_tag(browser, !tor_enabled);
+        torbutton_apply_tab_tag(tabbrowser, browser, !tor_enabled);
     }
 
     /* Solution from: https://bugzilla.mozilla.org/show_bug.cgi?id=409737 */
@@ -2575,7 +2575,7 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
             }
 
             if(isolate_dyn) {
-                torbutton_check_js_tag(b, tor_enabled, js_enabled);
+                torbutton_check_js_tag(browser, b, tor_enabled, js_enabled);
                 // kill meta-refresh and existing page loading 
                 b.webNavigation.stop(b.webNavigation.STOP_ALL);
             }
@@ -2637,26 +2637,32 @@ tbHistoryListener.prototype = {
     OnHistoryReload: function(uri,flags) { return this.f1(); }
 };
 
-function torbutton_apply_tab_tag(browser, tag) {
+function torbutton_apply_tab_tag(tabbrowser, browser, tag) {
    if (typeof(browser["__tb_tor_fetched"]) == "undefined" ||
            browser.__tb_tor_fetched != tag) {
      // Only update the browser's session store tag if the tag has changed.
      // This is an expensive operation.
      var ss = Components.classes["@mozilla.org/browser/sessionstore;1"]
                              .getService(Components.interfaces.nsISessionStore);
-
-     // http://stackoverflow.com/questions/3374056/firefox-gbrowser-getbrowserfortab-but-no-gbrowser-gettabforbrowser
-     var mTabs = gBrowser.mTabContainer.childNodes;
+     
      var tab = null;
-     for (var i=0; i<mTabs.length; i++) {
-         if (mTabs[i].linkedBrowser == browser) {
-             tab = mTabs[i];
-         }
+
+     // XXX: if tabbrowser is null, we may either write or omit session store data..
+     // This should only happen in toggle mode, though.
+     if (tabbrowser) {
+       // http://stackoverflow.com/questions/3374056/firefox-gbrowser-getbrowserfortab-but-no-gbrowser-gettabforbrowser
+       var mTabs = tabbrowser.mTabContainer.childNodes;
+       for (var i=0; i<mTabs.length; i++) {
+           if (mTabs[i].linkedBrowser == browser) {
+               tab = mTabs[i];
+           }
+       }
      }
      if (tab)
        ss.setTabValue(tab, "__tb_tor_fetched", tag.toString());
      else
        torbutton_log(5, "No tab found for session store tag.");
+
    }
    var oldtag = browser.__tb_tor_fetched;
    browser.__tb_tor_fetched = tag;
@@ -2677,7 +2683,7 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     // Only tag new windows
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
         torbutton_log(3, "Tagging new window: "+tor_tag);
-        torbutton_apply_tab_tag(browser, !tor_tag);
+        torbutton_apply_tab_tag(gBrowser, browser, !tor_tag);
 
         // XXX: Do we need to remove this listener on tab close?
         // No, but we probably do need to remove it on window close!
@@ -2750,7 +2756,7 @@ function torbutton_set_launch_state(state, session_restore) {
                     }
                 }
             }
-            torbutton_apply_tab_tag(b, state);
+            torbutton_apply_tab_tag(browser, b, state);
         }
     }
 
@@ -4114,7 +4120,7 @@ function torbutton_update_tags(win, new_loc) {
             // Defensive programming to tag this window here to 
             // an alternate tor state. It wil lmake this window totally
             // useless, but that is better than some undefined state
-            torbutton_apply_tab_tag(browser, tor_tag);
+            torbutton_apply_tab_tag(null, browser, tor_tag);
         }
         if(browser.__tb_tor_fetched != !tor_tag) {
             tag_change = true;
@@ -4146,7 +4152,7 @@ function torbutton_update_tags(win, new_loc) {
             }
         }
 
-        torbutton_apply_tab_tag(browser, !tor_tag);
+        torbutton_apply_tab_tag(null, browser, !tor_tag);
 
         if (!m_tb_tbb) {
           browser.docShell.allowPlugins = tor_tag || !kill_plugins;
