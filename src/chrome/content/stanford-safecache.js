@@ -140,6 +140,18 @@ SSC_RequestListener.prototype =
                " content loaded by " + parent_host);
       this.setCacheKey(channel, parent_host);
       referrer = parent_host;
+      try {
+        // Disable 3rd party http auth
+        // FIXME: Hrmm, this is just going to disable auth for 3rd party domains.
+        // It would be better if we could isolate the auth, but still
+        // allow it to be transmitted.. But I guess, who still uses http auth anyways?
+        if (channel.getRequestHeader("Authorization") !== null) {
+          torbutton_safelog(4, "Removing 3rd party HTTP auth for url: ", channel.URI.spec);
+          channel.setRequestHeader("Authorization", null, false);
+          channel.setRequestHeader("Pragma", null, false);
+          channel.setRequestHeader("Cache-Control", null, false);
+        }
+      } catch (e) {}
     } else {
       referrer = channel.URI.host;  
       if(!this.readCacheKey(channel.cacheKey)) {
