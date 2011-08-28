@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Подробности">
 <!ENTITY torbutton.pref_connection_more_info.title "Подсказка">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton включен.  Если будут изменяться настройки прокси, не являющегося частью сети Tor, необходимо сначала отключить Torbutton и затем вернуться сюда.  Если будут изменяться настройки Tor, необходимо использовать окно настроек Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Изменить состояние Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Настройки...">

@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Daha fazla bilgi">
 <!ENTITY torbutton.pref_connection_more_info.title "Yardım">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbuton şu anda devredışı. Proxy ayarlarını değiştirmek istiyorsan, Torbutonu tekrar devredışı bırak. Genel ayarları değiştirecekten, ayarlar penceresini kullan.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Durum">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Ayarlar">

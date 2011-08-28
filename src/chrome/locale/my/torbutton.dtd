@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "ပိုမုိျပည့္စံုေသာ သတင္းအခ်က္အလက္မ်ားသို႕">
 <!ENTITY torbutton.pref_connection_more_info.title "ကူညီမႈရယူရန္">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton ကုိ လက္ရွိတြင္ အသံုးျပဳႏုိင္ပါသည္။ Tor Proxy မဟုတ္ေသာ ခ်ိန္ညိႇခ်က္မ်ားကို ေျပာင္းလဲ အသံုးျပဳႏုိင္ရန္အတြက္ Torbutton ကုိ အသံုးမျပဳႏိုင္ေအာင္ ပိတ္၍ ယခုေနရာသို႕ ျပန္လာပါ။ Tor ခ်ိန္ညႇိခ်က္မ်ားကို ေျပာင္းလဲလိုပါက Torbutton ဦးစားေပးညႊန္ျပခ်က္မ်ားကို ကို အသံုးျပဳပါ။">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Tor အေျခအေနအခ်က္ျပမႈကို ေျပာင္းလဲရန္">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "ဦးစားေပး ညႊန္ျပမႈမ်ား">

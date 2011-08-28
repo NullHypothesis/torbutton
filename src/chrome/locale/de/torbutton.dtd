@@ -17,16 +17,18 @@
 <!ENTITY torbutton.prefs.proxy.port "Port:">
 <!ENTITY torbutton.about.title "Über Torbutton">
 <!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
+<!ENTITY torbutton.about.summary "Schützt die Privatsphäre deines Tor-Browsings.">
+<!ENTITY torbutton.about.code "Code Beitragende:">
 <!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.security_review "Sicherheitsüberprüfung:">
+<!ENTITY torbutton.about.donate "Wenn du es magst, Tor zu benutzen, ziehst du vielleicht in betracht">
+<!ENTITY torbutton.about.make_donation "zu spenden.">
 <!ENTITY torbutton.pref_connection.notice "Deaktivieren Sie Torbutton, um diese Einstellungen zu verändern.">
 <!ENTITY torbutton.pref_connection.more_info "Mehr Informationen">
 <!ENTITY torbutton.pref_connection_more_info.title "Hilfe">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutten ist momentan aktiv. Wenn Sie die Proxy-Einstellungen für den Betrieb ohne Tor ändern möchten, deaktivieren Sie bitte zuerst Torbutton. Für Änderungen der Tor-Einstellungen verwenden Sie bitte das Fenster &quot;Torbutton-Einstellungen&quot;.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Tor-Modus umschalten">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Einstellungen...">

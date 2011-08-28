@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Več informacij">
 <!ENTITY torbutton.pref_connection_more_info.title "Pomoč">
 <!ENTITY torbutton.pref_connection_more_info.text "Razširitev Torbutton je trenutno omogočena. Če želite spremeniti nastavitve ne-Tor posredniškega strežnika (proxy), razširitev Torbutton najprej onemogočite, nato pa se vrnite na to mesto. Če želite spremeniti nastavitve povezave v Tor omrežje uporabite nastavitve razširitve Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Zamenjaj status anonimizacije">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Nastavitve...">

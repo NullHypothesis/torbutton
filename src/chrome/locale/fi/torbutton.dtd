@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Lisää tietoja">
 <!ENTITY torbutton.pref_connection_more_info.title "Apua">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton on tällähetkellä käytössä. Jos haluat muuttaa välityspalvelinasetuksia joita käytät silloin kun Torbutton ei ole käytössä, ota ensin Torbutton pois päältä (Tor Disabled) ja palaa sitten tänne. Jos haluat muuttaa Tor asetuksia, käytä Torbutton asetukset ikkunaa.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Vaihda Tor tilaa">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Asetukset...">

@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Més informació">
 <!ENTITY torbutton.pref_connection_more_info.title "Ajuda">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton està activat.   Si voleu canviar la configuració del vostre proxy quan no funciona Tor, desactiveu Torbutton i torneu aquí.  Si voleu canviar la configuració de Tor, utilitzeu la finestra de preferències de Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Commuta l'estat de Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferències...">

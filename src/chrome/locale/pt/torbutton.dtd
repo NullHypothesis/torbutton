@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Mais informações">
 <!ENTITY torbutton.pref_connection_more_info.title "Ajuda">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton está activo. Se deseja mudar as configurações de Proxy que não sejam do Tor, por favor desactive o Torbutton e volte aqui. Se deseja alterar as configurações do Tor, por favor, use a janela de preferências do Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Alterar Status Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferências...">

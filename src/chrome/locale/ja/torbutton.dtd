@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "詳細情報">
 <!ENTITY torbutton.pref_connection_more_info.title "ヘルプ">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbuttonは現在オンになっています。もし、非Torの設定を変更する場合は、まずTorbuttonをオフにしてください。Torの設定を変更する場合にはTorbutton設定ウィンドウを使ってください。">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Torのステータスを変更">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "設定...">

@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "更多資訊">
 <!ENTITY torbutton.pref_connection_more_info.title "幫助">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton 現在已經啟用。如果您想改變非-Tor Proxy的設定，請停用Torbutton並回到這裏。如果您想改變Tor的設定，請使用Torbutton 設置視窗。">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "切換 Tor 狀態">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "設置...(P)">

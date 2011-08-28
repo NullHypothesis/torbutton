@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Više informacija">
 <!ENTITY torbutton.pref_connection_more_info.title "Pomoć">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton je trenutno omogućen. Ako biste željeli promijeniti Vaše ne-Tor proxy postavke, molimo Vas da onemogućite Torbutton i vratite se ovdje. Ako biste željeli promijeniti Vaše Tor postavke, molimo Vas, koristite prozor Torbutton postavki.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Promijeni Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "r">
 <!ENTITY torbutton.context_menu.preferences "Postavke...">

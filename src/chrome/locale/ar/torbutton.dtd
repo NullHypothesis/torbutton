@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "مزيد من المعلومات">
 <!ENTITY torbutton.pref_connection_more_info.title "التعليمات">
 <!ENTITY torbutton.pref_connection_more_info.text "زر تور مفعّل حاليًا. إن كنت تريد تغيير إعدادات الوسيط غير المتعلقة بتور، فضلاً عطل زر تور أولاً ثم عد إلى هنا. إن كنت تريد تعديل إعدادات زر تور فاستخدم نافذة تفضيلات زر تور.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "بدّل حالة تور">
 <!ENTITY torbutton.context_menu.toggle.key "ت">
 <!ENTITY torbutton.context_menu.preferences "التفضيلات...">

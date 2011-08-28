@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "更多信息">
 <!ENTITY torbutton.pref_connection_more_info.title "帮助">
 <!ENTITY torbutton.pref_connection_more_info.text "如果您想改变平常的代理设置，请在 Torbutton 禁用时修改。如果您想改变使用 TorButton 时的代理设置，请在 Torbutton 偏好设置中修改。如果这里的设置与 Torbutton 偏好设置中的不同 Torbutton 会被自动禁用。">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "转换 Tor 状态">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "首选项...">

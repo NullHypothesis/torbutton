@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Informatii suplimentare">
 <!ENTITY torbutton.pref_connection_more_info.title "Ajutor">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton este activată în acest moment. Dacă doriţi să schimbaţi setările non-proxy Tor, dezactivaţi Torbutton şi vă rugăm să reveniţi aici. Dacă doriţi să vă schimbaţi setările Tor, vă rugăm să folosiţi fereastra de preferinţă Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Comutarea starii Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferințe...">

@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Thông tin thêm">
 <!ENTITY torbutton.pref_connection_more_info.title "Trợ giúp">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton hiện đang được bật.  Nếu bạn muốn thay đổi thiết lập proxy không-Tor của bạn, vui lòng tắt Torbutton và quay trở lại đây.  Nếu bạn muốn thay đổi thiết lập Tor, vui lòng dùng cửa sổ tùy chỉnh Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Bật/tắt trạng thái Tor">
 <!ENTITY torbutton.context_menu.toggle.key "B">
 <!ENTITY torbutton.context_menu.preferences "Tùy chỉnh...">

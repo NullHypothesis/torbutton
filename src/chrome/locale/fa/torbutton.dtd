@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "اطلاعات بيشتر">
 <!ENTITY torbutton.pref_connection_more_info.title "راهنما">
 <!ENTITY torbutton.pref_connection_more_info.text "دکمه تُرهم اکنون فعال شده است.اگر می‌خواهيد تنظيمات پراکسی غيرمرتبط با تُر را تغيير دهيد، لطفا دکمه تُر را غيرفعال کنيد و دوباره به اينجا بازگرديد. اگر ميخواهيد تنظيمات تُر را تغيير دهيد، از پنجره تنظيمات دکمه تُر استفاده کنيد.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "ضامن فعال/غيرفعال کردن تُر">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "تنظيمات...">

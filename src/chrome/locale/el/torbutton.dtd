@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Περισσότερες πληροφορίες">
 <!ENTITY torbutton.pref_connection_more_info.title "Βοήθεια">
 <!ENTITY torbutton.pref_connection_more_info.text "Το Torbutton είναι ενεργοποιημένο.Αν θέλετε να αλλάξετε τις ρυθμίσεις διαμεσολαβητή, εκτός του Tor, απενεργοποιήστε το Torbutton και επιστρέψτε εδώ. Αν θέλετε να αλλάξετε τις ρυθμίσεις για τον διαμεσολαβητή Tor, χρησιμοποιήστε το παράθυρο επιλογών του Torbutton">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Εναλλαγή κατάστασης λειτουργίας του Tor">
 <!ENTITY torbutton.context_menu.toggle.key "Ε">
 <!ENTITY torbutton.context_menu.preferences "Επιλογές...">

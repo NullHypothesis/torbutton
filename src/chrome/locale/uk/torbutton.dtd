@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Більше інформації">
 <!ENTITY torbutton.pref_connection_more_info.title "Довідка">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton зараз увімкнено. Якщо Ви бажаєте змінити налаштування проксі (не Tor-проксі), прошу вимкнути Torbutton та повернутися сюди. Якщо ж бажана зміна торкатиметься Tor-проксі, прошу це робити через вікно налаштування Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Змінити стан Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Налаштування...">

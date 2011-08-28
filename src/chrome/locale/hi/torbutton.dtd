@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "अधिक जानकारी के लिए ">
 <!ENTITY torbutton.pref_connection_more_info.title "सहायता">
 <!ENTITY torbutton.pref_connection_more_info.text "टोर बटन अभी समर्थकृत है । अगर आप आपने अन्य (टोर के अलावा) प्रोक्सी सेटिंग को बदलना चाहते है तो टोर को असमर्थ करके इधर प्रतिगमन करे । अगर आप अपने टोर सेटिंग को बदलना चाहते है तो कृपिया टोर बटन के प्रिफ़रेन्स खिड़की का उपयोग करे ।">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T/त">
 <!ENTITY torbutton.context_menu.preferences "प्रिफ़रेन्सस ...">

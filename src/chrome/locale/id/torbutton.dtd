@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Informasi lebih lanjut">
 <!ENTITY torbutton.pref_connection_more_info.title "Bantuan">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton sedang aktif.  Apabila Anda ingin mengubah pengaturan proxy selain proxy Tor, Silahkan nonaktifkan Torbutton dan kembali ke sini.  Apabila Anda ingin mengubah pengaturan Tor, silahkan gunakan jendela preferensi Torbutton.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Alihkan Status Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferensi...">

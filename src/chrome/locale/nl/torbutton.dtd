@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Meer informatie">
 <!ENTITY torbutton.pref_connection_more_info.title "Help">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is momenteel ingeschakeld. Als u uw niet aan Tor gerelateerde proxy-instellingen wilt wijzigen dient u Torbutton uit te schakelen en dan hier terug te komen. Als u uw Tor instellingen wilt wijzigen, gebruik dan het Torbutton Voorkeuren-venster.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Tor status wisselen">
 <!ENTITY torbutton.context_menu.toggle.key "W">
 <!ENTITY torbutton.context_menu.preferences "Voorkeuren...">

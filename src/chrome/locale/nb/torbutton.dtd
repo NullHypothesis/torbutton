@@ -27,6 +27,8 @@
 <!ENTITY torbutton.pref_connection.more_info "Mer informasjon">
 <!ENTITY torbutton.pref_connection_more_info.title "Hjelp">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton er for øyeblikket aktivert. Hvis du vil endre på ikke-Tor-proxyinnstillinger, vennligst deaktiver Torbutton og returner hit. Hvis du vil endre på Tor-innstillingene, vennligst bruk Torbutton-innstillingsvinduet.">
+<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Endre Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Innstillinger...">
