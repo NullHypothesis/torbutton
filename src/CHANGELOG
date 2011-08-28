@@ -1,3 +1,15 @@
+1.4.1
+  28 Aug 2011
+  * bug 523: Implement New Identity (for TBB only)
+  * bug 3580: Fix hotmail/live breakage (TBB only)
+  * bug 3748: Disable 3rd party HTTP auth
+  * bug 3665: Fix several corner cases SafeCache isolation
+  * bug 3739: Fix https->http CORS failure for SafeCache
+  * bug 3414: Isolate window.name based on referrer policy
+  * bug 3809: Disable referer spoofing (fixes navigation issues)
+  * bug 3819: Fix API issue with cookie protections
+  * bug 3820: Fix warning w/ session store filter
+
 1.4.0
   30 Jun 2011
   * bug 3101: Disable WebGL. Too many unknowns for now.
