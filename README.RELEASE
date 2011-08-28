@@ -6,6 +6,7 @@
 #. Decide the version number.
 
    export VERSION="1.4.0"
+   vim ./src/install.rdf # edit <em:version> tag to reflect version
 
 #. Test upgrades of candidate XPI in latest Firefox and TBB product matrix
 
@@ -22,7 +23,9 @@
    torsocks tx pull -a
    cd ..
    ./validate_all.sh | less
+
    torsocks ./new_tb_strings.sh
+
    ./mkmoz.sh
    ./mvmoz.sh
    cd ..
@@ -31,7 +34,7 @@
 
 #. Tag the release:
 
-   git tag -s ${VERSION}
+   git tag -u mikeperry@fscked.org -s ${VERSION}
    torsocks git push origin-push --tags
 
 #. Create the .xpi
@@ -59,6 +62,7 @@
    cd website-svn
    vim ./include/versions.wmi   # Add sha1 and version
    vim ./torbutton/update.rdf   # Add <li> and <description> w/ sha1 and version
+
    torsocks svn up .
    torsocks svn commit .
 
