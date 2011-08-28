@@ -44,6 +44,7 @@
    cd torbutton-release
    git tag -v ${VERSION}   # verify signature against git protocol haaAAXXXX
    git checkout -b tag-${VERSION} ${VERSION}
+   mkdir ./pkg
    sh makexpi.sh
 
 #. SHA1 + Sign the .xpi
@@ -53,6 +54,7 @@
 
 #. Upload .xpi to website
 
+   chmod 664 ./pkg/torbutton-${VERSION}.xpi*
    torsocks scp ./pkg/torbutton-${VERSION}.xpi* vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/
    torsocks scp ./pkg/torbutton-${VERSION}.xpi vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi
    torsocks scp ./pkg/torbutton-${VERSION}.xpi.asc vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi.asc
