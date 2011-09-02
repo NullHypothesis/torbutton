@@ -4232,9 +4232,12 @@ function torbutton_hookdoc(win, doc, state_change, referrer) {
         // This keeps window.name clean between fresh urls.
         // It should also apply to iframes because hookdoc gets called for all
         // frames and subdocuments.
-        if (!referrer || referrer.spec == "") {
-            win.name = null;
-            win.window.name = null;
+        //
+        // The about:blank check handles the 'name' attribute of framesets, which
+        // get set before the referer is set on the channel.
+        if ((!referrer || referrer.spec == "") && win.location != "about:blank") {
+            win.name = "";
+            win.window.name = "";
         }
     } catch(e) {
         torbutton_log(4, "Failed to reset window.name: "+e)
