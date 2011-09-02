@@ -861,6 +861,53 @@ function torbutton_restore_nontor_settings()
   torbutton_log(2, 'settings restored');
 }
 
+function torbutton_check_version() {
+  torbutton_log(3, "Checking version");
+  try {
+    var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+                            .createInstance(Components.interfaces.nsIXMLHttpRequest);
+    //var req = new XMLHttpRequest(); Blocked by content policy
+    var url = m_tb_prefs.getCharPref("extensions.torbutton.versioncheck_url");
+    req.open('GET', url, false);
+    req.overrideMimeType("text/json");
+    req.send(null);
+  } catch(e) {
+    if(e.result == 0x80004005) { // NS_ERROR_FAILURE
+      torbutton_log(5, "Version check failed! Is tor running?");
+      return -1;
+    }
+    torbutton_log(5, "Version check failed! Tor internal error: "+e);
+    return -1;
+  }
+  if(req.status == 200) {
+    if(!req.responseText) {
+      torbutton_log(5, "Version check failed! No JSON present!");
+      return -1;
+    }
+    try {
+      var version_list = JSON.parse(req.responseText);
+      // torbrowser.version may not exist..
+      var my_version = m_tb_prefs.getCharPref("torbrowser.version");
+      for (var v in version_list) {
+        if (version_list[v] == my_version) {
+          return 1;
+        }
+      }
+      return 0;
+    } catch(e) {
+      torbutton_log(5, "Version check failed! JSON parsing error: "+e);
+      return -1;
+    }
+  } else if (req.status == 404) {
+    // We're going to assume 404 means the service is not implemented yet.
+    torbutton_log(3, "Version check failed. Versions file is 404.");
+    return -1;
+  }
+  torbutton_log(5, "Version check failed! Web server error: "+req.status);
+  return -1;
+}
+
+
 function torbutton_test_settings() {
     var wasEnabled = true;
     var ret = 0;
@@ -2772,10 +2819,26 @@ function torbutton_set_launch_state(state, session_restore) {
       if (state) {
         torbutton_disable_tor();
         torbutton_enable_tor(true);
-        torbutton_log(4, "Tor state updated.");
+        torbutton_log(3, "Tor state updated.");
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
+          if (m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
+            var is_updated = torbutton_check_version();
+            var locale = m_tb_prefs.getCharPref("general.useragent.locale");
+            if (is_updated == 0) {
+              // In an ideal world, we'd just check for hasUserValue, but we can't do
+              // that, because we set browser.startup.homepage to have a user value already...
+              m_tb_prefs.setCharPref("browser.startup.homepage",
+                      "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0");
+            } else if (is_updated == 1) {
+              var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
+              if (homepage.indexOf("https://check.torproject.org/") == 0) {
+                m_tb_prefs.setCharPref("browser.startup.homepage",
+                          "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1");
+              }
+            }
+          }
           var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
           gBrowser.loadURI(homepage, null, null);
         }
