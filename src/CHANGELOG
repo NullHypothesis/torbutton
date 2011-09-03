@@ -1,3 +1,9 @@
+1.4.2
+  3 Sep 2011
+  * bug 3879: Fix broken framed sites (yopmail, gmane, gmaps, etc)
+  * bug 3337: Fetch check.tp.o page to check versions (TBB only)
+  * Bug 3754: Fix SafeCache OCSP errors (fix for TBB only)
+
 1.4.1
   28 Aug 2011
   * bug 523: Implement New Identity (for TBB only)
