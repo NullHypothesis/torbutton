@@ -27,7 +27,7 @@
 <!ENTITY torbutton.pref_connection.more_info "Mehr Informationen">
 <!ENTITY torbutton.pref_connection_more_info.title "Hilfe">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutten ist momentan aktiv. Wenn Sie die Proxy-Einstellungen für den Betrieb ohne Tor ändern möchten, deaktivieren Sie bitte zuerst Torbutton. Für Änderungen der Tor-Einstellungen verwenden Sie bitte das Fenster &quot;Torbutton-Einstellungen&quot;.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Neue Identität">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Tor-Modus umschalten">
 <!ENTITY torbutton.context_menu.toggle.key "T">
