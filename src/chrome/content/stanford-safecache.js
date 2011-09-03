@@ -89,11 +89,16 @@ SSC_RequestListener.prototype =
   },
 
   setCacheKey: function(channel, str) {
-    var oldData = this.readCacheKey(channel.cacheKey);
-    var newKey = this.newCacheKey(this.getHash(str) + oldData);
-    channel.cacheKey = newKey;
-    SSC_dump("Set cache key to hash(" + str + ") = " + 
+    try {
+      channel.cacheDomain = str;
+      SSC_dump("Set cacheDomain to "+str+" for "+channel.URI.spec);
+    } catch(e) {
+      var oldData = this.readCacheKey(channel);
+      var newKey = this.newCacheKey(this.getHash(str) + oldData);
+      channel.cacheKey = newKey;
+      SSC_dump("Set cache key to hash(" + str + ") = " + 
               newKey.data + " for " + channel.URI.spec);
+    }
   },
 
   onModifyRequest: function(channel) {
@@ -136,7 +141,7 @@ SSC_RequestListener.prototype =
     // Same-origin policy
     var referrer;
     if (parent_host && parent_host != channel.URI.host) {
-      SSC_dump("Segmenting " + channel.URI.host + 
+      SSC_dump("Segmenting " + channel.URI.spec + 
                " content loaded by " + parent_host);
       this.setCacheKey(channel, parent_host);
       referrer = parent_host;
@@ -154,7 +159,7 @@ SSC_RequestListener.prototype =
       } catch (e) {}
     } else {
       referrer = channel.URI.host;  
-      if(!this.readCacheKey(channel.cacheKey)) {
+      if(!this.readCacheKey(channel)) {
         this.setCacheKey(channel, channel.URI.host);
       } else {
         SSC_dump("Existing cache key detected; leaving it unchanged.");
@@ -300,9 +305,13 @@ SSC_RequestListener.prototype =
   },
 
   // Read the integer data contained in a cache key
-  readCacheKey: function(key) {
-    key.QueryInterface(Components.interfaces.nsISupportsPRUint32);
-    return key.data;
+  readCacheKey: function(channel) {
+    try {
+      return channel.cacheDomain;
+    } catch(e) {
+      channel.cacheKey.QueryInterface(Components.interfaces.nsISupportsPRUint32);
+      return channel.cacheKey.data;
+    }
   },
 
   // Construct a new cache key with some integer data
