@@ -1655,10 +1655,13 @@ function torbutton_update_status(mode, force_update) {
     } else {
         torbutton_setBoolPref("extensions.update.enabled", "extension_update",
                 true, mode, changed);
-        torbutton_setBoolPref("app.update.enabled", "app_update",
+        // In TBB, do not touch these two. They must remain off.
+        if (!m_tb_tbb) {
+            torbutton_setBoolPref("app.update.enabled", "app_update",
                 true, mode, changed);
-        torbutton_setBoolPref("app.update.auto", "auto_update",
+            torbutton_setBoolPref("app.update.auto", "auto_update",
                 true, mode, changed);
+        }
         torbutton_setBoolPref("browser.search.update", "search_update",
                 true, mode, changed);
     }
