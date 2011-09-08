@@ -1699,8 +1699,10 @@ function torbutton_update_status(mode, force_update) {
     torbutton_setBoolPref("browser.cache.offline.enable", "offline_cache",
             !mode, mode, changed);
 
-    torbutton_setBoolPref("browser.zoom.siteSpecific", "zoom_specific",
+    if (!m_tb_tbb) {
+      torbutton_setBoolPref("browser.zoom.siteSpecific", "zoom_specific",
             !mode, mode, changed);
+    }
 
     // Disable safebrowsing in Tor for FF2. It fetches some info in 
     // cleartext with no HMAC (Firefox Bug 360387)
