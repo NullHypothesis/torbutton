@@ -402,10 +402,24 @@ function torbutton_set_status() {
         try {
             torbutton_update_status(true, false);
         } catch(e) {
-            // This should never happen.. 
-            // FIXME: Do we need to translate it? I'm guessing not.
-            window.alert("Torbutton: Please file bug report! Error applying Tor settings: "+e);
             torbutton_log(5,'Error applying tor settings: '+e);
+            var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                .getService(Components.interfaces.nsIWindowMediator);
+            var chrome = wm.getMostRecentWindow("navigator:browser");
+            var o_stringbundle = torbutton_get_stringbundle();
+            var warning1 = o_stringbundle.GetStringFromName("torbutton.popup.pref_error");
+
+            if (e.result == 0x80520015 || e.result == 0x80520013) { // NS_ERROR_FILE_ACCESS_DENIED/NS_ERROR_FILE_READ_ONLY
+                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.permission_denied");
+                chrome.alert(warning1+"\n\n"+warning2);
+            } else if (e.result == 0x80520010) { // NS_ERROR_FILE_NO_DEVICE_SPACE
+                var o_stringbundle = torbutton_get_stringbundle();
+                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.device_full");
+                chrome.alert(warning1+"\n\n"+warning2);
+            } else {
+                // This should never happen.. 
+                chrome.alert(warning1+"\n\n"+e);
+            }
             // Setting these prefs should avoid ininite recursion
             // because torbutton_update_status should return immediately
             // on the next call.
@@ -419,10 +433,25 @@ function torbutton_set_status() {
         try {
             torbutton_update_status(false, false);
         } catch(e) {
-            // This should never happen.. 
-            // FIXME: Do we need to translate it? I'm guessing not.
-            window.alert("Torbutton: Please file bug report! Error applying Non-Tor settings: "+e);
             torbutton_log(5,'Error applying nontor settings: '+e);
+
+            var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                .getService(Components.interfaces.nsIWindowMediator);
+            var chrome = wm.getMostRecentWindow("navigator:browser");
+            var o_stringbundle = torbutton_get_stringbundle();
+            var warning1 = o_stringbundle.GetStringFromName("torbutton.popup.pref_error");
+
+            if (e.result == 0x80520015 || e.result == 0x80520013) { // NS_ERROR_FILE_ACCESS_DENIED/NS_ERROR_FILE_READ_ONLY
+                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.permission_denied");
+                chrome.alert(warning1+"\n\n"+warning2);
+            } else if (e.result == 0x80520010) { // NS_ERROR_FILE_NO_DEVICE_SPACE
+                var o_stringbundle = torbutton_get_stringbundle();
+                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.device_full");
+                chrome.alert(warning1+"\n\n"+warning2);
+            } else {
+                // This should never happen.. 
+                chrome.alert(warning1+"\n\n"+e);
+            }
             // Setting these prefs should avoid infinite recursion
             // because torbutton_update_status should return immediately
             // on the next call.
