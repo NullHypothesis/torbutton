@@ -1,3 +1,10 @@
+1.4.3
+  9 Sep 2011
+  * bug 3933: Don't touch app.update.auto in TBB
+  * bug 3960: Don't disable zoom.siteSpecific on TBB
+  * bug 3928: Fix auto-scroll on twitter
+  * bug 3649: Make permissions and disk errors human-readable
+
 1.4.2
   3 Sep 2011
   * bug 3879: Fix broken framed sites (yopmail, gmane, gmaps, etc)
