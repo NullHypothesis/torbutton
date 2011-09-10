@@ -16,19 +16,19 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "ميزبان SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "درگاهی (Port):">
 <!ENTITY torbutton.about.title "دربارۀ دکمه تُر">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.version "نسخه :">
+<!ENTITY torbutton.about.summary "محافظت از حریم خصوصی در هنگام وبگردی با تُر.">
+<!ENTITY torbutton.about.code "کانون کد :">
+<!ENTITY torbutton.about.maintainer "نگهدارنده :">
+<!ENTITY torbutton.about.security_review "دیدگاه های ایمنی :">
+<!ENTITY torbutton.about.donate "اگر مایل به استفاده از تُر هستید، میتوانید مدنظر قرار دهید">
+<!ENTITY torbutton.about.make_donation "اهداء کمک نقدی.">
 <!ENTITY torbutton.pref_connection.notice "غيرفعال کردن دکمه تُر جهت تغيير دراين تنظيمات.">
 <!ENTITY torbutton.pref_connection.more_info "اطلاعات بيشتر">
 <!ENTITY torbutton.pref_connection_more_info.title "راهنما">
 <!ENTITY torbutton.pref_connection_more_info.text "دکمه تُرهم اکنون فعال شده است.اگر می‌خواهيد تنظيمات پراکسی غيرمرتبط با تُر را تغيير دهيد، لطفا دکمه تُر را غيرفعال کنيد و دوباره به اينجا بازگرديد. اگر ميخواهيد تنظيمات تُر را تغيير دهيد، از پنجره تنظيمات دکمه تُر استفاده کنيد.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity "هویت جدید">
+<!ENTITY torbutton.context_menu.new_identity_key "من">
 <!ENTITY torbutton.context_menu.toggle "ضامن فعال/غيرفعال کردن تُر">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "تنظيمات...">
