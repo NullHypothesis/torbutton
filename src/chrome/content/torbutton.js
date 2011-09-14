@@ -525,6 +525,15 @@ function torbutton_init() {
         // FIXME: We might want a check to use to set this in the future,
         // but this works fine for now.
         m_tb_tbb = true;
+    } else {
+        var cookie_path = environ.get("TOR_CONTROL_COOKIE_AUTH_FILE");
+        try {
+            if ("" != cookie_path) {
+                m_tb_control_pass = torbutton_read_authentication_cookie(cookie_path);
+            }
+        } catch(e) {
+            torbutton_log(4, 'unable to read authentication cookie');
+        }
     }
 
     if (environ.exists("TOR_CONTROL_PORT")) {
@@ -1304,6 +1313,27 @@ function torbutton_socket_readline(input) {
   return str;
 }
 
+function torbutton_read_authentication_cookie(path) {
+  var file = Components.classes['@mozilla.org/file/local;1']
+             .createInstance(Components.interfaces.nsILocalFile);
+  file.initWithPath(path);
+  var fileStream = Components.classes['@mozilla.org/network/file-input-stream;1']
+                   .createInstance(Components.interfaces.nsIFileInputStream);
+  fileStream.init(file, 1, 0, false);
+  var binaryStream = Components.classes['@mozilla.org/binaryinputstream;1']
+                     .createInstance(Components.interfaces.nsIBinaryInputStream);
+  binaryStream.setInputStream(fileStream);
+  var array = binaryStream.readByteArray(fileStream.available());
+  binaryStream.close();
+  fileStream.close();
+  return torbutton_array_to_hexdigits(array);
+}
+
+function torbutton_array_to_hexdigits(array) {
+  return array.map(function(c) {
+                     return String("0" + c.toString(16)).slice(-2)
+                   }).join('');
+};
 // Executes a command on the control port.
 // Return 0 in error, 1 for success.
 function torbutton_send_ctrl_cmd(command) {
