@@ -1314,8 +1314,8 @@ function torbutton_send_ctrl_cmd(command) {
     var input = socket.openInputStream(3, 0, 0); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
     var output = socket.openOutputStream(3, 0, 0); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
 
-    inputStream     = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
-    outputStream    = Cc["@mozilla.org/binaryoutputstream;1"].createInstance(Ci.nsIBinaryOutputStream);
+    var inputStream     = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
+    var outputStream    = Cc["@mozilla.org/binaryoutputstream;1"].createInstance(Ci.nsIBinaryOutputStream);
 
     inputStream.setInputStream(input);
     outputStream.setOutputStream(output);
