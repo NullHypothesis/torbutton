@@ -525,7 +525,7 @@ function torbutton_init() {
         // FIXME: We might want a check to use to set this in the future,
         // but this works fine for now.
         m_tb_tbb = true;
-    } else {
+    } else if (environ.exists("TOR_CONTROL_COOKIE_AUTH_FILE")) {
         var cookie_path = environ.get("TOR_CONTROL_COOKIE_AUTH_FILE");
         try {
             if ("" != cookie_path) {
