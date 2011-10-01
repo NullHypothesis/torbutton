@@ -758,12 +758,18 @@ function torbutton_init_prefs() {
 
         if (environ.exists("TOR_SOCKS_PORT")) {
           torprefs.setIntPref('socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
+          if (m_tb_tbb) {
+              m_tb_prefs.setIntPref('network.proxy.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
+          }
         } else {
           torprefs.setIntPref('socks_port', 9050);
         }
 
         if (environ.exists("TOR_SOCKS_HOST")) {
           torprefs.setCharPref('socks_host', environ.get("TOR_SOCKS_HOST"));
+          if (m_tb_tbb) {
+              m_tb_prefs.setIntPref('network.proxy.socks', parseInt(environ.get("TOR_SOCKS_HOST")));
+          }
         } else {
           torprefs.setCharPref('socks_host', '127.0.0.1');
         }
@@ -2824,6 +2830,25 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 }
 
+function torbutton_do_versioncheck() {
+  if (m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
+    var is_updated = torbutton_check_version();
+    var locale = m_tb_prefs.getCharPref("general.useragent.locale");
+    if (is_updated == 0) {
+      // In an ideal world, we'd just check for hasUserValue, but we can't do
+      // that, because we set browser.startup.homepage to have a user value already...
+      m_tb_prefs.setCharPref("browser.startup.homepage",
+              "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0");
+    } else if (is_updated == 1) {
+      var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
+      if (homepage.indexOf("https://check.torproject.org/") == 0) {
+        m_tb_prefs.setCharPref("browser.startup.homepage",
+                  "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1");
+      }
+    }
+  }
+}
+
 function torbutton_reload_homepage() {
     var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
                        Components.interfaces.nsIPrefLocalizedString).data;
@@ -2889,22 +2914,7 @@ function torbutton_set_launch_state(state, session_restore) {
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
-          if (m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
-            var is_updated = torbutton_check_version();
-            var locale = m_tb_prefs.getCharPref("general.useragent.locale");
-            if (is_updated == 0) {
-              // In an ideal world, we'd just check for hasUserValue, but we can't do
-              // that, because we set browser.startup.homepage to have a user value already...
-              m_tb_prefs.setCharPref("browser.startup.homepage",
-                      "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0");
-            } else if (is_updated == 1) {
-              var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
-              if (homepage.indexOf("https://check.torproject.org/") == 0) {
-                m_tb_prefs.setCharPref("browser.startup.homepage",
-                          "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1");
-              }
-            }
-          }
+          torbutton_do_versioncheck();
           torbutton_reload_homepage();
         }
       } else {
@@ -2918,6 +2928,7 @@ function torbutton_set_launch_state(state, session_restore) {
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
+            torbutton_do_version_check();
             torbutton_reload_homepage();
         }
     }
