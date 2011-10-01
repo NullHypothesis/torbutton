@@ -1529,6 +1529,9 @@ function torbutton_new_identity() {
     }
   }
 
+  // gBrowser should always be here.
+  torbutton_set_window_size(gBrowser.contentWindow);
+
   torbutton_log(3, "New identity successful");
 
 }
@@ -3191,6 +3194,8 @@ function torbutton_regen_google_cookie() {
     if (!m_tb_hidden_browser) {
       torbutton_init_hidden_browser();
     }
+    // XXX: This is might be forbidden according to 
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=608628
     m_tb_hidden_browser.addProgressListener(torbutton_google_cookie_regen_listener,
                         Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
 
