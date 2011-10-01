@@ -1238,15 +1238,8 @@ function torbutton_set_timezone(mode, startup) {
 
 function torbutton_get_general_useragent_locale() {
    try {
-        var locale = m_tb_prefs.getCharPref("general.useragent.locale");
-        if (locale != "chrome://global/locale/intl.properties") {
-            return locale;
-        }
-
-        var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
-                                .getService(Components.interfaces.nsIStringBundleService);
-        var stringbundle = bundle.createBundle(locale);
-        return stringbundle.GetStringFromName("general.useragent.locale");
+        return m_tb_prefs.getComplexValue("general.useragent.locale",
+                   Components.interfaces.nsIPrefLocalizedString).data;
     } catch(err) {
         torbutton_log(4, "Error while getting general.useragent.locale:" + err);
         return 'en-US';
