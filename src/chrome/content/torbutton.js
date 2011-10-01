@@ -2831,6 +2831,12 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 }
 
+function torbutton_reload_homepage() {
+    var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
+                       Components.interfaces.nsIPrefLocalizedString).data;
+    gBrowser.loadURI(homepage, null, null);
+}
+
 function torbutton_set_launch_state(state, session_restore) {
     if (!m_tb_wasinited) torbutton_init();
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
@@ -2906,8 +2912,7 @@ function torbutton_set_launch_state(state, session_restore) {
               }
             }
           }
-          var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
-          gBrowser.loadURI(homepage, null, null);
+          torbutton_reload_homepage();
         }
       } else {
         torbutton_log(3, "Leaving tor disabled");
@@ -2920,8 +2925,7 @@ function torbutton_set_launch_state(state, session_restore) {
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
-            var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
-            gBrowser.loadURI(homepage, null, null);
+            torbutton_reload_homepage();
         }
     }
 }
