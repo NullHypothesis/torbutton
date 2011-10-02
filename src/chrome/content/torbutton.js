@@ -3869,21 +3869,21 @@ function torbutton_do_startup()
                    .getService(Components.interfaces.nsIEnvironment);
 
         if (environ.exists("TOR_SOCKS_PORT")) {
-          torprefs.setIntPref('socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
+          m_tb_prefs.setIntPref('extensions.torbutton.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
           if (m_tb_tbb) {
               m_tb_prefs.setIntPref('network.proxy.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
           }
         } else {
-          torprefs.setIntPref('socks_port', 9050);
+          m_tb_prefs.setIntPref('extensions.torbutton.socks_port', 9050);
         }
 
         if (environ.exists("TOR_SOCKS_HOST")) {
-          torprefs.setCharPref('socks_host', environ.get("TOR_SOCKS_HOST"));
+          m_tb_prefs.setCharPref('extensions.torbutton.socks_host', environ.get("TOR_SOCKS_HOST"));
           if (m_tb_tbb) {
-              m_tb_prefs.setIntPref('network.proxy.socks', parseInt(environ.get("TOR_SOCKS_HOST")));
+              m_tb_prefs.setCharPref('network.proxy.socks', environ.get("TOR_SOCKS_HOST"));
           }
         } else {
-          torprefs.setCharPref('socks_host', '127.0.0.1');
+          m_tb_prefs.setCharPref('extensions.torbutton.socks_host', '127.0.0.1');
         }
 
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
