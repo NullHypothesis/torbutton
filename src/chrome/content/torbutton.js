@@ -1222,8 +1222,12 @@ function torbutton_set_timezone(mode, startup) {
 
 function torbutton_get_general_useragent_locale() {
    try {
-        return m_tb_prefs.getComplexValue("general.useragent.locale",
-                   Components.interfaces.nsIPrefLocalizedString).data;
+        var locale = m_tb_prefs.getCharPref("general.useragent.locale");
+        if (/chrome:\/\//.test(locale)) {
+            return m_tb_prefs.getComplexValue("general.useragent.locale",
+                       Components.interfaces.nsIPrefLocalizedString).data;
+        }
+        return locale;
     } catch(err) {
         torbutton_log(4, "Error while getting general.useragent.locale:" + err);
         return 'en-US';
