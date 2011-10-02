@@ -4381,7 +4381,7 @@ function torbutton_hookdoc(win, doc, state_change, referrer) {
         if ((!referrer || referrer.spec == "") && win.location != "about:blank") {
             if (win.top == win.window) {
                 // Only reset if we're the top-level window
-                torbutton_log(4, "Resetting window.name: "+win.name+" for "+win.location);
+                //torbutton_log(4, "Resetting window.name: "+win.name+" for "+win.location);
                 win.name = "";
                 win.window.name = "";
             }
