@@ -4375,14 +4375,17 @@ function torbutton_hookdoc(win, doc, state_change, referrer) {
         // The about:blank check handles the 'name' attribute of framesets, which
         // get set before the referer is set on the channel.
         if ((!referrer || referrer.spec == "") && win.location != "about:blank") {
-            win.name = "";
-            win.window.name = "";
+            if (win.top == win.window) {
+                // Only reset if we're the top-level window
+                torbutton_log(4, "Resetting window.name: "+win.name+" for "+win.location);
+                win.name = "";
+                win.window.name = "";
+            }
         }
     } catch(e) {
         torbutton_log(4, "Failed to reset window.name: "+e)
     }
 
-    
     var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
 
     // No need to hook js if tor is off
