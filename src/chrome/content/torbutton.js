@@ -300,6 +300,8 @@ var torbutton_unique_pref_observer =
                 torbutton_update_status(
                         m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
                         true);
+            // XXX: We should try to get rid of these warnings now that toggle
+            // is not supported in TBB.
             case "extensions.torbutton.disable_domstorage":
             case "extensions.torbutton.no_updates":
             case "extensions.torbutton.no_search":
@@ -1838,7 +1840,15 @@ function torbutton_update_status(mode, force_update) {
                     false, mode, changed);
             torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
                     false, mode, changed);
+        } else {
+            torbutton_setBoolPref("browser.formfill.enable", "formfill",
+                    true, mode, changed);
+            torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
+                    true, mode, changed);
         }
+
+        torbutton_setBoolPref("signon.autofillForms", "autofillForms",
+                false, mode, changed);
 
         if (m_tb_ff4) {
             if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
@@ -1866,6 +1876,10 @@ function torbutton_update_status(mode, force_update) {
             torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
                     false, mode, changed);
         }
+
+        torbutton_setBoolPref("signon.autofillForms", "autofillForms",
+                true, mode, changed);
+
         if (m_tb_ff4) {
             if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
                 m_tb_prefs.setBoolPref("places.history.enabled", false);
