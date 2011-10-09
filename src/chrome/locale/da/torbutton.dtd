@@ -1,10 +1,10 @@
-<!ENTITY torbutton.prefs.title "Torbutton Indstillinger">
-<!ENTITY torbutton.prefs.display_settings "Visnings Indstillinger">
+<!ENTITY torbutton.prefs.title "Torbutton-indstillinger">
+<!ENTITY torbutton.prefs.display_settings "Visningsindstillinger">
 <!ENTITY torbutton.prefs.display_panel "Vis Tor proxy-indstilling i statuslinjen">
 <!ENTITY torbutton.prefs.panel_format "Vis i Statusbar som:">
 <!ENTITY torbutton.prefs.panel_text_format "Tekst">
 <!ENTITY torbutton.prefs.panel_icon_format "Ikon">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Indstillinger">
+<!ENTITY torbutton.prefs.tor_settings "Proxy-indstillinger">
 <!ENTITY torbutton.prefs.recommended_settings "Brug de anbefalede proxyindstillinger til min version af Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Brug Privoxy">
 <!ENTITY torbutton.prefs.use_polipo "Brug Polipo">
@@ -17,17 +17,17 @@
 <!ENTITY torbutton.prefs.proxy.port "Port:">
 <!ENTITY torbutton.about.title "Om Torbutton">
 <!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.summary "Beskytter privatlivets fred for din Tor-browsing.">
+<!ENTITY torbutton.about.code "Personer som har bidraget med kode:">
+<!ENTITY torbutton.about.maintainer "Vedligeholder:">
+<!ENTITY torbutton.about.security_review "Gennemgang af sikkerhed:">
+<!ENTITY torbutton.about.donate "Hvis du kan lide at bruge Tor, så kan du overveje at">
+<!ENTITY torbutton.about.make_donation "foretage en donation.">
 <!ENTITY torbutton.pref_connection.notice "Deaktiver Torbutton for at ændre disse indstillinger.">
 <!ENTITY torbutton.pref_connection.more_info "Mere Information">
 <!ENTITY torbutton.pref_connection_more_info.title "Hjælp">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton er i øjeblikket aktiveret. Hvis du vil ændre dine ikke-Tor proxyindstillinger, skal du deaktivere Torbutton og vende tilbage hertil. Hvis du vil ændre dine Tor indstillinger, kan du benytte Torbuttons Indstillingsvindue.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Ny identitet">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Skift Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -35,13 +35,13 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Om Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie-beskyttelser">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "Kopiér Tor-adresse">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "Åbn Tor-adresse i ny fane">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "Åbn Tor-adresse i nyt vindue">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Klik for at starte Torbutton">
@@ -54,7 +54,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Bloker Tor disk cache og ryd alt cache ved ændring af Tor status">
 <!ENTITY torbutton.prefs.block_cache "Bloker disk og hukommelse cache adgang under Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Gem Ikke-Tor cookies i en beskyttet krukke">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Benyt dialogboks for Cookie-beskyttelse til at vælge">
 <!ENTITY torbutton.prefs.mmm_cookies "Jeg vil manuelt administrere mine cookies (farligt)">
 <!ENTITY torbutton.prefs.clear_cookies "Ryd cookies ved skift af Tor status">
 <!ENTITY torbutton.prefs.disable_plugins "Deaktiver plugins når Tor kører (afgørende)">
@@ -74,9 +74,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Deaktiver Sessions Lagring (anbefales)">
 <!ENTITY torbutton.prefs.headers "Hoveder">
 <!ENTITY torbutton.prefs.spoof_english "Spoof US Engelsk Browser">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Forfalskning af henviser">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Smart forfalskning af henviser under brug af Tor (forfalsk henvisninger som går på tværs af domæner)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Deaktiver DOM Lager når Tor kører (afgørende)">
 <!ENTITY torbutton.prefs.forms "Formulare">
@@ -115,28 +115,28 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Ingen Proxies for:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Advarsel: Undgå at bruge enhver værtsnavne ovenfor">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.prefs.spoofreresh "Genopfrisk forfalskning">
+<!ENTITY torbutton.prefs.refereroptions "Indstillinger for forfalskning af henviser ">
+<!ENTITY torbutton.prefs.nospoof "Forfalsk ikke henviser">
+<!ENTITY torbutton.prefs.spoofroot "Forfalsk den indeholdte mappe for siden">
+<!ENTITY torbutton.prefs.spoofdomain "Forfalsk domænet som henviser">
+<!ENTITY torbutton.prefs.spoofblank "Gør henviser tom">
+<!ENTITY torbutton.cookiedialog.title "Håndtér Cookie-beskyttelser">
+<!ENTITY torbutton.cookiedialog.lockCol "Beskyttet">
+<!ENTITY torbutton.cookiedialog.domainCol "Vært">
+<!ENTITY torbutton.cookiedialog.nameCol "Navn">
+<!ENTITY torbutton.cookiedialog.pathCol "Sti">
+<!ENTITY torbutton.cookiedialog.protectCookie "Beskyt cookie">
+<!ENTITY torbutton.cookiedialog.removeCookie "Fjern cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Fjern beskyttelse af cookie">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Fjern alle pånær beskyttede">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Beskyt nye cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Beskyt ikke nye cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Deaktiver opdatering af livemarks, når Tor kører">
 <!ENTITY torbutton.prefs.dtd_recommended "(anbefalet)">
 <!ENTITY torbutton.prefs.dtd_optional "(Valg frit)">
 <!ENTITY torbutton.prefs.dtd_crucial "(Vigtigt)">
-<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Videredirigér Torbutton-opdateringer gennem Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">

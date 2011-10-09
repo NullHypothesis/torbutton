@@ -1,7 +1,7 @@
 <!ENTITY torbutton.prefs.title "Préférences Torbutton">
 <!ENTITY torbutton.prefs.display_settings "Paramètres d'affichage">
 <!ENTITY torbutton.prefs.display_panel "Afficher les paramètres du proxy Tor dans la barre d'état">
-<!ENTITY torbutton.prefs.panel_format "Format d'affichage de la barre d'état:">
+<!ENTITY torbutton.prefs.panel_format "Format d'affichage de la barre d'état :">
 <!ENTITY torbutton.prefs.panel_text_format "Texte">
 <!ENTITY torbutton.prefs.panel_icon_format "Icône">
 <!ENTITY torbutton.prefs.tor_settings "Paramètres du proxy">
@@ -16,18 +16,18 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "Hôte SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "Port:">
 <!ENTITY torbutton.about.title "À propos de Torbutton">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.version "Version :">
+<!ENTITY torbutton.about.summary "Protège l'anonymat de votre navigation avec Tor.">
+<!ENTITY torbutton.about.code "Contributeurs au code :">
+<!ENTITY torbutton.about.maintainer "Mainteneur :">
+<!ENTITY torbutton.about.security_review "Revue de sécurité :">
+<!ENTITY torbutton.about.donate "Si vous aimez Tor, vous devriez considérer">
+<!ENTITY torbutton.about.make_donation "faire une donation.">
 <!ENTITY torbutton.pref_connection.notice "Désactiver Torbutton pour modifier ces paramètres.">
 <!ENTITY torbutton.pref_connection.more_info "Plus d'informations">
 <!ENTITY torbutton.pref_connection_more_info.title "Aide">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton est actuellement activé.  Si vous souhaitez modifier vos paramètres proxy non-Tor, veuillez désactiver Torbutton et revenir à cette fenêtre.  Si vous souhaitez modifier vos paramètres Tor, veuillez utiliser la fenêtre des préférences Torbutton.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Nouvelle identité">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Activer/Désactiver Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Lors d'une restauration de session, mettre Tor en état:">
-<!ENTITY torbutton.prefs.startup_tor "Au démarrage, mettre Tor en état :">
+<!ENTITY torbutton.prefs.startup_tor "Au démarrage, mettre Tor dans l'état :">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recharger la cookie jar et supprimer cookies lors d'un plantage de Firefox (recommandé)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Stocker les cookies Tor et non-Tor dans des cookie-jars sécurisés (dangereux)">
 <!ENTITY torbutton.prefs.clear_http_auth "Supprimer les sessions HTTP authentifiées (recommandé)">
@@ -143,5 +143,5 @@
 <!ENTITY torbutton.prefs.engine3 "yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
-<!ENTITY torbutton.prefs.fix_google_srch "Supprimer les informations relatives à la plateforme et à la langue des champs de recherche Google">
+<!ENTITY torbutton.prefs.fix_google_srch "Supprimer les informations relatives à la plateforme et à la langue des requêtes Google">
 <!ENTITY torbutton.prefs.transparentTor "Torification transparente (requiert un transproxy personnalisé ou un routeur Tor)">
