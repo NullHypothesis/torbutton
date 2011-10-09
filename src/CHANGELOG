@@ -1,3 +1,13 @@
+1.4.4
+  9 Oct 2011
+  * bug 4197: Allow Torbutton formfill blocking to be disabled
+  * bug 4058: Fix yet more issues with links opening in new tabs
+  * bug 4161: Make TBB version check work w/ SocksPort auto builds
+  * bug 3686: Fix loading of localized homepage on Debian
+  * bug 4016: Resize window on "New Identity"
+  * bug 3928: Implement CookieAuthFile password reading
+  * misc: Fix scoping issue for some stream variables
+
 1.4.3
   9 Sep 2011
   * bug 3933: Don't touch app.update.auto in TBB
