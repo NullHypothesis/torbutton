@@ -2924,7 +2924,7 @@ function torbutton_set_launch_state(state, session_restore) {
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
-            torbutton_do_version_check();
+            torbutton_do_versioncheck();
             torbutton_reload_homepage();
         }
     }
