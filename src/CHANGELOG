@@ -1,3 +1,7 @@
+1.4.4.1
+  11 Oct 2011
+  * misc: Fix a homepage load error on Windows TBB first-run
+
 1.4.4
   9 Oct 2011
   * bug 4197: Allow Torbutton formfill blocking to be disabled
