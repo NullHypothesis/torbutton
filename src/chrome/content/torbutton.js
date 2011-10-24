@@ -2908,9 +2908,10 @@ function torbutton_set_launch_state(state, session_restore) {
         torbutton_enable_tor(true);
         torbutton_log(3, "Tor state updated.");
 
+        torbutton_do_versioncheck();
+        
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
-          torbutton_do_versioncheck();
           torbutton_reload_homepage();
         }
       } else {
@@ -2921,10 +2922,11 @@ function torbutton_set_launch_state(state, session_restore) {
 
         if(state) torbutton_enable_tor(true);
         else  torbutton_disable_tor();
+        
+        torbutton_do_versioncheck();
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
-            torbutton_do_versioncheck();
             torbutton_reload_homepage();
         }
     }
