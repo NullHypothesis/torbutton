@@ -3893,7 +3893,7 @@ function torbutton_do_startup()
           if (m_tb_tbb) {
               m_tb_prefs.setIntPref('network.proxy.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
           }
-        } else {
+        } else if (m_tb_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
           m_tb_prefs.setIntPref('extensions.torbutton.socks_port', 9050);
         }
 
@@ -3902,7 +3902,7 @@ function torbutton_do_startup()
           if (m_tb_tbb) {
               m_tb_prefs.setCharPref('network.proxy.socks', environ.get("TOR_SOCKS_HOST"));
           }
-        } else {
+        } else if (m_tb_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
           m_tb_prefs.setCharPref('extensions.torbutton.socks_host', '127.0.0.1');
         }
 
