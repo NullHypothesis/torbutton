@@ -246,47 +246,12 @@ ExternalWrapper.prototype =
               flavor == "application/x-moz-file-promise-url") {
             this.logger.log(3, "Removing "+flavor);
             try { tr.removeDataFlavor(flavor); } catch(e) {}
-            continue;
           }
-
-          /*
-          var data = {}, len = {};
-          try {
-            tr.getTransferData(flavor, data, len);
-            this.logger.log(3, "Got data: "+data.value.QueryInterface(Ci.nsISupportsString).data);
-          } catch(e) {
-          }
-          */
         }
     }
 
     return this._drag().invokeDragSessionWithImage(aDOMNode, aTransferableArray, aRegion, aActionType, aImage, aImageX, aImageY, aDragEvent, aDataTransfer);
   },
-  /*
-  fireDragEventAtSource: function( aMsg ) {
-    this.logger.log(4, "FIRE AT THE SOURCE!!!");
-    return this._drag().fireDragEventAtSource(aMsg);
-  },
-
-  invokeDragSession: function(aDOMNode, aTransferables, aRegion, aActionType ) {
-    this.logger.log(4, "InvokeDragSession!");
-    return this._drag().invokeDragSession(aDOMNode, aTransferables, aRegion, aActionType );
-  },
-  invokeDragSessionWithSelection: function(aSelection, aTransferableArray, aActionType, aDragEvent, aDataTransfer) {
-    this.logger.log(4, "InvokeDragSessionWithSelection!!");
-    return this._drag().invokeDragSessionWithSelection(aSelection, aTransferableArray, aActionType, aDragEvent, aDataTransfer);
-  },
-
-  endDragSession: function(aDoneDrag) {
-    this.logger.log(4, "EndDrag");
-    return this._drag().endDragSession(aDoneDrag);
-  },
-
-  startDragSesssion: function() {
-    this.logger.log(4, "StartDrag");
-    return this._drag().startDragSession();
-  }
-  */
 
 };
 
