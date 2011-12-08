@@ -1358,6 +1358,15 @@ function torbutton_send_ctrl_cmd(command) {
   }
 }
 
+function torbutton_new_identity() {
+  try {
+    torbutton_do_new_identity();
+  } catch(e) {
+    torbutton_log(5, "Unexpected error on new identity: "+e);
+    window.alert("Torbutton: Unexpected error on new identity: "+e);
+  }
+}
+
 /* The "New Identity" implementation does the following:
  *   1. Tag all tabs as non-tor
  *   2. Disables Javascript and plugins on all tabs
@@ -1375,7 +1384,7 @@ function torbutton_send_ctrl_cmd(command) {
  *
  * XXX: intermediate SSL certificates are not cleared.
  */
-function torbutton_new_identity() {
+function torbutton_do_new_identity() {
   var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
       .getService(Components.interfaces.nsIWindowMediator);
   var enumerator = wm.getEnumerator("navigator:browser");
@@ -1478,6 +1487,7 @@ function torbutton_new_identity() {
       cache.evictEntries(0);
   } catch(e) {
       torbutton_log(5, "Exception on cache clearing: "+e);
+      window.alert("Torbutton: Unexpected error during cache clearing: "+e);
   }
 
   if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections')) {
@@ -1513,7 +1523,10 @@ function torbutton_new_identity() {
     window.alert(warning);
   } else {
     if(torbutton_send_ctrl_cmd("SIGNAL NEWNYM\r\n") == 0) {
+      var o_stringbundle = torbutton_get_stringbundle();
+      var warning = o_stringbundle.GetStringFromName("torbutton.popup.no_newnym");
       torbutton_log(5, "Torbutton was unable to request a new circuit from Tor");
+      window.alert(warning);
     }
   }
 
@@ -1521,7 +1534,6 @@ function torbutton_new_identity() {
   torbutton_set_window_size(gBrowser.contentWindow);
 
   torbutton_log(3, "New identity successful");
-
 }
 
 // toggles plugins: true for disabled, false for enabled
