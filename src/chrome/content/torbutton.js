@@ -1966,6 +1966,10 @@ function torbutton_update_status(mode, force_update) {
           !m_tb_prefs.getBoolPref("security.enable_ssl2"));
     }
 
+    // Disable ssl session tickets for tor usage
+    // https://trac.torproject.org/projects/tor/ticket/4099
+    m_tb_prefs.setBoolPref("security.enable_tls_session_tickets", !mode);
+
     // Lower keep-alive timeout to reduce cross-domain linkability
     // https://trac.torproject.org/projects/tor/ticket/4603
     if (mode) {
