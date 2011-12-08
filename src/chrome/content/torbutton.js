@@ -1491,6 +1491,11 @@ function torbutton_new_identity() {
     torbutton_clear_cookies();
   }
 
+  // Clear keep-alive
+  var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
+  obsSvc.notifyObservers(this, "net:prune-all-connections", null);
+
+  // XXX: This may not clear zoom site-specific
   var cps = Cc["@mozilla.org/content-pref/service;1"].
       createInstance(Ci.nsIContentPrefService);
   cps.removeGroupedPrefs();
