@@ -1966,6 +1966,14 @@ function torbutton_update_status(mode, force_update) {
           !m_tb_prefs.getBoolPref("security.enable_ssl2"));
     }
 
+    // Lower keep-alive timeout to reduce cross-domain linkability
+    // https://trac.torproject.org/projects/tor/ticket/4603
+    if (mode) {
+      m_tb_prefs.setIntPref("network.http.keep-alive.timeout", 20);
+    } else {
+      m_tb_prefs.clearUserPref("network.http.keep-alive.timeout");
+    }
+
     // This clears the OCSP cache.
     //
     // nsNSSComponent::Observe() watches security.OCSP.enabled, which calls
