@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Nastavitve posredniškega (proxy) strežnika">
 <!ENTITY torbutton.prefs.recommended_settings "Uporabi priporočene nastavitve posredniškega strežnika za mojo različico Firefoxa">
 <!ENTITY torbutton.prefs.use_privoxy "Uporabi tudi povezavo preko Privoxy-a">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "uporaba polipo">
 <!ENTITY torbutton.prefs.custom_settings "Uporabi nastavitve proxy strežnika po meri">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP posredniški strežnik:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL posredniški strežnik:">
@@ -16,18 +16,18 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS gostitelj:">
 <!ENTITY torbutton.prefs.proxy.port "vrata:">
 <!ENTITY torbutton.about.title "O razširitvi Torbutton">
-<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.about.version "verzija">
 <!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
 <!ENTITY torbutton.about.code "Code Contributors:">
 <!ENTITY torbutton.about.maintainer "Maintainer:">
 <!ENTITY torbutton.about.security_review "Security Review:">
 <!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.make_donation "doniraj">
 <!ENTITY torbutton.pref_connection.notice "Če želite spremeniti te nastavitve onemogočite razširitev Torbutton.">
 <!ENTITY torbutton.pref_connection.more_info "Več informacij">
 <!ENTITY torbutton.pref_connection_more_info.title "Pomoč">
 <!ENTITY torbutton.pref_connection_more_info.text "Razširitev Torbutton je trenutno omogočena. Če želite spremeniti nastavitve ne-Tor posredniškega strežnika (proxy), razširitev Torbutton najprej onemogočite, nato pa se vrnite na to mesto. Če želite spremeniti nastavitve povezave v Tor omrežje uporabite nastavitve razširitve Torbutton.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "nova indetiteta">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Zamenjaj status anonimizacije">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -35,13 +35,13 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "O razširitvi Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "piškotkina zaščita">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "kopiraj tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "odpri tor URL v novem zavitku">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "odpri tor URL v novem oknu">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Klikni za inicializiranje razširitve Torbutton">
@@ -74,7 +74,7 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Onemogoči shranjevanje sej (proporočeno)">
 <!ENTITY torbutton.prefs.headers "Headers (informacije na začetku paketa - naslavljanje)">
 <!ENTITY torbutton.prefs.spoof_english 'Navidezno "US English" brskalnik'>
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "osveži prevaro">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
@@ -124,14 +124,14 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "ime">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
+<!ENTITY torbutton.cookiedialog.protectCookie "žaščiti piškotke">
+<!ENTITY torbutton.cookiedialog.removeCookie "odstrani piškotke">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "nezaščiti piškotkov">
 <!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "ne zaščiti novih piškotkov">
 <!ENTITY torbutton.prefs.disable_livemarks "Onemogoči RSS posodobitve med uporaboTor-a ">
 <!ENTITY torbutton.prefs.dtd_recommended "(priporočeno)">
 <!ENTITY torbutton.prefs.dtd_optional "(neobvezno)">

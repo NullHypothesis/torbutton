@@ -1,62 +1,62 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
-<!ENTITY torbutton.prefs.panel_format "Status bar display format:">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Icon">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "About Torbutton">
-<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.prefs.title "Torbutton Hobespenak">
+<!ENTITY torbutton.prefs.display_settings "Erakutsi Ezarpenak">
+<!ENTITY torbutton.prefs.display_panel "Erakutsi Tor proxy ezarpenak egoera barran">
+<!ENTITY torbutton.prefs.panel_format "Egoera barran agertzeko formatua:">
+<!ENTITY torbutton.prefs.panel_text_format "Testua">
+<!ENTITY torbutton.prefs.panel_icon_format "Ikonoa">
+<!ENTITY torbutton.prefs.tor_settings "Proxy Ezarpenak">
+<!ENTITY torbutton.prefs.recommended_settings "Erabili nire Firefox bertsiorako proxy ezarpen gomendatuak">
+<!ENTITY torbutton.prefs.use_privoxy "Erabili Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Erabili Polipo">
+<!ENTITY torbutton.prefs.custom_settings "Erabili proxy ezarpen pertsonalizatuak">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxya:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxya:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxya:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxya:">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Ostalaria:">
+<!ENTITY torbutton.prefs.proxy.port "Portua:">
+<!ENTITY torbutton.about.title "Torbuttoni buruz">
+<!ENTITY torbutton.about.version "Bertsioa:">
 <!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
 <!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
-<!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
+<!ENTITY torbutton.about.maintainer "Mantentzailea:">
+<!ENTITY torbutton.about.security_review "Segurtasun Berrikuspena">
+<!ENTITY torbutton.about.donate "Tor erabiltzea gustoko baduzu, agian">
+<!ENTITY torbutton.about.make_donation "dohaintza kontutan hartu dezakezu.">
+<!ENTITY torbutton.pref_connection.notice "Torbutton ezgaitu ezarpen hauek aldatzeko">
+<!ENTITY torbutton.pref_connection.more_info "Informazio gehiago">
+<!ENTITY torbutton.pref_connection_more_info.title "Laguntza">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Nortasun berria">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
-<!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
+<!ENTITY torbutton.context_menu.toggle "Aldatu Toren egoera">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Preferences...">
+<!ENTITY torbutton.context_menu.preferences "Hobespenak...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "About Torbutton...">
+<!ENTITY torbutton.context_menu.about "Torbuttoni buruz...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie Babesa">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "Kopiatu Tor URLa">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "Ireki Tor URLa Fitxa berri batean">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "ireki Tor URLa Lehio berri batean">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
+<!ENTITY torbutton.button.tooltip "Sakatu Torbutton abiarazteko">
+<!ENTITY torbutton.prefs.sec_settings "Segurtasun Ezarpenak">
+<!ENTITY torbutton.prefs.block_thread "Blokeatu historia irakurketak Tor bitartean (erabakigarria)">
+<!ENTITY torbutton.prefs.block_thwrite "Blokeatu historia idazketak Tor bitartean (gomendatua)">
+<!ENTITY torbutton.prefs.block_nthread "Blokeatu historia irakurketak Ez-Tor bitartean (hautazkoa)">
+<!ENTITY torbutton.prefs.block_nthwrite "Blokeatu historia idazketak Ez-Tor bitartean (hautazkoa)">
+<!ENTITY torbutton.prefs.clear_history "Garbitu historia Tor aldatzerakoan (hautazkoa)">
+<!ENTITY torbutton.prefs.clear_cache "Blokeatu Tor katxe diska eta garbitu katxe osoa tor aldatzerakoan">
+<!ENTITY torbutton.prefs.block_cache "Blokeatu diska eta memoria katxera sartzea tor bitartean">
+<!ENTITY torbutton.prefs.cookie_jars "Gorde Ez-Tor cookieak babestutako jar batean">
+<!ENTITY torbutton.prefs.cookie_protection "Erabili Cookie Babes Elkarrizketa-koadroa aukeratzeko">
+<!ENTITY torbutton.prefs.mmm_cookies "Eskuz kudeatuko ditut nire cookieak (arriskutsua)">
+<!ENTITY torbutton.prefs.clear_cookies "Garbitu cookieak Tor aldatzerakoan">
 <!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
 <!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
 <!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
@@ -107,14 +107,14 @@
 <!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Ez idatzi Ez-Tor cookieak diskan">
+<!ENTITY torbutton.prefs.session_restore "Saioa gorde eta fitxa hauek leheneratu:">
+<!ENTITY torbutton.prefs.nontor_tabs "Fitxak Ez-Toren kargatuak">
+<!ENTITY torbutton.prefs.tor_tabs "Fitxak Toren kargatuak">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "Proxyrik ez hauentzako:">
+<!ENTITY torbutton.prefs.no_proxy_warning "Kontuz: Ez erabili ostalari-izenik gainean">
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
 <!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
 <!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
@@ -122,20 +122,20 @@
 <!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
 <!ENTITY torbutton.prefs.spoofblank "Make referer blank">
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.lockCol "Babestuta">
+<!ENTITY torbutton.cookiedialog.domainCol "Ostalaria">
+<!ENTITY torbutton.cookiedialog.nameCol "Izena">
+<!ENTITY torbutton.cookiedialog.pathCol "Bidea">
+<!ENTITY torbutton.cookiedialog.protectCookie "Cookiea babestu">
+<!ENTITY torbutton.cookiedialog.removeCookie "Cookiea kendu">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Cookiea ez babestu">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Denak kendu babestutakoak izan ezik">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Cookie berriak babestu">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Ez babestu cookie berririk">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(gomendatua)">
+<!ENTITY torbutton.prefs.dtd_optional "(hautazkoa)">
+<!ENTITY torbutton.prefs.dtd_crucial "(erabakigarria)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">

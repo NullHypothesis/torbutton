@@ -1,5 +1,5 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
+<!ENTITY torbutton.prefs.title "הגדרות Torbutton">
+<!ENTITY torbutton.prefs.display_settings "הצג הגדרות">
 <!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
 <!ENTITY torbutton.prefs.panel_format "Status bar display format:">
 <!ENTITY torbutton.prefs.panel_text_format "Text">

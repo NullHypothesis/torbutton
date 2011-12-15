@@ -16,19 +16,19 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "Host SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "Puerto:">
 <!ENTITY torbutton.about.title "Acerca de Torbutton">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.version "version">
+<!ENTITY torbutton.about.summary "Protege la privacidad de tu navegación con Tor">
+<!ENTITY torbutton.about.code "Contribuidores de codigo:">
+<!ENTITY torbutton.about.maintainer "Mantenedores:">
+<!ENTITY torbutton.about.security_review "Revisión de Seguridad:">
+<!ENTITY torbutton.about.donate "Si te gusta usar Tor, puedes considerar">
+<!ENTITY torbutton.about.make_donation "hacer una donacion">
 <!ENTITY torbutton.pref_connection.notice "Desactive Torbutton para cambiar esta configuración.">
 <!ENTITY torbutton.pref_connection.more_info "Más información">
 <!ENTITY torbutton.pref_connection_more_info.title "Ayuda">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton está activo.  Si desea cambiar la configuración de su proxy (no Tor), desactive Torbutton y regrese a este diálogo.  Si desea cambiar la configuración de Tor, use la ventana de preferencias de Torbutton.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity "Nueva identidad">
+<!ENTITY torbutton.context_menu.new_identity_key "Yo">
 <!ENTITY torbutton.context_menu.toggle "Cambiar estado de Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferencias...">
@@ -74,9 +74,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Deshabilitar el guardado de sesión (recomendado)">
 <!ENTITY torbutton.prefs.headers "Cabeceras">
 <!ENTITY torbutton.prefs.spoof_english "Simular navegador en Inglés de EEUU">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Suplantación referida">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Burlar inteligentemente un referido durante el uso de Tor (Burla referidos entre dominios)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Deshabilitar el almacenamiento de DOM al usar Tor (crucial)">
 <!ENTITY torbutton.prefs.forms "Formularios">
@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Sin Tor">
 <!ENTITY torbutton.prefs.restore_tor "En el arranque de la restauración de la sesión, establecer el estado de Tor a:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "En el arranque del navegador, establecer el estado de Tor:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Recargar jar de cookies/eliminar cookies al fallar Firefox (recomendado)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Almacenar cookies con Tor y sin Tor en jars protegidos (peligroso)">
 <!ENTITY torbutton.prefs.clear_http_auth "Eliminar sesiones de autenticación HTTP (recomendado)">
@@ -115,17 +115,17 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "No hay proxies para:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Advertencia: Evite el uso de nombres de host por encima de">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
+<!ENTITY torbutton.prefs.spoofreresh "Actualizar Burlado">
+<!ENTITY torbutton.prefs.refereroptions "Opciones de Referido de suplantación">
+<!ENTITY torbutton.prefs.nospoof "No referer parodia">
+<!ENTITY torbutton.prefs.spoofroot "Burlar de la carpeta que contiene la página">
+<!ENTITY torbutton.prefs.spoofdomain "Burlar el dominio como referido">
+<!ENTITY torbutton.prefs.spoofblank "Hacer un referido en blanco">
 <!ENTITY torbutton.cookiedialog.title "Administrar protecciones cookie">
 <!ENTITY torbutton.cookiedialog.lockCol "Protegidas">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.cookiedialog.domainCol "hospedaje">
 <!ENTITY torbutton.cookiedialog.nameCol "Nombre">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
+<!ENTITY torbutton.cookiedialog.pathCol "Ruta">
 <!ENTITY torbutton.cookiedialog.protectCookie "Proteger cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Eliminar cookie">
 <!ENTITY torbutton.cookiedialog.unprotectCookie "Desproteger cookie">
