@@ -1,3 +1,13 @@
+1.4.5
+  14 Dec 2011
+  * bug 4517: Disable external drag and drop (prevents proxy bypass)
+  * bug 4099: Disable TLS session tickets to prevent linkability
+  * bug 4603: Lower HTTP keep-alive timeout to reduce linkability
+  * bug 4611: Notify user if "New Identity" fails
+  * bug 4667: Close keep-alive connections on "New Identity" (TBB only)
+  * bug 4453: Reset SOCKS host and port only when using "recommended settings"
+  * misc: Perform versioncheck at startup regardless of session restore status
+
 1.4.4.1
   11 Oct 2011
   * misc: Fix a homepage load error on Windows TBB first-run

@@ -5,7 +5,7 @@
 
 #. Decide the version number.
 
-   export VERSION="1.4.3"
+   export VERSION="1.4.5"
    vim ./src/install.rdf # edit <em:version> tag to reflect version
 
 #. Test upgrades of candidate XPI in latest Firefox and TBB product matrix
