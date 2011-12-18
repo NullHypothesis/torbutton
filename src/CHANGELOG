@@ -1,3 +1,7 @@
+1.4.5.1
+  17 Dec 2011
+  * bug 4722: Fix ability to drag tabs on Windows (due to #4517)
+
 1.4.5
   14 Dec 2011
   * bug 4517: Disable external drag and drop (prevents proxy bypass)
