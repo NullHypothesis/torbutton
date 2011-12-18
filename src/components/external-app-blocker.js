@@ -225,8 +225,6 @@ ExternalWrapper.prototype =
 
   // from nsIDragService
   invokeDragSessionWithImage: function(aDOMNode, aTransferableArray, aRegion, aActionType, aImage, aImageX, aImageY, aDragEvent, aDataTransfer) {
-    aActionType = 0;
-
     for(var i = 0; i < aTransferableArray.Count(); i++) {
         this.logger.log(3, "Inspecting drag+drop transfer: "+i);
         var tr = aTransferableArray.GetElementAt(i);
