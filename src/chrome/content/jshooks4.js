@@ -28,6 +28,12 @@ window.__HookObjects = function() {
           Object.defineProperty(window.__proto__, "screenY",
                           {get: function() { return 0;},
                           configurable: false});
+          Object.defineProperty(MouseEvent.prototype, "screenX",
+                          {get: function() { return this.clientX;},
+                          configurable: false});
+          Object.defineProperty(MouseEvent.prototype, "screenY",
+                          {get: function() { return this.clientY;},
+                          configurable: false});
 
           // We can't define individual getters/setters for window.screen 
           // for some reason. works in html but not in these hooks.. No idea why
