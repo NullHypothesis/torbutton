@@ -1481,6 +1481,10 @@ function torbutton_do_new_identity() {
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
 
+  var imgCache = Components.classes["@mozilla.org/image/cache;1"].
+            getService(Components.interfaces.imgICache);
+  imgCache.clearCache(false); // evict all but chrome cache
+
   var cache = Components.classes["@mozilla.org/network/cache-service;1"].
       getService(Components.interfaces.nsICacheService);
   try {
