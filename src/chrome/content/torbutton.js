@@ -1432,6 +1432,16 @@ function torbutton_do_new_identity() {
 
   torbutton_close_on_toggle(true, true);
 
+  var searchBar = window.document.getElementById("searchbar");
+  if (searchBar)
+      searchBar.textbox.reset();
+
+  if (gFindBarInitialized) {
+      var findbox = gFindBar.getElement("findbar-textbox");
+      findbox.reset();
+      gFindBar.close();
+  }
+
   if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
       var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
           getService(Components.interfaces.nsIHttpAuthManager);
