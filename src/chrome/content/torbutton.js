@@ -4050,6 +4050,7 @@ function torbutton_do_resize(ev)
     m_tb_window_width = window.outerWidth;
 }
 
+// XXX: unused. Use torbutton_set_window_size instead
 function torbutton_check_round(browser) 
 {
     if(torbutton_is_windowed(window)
@@ -4096,7 +4097,7 @@ function torbutton_set_window_size(bWin) {
                 +" inner: "+bWin.innerWidth+"x"+bWin.innerHeight+
                 " in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
 
-        var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 101;
+        var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 1;
         var maxWidth = availWidth.value - (window.outerWidth - bWin.innerWidth);
 
         var width;
@@ -4381,7 +4382,7 @@ function torbutton_update_tags(win, new_loc) {
             // NoScript
             torbutton_log(3, "Javascript changed from "+browser.docShell.allowJavascript+" to: "+js_enabled);
             browser.docShell.allowJavascript = js_enabled;
-            torbutton_check_round(browser);
+            torbutton_set_window_size(browser.contentWindow);
 
             // Tag this specially, so that the next onLocationChange
             // doesn't redo these hooks.
@@ -4393,7 +4394,7 @@ function torbutton_update_tags(win, new_loc) {
         } else {
             // We need to do the resize here as well in case the window
             // was minimized during toggle...
-            torbutton_check_round(browser);
+            torbutton_set_window_size(browser.contentWindow);
         }
     }
 
