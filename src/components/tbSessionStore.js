@@ -95,6 +95,17 @@ TBSessionBlocker.prototype =
       if (topic != "sessionstore-state-write") return;
       this.logger.log(3, "Got Session Store observe: "+topic);
       subject = subject.QueryInterface(Ci.nsISupportsString);
+
+      // Simply block sessionstore writes entirely in Tor Browser
+      try {
+        if (this.prefs.getCharPref("torbrowser.version")) {
+          this.logger.log(3, "Blocking SessionStore write in Tor Browser");
+          subject.data = null;
+          return;
+        }
+      } catch(e) {
+      }
+
       this.logger.log(2, "Parsing JSON: "+subject);
 
       var state = this._safeJSONparse(subject);
