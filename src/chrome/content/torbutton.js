@@ -1520,6 +1520,7 @@ function torbutton_do_new_identity() {
   obsSvc.notifyObservers(this, "net:prune-all-connections", null);
 
   // XXX: This may not clear zoom site-specific
+  // browser.content.full-zoom
   var cps = Cc["@mozilla.org/content-pref/service;1"].
       createInstance(Ci.nsIContentPrefService);
   cps.removeGroupedPrefs();
@@ -4382,7 +4383,6 @@ function torbutton_update_tags(win, new_loc) {
             // NoScript
             torbutton_log(3, "Javascript changed from "+browser.docShell.allowJavascript+" to: "+js_enabled);
             browser.docShell.allowJavascript = js_enabled;
-            torbutton_set_window_size(browser.contentWindow);
 
             // Tag this specially, so that the next onLocationChange
             // doesn't redo these hooks.
@@ -4391,10 +4391,6 @@ function torbutton_update_tags(win, new_loc) {
             // JS was not fully enabled for some page elements. 
             // Need to reload
             browser.reload(); 
-        } else {
-            // We need to do the resize here as well in case the window
-            // was minimized during toggle...
-            torbutton_set_window_size(browser.contentWindow);
         }
     }
 
