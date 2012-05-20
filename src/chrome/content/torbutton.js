@@ -1372,7 +1372,7 @@ function torbutton_new_identity() {
  *   2. Disables Javascript and plugins on all tabs
  *   3. Clears state:
  *      a. OCSP
- *      b. Cache
+ *      b. Cache + image cache
  *      c. Site-specific zoom
  *      d. Cookies+DOM Storage+safe browsing key
  *      e. google wifi geolocation token
@@ -1381,6 +1381,8 @@ function torbutton_new_identity() {
  *      h. last open location url
  *      i. clear content prefs
  *   4. Sends tor the NEWNYM signal to get a new circuit
+ *   5. Opens a new window with the default homepage
+ *   6. Closes this window
  *
  * XXX: intermediate SSL certificates are not cleared.
  */
@@ -1545,10 +1547,15 @@ function torbutton_do_new_identity() {
     }
   }
 
-  // gBrowser should always be here.
-  torbutton_set_window_size(gBrowser.contentWindow);
+  // Open a new window with the TBB check homepage
+  var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
+                       Components.interfaces.nsIPrefLocalizedString).data;
+  window.open(homepage);
 
   torbutton_log(3, "New identity successful");
+
+  // Close the current window for added safety
+  window.close();
 }
 
 // toggles plugins: true for disabled, false for enabled
@@ -4094,12 +4101,21 @@ function torbutton_set_window_size(bWin) {
         // at this point...
         bWin.innerWidth = 200;
         bWin.innerHeight = 200;
+
+        // XXX: This is sufficient to prevent some kind of weird resize race condition on Linux.
+        // Why or how, you ask? I have no fucking clue, man.
+        if (bWin.innerWidth != 200 || bWin.innerHeight != 200) {
+            bWin.innerHeight = 200;
+            bWin.innerWidth = 200;
+        }
         torbutton_log(3, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight
                 +" inner: "+bWin.innerWidth+"x"+bWin.innerHeight+
                 " in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
 
         var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 1;
         var maxWidth = availWidth.value - (window.outerWidth - bWin.innerWidth);
+        
+        torbutton_log(3, "Got max dimensions: "+maxWidth+"x"+maxHeight);
 
         var width;
         var height;
