@@ -1613,9 +1613,7 @@ function torbutton_do_new_identity() {
   }
 
   // Open a new window with the TBB check homepage
-  var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
-                       Components.interfaces.nsIPrefLocalizedString).data;
-  window.open(homepage);
+  OpenBrowserWindow();
 
   torbutton_log(3, "New identity successful");
 
