@@ -4237,7 +4237,8 @@ function torbutton_new_window(event)
 
     torbutton_set_window_size(browser.contentWindow);
 
-    //window.addEventListener("resize", torbutton_do_resize, true);
+    // Check the version on every new window. We're already pinging check in these cases.    
+    torbutton_do_async_versioncheck();
 }
 
 function torbutton_close_window(event) {

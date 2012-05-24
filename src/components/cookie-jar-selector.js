@@ -494,7 +494,6 @@ function CookieJarSelector() {
   var jarThis = this;
   this.timerCallback = {
     cookie_changed: false,
-    update_counter: 0,
 
     QueryInterface: function(iid) {
        if (!iid.equals(Component.interfaces.nsISupports) &&
@@ -505,27 +504,6 @@ function CookieJarSelector() {
        return this;
     },
     notify: function() {
-       // XXX: ========== WARNING! Ultra-mega hack: ===============
-       // For various reasons, we want to totally refactor Torbutton.
-       // (see #5709). Since there's no great place to place this timer,
-       // I figured we might as well place it here.
-       //
-       // Additionally, mobile should verify that nsITimer.TYPE_REPEATING_SLACK
-       // is smart wrt suspend.
-       //
-       // We want to perform an update check *about* twice per day.
-       // I thought about randomizing it, but the slack will probably
-       // introduce enough noise over the course of 12 hours or so...
-       // Might as well KISS.
-       if (++this.update_counter > 720) {
-           jarThis.logger.log(3, "Performing async version check");
-           this.update_counter = 0;
-           var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-               .getService(Components.interfaces.nsIWindowMediator);
-           var chrome = wm.getMostRecentWindow("navigator:browser");
-           chrome.torbutton_do_async_versioncheck();
-       }
-
        // this refers to timerCallback object. use jarThis to reference
        // CookieJarSelector object.
        if(!this.cookie_changed) {
