@@ -885,6 +885,71 @@ function torbutton_restore_nontor_settings()
   torbutton_log(2, 'settings restored');
 }
 
+function torbutton_do_async_versioncheck() {
+  if (!m_tb_tbb || !m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
+    return;
+  }
+  torbutton_log(3, "Checking version");
+  try {
+    var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+                            .createInstance(Components.interfaces.nsIXMLHttpRequest);
+    //var req = new XMLHttpRequest(); Blocked by content policy
+    var url = m_tb_prefs.getCharPref("extensions.torbutton.versioncheck_url");
+    req.open('GET', url, true);
+    req.channel.loadFlags |= Ci.nsIRequest.LOAD_BYPASS_CACHE;
+    req.overrideMimeType("text/json");
+    req.onreadystatechange = function (oEvent) {  
+      if (req.readyState === 4) {
+        if(req.status == 200) {
+          if(!req.responseText) {
+            torbutton_log(5, "Version check failed! No JSON present!");
+            return -1;
+          }
+          try {
+            var locale = m_tb_prefs.getCharPref("general.useragent.locale");
+            var version_list = JSON.parse(req.responseText);
+            var my_version = m_tb_prefs.getCharPref("torbrowser.version");
+            for (var v in version_list) {
+              if (version_list[v] == my_version) {
+                torbutton_log(3, "Version check passed.");
+                var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
+                if (homepage.indexOf("https://check.torproject.org/") == 0) {
+                  m_tb_prefs.setCharPref("browser.startup.homepage",
+                      "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1");
+                }
+                return;
+              }
+            }
+            torbutton_log(5, "Your Tor Browser is out of date.");
+            // Not up to date
+            m_tb_prefs.setCharPref("browser.startup.homepage",
+                "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0");
+            return;
+          } catch(e) {
+            torbutton_log(5, "Version check failed! JSON parsing error: "+e);
+            return;
+          }
+        } else if (req.status == 404) {
+          // We're going to assume 404 means the service is not implemented yet.
+          torbutton_log(3, "Version check failed. Versions file is 404.");
+          return -1;
+        }
+        torbutton_log(5, "Version check failed! Web server error: "+req.status);
+        return -1;
+      }  
+    };  
+    req.send(null);
+  } catch(e) {
+    if(e.result == 0x80004005) { // NS_ERROR_FAILURE
+      torbutton_log(5, "Version check failed! Is tor running?");
+      return -1;
+    }
+    torbutton_log(5, "Version check failed! Tor internal error: "+e);
+    return -1;
+  }
+
+}
+
 function torbutton_check_version() {
   torbutton_log(3, "Checking version");
   try {
@@ -2967,7 +3032,7 @@ function torbutton_set_launch_state(state, session_restore) {
         torbutton_enable_tor(true);
         torbutton_log(3, "Tor state updated.");
 
-        torbutton_do_versioncheck();
+        torbutton_do_async_versioncheck();
         
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
@@ -2982,7 +3047,7 @@ function torbutton_set_launch_state(state, session_restore) {
         if(state) torbutton_enable_tor(true);
         else  torbutton_disable_tor();
         
-        torbutton_do_versioncheck();
+        torbutton_do_async_versioncheck();
 
         // Load our homepage again. We just killed it via the toggle.
         if (!session_restore) {
