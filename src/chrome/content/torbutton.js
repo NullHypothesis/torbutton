@@ -4183,7 +4183,7 @@ function torbutton_set_window_size(bWin) {
                 +" inner: "+bWin.innerWidth+"x"+bWin.innerHeight+
                 " in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
 
-        var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 1;
+        var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 51;
         var maxWidth = availWidth.value - (window.outerWidth - bWin.innerWidth);
         
         torbutton_log(3, "Got max dimensions: "+maxWidth+"x"+maxHeight);
