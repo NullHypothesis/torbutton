@@ -2027,7 +2027,7 @@ function torbutton_update_status(mode, force_update) {
     // being pwnt.  This is a pretty darn ugly hack, too. But because of #5863,
     // we really don't care about preserving the user's values for this.
     if (!m_tb_tbb) {
-        m_tb_prefs.setBoolPref("network.websockets.enabled", false);
+        m_tb_prefs.setBoolPref("network.websocket.enabled", false);
         m_tb_prefs.setBoolPref("dom.indexedDB.enabled", false);
     }
 
