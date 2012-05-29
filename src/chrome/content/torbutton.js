@@ -629,6 +629,30 @@ function torbutton_prompt_for_language_preference() {
   m_tb_prefs.setBoolPref("extensions.torbutton.prompted_language", true);
 }
 
+function torbutton_inform_about_tbb() {
+  var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
+      .getService(Components.interfaces.nsIPromptService);
+
+  var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_OK;
+
+  var strings = torbutton_get_stringbundle();
+  var message = strings.GetStringFromName("torbutton.popup.prompt_torbrowser");
+  var checkbox = {value: false};
+
+  var sb = Components.classes["@mozilla.org/intl/stringbundle;1"]
+      .getService(Components.interfaces.nsIStringBundleService);
+  var browserstrings = sb.createBundle("chrome://browser/locale/browser.properties");
+
+  var askagain = browserstrings.GetStringFromName("privateBrowsingNeverAsk");
+
+  var response = prompts.confirmEx(null, "", message, flags, null, null, null,
+                                   askagain, checkbox);
+
+  // Update preferences to reflect their response and to prevent the prompt from
+  // being displayed again.
+  m_tb_prefs.setBoolPref("extensions.torbutton.prompt_torbrowser", !checkbox.value);
+}
+
 //this function checks to see if the context menu is being clicked on a link.
 //if it is, then we show the two context menu items
 function torbutton_check_contextmenu() {
@@ -2219,6 +2243,10 @@ function torbutton_check_protections()
 
   if (!m_tb_control_pass || !m_tb_control_port)
     document.getElementById("torbutton-new-identity").disabled = true;
+
+  if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {
+      torbutton_inform_about_tbb();
+  }
 }
 
 function torbutton_open_cookie_dialog() {
