@@ -1,3 +1,18 @@
+1.4.6
+ 30 May 2012
+  * Bug 5710: Prevent all sessionstore data saving in TBB
+  * Bug 5715: Explicitly clear image cache on TBB New Identity
+  * Bug 4660: Clear search and find boxes on TBB New Identity
+  * Bug 5729: Make New Identity and New Window a multiple of 200x100px
+  * Bug 4755: Spoof screen coordinates for DOM MouseEvents
+  * Bug 4718: Make TBB version check happen on New Window+New Identity
+  * Bug 5758: Disable WebSockets and IndexedDB for non-TBB users
+  * Bug 5863: Remove the ability to toggle Torbutton (to prevent leaks)
+  * Bug 3838: Inform Torbutton users about TBB
+  * Bug 5092: Sign Torbutton Updates
+  * Bugs 5673+5732: Change captcha redirect to startpage.com
+  * Bug 3845: Bump Firefox user agent to 10.0-ESR
+
 1.4.5.1
   17 Dec 2011
   * bug 4722: Fix ability to drag tabs on Windows (due to #4517)
