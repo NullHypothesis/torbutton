@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Ikke-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Ved session genoprettelses start, sæt Tor tilstanden til:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "Når browser opstartes, så angive Tor-tilstanden til:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Genindlæs cookie jar/ryd cookies ved Firefox crash (anbefales)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Gem både Tor og Ikke-Tor cookies i beskyttede krukker (farlige)">
 <!ENTITY torbutton.prefs.clear_http_auth "Ryd HTTP auth sessioner (anbefales)">
@@ -137,11 +137,11 @@
 <!ENTITY torbutton.prefs.dtd_optional "(Valg frit)">
 <!ENTITY torbutton.prefs.dtd_crucial "(Vigtigt)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Videredirigér Torbutton-opdateringer gennem Tor">
-<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Brug automatisk en anden søgemaskine når du stilles overfor en Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
-<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.fix_google_srch "Fjern platform og sprog fra forespørgsler i Google-søgninger">
+<!ENTITY torbutton.prefs.transparentTor "Gennemsigtig Torifikation (Kræver tilpasset transproxy eller Tor-router)">

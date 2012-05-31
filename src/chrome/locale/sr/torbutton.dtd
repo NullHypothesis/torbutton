@@ -16,33 +16,33 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS домаћин:">
 <!ENTITY torbutton.prefs.proxy.port "Порт:">
 <!ENTITY torbutton.about.title "О додатку">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
+<!ENTITY torbutton.about.version "Верзија:">
+<!ENTITY torbutton.about.summary "Штити приватност Tor претраживања.">
 <!ENTITY torbutton.about.code "Code Contributors:">
 <!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.security_review "Безбедносна ревизија:">
+<!ENTITY torbutton.about.donate "Ако вам се свиђа Tor, размилисте о">
+<!ENTITY torbutton.about.make_donation "донирању.">
 <!ENTITY torbutton.pref_connection.notice "Забрани промену ових поставки.">
 <!ENTITY torbutton.pref_connection.more_info "Више информација">
 <!ENTITY torbutton.pref_connection_more_info.title "Помоћ">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton је тренутно омогућен. Ако желите да промените своје поставке посредника невезане за Tor, молимо Вас да онемогућите Torbutton и вратите се овде.  Ако желите да промените своје Tor поставке, молимо Вас да користите прозор за подешавања.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity "Нов идентитет">
+<!ENTITY torbutton.context_menu.new_identity_key "И">
 <!ENTITY torbutton.context_menu.toggle "Промени статус">
 <!ENTITY torbutton.context_menu.toggle.key "П">
 <!ENTITY torbutton.context_menu.preferences "Поставке...">
 <!ENTITY torbutton.context_menu.preferences.key "П">
 <!ENTITY torbutton.context_menu.about "О додатку...">
 <!ENTITY torbutton.context_menu.about.key "д">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
-<!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
-<!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
-<!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
-<!ENTITY torbutton.context_menu.openTorWindow.key "d">
+<!ENTITY torbutton.context_menu.cookieProtections "Дозволе за колачиће">
+<!ENTITY torbutton.context_menu.cookieProtections.key "Ц">
+<!ENTITY torbutton.context_menu.copyTor "Копрај Tor адресу">
+<!ENTITY torbutton.context_menu.copyTor.key "п">
+<!ENTITY torbutton.context_menu.openTorTab "Отвори Tor адресу у новој картици">
+<!ENTITY torbutton.context_menu.openTorTab.key "р">
+<!ENTITY torbutton.context_menu.openTorWindow "Отвори Tor адресу у новом прозору">
+<!ENTITY torbutton.context_menu.openTorWindow.key "д">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Кликните да бисте покренули Torbutton">
 <!ENTITY torbutton.prefs.sec_settings "Безбедносне поставке">
@@ -54,7 +54,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Забрани скривену меморију и очисти је при покретању Tor-а">
 <!ENTITY torbutton.prefs.block_cache "Забрани приступ диску и скривеној меморији када је Tor омогућен">
 <!ENTITY torbutton.prefs.cookie_jars "Смести колачиће у заштићено складиште">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Крости дијалог за заштиту колачића за бирање">
 <!ENTITY torbutton.prefs.mmm_cookies "Ручно ћу управљати својим колачићима (опасно)">
 <!ENTITY torbutton.prefs.clear_cookies "Очисти колачиће при покретању Tor-а">
 <!ENTITY torbutton.prefs.disable_plugins "Онемогући додатке када је Tor покренут (кључно)">
@@ -74,9 +74,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Онемогући чување сесије (препоручује се)">
 <!ENTITY torbutton.prefs.headers "Заглавља">
 <!ENTITY torbutton.prefs.spoof_english "Амерички енглески прегледач">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Маскирање упућивача">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Паметно маскирање упућивача када је Tor омогућен (маскира преко домена упућивача)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Онемогући DOM складиште када је Tor покренут (кључно)">
 <!ENTITY torbutton.prefs.forms "Формулари">
@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Не-Tor">
 <!ENTITY torbutton.prefs.restore_tor "При покретању прозора за враћање сесије, постави стање Tor-а на:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "При покретању претраживача, подсеи Tor стање на:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Поново учитај jar колачић/очисти колачиће при грешци у фајерфоксу (препоручује се)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Смести обичне и Tor колачиће у заштићеним архивама (опасно) ">
 <!ENTITY torbutton.prefs.clear_http_auth "Очисти HTTP сесије (препоручује се)">
@@ -115,23 +115,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Без посредника за:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Упозорење: избегни коришћење изнад наведене називе домаћина">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
+<!ENTITY torbutton.prefs.spoofreresh "Маскирај освежавање">
+<!ENTITY torbutton.prefs.refereroptions "Опције за маскирање упућивача">
+<!ENTITY torbutton.prefs.nospoof "Не маскирај упућиваче">
+<!ENTITY torbutton.prefs.spoofroot "Маскирај директоријум у коме се налази страница">
+<!ENTITY torbutton.prefs.spoofdomain "Маскирај домен као упућивача">
+<!ENTITY torbutton.prefs.spoofblank "Подсеи да упућивач буде празан">
+<!ENTITY torbutton.cookiedialog.title "Уреди заштиту колачића">
+<!ENTITY torbutton.cookiedialog.lockCol "Заштићен">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.cookiedialog.nameCol "Име">
+<!ENTITY torbutton.cookiedialog.pathCol "Путања">
+<!ENTITY torbutton.cookiedialog.protectCookie "Заштити колачић">
+<!ENTITY torbutton.cookiedialog.removeCookie "Уклони колачић">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Уклони заштиту колачића">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Уклони све осим заштићених">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Заштити нове колачиће">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Не штити нове колачиће">
 <!ENTITY torbutton.prefs.disable_livemarks "Онемогући ажурирања довода када је Tor покренут">
 <!ENTITY torbutton.prefs.dtd_recommended "(препоручује се)">
 <!ENTITY torbutton.prefs.dtd_optional "(необавезно)">
@@ -144,4 +144,4 @@
 <!ENTITY torbutton.prefs.engine4 "Scroogle.org">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Скини платформу и језик са Google претраживача">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.transparentTor "Транспарента Торификација (захтева посебан Tor прокси или Tor рутер)">

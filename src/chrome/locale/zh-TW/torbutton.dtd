@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Proxy 設定">
 <!ENTITY torbutton.prefs.recommended_settings "在Firefox 使用建議的 Proxy 設定">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "使用 Polipo">
 <!ENTITY torbutton.prefs.custom_settings "使用自訂的Proxy 設定">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
@@ -37,17 +37,17 @@
 <!ENTITY torbutton.context_menu.about.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
-<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.copyTor "複製 Tor 網際網路位址">
+<!ENTITY torbutton.context_menu.copyTor.key "P">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "在新的視窗開啟 Tor 網際網路位址">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "點擊以初始 Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
+<!ENTITY torbutton.prefs.sec_settings "安全設定">
 <!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
+<!ENTITY torbutton.prefs.block_thwrite "在啟用 Tor 時封鎖瀏覽器">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.clear_history "清除Tor toggle上的歷史記錄(選項)">
@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
 <!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">

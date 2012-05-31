@@ -7,7 +7,7 @@
 <!ENTITY torbutton.prefs.tor_settings "Ρυθμίσεις διαμεσολαβητή">
 <!ENTITY torbutton.prefs.recommended_settings "Χρήση των προτεινόμενων ρυθμίσεων για την τρέχουσα έκδοση του Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Χρήση του Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
+<!ENTITY torbutton.prefs.use_polipo "Χρήση Polipo">
 <!ENTITY torbutton.prefs.custom_settings "Χρήση προσαρμοσμένων ρυθμίσεων διαμεσολαβητή">
 <!ENTITY torbutton.prefs.proxy.host.http "Διαμεσολαβητής HTTP :">
 <!ENTITY torbutton.prefs.proxy.host.https "Διαμεσολαβητής SSL :">
@@ -16,32 +16,32 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "Κεντρικός υπολογιστής SOCKS :">
 <!ENTITY torbutton.prefs.proxy.port "Θύρα :">
 <!ENTITY torbutton.about.title "Περί Torbutton">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.version "Έκδοση">
+<!ENTITY torbutton.about.summary "Προστατεύει την ιδιωτική ζωή του Tor περιήγηση σας.">
+<!ENTITY torbutton.about.code "Συντελεστές Κώδικα:">
+<!ENTITY torbutton.about.maintainer "Συντηρητής:">
+<!ENTITY torbutton.about.security_review "Αναθεώρηση Ασφαλείας:">
+<!ENTITY torbutton.about.donate "Αν σας αρέσει η χρήση του Tor, θα μπορούσε να λάβετε υπ 'όψιν">
+<!ENTITY torbutton.about.make_donation "κάνε μια δωρεά.">
 <!ENTITY torbutton.pref_connection.notice "Απενεργοποιήστε το Torbutton για να αλλάξετε αυτές τις ρυθμίσεις.">
 <!ENTITY torbutton.pref_connection.more_info "Περισσότερες πληροφορίες">
 <!ENTITY torbutton.pref_connection_more_info.title "Βοήθεια">
 <!ENTITY torbutton.pref_connection_more_info.text "Το Torbutton είναι ενεργοποιημένο.Αν θέλετε να αλλάξετε τις ρυθμίσεις διαμεσολαβητή, εκτός του Tor, απενεργοποιήστε το Torbutton και επιστρέψτε εδώ. Αν θέλετε να αλλάξετε τις ρυθμίσεις για τον διαμεσολαβητή Tor, χρησιμοποιήστε το παράθυρο επιλογών του Torbutton">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity "Νέα Ταυτότητα">
+<!ENTITY torbutton.context_menu.new_identity_key "Τ">
 <!ENTITY torbutton.context_menu.toggle "Εναλλαγή κατάστασης λειτουργίας του Tor">
 <!ENTITY torbutton.context_menu.toggle.key "Ε">
 <!ENTITY torbutton.context_menu.preferences "Επιλογές...">
 <!ENTITY torbutton.context_menu.preferences.key "Ε">
 <!ENTITY torbutton.context_menu.about "Σχετικά με το Torbutton">
 <!ENTITY torbutton.context_menu.about.key "Π">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Προστασία Cookies">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "Αντιγραφή του Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "Άνοιγμα του Tor URL σε νέο Tab">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "Άνοιγμα του Tor URL σε νέο Παράθυρο">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Κάντε κλικ για να εκκίνηση του Torbutton">
@@ -54,7 +54,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Απαγόρευση χρήσης λανθάνουσας δίσκου κατά τη λειτουργία Tor και εκκαθάριση της στην εναλλαγή Tor">
 <!ENTITY torbutton.prefs.block_cache "Απαγόρευση λανθάνουσας μνήμης και δίσκου κατά τη λειτουργία Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Αποθήκευση cookies εκτός Tor σε προστατευμένο αρχείο jar">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Επιλογή μέσω του Διαλόγου Προστασίας Cookies">
 <!ENTITY torbutton.prefs.mmm_cookies "Χειρωνακτική διαχείριση cookies (επικίνδυνο)">
 <!ENTITY torbutton.prefs.clear_cookies "Εκκαθάριση cookies κατά την εναλλαγή χρήσης Tor">
 <!ENTITY torbutton.prefs.disable_plugins "Απενεργοποίηση πρόσθετων λειτουργιών κατά τη χρήση Tor (κρίσιμο)">
@@ -74,9 +74,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Απενεργοποίηση αποθήκευσης συνεδρίας (συνιστάται)">
 <!ENTITY torbutton.prefs.headers "Κεφαλίδες">
 <!ENTITY torbutton.prefs.spoof_english "Παραπλάνηση της γλώσσας US English του Περιηγητή">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Παραπλάνηση διεύθυνσης αναφοράς">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Παραπλάνηση ευφυούς αναφορέα κατά την χρήση του Tor (παραπλανεί ">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Απενεργοποίηση αποθήκευσης DOM κατά τη χρήση Tor (κρίσιμο)">
 <!ENTITY torbutton.prefs.forms "Έντυπα">
@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Μη Tor">
 <!ENTITY torbutton.prefs.restore_tor "Όταν γίνεται εκκίνηση με αποκατάσταση της συνεδρίας, τοποθέτηση του Tor σε κατάσταση:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "Κατά την εκκίνηση του προγράμματος περιήγησης, ρύθμιση της κατάστασης του Tor σε:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Επαναφόρτωση cookie jar/ εκκαθάριση cookiew σε περίπτωση κατάρρευσης του Firefox (συνίσταται)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Αποθήκευση cookies από και εκτός Tor σε προστατευμένα αρχεία jar (επικίνδυνο)">
 <!ENTITY torbutton.prefs.clear_http_auth "Εκκαθάριση πιστοποιημένων  συνεδριών HTTP (συνιστάται)">
@@ -115,24 +115,24 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Δεν υπάρχουν πληρεξούσιοι διακομιστές proxy για:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Ειδοποίηση: Αποφύγετε την  χρήση hostnames πιο πάνω">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
+<!ENTITY torbutton.prefs.spoofreresh "Ανανέωση παραπλάνησης">
+<!ENTITY torbutton.prefs.refereroptions "Επιλογές παραπλάνησης αναφορέα">
+<!ENTITY torbutton.prefs.nospoof "Να μην παραπλανείται ο αναφορέας">
+<!ENTITY torbutton.prefs.spoofroot "Παραπλάνηση του γονικού καταλόγου της σελίδας">
+<!ENTITY torbutton.prefs.spoofdomain "Παραπλάνηση της περιοχής ως αναφορέα">
+<!ENTITY torbutton.prefs.spoofblank "Φτιάξε κενές παραπομπές">
+<!ENTITY torbutton.cookiedialog.title "Διαχείριση Προστασίας Cookie">
 <!ENTITY torbutton.cookiedialog.lockCol "Προστατευμένα">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.cookiedialog.domainCol "Οικοδεσπότης">
 <!ENTITY torbutton.cookiedialog.nameCol "Όνομα">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
+<!ENTITY torbutton.cookiedialog.pathCol "Μονοπάτι">
+<!ENTITY torbutton.cookiedialog.protectCookie "Προστασίας Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Αφαίρεση Cookie">
 <!ENTITY torbutton.cookiedialog.unprotectCookie "Ξεπροστάτευση Cookie">
 <!ENTITY torbutton.cookiedialog.removeAllBut "Αφαίρεση Όλων Εκτός από των Προστατευμένων">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Προστασία Νέων Cookie">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Να Μη γίνεται Προστασία Νέων Cookie">
-<!ENTITY torbutton.prefs.disable_livemarks "Απενεργοποίηση των ενημερώσεων του livemark όσο χρησιμοποιείται το Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Απενεργοποίηση των ενημερώσεων Livemark κατά τη διάρκεια της χρήσης του Tor">
 <!ENTITY torbutton.prefs.dtd_recommended "(συνίσταται)">
 <!ENTITY torbutton.prefs.dtd_optional "(προεραιτικό)">
 <!ENTITY torbutton.prefs.dtd_crucial "(κρίσιμο)">
@@ -144,4 +144,4 @@
 <!ENTITY torbutton.prefs.engine4 "scroogle.org">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Αφαίρεσε την πλατφόρμα και τη γλώσσα (του συστήματος) απο τα ερωτήματα στα κουτιά αναζήτησης">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.transparentTor "Διαφανής Torification  (Απαιτεί προσαρμοσμένο  proxy ή Tor δρομολογητή)">

@@ -21,7 +21,7 @@
 <!ENTITY torbutton.about.code "Code Contributors:">
 <!ENTITY torbutton.about.maintainer "Maintainer:">
 <!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
+<!ENTITY torbutton.about.donate "Če vam je Tor všeč, vas bo morda zanimalo tudi:">
 <!ENTITY torbutton.about.make_donation "doniraj">
 <!ENTITY torbutton.pref_connection.notice "Če želite spremeniti te nastavitve onemogočite razširitev Torbutton.">
 <!ENTITY torbutton.pref_connection.more_info "Več informacij">
@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Ne-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Ob začetku obnovljene seje nastavi Tor na:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "Ob zagonu brskalnika nastavi stanje Tor-a na:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Naloži piškotke iz predala /počisti piškotke, če se Firefox samodejno zapre (proporočeno)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Shrani Tor in ne-tor piškotke v zaščiten predal (nevarno)">
 <!ENTITY torbutton.prefs.clear_http_auth "Počisti HTTP seje (priporočeno)">
@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
 <!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
