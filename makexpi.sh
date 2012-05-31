@@ -1,6 +1,6 @@
 #!/bin/bash
 APP_NAME=torbutton
-VERSION=`grep em:version src/install.rdf | sed -e 's/[<>]/	/g' | cut -f3`
+VERSION=`grep em:version src/install.rdf | sed -e 's/["]//g' | cut -f2 -d=`
 XPI_NAME=$APP_NAME-$VERSION.xpi
 
 if [ -e "pkg/$XPI_NAME" ]; then
