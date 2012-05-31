@@ -633,10 +633,9 @@ function torbutton_inform_about_tbb() {
   var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
       .getService(Components.interfaces.nsIPromptService);
 
-  var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_OK;
-
   var strings = torbutton_get_stringbundle();
   var message = strings.GetStringFromName("torbutton.popup.prompt_torbrowser");
+  var title = strings.GetStringFromName("torbutton.title.prompt_torbrowser");
   var checkbox = {value: false};
 
   var sb = Components.classes["@mozilla.org/intl/stringbundle;1"]
@@ -645,8 +644,7 @@ function torbutton_inform_about_tbb() {
 
   var askagain = browserstrings.GetStringFromName("privateBrowsingNeverAsk");
 
-  var response = prompts.confirmEx(null, "", message, flags, null, null, null,
-                                   askagain, checkbox);
+  var response = prompts.alertCheck(null, title, message, askagain, checkbox);
 
   // Update preferences to reflect their response and to prevent the prompt from
   // being displayed again.
@@ -4054,6 +4052,14 @@ function torbutton_do_startup()
           }
         } else if (m_tb_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
           m_tb_prefs.setCharPref('extensions.torbutton.socks_host', '127.0.0.1');
+        }
+
+        if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {
+          var o_stringbundle = torbutton_get_stringbundle();
+          var warning = o_stringbundle.GetStringFromName("torbutton.popup.short_torbrowser");
+          var title = o_stringbundle.GetStringFromName("torbutton.title.prompt_torbrowser");
+          var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
+          prompts.alert(null, title, warning);
         }
 
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
