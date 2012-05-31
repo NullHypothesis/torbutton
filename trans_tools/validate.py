@@ -1,4 +1,4 @@
-#! /bin/env python
+#!/usr/bin/python
 
 from __future__ import unicode_literals, print_function
 
