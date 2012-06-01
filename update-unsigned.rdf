@@ -1,0 +1,350 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}">
+    <em:updates>
+      <Seq>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.14-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.15-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.16-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.17-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.18alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc1"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc2"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc3"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc4"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc5"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc6"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.3.2-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.3.3-alpha"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.0"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.1"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.2"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.3"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.4"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.4.1"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.5"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.5.1"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.6"/>
+      </Seq>
+    </em:updates>
+    
+  </Description>
+
+  <!-- version 1.1.14 -->
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.14-alpha">
+    <em:version>1.1.14-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.1.14-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:b316f9d84930ecf23b0797f93a6433334a4c38d5</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.15-alpha">
+    <em:version>1.1.15-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.1.15-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:fa0d47c98d258ba904d828bea15b140ab438eb56</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.16-alpha">
+    <em:version>1.1.16-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.1.16-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:f892dac7e5da8c63005f896c9aa1436e3f77ab4b</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.17-alpha">
+    <em:version>1.1.17-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.1.17-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:93e17f955655eb31e5a6ff9f71dfde479a5b7a6d</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.1.18alpha">
+    <em:version>1.1.18alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.0b*</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.1.18alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:6fdcebcb1e6cc694b45065c2b6df07ffb12ea164</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc1">
+    <em:version>1.2.0rc1</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0rc1.xpi</em:updateLink>
+		 <em:updateHash>sha1:8c8cb5e7e3844b8310151c5b56fb622134ea67f6</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc2">
+    <em:version>1.2.0rc2</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0rc2.xpi</em:updateLink>
+		 <em:updateHash>sha1:f0d6e121e2b0fbd4d1db7c3f333b8d7ab5c1d906</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc3">
+    <em:version>1.2.0rc3</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0rc3.xpi</em:updateLink>
+		 <em:updateHash>sha1:184294b480119bb7b943ede116345c52ee7772fc</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+  
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc4">
+    <em:version>1.2.0rc4</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0rc4.xpi</em:updateLink>
+		 <em:updateHash>sha1:23df6a12c7140b5817338136da1cd7737412bbbb</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+  
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc5">
+    <em:version>1.2.0rc5</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0rc5.xpi</em:updateLink>
+		 <em:updateHash>sha1:050925e2c02e61f2f0ceb4683600fc0c58a835bb</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0rc6">
+    <em:version>1.2.0rc6</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0rc6.xpi</em:updateLink>
+		 <em:updateHash>sha1:7f01c577641b6222781cd880c9825d6f50ff1cc4</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.0">
+    <em:version>1.2.0</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.0.xpi</em:updateLink>
+		 <em:updateHash>sha1:086e2a05b8e5393f2f28533cdb715e69465c3169</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.2.1">
+    <em:version>1.2.1</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>3.1a1pre</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.2.1.xpi</em:updateLink>
+		 <em:updateHash>sha1:204766e5c9112aba7313e3ab98023f57f1668978</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.3.2-alpha">
+    <em:version>1.3.2-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>4.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/torbutton/releases/torbutton-1.3.2-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:4231cf0e568fe61f49011d4626e85cdb467c6a48</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.3.3-alpha">
+    <em:version>1.3.3-alpha</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.3.3-alpha.xpi</em:updateLink>
+		 <em:updateHash>sha1:c7323cd408ebee28ee23b6a91fe056d59de668f5</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.0">
+    <em:version>1.4.0</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.0.xpi</em:updateLink>
+		 <em:updateHash>sha1:4df99e70b2991bb51ea70d0c217961174b24a98e</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.1">
+    <em:version>1.4.1</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.1.xpi</em:updateLink>
+		 <em:updateHash>sha1:7f80cf8eea6d523fdb0bac94eefce52ebbb192be</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+    
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.2">
+    <em:version>1.4.2</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.2.xpi</em:updateLink>
+		 <em:updateHash>sha1:a724c55165f81a86e2ec1d56026c9160964c5b87</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.3">
+    <em:version>1.4.3</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.3.xpi</em:updateLink>
+		 <em:updateHash>sha1:e048d53b3e36c161ccfb75b09c6aece8b7f1e94f</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.4">
+    <em:version>1.4.4</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.4.xpi</em:updateLink>
+		 <em:updateHash>sha1:3f352e7d8577fc576a9011d858a8b34f4fea4b09</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.4.1">
+    <em:version>1.4.4.1</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.4.1.xpi</em:updateLink>
+		 <em:updateHash>sha1:95dc1e079da873aae9ca1beb7354fb8fdeaa7414</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+        
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.5">
+    <em:version>1.4.5</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.5.xpi</em:updateLink>
+		 <em:updateHash>sha1:5f2e2d72343b2d4702ec24491a11babedd3650b9</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.5.1">
+    <em:version>1.4.5.1</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.5.1.xpi</em:updateLink>
+		 <em:updateHash>sha1:0002e2d61613504e41d8b773c30ff6307b8286da</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.6">
+    <em:version>1.4.6</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.6.xpi</em:updateLink>
+		 <em:updateHash>sha1:eedadda6e5aacb8dabe2118e6c14c4dd4441fed0</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+        
+</RDF>

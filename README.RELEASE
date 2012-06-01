@@ -67,12 +67,19 @@
 
 #. Sign the new update.rdf.
 
-   # TODO: Currently manual due to offline signing.
+   # Key creation based on these instructions:
+   # Command line: http://blog.techno-barje.fr/post/2009/10/08/How-to-setup-a-mozilla-extension-update-server/
+   # Gui: https://www.binaryturf.com/steps-release-extension-firefox-3/
+
+   # TODO: Process currently manual due to offline signing.
    # No need to fear the reaper, man. We can do online signing if we just put
    # our minds to it: https://trac.torproject.org/projects/tor/ticket/6011
 
-   # Command line: http://blog.techno-barje.fr/post/2009/10/08/How-to-setup-a-mozilla-extension-update-server/
-   # Gui: https://www.binaryturf.com/steps-release-extension-firefox-3/
+   # Special note: I was unable to update an already signed
+   # copy of the update.rdf for a new release. We probably need to 
+   # keep the unsigned version around as input? See the root directory 
+   # of the torbutton.git for a copy.
+   ./mccoy-cli.x86/mccoy -profile ./.mozilla/mccoy/*.default/ -signRDF update-unsigned.rdf -key Torbutton
 
    # Copy the signed update.rdf into place in the website svn
 
@@ -80,6 +87,8 @@
 
    torsocks svn up .
    torsocks svn commit .
+
+   torsocks ssh vescum "/home/mirroradm/bin/trigger-mirrors"
 
 #. Test firefox autoupdate
 
