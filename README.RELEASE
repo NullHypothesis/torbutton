@@ -59,19 +59,22 @@
    torsocks scp ./pkg/torbutton-${VERSION}.xpi vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi
    torsocks scp ./pkg/torbutton-${VERSION}.xpi.asc vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi.asc
 
-#. Update + Sign update.rdf
+#. Update update.rdf
 
    cd website-svn
    vim ./include/versions.wmi   # Add sha1 and version
    vim ./torbutton/update.rdf   # Add <li> and <description> w/ sha1 and version
 
-   # Sign the new update.rdf.
-   # Command line:
-   # http://blog.techno-barje.fr/post/2009/10/08/How-to-setup-a-mozilla-extension-update-server/
-   # Gui:
-   # https://www.binaryturf.com/steps-release-extension-firefox-3/
+#. Sign the new update.rdf.
 
-   # Copy the signed update.rdf into place
+   # TODO: Currently manual due to offline signing.
+   # No need to fear the reaper, man. We can do online signing if we just put
+   # our minds to it: https://trac.torproject.org/projects/tor/ticket/6011
+
+   # Command line: http://blog.techno-barje.fr/post/2009/10/08/How-to-setup-a-mozilla-extension-update-server/
+   # Gui: https://www.binaryturf.com/steps-release-extension-firefox-3/
+
+   # Copy the signed update.rdf into place in the website svn
 
 #. Update website
 
