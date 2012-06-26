@@ -1,3 +1,7 @@
+// Bug 1506 Android P1/TBB P5: This code providers users with notification
+// in the event of external app launch. We want it to exist in the desktop
+// port, but it is probably useless for Android.
+
 /*************************************************************************
  * External App Handler.
  * Handles displaying confirmation dialogs for external apps and protocols

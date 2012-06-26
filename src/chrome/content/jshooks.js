@@ -1,3 +1,5 @@
+// Bug 1506 P0: These hooks are only relevant to FF 3.5 and below.
+
 window.__HookObjects = function() {
   if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;

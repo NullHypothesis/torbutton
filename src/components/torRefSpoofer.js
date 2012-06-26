@@ -1,3 +1,6 @@
+// Bug 1506 P0: I don't really believe referers matter in the grand scheme.
+// Kill this code.
+
 const kMODULE_CID = Components.ID("65be2be0-ceb4-44c2-91a5-9c75c53430bf");
 const kMODULE_CONTRACTID = "@torproject.org/torRefSpoofer;1";
 

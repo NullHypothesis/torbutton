@@ -1,3 +1,5 @@
+// Bug 1506 P0: This component is unused. Ignore it.
+
 /*************************************************************************
  * Hack to disable CA cert trust dialog popup during CA cert import
  * during Tor toggle (since we save the trust bits to disk).

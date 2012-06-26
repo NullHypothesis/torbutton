@@ -1,3 +1,6 @@
+// Bug 1506 P1: We're almost certainly going to replace this stuff with direct
+// patches of the JS VM. 
+
 window.__HookObjects = function() {
   if (typeof(window.__tb_hooks_ran) === "boolean") {
       return false;

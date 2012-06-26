@@ -1,3 +1,5 @@
+// Bug 1506 P0: All of this code is toggle specific and can be killed
+
 /* -*- Mode: javascript; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; -*- */
 /*************************************************************************
  * Content policy to block stuff not handled by other components

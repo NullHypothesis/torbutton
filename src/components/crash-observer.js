@@ -1,3 +1,7 @@
+// Bug 1506 P1-2: This code is mostly hackish remnants of session store
+// support. There are a couple of observer events that *might* be worth
+// listening to. Search for 1506 in the code.
+
 /*************************************************************************
  * Crash observer (JavaScript XPCOM component)
  *
@@ -92,11 +96,10 @@ CrashObserver.prototype = {
       }
     },
 
-    // This is done in the constructor. JS doesn't allow this...
-    //onEnabling: this.onOperationCancelled,
-
     observe: function(subject, topic, data) {
       if(topic == "profile-after-change") {
+        // Bug 1506 P1: We listen to these prefs as signals for startup,
+        // but only for hackish reasons.
         if(this._prefs.getBoolPref("extensions.torbutton.fresh_install")) {
           this._prefs.setBoolPref("extensions.torbutton.normal_exit", true);
         }
@@ -108,6 +111,8 @@ CrashObserver.prototype = {
         }
         this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
       } else if (topic == "em-action-requested") {
+        // Bug 1506 P2/P4: You probably want to register this observer to clean up
+        // prefs if you're going to support using normal firefox. 
         this.logger.log(3, "Uninstall action requested..");
         // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
         subject.QueryInterface(Components.interfaces.nsIUpdateItem);
@@ -122,6 +127,8 @@ CrashObserver.prototype = {
           }
         }
       } else if (topic == "quit-application-granted") {
+        // Bug 1506 P2/P4: You probably want to register this observer to clean up
+        // prefs if you're going to support using normal firefox. 
         this.logger.log(3, "Got firefox quit event.");
         var chrome = null;
         try {

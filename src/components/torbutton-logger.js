@@ -1,3 +1,6 @@
+// Bug 1506 P1: This is just a handy logger. If you have a better one, toss
+// this in the trash.
+
 /*************************************************************************
  * TBLogger (JavaScript XPCOM component)
  *

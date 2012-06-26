@@ -1,3 +1,7 @@
+// Bug 1506 P4: This code blocks the session store from being written to
+// disk. It is fairly important, but only one small piece is needed. Search
+// this file for 1506 for more details.
+
 /*************************************************************************
  * Torbutton Session Store Control
  *
@@ -96,6 +100,10 @@ TBSessionBlocker.prototype =
       this.logger.log(3, "Got Session Store observe: "+topic);
       subject = subject.QueryInterface(Ci.nsISupportsString);
 
+      // Bug 1506: This is the only important bit, other than
+      // the registration goop. You don't even need the JSON 
+      // garbage...
+      // 
       // Simply block sessionstore writes entirely in Tor Browser
       try {
         if (this.prefs.getCharPref("torbrowser.version")) {
@@ -105,6 +113,8 @@ TBSessionBlocker.prototype =
         }
       } catch(e) {
       }
+
+      // End 1506. Rest of this function can be ignored.
 
       this.logger.log(2, "Parsing JSON: "+subject);
 

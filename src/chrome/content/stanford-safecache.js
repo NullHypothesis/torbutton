@@ -1,3 +1,9 @@
+// Bug 1506 P3: This file provides important cache isolation properties, 
+// but it is not very useful without a patched Firefox to go with it.
+// It could probably also use some refactoring into an XPCOM component.
+// It is currently registered from torbutton.js's "main window" observers,
+// which is not the right place.
+
 /*
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

@@ -1,3 +1,8 @@
+// Bug 1506 P0-P5: This is the main Torbutton overlay file. Much needs to be
+// preserved here, but in an ideal world, most of this code should perhaps be
+// moved into an XPCOM service, and much can also be tossed. See also
+// individual 1506 comments for details.
+
 // TODO: check for leaks: http://www.mozilla.org/scriptable/avoiding-leaks.html
 // TODO: Double-check there are no strange exploits to defeat:
 //       http://kb.mozillazine.org/Links_to_local_pages_don%27t_work
@@ -24,6 +29,7 @@ var m_tb_control_port = null;
 var m_tb_control_host = null;
 var m_tb_control_pass = null;
 
+// Bug 1506 P1: This object is only for updating the UI for toggling and style
 var torbutton_window_pref_observer =
 {
     register: function()
@@ -66,6 +72,10 @@ var torbutton_window_pref_observer =
     }
 }
 
+// Bug 1506 P2: This object keeps Firefox prefs in sync with Torbutton prefs.
+// It probably could stand some simplification (See #3100). It also belongs
+// in a component, not the XUL overlay. There also are a lot of toggle-triggering
+// prefs here..
 var torbutton_unique_pref_observer =
 {
     register: function()
@@ -342,7 +352,7 @@ var torbutton_unique_pref_observer =
     }
 }
 
-
+// Bug 1506 P1
 function torbutton_set_panel_view() {
     var o_statuspanel = false;
     var o_prefbranch = false;
@@ -358,6 +368,7 @@ function torbutton_set_panel_view() {
     o_statuspanel.setAttribute('collapsed', !display_panel);
 }
 
+// Bug 1506 P1
 function torbutton_set_panel_style() {
     var o_statuspanel = false;
     var o_prefbranch = false;
@@ -371,6 +382,7 @@ function torbutton_set_panel_style() {
     o_statuspanel.setAttribute('class','statusbarpanel-' + panel_style);
 }
 
+// Bug 1506 P0: Die toggle, die! 
 function torbutton_toggle(force) {
     var o_toolbutton = false;
 
@@ -397,6 +409,7 @@ function torbutton_toggle(force) {
     }
 }
 
+// Bug 1506 P0: Die toggle, die! 
 function torbutton_set_status() {
     var state = false;
     if (torbutton_check_status()) {
@@ -465,6 +478,7 @@ function torbutton_set_status() {
     }
 }
 
+// Bug 1506 P0: Die toggle die
 function torbutton_init_toolbutton()
 {
     try {
@@ -485,6 +499,9 @@ function torbutton_init_toolbutton()
     }
 }
 
+// Bug 1506 P2-P4: This code sets some version variables that are irrelevant.
+// It does read out some important environment variables, though. It is
+// called once per browser window.. This might belong in a component.
 function torbutton_init() {
     torbutton_log(3, 'called init()');
 
@@ -518,6 +535,7 @@ function torbutton_init() {
         m_tb_ff36 = false;
     }
 
+    // Bug 1506 P4: These vars are very important for New Identity
     var environ = Components.classes["@mozilla.org/process/environment;1"]
                    .getService(Components.interfaces.nsIEnvironment);
 
@@ -607,6 +625,9 @@ function torbutton_init() {
     torbutton_log(3, 'init completed');
 }
 
+// Bug 1506 P3: This code asks the user once if they want to spoof their
+// language to English.
+//
 // Asks the user whether Torbutton should make "English requests", and updates
 // the extensions.torbutton.spoof_english preference accordingly.
 function torbutton_prompt_for_language_preference() {
@@ -651,6 +672,9 @@ function torbutton_inform_about_tbb() {
   m_tb_prefs.setBoolPref("extensions.torbutton.prompt_torbrowser", !checkbox.value);
 }
 
+// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
+// Kill it.
+// 
 //this function checks to see if the context menu is being clicked on a link.
 //if it is, then we show the two context menu items
 function torbutton_check_contextmenu() {
@@ -660,6 +684,8 @@ function torbutton_check_contextmenu() {
     torurl.hidden = tortab.hidden = torwin.hidden = (document.popupNode.localName != "A") 
 }
 
+// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
+// Kill it.
 function torbutton_copy_link() {
   var element = document.popupNode;
   var myURI = Components.classes["@mozilla.org/network/io-service;1"]
@@ -674,6 +700,9 @@ function torbutton_copy_link() {
       return;//unsupported scheme      
   torbutton_copyToClipboard(myURI.spec);  
 }
+
+// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
+// Kill it.
 function torbutton_copyToClipboard(copyThis) {	
 	
 	var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
@@ -693,6 +722,9 @@ function torbutton_copyToClipboard(copyThis) {
 	clip.setData(trans, null, clipid.kGlobalClipboard);
 	return true;
 }
+
+// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
+// Kill it.
 //opens new tab with link with tor:// protocol
 function torbutton_open_link_as_tor(tabFlag) {
   var element = document.popupNode;
@@ -721,12 +753,12 @@ function torbutton_open_link_as_tor(tabFlag) {
 
 
 
-
+// Bug 1506 P0: Our prefs should be handled by Tor Browser. Even if they're
+// not, they should be vastly simplified from this. See also #3100.
+//
 // this function duplicates a lot of code in preferences.js for deciding our
 // recommended settings.  figure out a way to eliminate the redundancy.
 // TODO: Move it to torbutton_util.js?
-
-// XXX: Still doesn't help torbrowser...
 function torbutton_init_prefs() {
     var torprefs = false;
     var proxy_port;
@@ -781,6 +813,7 @@ function torbutton_init_prefs() {
     torbutton_log(1, 'http_port='+torprefs.getIntPref('http_port'));
 }
 
+// Bug 1506 P2: It might be nice to let people move the button around, I guess?
 function torbutton_get_button_from_toolbox() {
     var toolbox = document.getElementById("navigator-toolbox");
     for (var child = toolbox.palette.firstChild; child; child = child.nextSibling)
@@ -790,6 +823,7 @@ function torbutton_get_button_from_toolbox() {
     return torbutton_get_toolbutton();
 }
 
+// Bug 1506 P2: It might be nice to let people move the button around, I guess?
 function torbutton_get_toolbutton() {
     var o_toolbutton = false;
 
@@ -820,6 +854,7 @@ function torbutton_get_statuspanel() {
     return o_statuspanel;
 }
 
+// Bug 1506 P0: Toggle. Kill kill kill.
 function torbutton_save_nontor_settings()
 {
   var liveprefs = false;
@@ -859,6 +894,7 @@ function torbutton_save_nontor_settings()
   torbutton_log(2, 'Non-tor settings saved');
 }
 
+// Bug 1506 P0: Toggle. Kill kill kill.
 function torbutton_restore_nontor_settings()
 {
   var liveprefs = false;
@@ -907,6 +943,8 @@ function torbutton_restore_nontor_settings()
   torbutton_log(2, 'settings restored');
 }
 
+// Bug 1506 P4: Checking for Tor Browser updates is pretty important,
+// probably even as a fallback if we ever do get a working updater.
 function torbutton_do_async_versioncheck() {
   if (!m_tb_tbb || !m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
     return;
@@ -972,6 +1010,7 @@ function torbutton_do_async_versioncheck() {
 
 }
 
+// Bug 1506 P0: Deprecated by the async version.
 function torbutton_check_version() {
   torbutton_log(3, "Checking version");
   try {
@@ -1018,7 +1057,8 @@ function torbutton_check_version() {
   return -1;
 }
 
-
+// Bug 1506 P2: Probably a good idea to have some way to test everything,
+// but will need to be decoupled from the toggle logic :/
 function torbutton_test_settings() {
     var wasEnabled = true;
     var ret = 0;
@@ -1093,12 +1133,14 @@ function torbutton_test_settings() {
     return ret;
 }
 
+// Bug 1506 P0: Toggle must die.
 function torbutton_disable_tor()
 {
   torbutton_log(3, 'called disable_tor()');
   torbutton_restore_nontor_settings();
 }
 
+// Bug 1506 P0: Toggle must die.
 function torbutton_enable_tor(force)
 {
   torbutton_log(3, 'called enable_tor()');
@@ -1118,6 +1160,7 @@ function torbutton_enable_tor(force)
   torbutton_activate_tor_settings();
 }
 
+// Bug 1506 P0: Toggle must die.
 function torbutton_update_toolbutton(mode)
 {
   var o_toolbutton = torbutton_get_toolbutton();
@@ -1136,6 +1179,7 @@ function torbutton_update_toolbutton(mode)
   }
 }
 
+// Bug 1506 P0: Toggle must die.
 function torbutton_update_statusbar(mode)
 {
     var o_statuspanel = torbutton_get_statuspanel();
@@ -1161,6 +1205,9 @@ function torbutton_update_statusbar(mode)
     }
 }
 
+// Bug 1506 P0: This is support code for preserving user prefs during
+// toggle.
+//
 // XXX: Hrmm, this may not always be called with ints (see bug 1006).
 // Possibly because some other addon sets odd values for a pref
 // that can be either int or char?  Can maybe just wrap in try block 
@@ -1192,6 +1239,8 @@ function torbutton_setIntPref(pref, save, val, mode, changed) {
     }
 }
 
+// Bug 1506 P0: This is support code for preserving user prefs during
+// toggle.
 function torbutton_setCharPref(pref, save, val, mode, changed) {
     if(!changed) return; // Handle the pref change cases via observers
     try {
@@ -1219,6 +1268,8 @@ function torbutton_setCharPref(pref, save, val, mode, changed) {
     }
 }
 
+// Bug 1506 P0: This is support code for preserving user prefs during
+// toggle.
 function torbutton_setBoolPref(pref, save, val, mode, changed) {
     if(!changed) return; // Handle the pref change cases via observers
     try {
@@ -1246,6 +1297,7 @@ function torbutton_setBoolPref(pref, save, val, mode, changed) {
     }
 }
 
+// Bug 1506 P4: Timezone spoofing is pretty important
 function torbutton_set_timezone(mode, startup) {
     /* Windows doesn't call tzset() automatically.. Linux and MacOS
      * both do though.. FF3.5 now calls _tzset() for us on windows.
@@ -1309,6 +1361,7 @@ function torbutton_set_timezone(mode, startup) {
     }
 }
 
+// Bug 1506 P3: Support code for language+uagent spoofing
 function torbutton_get_general_useragent_locale() {
    try {
         var locale = m_tb_prefs.getCharPref("general.useragent.locale");
@@ -1323,6 +1376,9 @@ function torbutton_get_general_useragent_locale() {
     }
 }
 
+// Bug 1506 P3: Useragent spoofing code.. Important, but perhaps
+// we only need to do this in code for toggling. Can probably be
+// directly in prefs.js
 function torbutton_set_uagent() {
     try {
         var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
@@ -1374,6 +1430,7 @@ function torbutton_set_uagent() {
     }
 }
 
+// Bug 1506 P4: Control port interaction. Needed for New Identity.
 function torbutton_socket_readline(input) {
   var str = "";
   var bytes;
@@ -1383,6 +1440,7 @@ function torbutton_socket_readline(input) {
   return str;
 }
 
+// Bug 1506 P4: Control port interaction. Needed for New Identity.
 function torbutton_read_authentication_cookie(path) {
   var file = Components.classes['@mozilla.org/file/local;1']
              .createInstance(Components.interfaces.nsILocalFile);
@@ -1399,11 +1457,15 @@ function torbutton_read_authentication_cookie(path) {
   return torbutton_array_to_hexdigits(array);
 }
 
+// Bug 1506 P4: Control port interaction. Needed for New Identity.
 function torbutton_array_to_hexdigits(array) {
   return array.map(function(c) {
                      return String("0" + c.toString(16)).slice(-2)
                    }).join('');
 };
+
+// Bug 1506 P4: Control port interaction. Needed for New Identity.
+//
 // Executes a command on the control port.
 // Return 0 in error, 1 for success.
 function torbutton_send_ctrl_cmd(command) {
@@ -1445,6 +1507,7 @@ function torbutton_send_ctrl_cmd(command) {
   }
 }
 
+// Bug 1506 P4: Needed for New Identity.
 function torbutton_new_identity() {
   try {
     torbutton_do_new_identity();
@@ -1473,6 +1536,7 @@ function torbutton_new_identity() {
  *
  * XXX: intermediate SSL certificates are not cleared.
  */
+// Bug 1506 P4: Needed for New Identity.
 function torbutton_do_new_identity() {
   var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
       .getService(Components.interfaces.nsIWindowMediator);
@@ -1643,6 +1707,9 @@ function torbutton_do_new_identity() {
   window.close();
 }
 
+// Bug 1506 P5: Despite the name, this is the way we disable
+// plugins for Tor Browser, too.
+//
 // toggles plugins: true for disabled, false for enabled
 function torbutton_toggle_plugins(disable_plugins) {
   if (m_tb_tbb) {
@@ -1655,6 +1722,17 @@ function torbutton_toggle_plugins(disable_plugins) {
 }
 
 
+// Bug 1506 P1/P4: This code is *mostly* a toggle-relic. 
+//
+// For full browser implementations, this function is P1, and you should
+// just use https://gitweb.torproject.org/torbrowser.git/blob/HEAD:/build-scripts/config/prefs.js
+//
+// For native Firefox implementations, this code might be P4, since you'll
+// need to set all those prefs, as well as preserve people's originals for
+// uninstall. There are also two prefs that should be set in a native
+// Firefox implementation at level P5. I believe Proxy Mobile already
+// sets them, though.
+//
 // NOTE: If you touch any additional prefs in here, be sure to update
 // the list in torbutton_util.js::torbutton_reset_browser_prefs()
 function torbutton_update_status(mode, force_update) {
@@ -1700,6 +1778,8 @@ function torbutton_update_status(mode, force_update) {
     // thread
     torbutton_log(2, 'Toggling JS state');
 
+    // Bug 1506 P5: You want to call torbutton_toggle_plugins, but during
+    // startup, not toggle.
     torbutton_toggle_plugins(mode && torprefs.getBoolPref("no_tor_plugins"));
 
     torbutton_toggle_jsplugins(mode, 
@@ -2049,6 +2129,7 @@ function torbutton_update_status(mode, force_update) {
     // being pwnt.  This is a pretty darn ugly hack, too. But because of #5863,
     // we really don't care about preserving the user's values for this.
     if (!m_tb_tbb) {
+        // Bug 1506 P5: You have to set these two for non-TBB Firefoxen
         m_tb_prefs.setBoolPref("network.websocket.enabled", false);
         m_tb_prefs.setBoolPref("dom.indexedDB.enabled", false);
     }
@@ -2171,6 +2252,7 @@ function torbutton_update_status(mode, force_update) {
     torbutton_log(3, "Settings applied for mode: "+mode);
 }
 
+// Bug 1506 P4: Despite the name, it is used on new identity
 function torbutton_close_on_toggle(mode, newnym) {
     var close_tor = m_tb_prefs.getBoolPref("extensions.torbutton.close_tor");
     var close_nontor = m_tb_prefs.getBoolPref("extensions.torbutton.close_nontor");
@@ -2232,6 +2314,8 @@ function torbutton_close_on_toggle(mode, newnym) {
     torbutton_log(3, "Closed all tabs");
 }
 
+// Bug 1506 P2: This code is only important for disabling
+// New Identity where it is not supported (ie no control port).
 function torbutton_check_protections()
 {
   var cookie_pref = m_tb_prefs.getBoolPref("extensions.torbutton.cookie_protections");
@@ -2247,15 +2331,19 @@ function torbutton_check_protections()
   }
 }
 
+// Bug 1506 P2: I think cookie protections is a neat feature.
 function torbutton_open_cookie_dialog() {
   window.openDialog('chrome://torbutton/content/torcookiedialog.xul','Cookie Protections',
                                    'centerscreen,chrome,dialog,modal,resizable');
 }
+
+// Bug 1506 P2/P3: Prefs are handled differently on android, I guess?
 function torbutton_open_prefs_dialog() {
     window.openDialog("chrome://torbutton/content/preferences.xul","torbutton-preferences","centerscreen, chrome");
     torbutton_log(2, 'opened preferences window');
 }
 
+// Bug 1506 P0: Support code for checking Firefox versions. Not needed.
 function torbutton_gecko_compare(aVersion) {
     var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                     .getService(Components.interfaces.nsIIOService);
@@ -2274,6 +2362,8 @@ function torbutton_gecko_compare(aVersion) {
     return versionComparator.compare(aVersion, geckoVersion);
 }
 
+// Bug 1506 P0: Code to attempt to grey out browser proxy prefs. Doesn't
+// actually seem to work?
 function torbutton_browser_proxy_prefs_init()
 {
   var _elementIDs = ["networkProxyType",
@@ -2303,6 +2393,7 @@ function torbutton_browser_proxy_prefs_init()
 }
 
 // -------------- HISTORY & COOKIES ---------------------
+// Bug 1506 P0: Only used by toggle. Kill it.
 function torbutton_clear_history() {
     torbutton_log(2, 'called torbutton_clear_history');
     var hist = Components.classes["@mozilla.org/browser/global-history;2"]
@@ -2336,6 +2427,8 @@ function torbutton_clear_history() {
     }
 }
 
+// Bug 1506 P4: Used by New Identity if cookie protections are
+// not in use.
 function torbutton_clear_cookies() {
     torbutton_log(2, 'called torbutton_clear_cookies');
     var cm = Components.classes["@mozilla.org/cookiemanager;1"]
@@ -2344,7 +2437,7 @@ function torbutton_clear_cookies() {
     cm.removeAll();
 }
 
-
+// Bug 1506 P0: Toggle-only. Kill it.
 function torbutton_jar_cookies(mode) {
     var selector =
           Components.classes["@torproject.org/cookie-jar-selector;1"]
@@ -2376,6 +2469,7 @@ function torbutton_jar_cookies(mode) {
     }
 }
 
+// Bug 1506 P0: Toggle-only. Kill it.
 function torbutton_jar_cert_type(mode, treeView, name, type) {
     var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
                     .getService(Components.interfaces.nsIX509CertDB2);
@@ -2492,6 +2586,7 @@ function torbutton_jar_cert_type(mode, treeView, name, type) {
     torbutton_log(2, "Wrote "+outList.length+" "+name+" certificates to "+outFile.path);
 }
 
+// Bug 1506 P0: Toggle-only. Kill it.
 function torbutton_bytearray_to_string(ba) {
     var ret = "";
     for(var i = 0; i < ba.length; i++) {
@@ -2500,6 +2595,7 @@ function torbutton_bytearray_to_string(ba) {
     return ret;
 }
 
+// Bug 1506 P0: Toggle-only. Kill it.
 function torbutton_unjar_cert_type(mode, treeView, name, type) {
     var unjared_certs = 0;
     var certdb = Components.classes["@mozilla.org/security/x509certdb;1"]
@@ -2593,6 +2689,7 @@ function torbutton_unjar_cert_type(mode, treeView, name, type) {
     return unjared_certs;
 }
 
+// Bug 1506 P0: Toggle-only. Kill it.
 function torbutton_jar_certs(mode) {
     var tot_certs = 0;
     var certCache = 
@@ -2744,7 +2841,7 @@ function torbutton_jar_certs(mode) {
 
 
 // -------------- JS/PLUGIN HANDLING CODE ---------------------
-
+// Bug 1506 P0: Toggle-only. Kill it.
 function torbutton_check_js_tag(tabbrowser, browser, tor_enabled, js_enabled) {
     var eventSuppressor = null;
     if (typeof(browser.__tb_tor_fetched) == 'undefined') {
@@ -2796,6 +2893,8 @@ function torbutton_check_js_tag(tabbrowser, browser, tor_enabled, js_enabled) {
     }
 }
 
+// Bug 1506 P3: The JS-killing bits of this are used by
+// New Identity as a defense-in-depth measure.
 function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
                                         kill_plugins) {
     var browser = win.getBrowser();
@@ -2845,6 +2944,9 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
     }
 }
 
+// Bug 1506 P3: The JS-killing bits of this are used by
+// New Identity as a defense-in-depth measure.
+//
 // This is an ugly beast.. But unfortunately it has to be so..
 // Looping over all tabs twice is not somethign we wanna do..
 function torbutton_toggle_jsplugins(tor_enabled, isolate_dyn, kill_plugins) {
@@ -2860,6 +2962,7 @@ function torbutton_toggle_jsplugins(tor_enabled, isolate_dyn, kill_plugins) {
     }
 }
 
+// Bug 1506 P0: Toggle garbage.
 function tbHistoryListener(browser) {
     this.browser = browser;
 
@@ -2880,6 +2983,7 @@ function tbHistoryListener(browser) {
     };
 }
 
+// Bug 1506 P0: Toggle garbage.
 tbHistoryListener.prototype = {
     QueryInterface: function(iid) {
         // XXX: Is this the right way to handle weak references from JS?
@@ -2899,6 +3003,11 @@ tbHistoryListener.prototype = {
     OnHistoryReload: function(uri,flags) { return this.f1(); }
 };
 
+// Bug 1506 P1: Technically, tags are still used by New Identity as
+// defense-in-depth, but they are very expensive to enforce and requires
+// an nsIConentPolicy, which is broken on Android last I checked.
+// Killing this is fine, but be sure to watch out for other places
+// where tab tags are referenced.
 function torbutton_apply_tab_tag(tabbrowser, browser, tag) {
    if (typeof(browser["__tb_tor_fetched"]) == "undefined" ||
            browser.__tb_tor_fetched != tag) {
@@ -2931,6 +3040,7 @@ function torbutton_apply_tab_tag(tabbrowser, browser, tag) {
    return oldtag != tag;
 }
 
+// Bug 1506 P1: Tagging is pretty much toggle-only. See above.
 function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     if (!tor_tag && no_plugins && !m_tb_tbb) {
         browser.docShell.allowPlugins = tor_tag;
@@ -2974,6 +3084,7 @@ function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
     }
 }
 
+// Bug 1506 P0: This has been deprecated in favor of an async check
 function torbutton_do_versioncheck() {
   if (m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
     var is_updated = torbutton_check_version();
@@ -2993,12 +3104,15 @@ function torbutton_do_versioncheck() {
   }
 }
 
+// Bug 1506 P2: We may want to replace this with a XUl solution.
+// See #6096.
 function torbutton_reload_homepage() {
     var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
                        Components.interfaces.nsIPrefLocalizedString).data;
     gBrowser.loadURI(homepage, null, null);
 }
 
+// Bug 1506 P0: There are no states, only Tor.
 function torbutton_set_launch_state(state, session_restore) {
     if (!m_tb_wasinited) torbutton_init();
     var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
@@ -3080,6 +3194,7 @@ function torbutton_set_launch_state(state, session_restore) {
     }
 }
 
+// Bug 1506 P0: Toggle, kill it.
 function torbutton_restore_cookies(tor_enabled)
 {
     var selector =
@@ -3103,6 +3218,7 @@ function torbutton_restore_cookies(tor_enabled)
     }
 }
 
+// Bug 1506 P0: We only care about crashes in a toggle world. Kill this.
 function torbutton_crash_recover()
 {
     if (!m_tb_wasinited) torbutton_init();
@@ -3195,6 +3311,9 @@ function torbutton_crash_recover()
 
 // ---------------------- Event handlers -----------------
 
+// Bug 1506 P0: This observer was due to a hack to try to get rid
+// of Google captchas.. It didn't work. Kill it.
+//
 // Observer to handle regeneration of google pref cookies
 var torbutton_cookie_observer = {
 observe: function(subject, topic, data) {
@@ -3242,6 +3361,8 @@ unregister: function() {
 
 };
 
+// Bug 1506 P0: This function was due to a hack to try to get rid
+// of Google captchas.. It didn't work. Kill it.
 function torbutton_new_google_cookie() {
   var regen = m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies");
   var reset = m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies");
@@ -3271,6 +3392,8 @@ function torbutton_new_google_cookie() {
   }
 }
 
+// Bug 1506 P0: This function was due to a hack to try to get rid
+// of Google captchas.. It didn't work. Kill it.
 function torbutton_init_hidden_browser() {
   var loaderBox = document.createElement("hbox");
   loaderBox.setAttribute("style", "overflow: hidden; visibility: hidden;");
@@ -3313,6 +3436,8 @@ function torbutton_init_hidden_browser() {
   torbutton_log(3, "Created hidden browser.");
 }
 
+// Bug 1506 P0: This function was due to a hack to try to get rid
+// of Google captchas.. It didn't work. Kill it.
 var torbutton_google_cookie_regen_listener = {
   QueryInterface: function(aIID)
   {
@@ -3341,6 +3466,8 @@ var torbutton_google_cookie_regen_listener = {
   onLinkIconAvailable: function() {return 0;}
 };
 
+// Bug 1506 P0: This function was due to a hack to try to get rid
+// of Google captchas.. It didn't work. Kill it.
 function torbutton_regen_google_cookie() {
   // Only fire if tor fully enabled...
   if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
@@ -3368,6 +3495,8 @@ function torbutton_regen_google_cookie() {
   }
 }
 
+// Bug 1506 P0: This function was due to a hack to try to get rid
+// of Google captchas.. It didn't work. Kill it.
 function torbutton_reset_google_cookie() {
   // Only fire if tor is fully enabled..
   if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
@@ -3425,7 +3554,9 @@ function torbutton_filter_cookies(filter_cookies) {
 }
 */
 
-
+// Bug 1506 P1: This function was due to a hack to try to limit
+// Google captchas.. It might help, but it's probably not worth
+// it.
 function torbutton_xfer_google_cookies(subject, topic, data) {
   // Only fire if tor is fully enabled
   if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
@@ -3561,6 +3692,7 @@ function torbutton_xfer_google_cookies(subject, topic, data) {
   }
 }
 
+// Bug 1506 P2: Google captchas really suck. This is still useful
 /* Redirect the user to a different search engine if Google is blocking Tor */
 function torbutton_check_google_captcha(subject, topic, data) {
   if (!m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied"))
@@ -3657,6 +3789,9 @@ function torbutton_check_google_captcha(subject, topic, data) {
 // to deal with firefox bug 401296
 // TODO: One of these days we should probably unify these http observers
 // with our content policy, like NoScript does.
+//
+// Bug 1506 P2: Most of this is toggle/plugin protections, however
+// the google captcha redirect is also in here.
 var torbutton_http_observer = {
 observe : function(subject, topic, data) {
   torbutton_eclog(2, 'Examine response: '+subject.name);
@@ -3707,6 +3842,8 @@ observe : function(subject, topic, data) {
   }
 
   if (topic == "http-on-examine-response") {
+      // Bug 1506 P2: This is the only observer topic you might want
+      // to keep in this object
       torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
       if (m_tb_prefs.getBoolPref("extensions.torbutton.dodge_google_captcha")
             && subject instanceof Ci.nsIHttpChannel) {
@@ -3749,6 +3886,8 @@ unregister : function() {
 }
 }
 
+// Bug 1506 P0: Forces torbutton updates over tor when in non-tor mode.
+// Kill it.
 var torbutton_proxyservice = {
   applyFilter : function(ps, uri, proxy) {
     try {
@@ -3848,6 +3987,8 @@ var torbutton_proxyservice = {
   }
 }
 
+// Bug 1506 P1/P3: This removes any platform-specific junk
+// from the omnibox. In Tor Browser, it should not be needed.
 function torbutton_wrap_search_service()
 {
   var ss = Cc["@mozilla.org/browser/search-service;1"]
@@ -3893,6 +4034,8 @@ function torbutton_wrap_search_service()
   }
 }
 
+// Bug 1506 P1-P3: Most of these observers aren't very important.
+// See their comments for details
 function torbutton_do_main_window_startup()
 {
     torbutton_log(3, "Torbutton main window startup");
@@ -3917,10 +4060,13 @@ function torbutton_do_main_window_startup()
     torbutton_cookie_observer.register();
     torbutton_proxyservice.register();
 
-    // XXX: We should fold this into our code
+    // Bug 1506: This is probably the most important observer in this function
+    // XXX: We should fold this into our code/move it to its own component
     SSC_startup();
 }
 
+// Bug 1506 P0: We should always start with Tor enabled based on
+// prefs.js. We probably don't need this code to enforce it.
 function torbutton_set_initial_state() {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
         var restore_tor = m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor");
@@ -3938,6 +4084,8 @@ function torbutton_set_initial_state() {
     }
 }
 
+// Bug 1506 P1: This is a relic of the need to sync up user prefs to
+// tor prefs. See #3100 for a more generalized approach
 function torbutton_do_fresh_install() 
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.fresh_install")) {
@@ -3967,6 +4115,10 @@ function torbutton_do_fresh_install()
     }
 }
 
+// Bug 1506 P4: Most of this function is now useless, save
+// for the very important SOCKS environment vars at the end.
+// Those could probably be rolled into a function with the
+// control port vars, though. See 1506 comments inside.
 function torbutton_do_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
@@ -3987,6 +4139,7 @@ function torbutton_do_startup()
           m_tb_prefs.setBoolPref('extensions.torbutton.clear_cookies', false);
         }
 
+        // Bug 1506: Should probably be moved to an XPCOM component
         torbutton_do_main_window_startup();
 
         // This is due to Bug 908: UserAgent Switcher is resetting
@@ -4008,6 +4161,7 @@ function torbutton_do_startup()
           }
         }
 
+        // Bug 1506: Still want to do this
         torbutton_set_timezone(tor_enabled, true);
 
         // FIXME: This is probably better done by reimplementing the 
@@ -4024,6 +4178,7 @@ function torbutton_do_startup()
             }
         }
     
+        // Bug 1506: Still want to do this
         torbutton_toggle_plugins(tor_enabled
                 && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
@@ -4033,6 +4188,7 @@ function torbutton_do_startup()
           torbutton_new_google_cookie();
         }
 
+        // Bug 1506: Still want to get these env vars
         var environ = Components.classes["@mozilla.org/process/environment;1"]
                    .getService(Components.interfaces.nsIEnvironment);
 
@@ -4066,6 +4222,7 @@ function torbutton_do_startup()
     }
 }
 
+// Bug 1506 P0: Old way of blocking plugins. Kill it
 function torbutton_get_plugin_mimetypes()
 {
     m_tb_plugin_mimetypes = { null : null };
@@ -4081,6 +4238,9 @@ function torbutton_get_plugin_mimetypes()
 }
 
 
+// Bug 1506 P0: Has some tagging code (can be removed) 
+// and the language prompt (probably the wrong place for the
+// call)
 function torbutton_new_tab(event)
 {
     // listening for new tabs
@@ -4106,6 +4266,8 @@ function torbutton_new_tab(event)
     }
 }
 
+// Bug 1506 P3: Used to decide if we should resize the window.
+//
 // Returns true if the window wind is neither maximized, full screen,
 // ratpoisioned/evilwmed, nor minimized.
 function torbutton_is_windowed(wind) {
@@ -4130,6 +4292,8 @@ function torbutton_is_windowed(wind) {
     return true;
 }
 
+// Bug 1506 P0: Kill this
+// 
 // XXX: This function is unused. We can't make it work
 // without a way to tell when the user has stopped resizing..
 function torbutton_do_resize(ev)
@@ -4163,6 +4327,7 @@ function torbutton_do_resize(ev)
     m_tb_window_width = window.outerWidth;
 }
 
+// Bug 1506 P0: Kill this
 // XXX: unused. Use torbutton_set_window_size instead
 function torbutton_check_round(browser) 
 {
@@ -4188,6 +4353,8 @@ function torbutton_check_round(browser)
     }
 }
 
+// Bug 1506 P1/P3: Setting a fixed window size is important, but
+// probably not for android.
 function torbutton_set_window_size(bWin) {
     if (!bWin || typeof(bWin) == "undefined") {
         torbutton_log(5, "No initial browser content window?");
@@ -4240,6 +4407,9 @@ function torbutton_set_window_size(bWin) {
     }
 }
 
+// Bug 1506 P3: This is needed pretty much only for the version check
+// and the window resizing. See comments for individual functions for
+// details
 function torbutton_new_window(event)
 {
     torbutton_log(3, "New window");
@@ -4275,6 +4445,8 @@ function torbutton_new_window(event)
     torbutton_do_async_versioncheck();
 }
 
+// Bug 1506 P2: This is only needed because we have observers
+// in XUL that should be in an XPCOM component
 function torbutton_close_window(event) {
     torbutton_window_pref_observer.unregister();
 
@@ -4329,7 +4501,7 @@ window.addEventListener('unload', torbutton_close_window, false);
 
 
 // ----------- JAVASCRIPT HOOKING + EVENT HANDLERS ----------------
-
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 function torbutton_init_jshooks() {
     torbutton_log(2, "torbutton_init_jshooks()");
     var nsio = Components.classes["@mozilla.org/network/io-service;1"]
@@ -4350,6 +4522,7 @@ function torbutton_init_jshooks() {
     istream.close();
 }
 
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 function torbutton_getbody(doc) {
     if (doc.body)
         return doc.body;
@@ -4362,10 +4535,12 @@ function torbutton_getbody(doc) {
  * nebulous scoping/parsing/evaluations issues. Having this as
  * a standalone statement seems to cause the flag
  * to become defined after just parsing, not execution */
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 function torbutton_set_flag(obj, flag) {
     obj[flag] = true;
 }
 
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 function torbutton_check_flag(obj, flag) {
     try {
         return (typeof(obj[flag]) != 'undefined');
@@ -4375,6 +4550,7 @@ function torbutton_check_flag(obj, flag) {
     }
 }
 
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 function torbutton_is_same_origin(win, source, target) { // unused.
     var fixup = Components.classes["@mozilla.org/docshell/urifixup;1"]
         .getService(Components.interfaces.nsIURIFixup);
@@ -4400,7 +4576,8 @@ function torbutton_is_same_origin(win, source, target) { // unused.
     }
 }
 
-
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
+// Also, tagging can be deprecated.
 function torbutton_update_tags(win, new_loc) {
     var tag_change = false;
     torbutton_eclog(2, "Updating tags.");
@@ -4536,6 +4713,8 @@ function torbutton_update_tags(win, new_loc) {
 //    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
 //  - pure javascript pages/non-text/html pages
 //  - Messing with variables/existing hooks
+// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
+// Also, tagging can be deprecated.
 function torbutton_hookdoc(win, doc, state_change, referrer) {
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
@@ -4662,6 +4841,8 @@ function torbutton_hookdoc(win, doc, state_change, referrer) {
 // of its being called so early. Need to find a quick way to check if
 // aProgress and aRequest are actually fully initialized 
 // (without throwing exceptions)
+// Bug 1506 P0: This is to block full page plugins. Not needed anymore
+// due to better (but non-toggle-friendly) plugin APIs)
 function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
     if (!m_tb_wasinited) {
         torbutton_init();
@@ -4847,7 +5028,10 @@ function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
 // Warning: These can also fire when the 'debuglogger' extension
 // updates its window. Typically for this, doc.domain is null. Do not
 // log in this case (until we find a better way to filter those
-// events out). Use torbutton_eclog for common-path stuff.
+// events out). Use torbutton_eclog for common-path stuff.]
+// 
+// Bug 1506 P0: This listener is for blocking plugins and installing JS hooks.
+// It can be eliminated.
 var torbutton_weblistener =
 {
   QueryInterface: function(aIID)

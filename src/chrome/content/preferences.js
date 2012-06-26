@@ -1,3 +1,5 @@
+// Bug 1506 P1: Most of this code needs to go away. See also Bug 3100.
+
 // PREFERences dialog functions
 //   torbutton_prefs_set_field_attributes() -- initialize dialog fields
 //   torbutton_prefs_init() -- on dialog load

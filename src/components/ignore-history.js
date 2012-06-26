@@ -1,3 +1,6 @@
+// Bug 1506 P0: This code is a relic from FF < 3.5 days and can be totally
+// ignored.
+
 /*************************************************************************
  * Ignore History (JavaScript XPCOM component)
  * Disables reading and writing history. This component is implemented as a

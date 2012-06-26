@@ -1,3 +1,7 @@
+// Bug 1506 P1: This component is currently only used to protect
+// user-selected cookies from deletion. Moreover, all the E4X code is
+// deprecated and needs to be replaced with JSON.
+
 /*************************************************************************
  * Cookie Jar Selector (JavaScript XPCOM component)
  * Enables selection of separate cookie jars for (more) anonymous browsing.
@@ -154,6 +158,7 @@ function CookieJarSelector() {
     foStream.close();
   };
 
+  // Start1506
   this._protectedCookiesToFile = function(name) {
     var file = getProfileFile("protected-" + name + ".xml");
     var foStream = Cc["@mozilla.org/network/file-output-stream;1"]
@@ -292,6 +297,7 @@ function CookieJarSelector() {
     }
     this["protected-" + name] = cookiesAsXml;
   };
+  // End1506
 
   this._cookiesFromFile = function(name) {
       var file = getProfileFile("cookies-" + name + ".xml");
@@ -360,6 +366,7 @@ function CookieJarSelector() {
     this.logger.log(2, "Cookies saved");
   };
 
+  // Start1506
   this.clearUnprotectedCookies = function(name) {
     try {
       var cookiesAsXml = this.getProtectedCookies(name);
@@ -407,6 +414,7 @@ function CookieJarSelector() {
       this.logger.log(3, "Error deleting unprotected cookies: " + e);
     }
   };
+  // End1506
 
   this._oldLoadCookies = function(name, deleteSavedCookieJar) {
     var cookieManager =
@@ -541,6 +549,7 @@ const nsIComponentRegistrar = Components.interfaces.nsIComponentRegistrar;
 const nsIObserverService = Components.interfaces.nsIObserverService;
 const nsICategoryManager = Components.interfaces.nsICategoryManager;
 
+// Start1506: You may or may not care about this:
 CookieJarSelector.prototype =
 {
   QueryInterface: function(iid)
@@ -610,3 +619,5 @@ if (XPCOMUtils.generateNSGetFactory)
     var NSGetFactory = XPCOMUtils.generateNSGetFactory([CookieJarSelector]);
 else
     var NSGetModule = XPCOMUtils.generateNSGetModule([CookieJarSelector]);
+
+// End1506

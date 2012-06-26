@@ -1,3 +1,5 @@
+// Bug 1506 P0: This code is toggle-mode code and is unused. Kill it.
+
 // Test protocol related
 const kSCHEME = "tor";
 const kPROTOCOL_NAME = "tor";
