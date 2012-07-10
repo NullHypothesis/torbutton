@@ -1,3 +1,5 @@
+// Bug 1506 P2: I think cookie protections is a neat feature.
+
 var cookiesTree = null;
 var prefs = null;
 var cookies = [];

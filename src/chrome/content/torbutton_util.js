@@ -1,3 +1,8 @@
+// Bug 1506 P0-P3: These utility functions might be useful, but 
+// you probably just want to rewrite them or use the underlying
+// code directly. I don't see any of them as essential for 1506,
+// really.
+
 var m_tb_torlog = Components.classes["@torproject.org/torbutton-logger;1"]
 .getService(Components.interfaces.nsISupports).wrappedJSObject;
 
@@ -21,6 +26,7 @@ if(versionChecker.compare(appInfo.version, "5.0a1") >= 0) {
 }
 
 
+// Bug 1506 P0: Use the log service directly
 function torbutton_eclog(nLevel, sMsg) {
     m_tb_torlog.eclog(nLevel, sMsg);
     return true;
@@ -64,6 +70,9 @@ function torbutton_get_prefbranch(branch_name) {
     return o_branch;
 }
 
+// Bug 1506 P3: This would be a semi-polite thing to do on uninstall 
+// for pure Firefox users. The most polite thing would be to save
+// all their original prefs.. But meh?
 function torbutton_reset_browser_prefs() {
     var o_all_prefs = torbutton_get_prefbranch('');
     var prefs = ["network.http.sendSecureXSiteReferrer", 

@@ -1,4 +1,4 @@
-// Bug 1506 P1-2: This code is mostly hackish remnants of session store
+// Bug 1506 P1-3: This code is mostly hackish remnants of session store
 // support. There are a couple of observer events that *might* be worth
 // listening to. Search for 1506 in the code.
 
@@ -55,6 +55,8 @@ function CrashObserver() {
     }
 
     if (this.is_ff4) {
+      // Bug 1506 P2/P3: You probably want to register this observer to clean up
+      // prefs if you're going to support using normal firefox. 
       Components.utils.import("resource://gre/modules/AddonManager.jsm");
       this.onEnabling = this.onOperationCancelled;
       this.onDisabling = this.onUninstalling;
@@ -74,6 +76,8 @@ CrashObserver.prototype = {
     // us somehow, we will leave the browser in a sorry state... Let's hope they
     // have the sense not to uninstall addons after an improper shutdown/crash
     // (or at least give us this event again in that case).
+    // Bug 1506 P2/P3: You probably want to register this observer to clean up
+    // prefs if you're going to support using normal firefox. 
     onUninstalling: function(addon, needsRestart) {
       if (addon.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
         this._uninstall = true;
@@ -89,6 +93,8 @@ CrashObserver.prototype = {
     // This is done in the constructor. JS doesn't allow this...
     //onDisabling: this.onUninstalling,
 
+    // Bug 1506 P2/P3: You probably want to register this observer to clean up
+    // prefs if you're going to support using normal firefox. 
     onOperationCancelled: function(addon) {
       if (addon.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
          this.logger.log(4, "Uninstall of Torbutton canceled. Hurray!");
@@ -111,8 +117,6 @@ CrashObserver.prototype = {
         }
         this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
       } else if (topic == "em-action-requested") {
-        // Bug 1506 P2/P4: You probably want to register this observer to clean up
-        // prefs if you're going to support using normal firefox. 
         this.logger.log(3, "Uninstall action requested..");
         // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
         subject.QueryInterface(Components.interfaces.nsIUpdateItem);
@@ -127,7 +131,7 @@ CrashObserver.prototype = {
           }
         }
       } else if (topic == "quit-application-granted") {
-        // Bug 1506 P2/P4: You probably want to register this observer to clean up
+        // Bug 1506 P2/P3: You probably want to register this observer to clean up
         // prefs if you're going to support using normal firefox. 
         this.logger.log(3, "Got firefox quit event.");
         var chrome = null;
