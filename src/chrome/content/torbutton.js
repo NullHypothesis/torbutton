@@ -23,6 +23,7 @@ var m_tb_ff3 = false;
 var m_tb_ff35 = false;
 var m_tb_ff36 = false;
 var m_tb_ff4 = false;
+var m_tb_ff15 = false;
 var m_tb_tbb = false;
 
 var m_tb_control_port = null;
@@ -510,6 +511,12 @@ function torbutton_init() {
         .getService(Components.interfaces.nsIXULAppInfo);
     var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
         .getService(Components.interfaces.nsIVersionComparator);
+
+    if(versionChecker.compare(appInfo.version, "15.0a1") >= 0) {
+        m_tb_ff15 = true;
+    } else {
+        m_tb_ff15 = false;
+    }
 
     if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
         m_tb_ff4 = true;
@@ -4716,6 +4723,11 @@ function torbutton_update_tags(win, new_loc) {
 // Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 // Also, tagging can be deprecated.
 function torbutton_hookdoc(win, doc, state_change, referrer) {
+    /* Firefox 15 broke the last of our JS hooks :/ */
+    if (m_tb_ff15) {
+        return;
+    }
+
     if(typeof(win.wrappedJSObject) == 'undefined') {
         torbutton_eclog(3, "No JSObject: "+win.location);
         return;
