@@ -1,3 +1,7 @@
+1.4.6.1
+ 30 Aug 2012
+  * Bug 6737: Disable window.screen hooks for FF15+ (fixes exception alert)
+
 1.4.6
  30 May 2012
   * Bug 5710: Prevent all sessionstore data saving in TBB
