@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Αφαίρεσε την πλατφόρμα και τη γλώσσα (του συστήματος) απο τα ερωτήματα στα κουτιά αναζήτησης">
 <!ENTITY torbutton.prefs.transparentTor "Διαφανής Torification  (Απαιτεί προσαρμοσμένο  proxy ή Tor δρομολογητή)">

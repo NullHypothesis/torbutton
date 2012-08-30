@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Kaldır platform ve Google Arama Kutusu gelen dil sorgular">
 <!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">

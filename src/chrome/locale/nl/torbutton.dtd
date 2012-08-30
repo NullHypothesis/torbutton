@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Systeem- en taalgegevens verwijderen bij gebruik van de Google zoekbalk">
 <!ENTITY torbutton.prefs.transparentTor "Transparante Torificatie (Heeft aangepaste transparente proxy of Tor router nodig)">

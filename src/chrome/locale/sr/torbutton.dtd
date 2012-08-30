@@ -15,11 +15,11 @@
 <!ENTITY torbutton.prefs.proxy.host.gopher "Gopher посредник:">
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS домаћин:">
 <!ENTITY torbutton.prefs.proxy.port "Порт:">
-<!ENTITY torbutton.about.title "О додатку">
+<!ENTITY torbutton.about.title "О Torbutton">
 <!ENTITY torbutton.about.version "Верзија:">
 <!ENTITY torbutton.about.summary "Штити приватност Tor претраживања.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
+<!ENTITY torbutton.about.code "Kodiranje pomogli:">
+<!ENTITY torbutton.about.maintainer "Održava:">
 <!ENTITY torbutton.about.security_review "Безбедносна ревизија:">
 <!ENTITY torbutton.about.donate "Ако вам се свиђа Tor, размилисте о">
 <!ENTITY torbutton.about.make_donation "донирању.">
@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "IXQuick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "Scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Скини платформу и језик са Google претраживача">
 <!ENTITY torbutton.prefs.transparentTor "Транспарента Торификација (захтева посебан Tor прокси или Tor рутер)">

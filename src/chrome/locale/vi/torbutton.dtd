@@ -85,7 +85,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Không-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Khi khởi chạy cùng phiên được khôi phục, thiết lập tình trạng Tor thành:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "Khi trình duyệt khởi động, thiết lập trạng thái Tor thành:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Tải lại jar cookie/xóa cookie khi Firefox bị đổ vỡ (khuyến cáo)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Lưu trữ cả Tor và Không-Tor trong các tập tin jar được bảo vệ (nguy hiểm)">
 <!ENTITY torbutton.prefs.clear_http_auth "Xóa các phiên xác thực HTTP (khuyến cáo)">

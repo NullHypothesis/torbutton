@@ -141,7 +141,7 @@
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
-<!ENTITY torbutton.prefs.engine4 "scroogle.org">
+<!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "اطلاعات مربوط به نوع سيستم عامل و مرورگر و زبان مورد استفاده شما را از ورودی‌های جستجوگر گوگل حذف کن">
 <!ENTITY torbutton.prefs.transparentTor "سازگارسازی با تُر به صورت شفاف (نياز به رهياب تُر يا Tor router و يا transproxy سفارشی دارد)">
