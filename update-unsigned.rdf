@@ -29,6 +29,7 @@
         <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.5"/>
         <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.5.1"/>
         <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.6"/>
+        <li resource="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.6.1"/>
       </Seq>
     </em:updates>
     
@@ -343,6 +344,19 @@
          <em:maxVersion>10000.0</em:maxVersion>
          <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.6.xpi</em:updateLink>
 		 <em:updateHash>sha1:eedadda6e5aacb8dabe2118e6c14c4dd4441fed0</em:updateHash>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+  <Description about="urn:mozilla:extension:{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}:1.4.6.1">
+    <em:version>1.4.6.1</em:version>
+    <em:targetApplication>
+      <Description>
+         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+         <em:minVersion>0.9</em:minVersion>
+         <em:maxVersion>10000.0</em:maxVersion>
+         <em:updateLink>https://www.torproject.org/dist/torbutton/torbutton-1.4.6.1.xpi</em:updateLink>
+		 <em:updateHash>sha1:fb1df9ce40c5b1282e701f2a96694b0bfbdc2687</em:updateHash>
       </Description>
     </em:targetApplication>
   </Description>

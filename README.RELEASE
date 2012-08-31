@@ -59,13 +59,12 @@
    torsocks scp ./pkg/torbutton-${VERSION}.xpi vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi
    torsocks scp ./pkg/torbutton-${VERSION}.xpi.asc vescum:/srv/www-master.torproject.org/htdocs/dist/torbutton/torbutton-current.xpi.asc
 
-#. Update update.rdf
+#. Update update-unsigned.rdf in torbutton.git with package sha1
 
-   cd website-svn
-   vim ./include/versions.wmi   # Add sha1 and version
-   vim ./torbutton/update.rdf   # Add <li> and <description> w/ sha1 and version
+   cd torbutton.git
+   vim update-unsigned.rdf   # Add <li> and <description> w/ sha1 and version
 
-#. Sign the new update.rdf.
+#. Sign the new update-unsigned.rdf.
 
    # Key creation based on these instructions:
    # Command line: http://blog.techno-barje.fr/post/2009/10/08/How-to-setup-a-mozilla-extension-update-server/
@@ -82,6 +81,12 @@
    ./mccoy-cli.x86/mccoy -profile ./.mozilla/mccoy/*.default/ -signRDF update-unsigned.rdf -key Torbutton
 
    # Copy the signed update.rdf into place in the website svn
+
+#. Update update.rdf
+
+   cd website-svn
+   vim ./include/versions.wmi   # Add sha1 and version
+   cp /mnt/update-signed.rdf ./torbutton/update.rdf
 
 #. Update website
 
