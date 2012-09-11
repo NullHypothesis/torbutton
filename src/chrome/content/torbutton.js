@@ -3894,7 +3894,7 @@ unregister : function() {
 }
 
 // Bug 1506 P0: Forces torbutton updates over tor when in non-tor mode.
-// Kill it.
+// Actually, this observer is already disabled due to being irrelevant.
 var torbutton_proxyservice = {
   applyFilter : function(ps, uri, proxy) {
     try {
@@ -4065,7 +4065,8 @@ function torbutton_do_main_window_startup()
     torbutton_unique_pref_observer.register();
     torbutton_http_observer.register();
     torbutton_cookie_observer.register();
-    torbutton_proxyservice.register();
+    // Not needed
+    //torbutton_proxyservice.register();
 
     // Bug 1506: This is probably the most important observer in this function
     // XXX: We should fold this into our code/move it to its own component
@@ -4485,7 +4486,8 @@ function torbutton_close_window(event) {
         torbutton_unique_pref_observer.unregister();
         torbutton_http_observer.unregister();
         torbutton_cookie_observer.unregister();
-        torbutton_proxyservice.unregister();
+        // Not needed
+        //torbutton_proxyservice.unregister();
 
         // XXX: We should fold this into our code..
         SSC_controller.removeListener();
