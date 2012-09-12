@@ -505,6 +505,14 @@ function torbutton_init_toolbutton()
 // called once per browser window.. This might belong in a component.
 function torbutton_init() {
     torbutton_log(3, 'called init()');
+    
+    if (m_tb_wasinited) {
+        return;
+    }
+    m_tb_wasinited = true;
+
+    m_tb_prefs =  Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefBranch);
 
     // Determine if we are firefox 3 or not.
     var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
@@ -542,16 +550,20 @@ function torbutton_init() {
         m_tb_ff36 = false;
     }
 
+    try {
+      var test = m_tb_prefs.getCharPref("torbrowser.version");
+      m_tb_tbb = true;
+      torbutton_log(3, "This is a Tor Browser");
+    } catch(e) {
+      torbutton_log(3, "This is not a Tor Browser: "+e);
+    }
+
     // Bug 1506 P4: These vars are very important for New Identity
     var environ = Components.classes["@mozilla.org/process/environment;1"]
                    .getService(Components.interfaces.nsIEnvironment);
 
     if (environ.exists("TOR_CONTROL_PASSWD")) {
         m_tb_control_pass = environ.get("TOR_CONTROL_PASSWD");
-
-        // FIXME: We might want a check to use to set this in the future,
-        // but this works fine for now.
-        m_tb_tbb = true;
     } else if (environ.exists("TOR_CONTROL_COOKIE_AUTH_FILE")) {
         var cookie_path = environ.get("TOR_CONTROL_COOKIE_AUTH_FILE");
         try {
@@ -582,19 +594,10 @@ function torbutton_init() {
     // listen for our toolbar button being added so we can initialize it
     torbutton_init_toolbutton();
 
-    if (!m_tb_wasinited) { 
-        // Runs every time a new window is opened
-        m_tb_prefs =  Components.classes["@mozilla.org/preferences-service;1"]
-                        .getService(Components.interfaces.nsIPrefBranch);
+    torbutton_init_jshooks();
 
-        torbutton_init_jshooks();
-
-        torbutton_log(1, 'registering pref observer');
-        torbutton_window_pref_observer.register(); 
-        m_tb_wasinited = true;
-    } else {
-        torbutton_log(1, 'skipping pref observer init');
-    }
+    torbutton_log(1, 'registering pref observer');
+    torbutton_window_pref_observer.register(); 
     
     //setting up context menu
     var contextMenu = document.getElementById("contentAreaContextMenu");
@@ -956,7 +959,8 @@ function torbutton_do_async_versioncheck() {
   if (!m_tb_tbb || !m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
     return;
   }
-  torbutton_log(3, "Checking version");
+  torbutton_log(3, "Checking version with socks port: "
+          +m_tb_prefs.getIntPref("extensions.torbutton.socks_port"));
   try {
     var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
                             .createInstance(Components.interfaces.nsIXMLHttpRequest);
@@ -3116,6 +3120,8 @@ function torbutton_do_versioncheck() {
 function torbutton_reload_homepage() {
     var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
                        Components.interfaces.nsIPrefLocalizedString).data;
+
+    torbutton_log(3, "Reloading homepage: "+homepage);
     gBrowser.loadURI(homepage, null, null);
 }
 
@@ -4194,28 +4200,6 @@ function torbutton_do_startup()
         if (tor_enabled) {
           // Need to maybe generate google cookie if tor is enabled
           torbutton_new_google_cookie();
-        }
-
-        // Bug 1506: Still want to get these env vars
-        var environ = Components.classes["@mozilla.org/process/environment;1"]
-                   .getService(Components.interfaces.nsIEnvironment);
-
-        if (environ.exists("TOR_SOCKS_PORT")) {
-          m_tb_prefs.setIntPref('extensions.torbutton.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
-          if (m_tb_tbb) {
-              m_tb_prefs.setIntPref('network.proxy.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
-          }
-        } else if (m_tb_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
-          m_tb_prefs.setIntPref('extensions.torbutton.socks_port', 9050);
-        }
-
-        if (environ.exists("TOR_SOCKS_HOST")) {
-          m_tb_prefs.setCharPref('extensions.torbutton.socks_host', environ.get("TOR_SOCKS_HOST"));
-          if (m_tb_tbb) {
-              m_tb_prefs.setCharPref('network.proxy.socks', environ.get("TOR_SOCKS_HOST"));
-          }
-        } else if (m_tb_prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
-          m_tb_prefs.setCharPref('extensions.torbutton.socks_host', '127.0.0.1');
         }
 
         if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {

@@ -54,6 +54,14 @@ function CrashObserver() {
         this.is_ff4 = false;
     }
 
+    try {
+      var test = this._prefs.getCharPref("torbrowser.version");
+      this.is_tbb = true;
+      this.logger.log(3, "This is a Tor Browser's XPCOM");
+    } catch(e) {
+      this.logger.log(3, "This is not a Tor Browser's XPCOM");
+    }
+
     if (this.is_ff4) {
       // Bug 1506 P2/P3: You probably want to register this observer to clean up
       // prefs if you're going to support using normal firefox. 
@@ -102,6 +110,36 @@ CrashObserver.prototype = {
       }
     },
 
+    // Bug 6803: We need to get the env vars early due to
+    // some weird proxy caching code that showed up in FF15.
+    // Otherwise, homepage domain loads fail forever.
+    getProxySettings: function() {
+      // Bug 1506: Still want to get these env vars
+      var environ = Components.classes["@mozilla.org/process/environment;1"]
+                 .getService(Components.interfaces.nsIEnvironment);
+
+      if (environ.exists("TOR_SOCKS_PORT")) {
+        this.logger.log(3, "Resetting socks port to "+environ.get("TOR_SOCKS_PORT"));
+        this._prefs.setIntPref('extensions.torbutton.socks_port',
+                parseInt(environ.get("TOR_SOCKS_PORT")));
+        if (this.is_tbb) {
+            this._prefs.setIntPref('network.proxy.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
+        }
+      } else if (this._prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
+        this._prefs.setIntPref('extensions.torbutton.socks_port', 9050);
+      }
+
+      if (environ.exists("TOR_SOCKS_HOST")) {
+        this._prefs.setCharPref('extensions.torbutton.socks_host', environ.get("TOR_SOCKS_HOST"));
+        if (this.is_tbb) {
+            this._prefs.setCharPref('network.proxy.socks', environ.get("TOR_SOCKS_HOST"));
+        }
+      } else if (this._prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
+        this._prefs.setCharPref('extensions.torbutton.socks_host', '127.0.0.1');
+      }
+ 
+    },
+
     observe: function(subject, topic, data) {
       if(topic == "profile-after-change") {
         // Bug 1506 P1: We listen to these prefs as signals for startup,
@@ -116,6 +154,8 @@ CrashObserver.prototype = {
           this._prefs.setBoolPref("extensions.torbutton.crashed", true);
         }
         this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
+
+        this.getProxySettings();
       } else if (topic == "em-action-requested") {
         this.logger.log(3, "Uninstall action requested..");
         // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html

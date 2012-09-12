@@ -10,7 +10,7 @@
                    em:name="Torbutton"
                    em:creator="Mike Perry"
                    em:id="{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}"
-                   em:version="1.4.6.1"
+                   em:version="1.4.6.2"
                    em:homepageURL="https://www.torproject.org/torbutton/"
                    em:optionsURL="chrome://torbutton/content/preferences.xul"
                    em:iconURL="chrome://torbutton/skin/tor.png"
