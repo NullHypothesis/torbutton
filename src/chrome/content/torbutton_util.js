@@ -151,7 +151,14 @@ function torbutton_check_status() {
     else
          remote_dns = true;
 
-    return ((liveprefs.getIntPref("type")          == 1)              &&
+    var proxy_type = 1;
+    if (torprefs.getCharPref('settings_method') == 'transparent') {
+        remote_dns = true; // Hack. Transparent has remote_dns disabled
+        proxy_type = 0;
+    } 
+
+    return (
+         (liveprefs.getIntPref("type")          == proxy_type)              &&
          torbutton_log(1, "Type is true") &&
          (liveprefs.getCharPref("http")         == torprefs.getCharPref('http_proxy'))   &&
          torbutton_log(1, "Http proxy") &&
@@ -207,10 +214,18 @@ function torbutton_activate_tor_settings()
   liveprefs.setIntPref('socks_version', torprefs.getIntPref('socks_version'));
   liveprefs.setCharPref('no_proxies_on', torprefs.getCharPref('no_proxies_on'));
   liveprefs.setBoolPref('share_proxy_settings', false);
-  if (torbutton_check_socks_remote_dns()) {
-      liveprefs.setBoolPref('socks_remote_dns', true);
+
+  if (torprefs.getCharPref('settings_method') == 'transparent') {
+    liveprefs.setIntPref('type', 0);
+    if (torbutton_check_socks_remote_dns()) {
+        liveprefs.setBoolPref('socks_remote_dns', false);
+    }
+  } else {
+    liveprefs.setIntPref('type', 1);
+    if (torbutton_check_socks_remote_dns()) {
+        liveprefs.setBoolPref('socks_remote_dns', true);
+    }
   }
-  liveprefs.setIntPref('type', 1);
   torbutton_log(2, 'Done activating tor settings');
 }
 

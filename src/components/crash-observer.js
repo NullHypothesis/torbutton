@@ -124,6 +124,12 @@ CrashObserver.prototype = {
                 parseInt(environ.get("TOR_SOCKS_PORT")));
         if (this.is_tbb) {
             this._prefs.setIntPref('network.proxy.socks_port', parseInt(environ.get("TOR_SOCKS_PORT")));
+
+            // XXX: Hack for TBB people who alternate between transproxy and non
+            this._prefs.setCharPref('extensions.torbutton.settings_method', 'recommended');
+            this._prefs.setBoolPref('extensions.torbutton.saved.transparentTor', false);
+            this._prefs.setBoolPref('network.proxy.socks_remote_dns', true);
+            this._prefs.setIntPref('network.proxy.type', 1);
         }
       } else if (this._prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
         this._prefs.setIntPref('extensions.torbutton.socks_port', 9050);
@@ -137,7 +143,20 @@ CrashObserver.prototype = {
       } else if (this._prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
         this._prefs.setCharPref('extensions.torbutton.socks_host', '127.0.0.1');
       }
- 
+
+      if (environ.exists("TOR_TRANSPROXY")) {
+        this.logger.log(3, "Resetting Tor settings to transproxy");
+        this._prefs.setCharPref('extensions.torbutton.settings_method', 'transparent');
+        this._prefs.setBoolPref('extensions.torbutton.saved.transparentTor', true);
+        this._prefs.setIntPref('extensions.torbutton.socks_port', 0);
+        this._prefs.setCharPref('extensions.torbutton.socks_host', "");
+        if (this.is_tbb) {
+            this._prefs.setBoolPref('network.proxy.socks_remote_dns', false);
+            this._prefs.setIntPref('network.proxy.type', 0);
+            this._prefs.setIntPref('network.proxy.socks_port', 0);
+            this._prefs.setCharPref('network.proxy.socks', "");
+        }
+      }
     },
 
     observe: function(subject, topic, data) {
