@@ -1,3 +1,8 @@
+1.4.6.2
+ 12 Sep 2012
+  * bug 6803: Set proxy settings earlier to fix broken homepage load on FF15
+  * bug 6254: Support transparent Tor mode through TOR_TRANSPROXY=1 env var.
+
 1.4.6.1
  30 Aug 2012
   * Bug 6737: Disable window.screen hooks for FF15+ (fixes exception alert)
