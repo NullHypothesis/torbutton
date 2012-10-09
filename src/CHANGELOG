@@ -1,3 +1,7 @@
+1.4.6.3
+ 9 Oct 2012
+  * bug 5856: Disable JS hooks to make way for direct Firefox patch
+
 1.4.6.2
  12 Sep 2012
   * bug 6803: Set proxy settings earlier to fix broken homepage load on FF15
