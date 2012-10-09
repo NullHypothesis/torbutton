@@ -24,6 +24,7 @@ var m_tb_ff35 = false;
 var m_tb_ff36 = false;
 var m_tb_ff4 = false;
 var m_tb_ff15 = false;
+var m_tb_ff10_8 = false;
 var m_tb_tbb = false;
 
 var m_tb_control_port = null;
@@ -524,6 +525,13 @@ function torbutton_init() {
         m_tb_ff15 = true;
     } else {
         m_tb_ff15 = false;
+    }
+
+    if(versionChecker.compare(appInfo.version, "10.0.8") >= 0
+       && versionChecker.compare(appInfo.version, "11.0a1") < 0) {
+        m_tb_ff10_8 = true;
+    } else {
+        m_tb_ff10_8 = false;
     }
 
     if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
@@ -4709,8 +4717,9 @@ function torbutton_update_tags(win, new_loc) {
 // Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
 // Also, tagging can be deprecated.
 function torbutton_hookdoc(win, doc, state_change, referrer) {
-    /* Firefox 15 broke the last of our JS hooks :/ */
-    if (m_tb_ff15) {
+    /* Firefox 15 broke the last of our JS hooks.
+     * So did 10.0.8-ESR... */
+    if (m_tb_ff15 || m_tb_ff10_8) {
         return;
     }
 
