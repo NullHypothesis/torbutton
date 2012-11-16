@@ -970,7 +970,7 @@ function torbutton_do_async_versioncheck() {
 
   // Suppress update check if done recently.
   const kLastCheckPref = "extension.torbutton.lastUpdateCheck";
-  const kMinSecsBetweenChecks = 15 * 60; // 15 minutes
+  const kMinSecsBetweenChecks = 90 * 60; // 1.5 hours
   var now = Date.now() / 1000;
   var lastCheckTime;
   try {
