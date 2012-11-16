@@ -4269,6 +4269,11 @@ function torbutton_new_tab(event)
     //var browser = event.currentTarget;
     var browser = gBrowser.getBrowserForTab(event.target);
 
+    /* Perform the version check on new tab, module timer */
+    if (!tor_tag) { // tor is enabled...
+      torbutton_do_async_versioncheck();
+    }
+
     torbutton_tag_new_browser(browser, tor_tag, no_plugins);
 
     // XXX: This is possibly slightly the wrong place to do this check,
