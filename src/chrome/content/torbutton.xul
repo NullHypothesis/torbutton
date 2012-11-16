@@ -31,6 +31,8 @@
         <toolbarbutton 
             id="torbutton-button"
             class="toolbarbutton-1 chromeclass-toolbar-additional"
+            type="menu"
+            orient="horizontal"
             label="Torbutton"
             tooltiptext="&torbutton.button.tooltip;"
             menu="torbutton-context-menu"
