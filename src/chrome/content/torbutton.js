@@ -967,6 +967,23 @@ function torbutton_do_async_versioncheck() {
   if (!m_tb_tbb || !m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
     return;
   }
+
+  // Suppress update check if done recently.
+  const kLastCheckPref = "extension.torbutton.lastUpdateCheck";
+  const kMinSecsBetweenChecks = 15 * 60; // 15 minutes
+  var now = Date.now() / 1000;
+  var lastCheckTime;
+  try {
+    lastCheckTime = parseFloat(m_tb_prefs.getCharPref(kLastCheckPref));
+    if (isNaN(lastCheckTime))
+      lastCheckTime = undefined;
+  } catch (e) {}
+
+  if (lastCheckTime && ((now - lastCheckTime) < kMinSecsBetweenChecks))
+    return;
+
+  m_tb_prefs.setCharPref(kLastCheckPref, now);
+
   torbutton_log(3, "Checking version with socks port: "
           +m_tb_prefs.getIntPref("extensions.torbutton.socks_port"));
   try {
