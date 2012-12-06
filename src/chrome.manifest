@@ -143,9 +143,6 @@ contract @torproject.org/crash-observer;1 {06322def-6fde-4c06-aef6-47ae8e799629}
 component {e6204253-b690-4159-bfe8-d4eedab6b3be} components/cookie-jar-selector.js
 contract @torproject.org/cookie-jar-selector;1 {e6204253-b690-4159-bfe8-d4eedab6b3be}
 
-component {23f4d9ba-023a-94ab-eb75-67aed7562a18} components/cssblocker.js
-contract @torproject.org/cssblocker;1 {23f4d9ba-023a-94ab-eb75-67aed7562a18}
-
 component {f36d72c9-9718-4134-b550-e109638331d7} components/torbutton-logger.js
 contract @torproject.org/torbutton-logger;1 {f36d72c9-9718-4134-b550-e109638331d7}
 
@@ -161,7 +158,6 @@ contract @mozilla.org/network/protocol;1?name=tor {52183e20-4d4b-11de-8a39-08002
 component {a5a4bc50-5e8d-11de-8a39-0800200c9a66} components/tors-protocol.js
 contract @mozilla.org/network/protocol;1?name=tors {a5a4bc50-5e8d-11de-8a39-0800200c9a66}
 
-category content-policy ContentPolicy @torproject.org/cssblocker;1
 category profile-after-change CookieJarSelector @torproject.org/cookie-jar-selector;1
 # category profile-after-change RefSpoofer @torproject.org/torRefSpoofer;1
 category profile-after-change TBSessionBlocker @torproject.org/torbutton-ss-blocker;1
