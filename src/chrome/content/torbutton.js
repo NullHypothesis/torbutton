@@ -602,15 +602,13 @@ function torbutton_init() {
     // listen for our toolbar button being added so we can initialize it
     torbutton_init_toolbutton();
 
-    torbutton_init_jshooks();
-
     torbutton_log(1, 'registering pref observer');
     torbutton_window_pref_observer.register(); 
     
     //setting up context menu
-    var contextMenu = document.getElementById("contentAreaContextMenu");
-    if (contextMenu)
-      contextMenu.addEventListener("popupshowing", torbutton_check_contextmenu, false);
+    //var contextMenu = document.getElementById("contentAreaContextMenu");
+    //if (contextMenu)
+    //  contextMenu.addEventListener("popupshowing", torbutton_check_contextmenu, false);
 
     // Add toolbutton to the bar.
     // This should maybe be in the startup function, but we want to add
@@ -689,87 +687,6 @@ function torbutton_inform_about_tbb() {
   // being displayed again.
   m_tb_prefs.setBoolPref("extensions.torbutton.prompt_torbrowser", !checkbox.value);
 }
-
-// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
-// Kill it.
-// 
-//this function checks to see if the context menu is being clicked on a link.
-//if it is, then we show the two context menu items
-function torbutton_check_contextmenu() {
-    var torurl = document.getElementById("torcontext-copyurl");
-    var tortab = document.getElementById("torcontext-opentortab");
-    var torwin = document.getElementById("torcontext-opentorwin");
-    torurl.hidden = tortab.hidden = torwin.hidden = (document.popupNode.localName != "A") 
-}
-
-// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
-// Kill it.
-function torbutton_copy_link() {
-  var element = document.popupNode;
-  var myURI = Components.classes["@mozilla.org/network/io-service;1"]
-                      .getService(Components.interfaces.nsIIOService)
-                      .newURI(element, null, null);
-  //check the scheme
-  if (myURI.scheme == "http" || myURI.scheme == "tor")
-    myURI.scheme = "tor";
-  else if (myURI.scheme == "https" || myURI.scheme == "tors")
-    myURI.scheme = "tors";
-    else
-      return;//unsupported scheme      
-  torbutton_copyToClipboard(myURI.spec);  
-}
-
-// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
-// Kill it.
-function torbutton_copyToClipboard(copyThis) {	
-	
-	var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
-	if (!str) return false;
-	str.data = copyThis; // unicode string?
-	
-	var trans = Components.classes["@mozilla.org/widget/transferable;1"].createInstance(Components.interfaces.nsITransferable);
-	if (!trans) return false; //no transferable widget found
-	
-	trans.addDataFlavor("text/unicode");
-	trans.setTransferData("text/unicode", str, copyThis.length*2); // *2 cuz it's unicode
-	
-	var clipid=Components.interfaces.nsIClipboard;
-	var clip = Components.classes["@mozilla.org/widget/clipboard;1"].getService(clipid);
-	if (!clip) return false; // couldn't get the clipboard
-	
-	clip.setData(trans, null, clipid.kGlobalClipboard);
-	return true;
-}
-
-// Bug 1506 P0: This code only matters in toggle mode (for tor:// urls).
-// Kill it.
-//opens new tab with link with tor:// protocol
-function torbutton_open_link_as_tor(tabFlag) {
-  var element = document.popupNode;
-  var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                   .getInterface(Components.interfaces.nsIWebNavigation)
-                   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
-                   .rootTreeItem
-                   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                   .getInterface(Components.interfaces.nsIDOMWindow);
-  //make into nsIURI
-  var myURI = Components.classes["@mozilla.org/network/io-service;1"]
-                      .getService(Components.interfaces.nsIIOService)
-                      .newURI(element, null, null);
-  //check the scheme
-  if (myURI.scheme == "http" || myURI.scheme == "tor")
-    myURI.scheme = "tor";
-  else if (myURI.scheme == "https" || myURI.scheme == "tors")
-    myURI.scheme = "tors";
-    else
-      return;//unsupported scheme
-  if (tabFlag)
-    mainWindow.getBrowser().addTab(myURI.spec);
-   else
-    mainWindow.open(myURI.spec);    
-}
-
-
 
 // Bug 1506 P0: Our prefs should be handled by Tor Browser. Even if they're
 // not, they should be vastly simplified from this. See also #3100.
@@ -1554,9 +1471,8 @@ function torbutton_new_identity() {
 }
 
 /* The "New Identity" implementation does the following:
- *   1. Tag all tabs as non-tor
- *   2. Disables Javascript and plugins on all tabs
- *   3. Clears state:
+ *   1. Disables Javascript and plugins on all tabs
+ *   2. Clears state:
  *      a. OCSP
  *      b. Cache + image cache
  *      c. Site-specific zoom
@@ -1566,35 +1482,15 @@ function torbutton_new_identity() {
  *      g. SSL Session IDs
  *      h. last open location url
  *      i. clear content prefs
- *   4. Sends tor the NEWNYM signal to get a new circuit
- *   5. Opens a new window with the default homepage
- *   6. Closes this window
+ *   3. Sends tor the NEWNYM signal to get a new circuit
+ *   4. Opens a new window with the default homepage
+ *   5. Closes this window
  *
  * XXX: intermediate SSL certificates are not cleared.
  */
 // Bug 1506 P4: Needed for New Identity.
 function torbutton_do_new_identity() {
-  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-      .getService(Components.interfaces.nsIWindowMediator);
-  var enumerator = wm.getEnumerator("navigator:browser");
-  var closeWins = new Array();
-  while(enumerator.hasMoreElements()) {
-      var win = enumerator.getNext();
-      var browser = win.getBrowser();
-      if(!browser) {
-          torbutton_log(5, "No browser for possible closed window");
-          continue;
-      }
-      var tabs = browser.browsers.length;
-
-      torbutton_log(3, "Length: "+browser.browsers.length);
-
-      for(var i = 0; i < tabs; i++) {
-        torbutton_apply_tab_tag(browser, browser.browsers[i], false);
-      }
-  }
-
-  torbutton_toggle_jsplugins(true, true, true);
+  torbutton_disable_all_js();
 
   m_tb_prefs.setBoolPref("browser.zoom.siteSpecific",
                          !m_tb_prefs.getBoolPref("browser.zoom.siteSpecific"));
@@ -1817,10 +1713,6 @@ function torbutton_update_status(mode, force_update) {
     // Bug 1506 P5: You want to call torbutton_toggle_plugins, but during
     // startup, not toggle.
     torbutton_toggle_plugins(mode && torprefs.getBoolPref("no_tor_plugins"));
-
-    torbutton_toggle_jsplugins(mode, 
-            changed && torprefs.getBoolPref("isolate_content"),
-            torprefs.getBoolPref("no_tor_plugins"));
 
     torbutton_log(2, 'Setting user agent');
 
@@ -2139,19 +2031,6 @@ function torbutton_update_status(mode, force_update) {
                 "full_page_plugins", m_tb_plugin_string, false, changed);
     }
 
-    if(m_tb_ff35) {
-      var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
-                        getService(Ci.nsILivemarkService);
-      if (mode &&
-           m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
-        livemarks.stopUpdateLivemarks();
-        torbutton_log(3, "Disabled livemarks");
-      } else {
-        livemarks.start();
-        torbutton_log(3, "Enabled livemarks");
-      }
-    }
-
     // No need to clear cookies if just updating prefs
     if(!changed && force_update) {
         // Force prefs to be synced to disk
@@ -2322,9 +2201,7 @@ function torbutton_close_on_toggle(mode, newnym) {
 
         var remove = new Array();
         for(var i = 0; i < tabs; i++) {
-            if(browser.browsers[i].__tb_tor_fetched != mode) {
-                remove.push(browser.browsers[i]);
-            }
+            remove.push(browser.browsers[i]);
         }
 
         if(browser.browsers.length == remove.length) {
@@ -2877,25 +2754,13 @@ function torbutton_jar_certs(mode) {
 
 
 // -------------- JS/PLUGIN HANDLING CODE ---------------------
-// Bug 1506 P0: Toggle-only. Kill it.
-function torbutton_check_js_tag(tabbrowser, browser, tor_enabled, js_enabled) {
+// Bug 1506 P3: Defense in depth. Disables JS and events for New Identity.
+function torbutton_disable_browser_js(browser) {
     var eventSuppressor = null;
-    if (typeof(browser.__tb_tor_fetched) == 'undefined') {
-        try {
-            torbutton_log(5, "UNTAGGED WINDOW at: "+browser.src);
-        } catch(e) {
-            torbutton_log(5, "UNTAGGED WINDOW: "+e);
-        }
-        // Defensive programming to tag this window here to 
-        // an alternate tor state. It wil lmake this window totally
-        // useless, but that is better than some undefined state
-        torbutton_apply_tab_tag(tabbrowser, browser, !tor_enabled);
-    }
 
     /* Solution from: https://bugzilla.mozilla.org/show_bug.cgi?id=409737 */
-    // XXX: This is disabled. It kills the entire window. We need to redirect
+    // XXX: This kills the entire window. We need to redirect
     // focus and inform the user via a lightbox.
-    // See https://bugs.torproject.org/flyspray/index.php?do=details&id=1283
     try {
         if (!browser.contentWindow)
             torbutton_log(3, "No content window to disable JS events.");
@@ -2903,10 +2768,11 @@ function torbutton_check_js_tag(tabbrowser, browser, tor_enabled, js_enabled) {
             eventSuppressor = browser.contentWindow.
                 QueryInterface(Components.interfaces.nsIInterfaceRequestor).
                        getInterface(Ci.nsIDOMWindowUtils);
-        eventSuppressor = null;
     } catch(e) {
         torbutton_log(4, "Failed to disable JS events: "+e)
     }
+    
+    browser.docShell.allowJavascript = false;
 
     try {
         // My estimation is that this does not get the inner iframe windows,
@@ -2918,21 +2784,13 @@ function torbutton_check_js_tag(tabbrowser, browser, tor_enabled, js_enabled) {
         torbutton_log(4, "Failed to reset window.name: "+e)
     }
 
-    if(browser.__tb_tor_fetched == tor_enabled) { // States match, js ok 
-        browser.docShell.allowJavascript = js_enabled;
-        if (eventSuppressor)
-            eventSuppressor.suppressEventHandling(!js_enabled);
-    } else { // States differ or undefined, js not ok 
-        browser.docShell.allowJavascript = false;
-        if (eventSuppressor)
-            eventSuppressor.suppressEventHandling(true);
-    }
+    if (eventSuppressor)
+        eventSuppressor.suppressEventHandling(true);
 }
 
 // Bug 1506 P3: The JS-killing bits of this are used by
 // New Identity as a defense-in-depth measure.
-function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
-                                        kill_plugins) {
+function torbutton_disable_window_js(win) {
     var browser = win.getBrowser();
     if(!browser) {
       torbutton_log(5, "No browser for plugin window...");
@@ -2954,28 +2812,10 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
             }
         }
         if (b && b.docShell) {
-            // Only allow plugins if the tab load was from an 
-            // non-tor state and the current tor state is off.
-            if (!m_tb_tbb) {
-              if(kill_plugins) 
-                  b.docShell.allowPlugins = !b.__tb_tor_fetched && !tor_enabled;
-              else 
-                  b.docShell.allowPlugins = true;
-            }
+            torbutton_disable_browser_js(b);
 
-            // Likewise for DNS prefetch
-            if(m_tb_ff35) {
-                if(!m_tb_ff36)
-                    b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
-                b.docShell.allowDNSPrefetch = !b.__tb_tor_fetched
-                    && !tor_enabled;
-            }
-
-            if(isolate_dyn) {
-                torbutton_check_js_tag(browser, b, tor_enabled, js_enabled);
-                // kill meta-refresh and existing page loading 
-                b.webNavigation.stop(b.webNavigation.STOP_ALL);
-            }
+            // kill meta-refresh and existing page loading 
+            b.webNavigation.stop(b.webNavigation.STOP_ALL);
         }
     }
 }
@@ -2985,138 +2825,13 @@ function torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dy
 //
 // This is an ugly beast.. But unfortunately it has to be so..
 // Looping over all tabs twice is not somethign we wanna do..
-function torbutton_toggle_jsplugins(tor_enabled, isolate_dyn, kill_plugins) {
-    torbutton_log(1, "Toggle plugins for: "+tor_enabled);
+function torbutton_disable_all_js() {
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
                        .getService(Components.interfaces.nsIWindowMediator);
     var enumerator = wm.getEnumerator("navigator:browser");
-    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
     while(enumerator.hasMoreElements()) {
         var win = enumerator.getNext();
-        torbutton_toggle_win_jsplugins(win, tor_enabled, js_enabled, isolate_dyn, 
-                                       kill_plugins);   
-    }
-}
-
-// Bug 1506 P0: Toggle garbage.
-function tbHistoryListener(browser) {
-    this.browser = browser;
-
-    var o_stringbundle = torbutton_get_stringbundle();
-    var warning = o_stringbundle.GetStringFromName("torbutton.popup.history.warning");
-
-    this.f1 = function() {
-        // Block everything unless we've reached steady state
-        if((this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"))
-                || (this.browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied"))
-                && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
-            torbutton_log(3, "Blocking history manipulation");
-            window.alert(warning);
-            return false;
-        } else {
-            return true;
-        }
-    };
-}
-
-// Bug 1506 P0: Toggle garbage.
-tbHistoryListener.prototype = {
-    QueryInterface: function(iid) {
-        // XXX: Is this the right way to handle weak references from JS?
-        if(iid.equals(Components.interfaces.nsISHistoryListener) || 
-                iid.equals(Components.interfaces.nsISupports) ||
-                iid.equals(Components.interfaces.nsISupportsWeakReference))
-            return this;
-        else
-            return null;
-    },
-
-    OnHistoryGoBack: function(url) { return this.f1(); },
-    OnHistoryGoForward: function(url) { return this.f1(); },
-    OnHistoryGotoIndex: function(idx, url) { return this.f1(); }, 
-    OnHistoryNewEntry: function(url) { return true; },
-    OnHistoryPurge: function(ents) { return true; },
-    OnHistoryReload: function(uri,flags) { return this.f1(); }
-};
-
-// Bug 1506 P1: Technically, tags are still used by New Identity as
-// defense-in-depth, but they are very expensive to enforce and requires
-// an nsIConentPolicy, which is broken on Android last I checked.
-// Killing this is fine, but be sure to watch out for other places
-// where tab tags are referenced.
-function torbutton_apply_tab_tag(tabbrowser, browser, tag) {
-   if (typeof(browser["__tb_tor_fetched"]) == "undefined" ||
-           browser.__tb_tor_fetched != tag) {
-     // Only update the browser's session store tag if the tag has changed.
-     // This is an expensive operation.
-     var ss = Components.classes["@mozilla.org/browser/sessionstore;1"]
-                             .getService(Components.interfaces.nsISessionStore);
-     
-     var tab = null;
-
-     // XXX: if tabbrowser is null, we may either write or omit session store data..
-     // This should only happen in toggle mode, though.
-     if (tabbrowser) {
-       // http://stackoverflow.com/questions/3374056/firefox-gbrowser-getbrowserfortab-but-no-gbrowser-gettabforbrowser
-       var mTabs = tabbrowser.mTabContainer.childNodes;
-       for (var i=0; i<mTabs.length; i++) {
-           if (mTabs[i].linkedBrowser == browser) {
-               tab = mTabs[i];
-           }
-       }
-     }
-     if (tab)
-       ss.setTabValue(tab, "__tb_tor_fetched", tag.toString());
-     else
-       torbutton_log(5, "No tab found for session store tag.");
-
-   }
-   var oldtag = browser.__tb_tor_fetched;
-   browser.__tb_tor_fetched = tag;
-   return oldtag != tag;
-}
-
-// Bug 1506 P1: Tagging is pretty much toggle-only. See above.
-function torbutton_tag_new_browser(browser, tor_tag, no_plugins) {
-    if (!tor_tag && no_plugins && !m_tb_tbb) {
-        browser.docShell.allowPlugins = tor_tag;
-    }
-
-    if (!tor_tag && m_tb_ff35) {
-        if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
-            browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
-        browser.docShell.allowDNSPrefetch = tor_tag;
-    }
-
-    // Only tag new windows
-    if (typeof(browser.__tb_tor_fetched) == 'undefined') {
-        torbutton_log(3, "Tagging new window: "+tor_tag);
-        torbutton_apply_tab_tag(gBrowser, browser, !tor_tag);
-
-        // XXX: Do we need to remove this listener on tab close?
-        // No, but we probably do need to remove it on window close!
-        // FF3.5 may be throwing uncaught exceptions!
-        var hlisten = new tbHistoryListener(browser);
-
-        var sessionSetter = function() {
-            if(!browser.webNavigation.sessionHistory) {
-                torbutton_log(4, "Still failed to add historyListener!");
-            }
-            try {
-               browser.webNavigation.sessionHistory.addSHistoryListener(hlisten);
-               browser.__tb_hlistener = hlisten;
-               torbutton_log(2, "Added history listener");
-            } catch(e) {
-               torbutton_log(4,  "Exception adding history listener: "+e);
-            }
-        }
-        
-        if(browser.webNavigation.sessionHistory) {
-            sessionSetter();
-        } else {
-            torbutton_log(3, "Delayed session setter");
-            window.setTimeout(sessionSetter, 500); 
-        }
+        torbutton_disable_window_js(win);
     }
 }
 
@@ -3195,7 +2910,6 @@ function torbutton_set_launch_state(state, session_restore) {
                     }
                 }
             }
-            torbutton_apply_tab_tag(browser, b, state);
         }
     }
 
@@ -3330,11 +3044,6 @@ function torbutton_crash_recover()
         else
             torbutton_set_launch_state(false, !m_tb_prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"));
 
-        if (state) {
-          // Need to maybe generate google cookie if tor is enabled
-          torbutton_new_google_cookie();
-        }
-
         m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
 
         // Force prefs to be synced to disk
@@ -3348,682 +3057,6 @@ function torbutton_crash_recover()
 
 
 // ---------------------- Event handlers -----------------
-
-// Bug 1506 P0: This observer was due to a hack to try to get rid
-// of Google captchas.. It didn't work. Kill it.
-//
-// Observer to handle regeneration of google pref cookies
-var torbutton_cookie_observer = {
-observe: function(subject, topic, data) {
-    if (topic == 'cookie-changed') {
-      if (data == 'cleared') {
-        // XXX: Does this get called for every cookie that is cleared?
-        if (m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies")) {
-          torbutton_reset_google_cookie();
-        } else if (m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies")) {
-          torbutton_regen_google_cookie();
-        }
-      } else if (data == 'deleted') {
-        // single cookie deleted or changed - reset just what we need to
-        var cookie = subject.QueryInterface(Components.interfaces.nsICookie);
-        var host = cookie.host;
-        var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
-        if (cookie.host == google_host && cookie.path == "/" && cookie.name == "PREF") {
-          if (m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies")) {
-             torbutton_reset_google_cookie();
-          } else if (m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies")) {
-             torbutton_regen_google_cookie();
-          }
-        }
-      }
-    }
-},
-
-register: function() {
-  var os = Components.classes['@mozilla.org/observer-service;1'].
-                getService(Components.interfaces.nsIObserverService);
-  os.addObserver(torbutton_cookie_observer, 'cookie-changed', false);
-
-
-},
-
-unregister: function() {
-  try {
-    var os = Components.classes['@mozilla.org/observer-service;1'].
-                getService(Components.interfaces.nsIObserverService);
-    os.removeObserver(torbutton_cookie_observer, 'cookie-changed');
-  } catch(e) {
-    torbutton_log(3, "Already unregistered cookie observer");
-  }
-}
-
-};
-
-// Bug 1506 P0: This function was due to a hack to try to get rid
-// of Google captchas.. It didn't work. Kill it.
-function torbutton_new_google_cookie() {
-  var regen = m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies");
-  var reset = m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies");
-  if (!regen && !reset) {
-    return;
-  }
-  var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
-                        .getService(Ci.nsICookieManager);
-  var cookiesEnum = cookieManager.enumerator;
-  var gpref = null;
-  var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
-  while (cookiesEnum.hasMoreElements()) {
-    var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
-    if (cookie.host == google_host && cookie.path == "/" &&
-            cookie.name == "PREF") {
-      gpref = cookie;
-    }
-  }
-
-  if (!gpref) {
-    torbutton_log(3, "No google cookie found. Regenerating.");
-    if (reset) {
-        torbutton_reset_google_cookie();
-    } else if (regen) {
-        torbutton_regen_google_cookie();
-    }
-  }
-}
-
-// Bug 1506 P0: This function was due to a hack to try to get rid
-// of Google captchas.. It didn't work. Kill it.
-function torbutton_init_hidden_browser() {
-  var loaderBox = document.createElement("hbox");
-  loaderBox.setAttribute("style", "overflow: hidden; visibility: hidden;");
-  loaderBox.setAttribute("flex", "1");
-  loaderBox.setAttribute("height", "0");
-  loaderBox.setAttribute("maxheight", "0");
-  loaderBox.setAttribute("minheight", "0");
-
-  var loaderSubBox = document.createElement("vbox");
-  loaderSubBox.setAttribute("flex", "0");
-  loaderBox.appendChild(loaderSubBox);
-  document.documentElement.appendChild(loaderBox);
-
-  var win_width = window.getBrowser().contentWindow.innerWidth;
-  var win_height = window.getBrowser().contentWindow.innerHeight;
-
-  loaderSubBox.setAttribute("width", win_width);
-  loaderSubBox.setAttribute("minwidth", win_width);
-  loaderSubBox.setAttribute("maxwidth", win_width);
-  loaderSubBox.setAttribute("height", win_height);
-  loaderSubBox.setAttribute("minheight", win_height);
-  loaderSubBox.setAttribute("maxheight", win_height);
-
-  loaderSubBox.style.width = win_width + "px !important";
-  loaderSubBox.style.maxWidth = loaderSubBox.style.width;
-  loaderSubBox.style.minWidth = loaderSubBox.style.width;
-  loaderSubBox.style.height = win_height + "px !important";
-  loaderSubBox.style.maxHeight = loaderSubBox.style.height;
-  loaderSubBox.style.minHeight = loaderSubBox.style.height;
-
-  m_tb_hidden_browser = document.createElement("browser");
-  m_tb_hidden_browser.setAttribute("class", "torbuttonBrowser");
-  m_tb_hidden_browser.setAttribute("type", "content");
-  m_tb_hidden_browser.setAttribute("disablehistory", true);
-  m_tb_hidden_browser.setAttribute("allowPlugins", false);
-  m_tb_hidden_browser.setAttribute("flex", "1");
-  m_tb_hidden_browser.setAttribute("id", "torbuttonBrowser");
-
-  loaderSubBox.appendChild(m_tb_hidden_browser);
-  torbutton_log(3, "Created hidden browser.");
-}
-
-// Bug 1506 P0: This function was due to a hack to try to get rid
-// of Google captchas.. It didn't work. Kill it.
-var torbutton_google_cookie_regen_listener = {
-  QueryInterface: function(aIID)
-  {
-   if (aIID.equals(Components.interfaces.nsIDOMEventListener) ||
-       aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-       aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-       aIID.equals(Components.interfaces.nsISupports))
-     return this;
-   throw Components.results.NS_NOINTERFACE;
-  },
-
-  onStateChange: function(aWebProgress, aRequest, aFlag, aStatus) {
-    torbutton_log(3, "Google cookie fetch progress");
-    if ((aFlag & Ci.nsIWebProgressListener.STATE_STOP)
-      && (aFlag & Ci.nsIWebProgressListener.STATE_IS_WINDOW)) {
-      m_tb_hidden_browser.removeProgressListener(torbutton_google_cookie_regen_listener);
-      m_tb_hidden_browser.setAttribute("src", "about:blank");
-      torbutton_log(3, "Google cookie fetch complete.");
-    }
-  },
-
-  onLocationChange: function(aProgress, aRequest, aURI) { return 0; },
-  onProgressChange: function() {return 0;},
-  onStatusChange: function() {return 0;},
-  onSecurityChange: function() {return 0;},
-  onLinkIconAvailable: function() {return 0;}
-};
-
-// Bug 1506 P0: This function was due to a hack to try to get rid
-// of Google captchas.. It didn't work. Kill it.
-function torbutton_regen_google_cookie() {
-  // Only fire if tor fully enabled...
-  if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
-    torbutton_log(3, "Regenerating google cookie via fetch");
-    if (!m_tb_hidden_browser) {
-      torbutton_init_hidden_browser();
-    }
-    // XXX: This is might be forbidden according to 
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=608628
-    m_tb_hidden_browser.addProgressListener(torbutton_google_cookie_regen_listener,
-                        Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
-
-    /* XXX: ideal, but broken..
-    m_tb_hidden_browser.loadURIWithFlags(
-        "http://www"+m_tb_prefs.getCharPref("extensions.torbutton.google_host")+"/",
-        Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE
-            |Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY, null, null);
-    */
-
-    torbutton_log(3, "Cookie fetch initiating..");
-
-    m_tb_hidden_browser.setAttribute("src",
-        "http://www"+m_tb_prefs.getCharPref("extensions.torbutton.google_host")+"/");
-
-  }
-}
-
-// Bug 1506 P0: This function was due to a hack to try to get rid
-// of Google captchas.. It didn't work. Kill it.
-function torbutton_reset_google_cookie() {
-  // Only fire if tor is fully enabled..
-  if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
-    torbutton_log(3, "Resetting google cookie to pref");
-    var cm = Components.classes['@mozilla.org/cookiemanager;1'].
-       getService(Components.interfaces.nsICookieManager2);
-    var expires = (new Date("Jan 1, 3000")).getTime() / 1000;
-
-    // Need S, GDSESS, SS (www, /search), SNID (/verify) and NID...
-    // But it may be the case that NID, SNID and the others can be tied
-    // to a gmail account, search history, prefs, and/or iGoogle customization.
-    // Initial testing shows this to be not the case though.
-
-    cm.add("www"+m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
-      "/search", "SS",
-      m_tb_prefs.getCharPref("extensions.torbutton.gss_cookie"),
-      false, false, false, expires);
-
-    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
-      "/verify", "SNID",
-      m_tb_prefs.getCharPref("extensions.torbutton.gsnid_cookie"),
-      false, false, false, expires);
-
-    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
-      "/", "NID",
-      m_tb_prefs.getCharPref("extensions.torbutton.gnid_cookie"),
-      false, false, false, expires);
-
-    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
-      "/", "PREF", m_tb_prefs.getCharPref("extensions.torbutton.gpref_cookie"),
-      false, false, false, expires);
-
-    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
-      "/", "GDSESS",
-      m_tb_prefs.getCharPref("extensions.torbutton.ggdsess_cookie"),
-      false, false, false, expires);
-
-    cm.add(m_tb_prefs.getCharPref("extensions.torbutton.google_host"),
-      "/", "S", m_tb_prefs.getCharPref("extensions.torbutton.gs_cookie"),
-      false, false, false, expires);
-
-
-  }
-}
-
-/*
-function torbutton_filter_cookies(filter_cookies) {
-  var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
-                     .getService(Ci.nsICookieManager);
-  var cookiesEnum = cookieManager.enumerator;
-  var new_cookies = [];
-  while (cookiesEnum.hasMoreElements()) {
-    var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
-  }
-}
-*/
-
-// Bug 1506 P1: This function was due to a hack to try to limit
-// Google captchas.. It might help, but it's probably not worth
-// it.
-function torbutton_xfer_google_cookies(subject, topic, data) {
-  // Only fire if tor is fully enabled
-  if (m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied")) {
-    // catch load requests for nsIURI.host of google.(com|[\S\S](.[\S\S])?)$
-    // If no pref cookie, generate from google.ca PREF
-    var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
-    var hostmatch =
-        subject.URI.host.match(/^www\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
-
-    // check nsIURI
-    if (hostmatch) {
-      var domain = hostmatch[1];
-      var google_host = m_tb_prefs.getCharPref("extensions.torbutton.google_host");
-      torbutton_log(3, "Got Google request for host: "+subject.URI.host
-              +", matched: "+hostmatch[0]);
-      var cookieManager = Cc["@mozilla.org/cookiemanager;1"]
-                            .getService(Ci.nsICookieManager);
-      var cookiesEnum = cookieManager.enumerator;
-      var copy_cookies = [];
-      // Lets always xfer over all cookies from www.google hosts
-      var use_google_host = false;
-         /* m_tb_prefs.getBoolPref("extensions.torbutton.reset_google_cookies")
-         || m_tb_prefs.getBoolPref("extensions.torbutton.regen_google_cookies");
-         */
-      torbutton_log(3, "Got prefs: "+subject.URI.host);
-      while (cookiesEnum.hasMoreElements()) {
-        var cookie = cookiesEnum.getNext().QueryInterface(Ci.nsICookie);
-        var hostmatched = false;
-        if (use_google_host) {
-          hostmatched = (cookie.host == google_host);
-        } else {
-          hostmatched = (new String(cookie.host)).match(
-                  /^(\.www|www|)\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
-        }
-        // Copy all relevent cookies (except for ssl)
-        // only copy captcha cookie ("S"?)
-        if (hostmatched && !cookie.isSecure
-                && (cookie.name in {"S":1,"NID":1,"PREF":1,"GDSESS":1,"SNID":1})) {
-          copy_cookies.push(cookie);
-        }
-      }
-
-      if (!copy_cookies.length) {
-        torbutton_safelog(4, "No cookie to migrate: ", subject.URI.host);
-        return;
-      }
-      var cm = Components.classes['@mozilla.org/cookiemanager;1'].
-         getService(Components.interfaces.nsICookieManager2);
-      var expires = (new Date("Jan 1, 3000")).getTime() / 1000;
-      var i;
-
-      var cookies = null;
-      try {
-        cookies = new String(httpChannel.getRequestHeader("Cookie"));
-        torbutton_log(3, "Google cookies: "+(cookies ? cookies : "none"));
-      } catch(e) {
-        torbutton_log(3, "Google cookies exploded: "+e);
-      }
-      for (i = 0; i < copy_cookies.length; i++) {
-        var cmatch = new RegExp("(^|;)"+copy_cookies[i].name+"=");
-        // XXX: Hrmm.. could also replace with most recent cookie..
-        // but that requires another O(n^2) loop above
-        if (cookies && cookies.match(cmatch))
-          continue; // Already present. Skip.
-
-        var new_host = new String(copy_cookies[i].host);
-        // Regex sub out copy_cookies[i].host
-        new_host = new_host.replace(
-                         /\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/,
-                         ".google."+domain);
-        try {
-          cm.add(
-             new_host,
-             copy_cookies[i].path,   // path
-             copy_cookies[i].name,
-             copy_cookies[i].value,
-             copy_cookies[i].isSecure,  // isSecure
-             copy_cookies[i].isHttpOnly,  // isHttpOnly
-             false,  // isSession
-             expires);
-          /* Need to copy only cookies matching the host/domain and
-           * path of this request... */
-          var dmatch = new RegExp(new_host+"$");
-          if (subject.URI.host.match(dmatch)
-              && subject.URI.path.indexOf(copy_cookies[i].path) == 0) {
-            httpChannel.setRequestHeader("Cookie",
-                    copy_cookies[i].name+"="+copy_cookies[i].value, true);
-            torbutton_log(3, "Google cookie "+copy_cookies[i].name+
-                          " applied for: "+subject.URI.host+" to domain "+
-                          new_host+" from "+copy_cookies[i].host);
-          } else {
-            torbutton_log(3, "Google cookie "+copy_cookies[i].name+
-                          " transfered for: "+subject.URI.host+" to domain "+
-                          new_host+" from "+copy_cookies[i].host);
-          }
-        } catch(e) {
-          torbutton_log(3, "Cookie add fail for "+new_host+" "
-                        +copy_cookies[i].name+": "+e);
-        }
-      }
-
-      /*
-      var browser = null;
-      if (subject.notificationCallbacks ||
-           (subject.loadGroup && subject.loadGroup.notificationCallbacks) {
-        try {
-          var callbacks = subject.notificationCallbacks;
-          if (!callbacks) {
-            callbacks = subject.loadGroup.notificationCallbacks;
-          }
-          var wind = callbacks.QueryInterface(
-              Components.interfaces.nsIInterfaceRequestor).getInterface(
-                 Components.interfaces.nsIDOMWindow);
-
-          if (wind instanceof Components.interfaces.nsIDOMChromeWindow) {
-            if (wind.browserDOMWindow) {
-              browser = wind.getBrowser().selectedTab.linkedBrowser;
-            }
-          }
-        } catch(e) {
-            torbutton_eclog(4,
-                    'Failure obtaining window for cookie xfer: '+e);
-        }
-      }
-      if (browser) {
-        torbutton_eclog(3, "Reload after cookie xfer: "+subject.URI.spec);
-        browser.reload();
-      } else {
-        torbutton_eclog(4, "Could not find browser to reload "+subject.URI.spec);
-      }
-      */
-    }
-  }
-}
-
-// Bug 1506 P2: Google captchas really suck. This is still useful
-/* Redirect the user to a different search engine if Google is blocking Tor */
-function torbutton_check_google_captcha(subject, topic, data) {
-  if (!m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied"))
-    return;
-
-  var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
-  var hostmatch = subject.URI.host.match(/^(encrypted|www)\.google\.(co\.\S\S|com|\S\S|com\.\S\S)$/);
-
-  // check nsIURI
-  if (hostmatch && httpChannel.responseStatus == 302) {
-    // Now check for 302 to sorry.google.com
-    torbutton_log(3, "Got Google 302 response...");
-    var redir = httpChannel.getResponseHeader("Location");
-    var redirURI = Components.classes["@mozilla.org/network/standard-url;1"]
-                      .createInstance(Ci.nsIStandardURL);
-
-    redirURI.init(Ci.nsIStandardURL.URLTYPE_STANDARD, 80, redir,
-                  subject.URI.originCharset, null);
-    redirURI = redirURI.QueryInterface(Components.interfaces.nsIURI);
-    if (redirURI.host == "sorry.google.com"
-            || redirURI.path.match("^/sorry/")) {
-      var browser = null;
-      if(m_tb_ff3 && subject.notificationCallbacks) {
-        // Arg. google.timers.load.t is fucking us up!
-        try {
-          var wind = subject.notificationCallbacks.QueryInterface(
-                  Components.interfaces.nsIInterfaceRequestor).getInterface(
-                      Components.interfaces.nsIDOMWindow);
-          var wm = Components.classes["@torproject.org/content-window-mapper;1"]
-             .getService(Components.interfaces.nsISupports)
-             .wrappedJSObject;
-          browser = wm.getBrowserForContentWindow(wind.window.top);
-        } catch(e) {
-          torbutton_log(4, "Exception on google captcha logging: "+e);
-        }
-      }
-
-      var querymatch = subject.URI.path.match("[\?\&]q=([^&]+)(?:[\&]|$)");
-      if (!querymatch) {
-        torbutton_safelog(4, "No Google query found for captcha in: ",
-                subject.URI.spec);
-        return;
-      }
-      var newUrl = m_tb_prefs.getCharPref("extensions.torbutton.redir_url."+
-                    m_tb_prefs.getIntPref("extensions.torbutton.google_redir_url"));
-      var query=newUrl+querymatch[1];
-      torbutton_safelog(3, "Got Google query: ",query);
-
-      if (!m_tb_prefs.getBoolPref("extensions.torbutton.asked_google_captcha")) {
-        var check = {value: false};
-        var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                                .getService(Components.interfaces.nsIPromptService);
-        var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
-                    prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING +
-                    prompts.BUTTON_POS_1_DEFAULT;
-
-        var bundle = torbutton_get_stringbundle();
-        var title = bundle.GetStringFromName("torbutton.popup.captcha.title");
-        var ask = bundle.GetStringFromName("torbutton.popup.captcha.ask");
-        var dontask = bundle.GetStringFromName("torbutton.popup.captcha.always");
-        var launch = bundle.GetStringFromName("torbutton.popup.redirect");
-        var cancel = bundle.GetStringFromName("torbutton.popup.no_redirect");
-
-        var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                   .getService(Components.interfaces.nsIWindowMediator);
-        var chrome = wm.getMostRecentWindow("navigator:browser");
-
-        var result = prompts.confirmEx(chrome, title, ask, flags,
-                                       launch, cancel, "", dontask, check);
-
-        if (check.value) {
-          m_tb_prefs.setBoolPref("extensions.torbutton.asked_google_captcha",
-                                 true);
-          m_tb_prefs.setBoolPref("extensions.torbutton.dodge_google_captcha",
-                                 (result == 0));
-        }
-
-        if (result != 0) {
-          return;
-        }
-      }
-      torbutton_safelog(3, "Still have Google query: ",query);
-      // Split url into [?&]q=...[&$]
-      if (browser)
-        browser.loadURI(query, null, subject.URI.originCharset);
-      else
-        httpChannel.setResponseHeader("Location", query, false);
-      torbutton_log(4, "Got Google Captcha. Redirecting");
-    }
-  }
-}
-
-// This observer is to catch some additional http load events
-// to deal with firefox bug 401296
-// TODO: One of these days we should probably unify these http observers
-// with our content policy, like NoScript does.
-//
-// Bug 1506 P2: Most of this is toggle/plugin protections, however
-// the google captcha redirect is also in here.
-var torbutton_http_observer = {
-observe : function(subject, topic, data) {
-  torbutton_eclog(2, 'Examine response: '+subject.name);
-  if (((subject instanceof Components.interfaces.nsIHttpChannel)
-      && !(subject.loadFlags & Components.interfaces.nsIChannel.LOAD_DOCUMENT_URI))) {
-      // FIXME: FF3 no longer calls the contet policy for favicons. 
-      // This is the workaround. Fun fun fun.
-      if(m_tb_ff3 && subject.notificationCallbacks) {
-          try {
-              var wind = subject.notificationCallbacks.QueryInterface(
-                      Components.interfaces.nsIInterfaceRequestor).getInterface(
-                          Components.interfaces.nsIDOMWindow);
-
-              if(wind instanceof Components.interfaces.nsIDOMChromeWindow) {
-                  if(wind.browserDOMWindow) {
-                      var browser = wind.getBrowser().selectedTab.linkedBrowser;
-                      if(!browser) {
-                         torbutton_safelog(5,
-                            "No linked browser for possible favicon request: ",
-                               subject.name);
-                         // Hrmm.. fail closed is the safe option here,
-                         // but how often does this happen?? If this
-                         // is bug 1035, this request probably is the
-                         // proxy test.
-                         //subject.cancel(0x804b0002); // NS_BINDING_ABORTED
-                         return;
-                      }
-
-                      // This can happen in the first request of a new state.
-                      // block favicons till we've reach steady state
-                      if((typeof(browser.__tb_tor_fetched) != "undefined")
-                        && (browser.__tb_tor_fetched != 
-                              m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                              || browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied"))) {
-                          subject.cancel(0x804b0002); // NS_BINDING_ABORTED
-                          torbutton_eclog(3, 'Cancelling opposing (favicon?) request: '+subject.name);
-                      }
-                  }
-              }
-          } catch(e) {
-              torbutton_eclog(2, 'Failure cancelling opposing (favicon?) request '+subject.name+': '+e);
-          }
-      }
-      return;
-  }
-  if(!(subject instanceof Components.interfaces.nsIHttpChannel)) {
-      torbutton_eclog(2, 'Non-http request '+subject.name);
-  }
-
-  if (topic == "http-on-examine-response") {
-      // Bug 1506 P2: This is the only observer topic you might want
-      // to keep in this object
-      torbutton_eclog(3, 'Definitaly Examine response: '+subject.name);
-      if (m_tb_prefs.getBoolPref("extensions.torbutton.dodge_google_captcha")
-            && subject instanceof Ci.nsIHttpChannel) {
-        try {
-          torbutton_check_google_captcha(subject, topic, data);
-        } catch(e) {
-          torbutton_log(4, "Explosion on captcha redirect: "+e);
-        }
-      }
-      torbutton_check_progress(null, subject, 0, false);
-  } else if (topic == "http-on-modify-request") {
-      torbutton_eclog(3, 'Modify request: '+subject.name);
-      if (m_tb_prefs.getBoolPref("extensions.torbutton.xfer_google_cookies")
-            && subject instanceof Ci.nsIHttpChannel) {
-        try {
-          torbutton_xfer_google_cookies(subject, topic, data);
-        } catch(e) {
-          torbutton_log(4, "Explosion on cookie transfer: "+e);
-        }
-      }
-  }
-},
-register : function() {
- var observerService =
-   Components.classes["@mozilla.org/observer-service;1"].
-     getService(Components.interfaces.nsIObserverService);
- torbutton_log(3, "Observer register");
-
- observerService.addObserver(this, "http-on-modify-request", false);
- observerService.addObserver(this, "http-on-examine-response", false);
- torbutton_log(3, "Observer register");
-},
-unregister : function() {
-  var observerService =
-    Components.classes["@mozilla.org/observer-service;1"].
-      getService(Components.interfaces.nsIObserverService);
-
-  observerService.removeObserver(this,"http-on-modify-request");
-  observerService.removeObserver(this,"http-on-examine-response");
-}
-}
-
-// Bug 1506 P0: Forces torbutton updates over tor when in non-tor mode.
-// Actually, this observer is already disabled due to being irrelevant.
-var torbutton_proxyservice = {
-  applyFilter : function(ps, uri, proxy) {
-    try {
-      proxyhost = proxy ? 'proxy: '+proxy.host:'no proxy';
-      torbutton_eclog(3, 'apply: '+proxyhost);
-      if (m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-        if (uri.host == "localhost") return null;
-      }
-
-      if (!m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")) {
-          if (m_tb_prefs.getBoolPref("extensions.torbutton.update_torbutton_via_tor")) {
-               var path = new String(uri.path);
-               var update_proxy = proxy;
-               if (uri.host == "versioncheck.addons.mozilla.org") {
-                   if (path.indexOf("{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}") != -1) {
-                       // https_proxy, https_port
-                       var https_proxy=m_tb_prefs.getCharPref("extensions.torbutton.https_proxy");
-                       var https_port=m_tb_prefs.getIntPref("extensions.torbutton.https_port");
-                       if (!https_proxy || !https_port) {
-                           var socks_host=m_tb_prefs.getCharPref("extensions.torbutton.socks_host");
-                           var socks_port=m_tb_prefs.getIntPref("extensions.torbutton.socks_port");
-                           var socks_version=m_tb_prefs.getIntPref("extensions.torbutton.socks_version");
-                           var flag = 0;
-                           if (!socks_host || !socks_port)
-                               return proxy;
-                           if (m_tb_prefs.getBoolPref("network.proxy.socks_remote_dns"))
-                               flag = Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST;
-                           if (socks_version == 4) {
-                               update_proxy = this._proxyservice.newProxyInfo("socks4", socks_proxy, socks_port,
-                                   flag, 0x7ffffffe, null);
-                           } else {
-                               update_proxy = this._proxyservice.newProxyInfo("socks", socks_proxy, socks_port,
-                                   flag, 0x7ffffffe, null);
-                           }
-                       } else {
-                           update_proxy = this._proxyservice.newProxyInfo("http", https_proxy, https_port,
-                                   Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST, 0x7ffffffe, null);
-                       }
-                   }
-               } else if (uri.host == "releases.mozilla.org") {
-                   if (path.indexOf("/pub/mozilla.org/addons/2275/") == 0) {
-                       var http_proxy=m_tb_prefs.getCharPref("extensions.torbutton.http_proxy");
-                       var http_port=m_tb_prefs.getIntPref("extensions.torbutton.http_port");
-                       if (!http_proxy || !http_port) {
-                           var socks_host=m_tb_prefs.getCharPref("extensions.torbutton.socks_host");
-                           var socks_port=m_tb_prefs.getIntPref("extensions.torbutton.socks_port");
-                           var socks_version=m_tb_prefs.getIntPref("extensions.torbutton.socks_version");
-                           var flag = 0;
-                           if (!socks_host || !socks_port)
-                               return proxy;
-                           if (m_tb_prefs.getBoolPref("network.proxy.socks_remote_dns"))
-                               flag = Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST;
-                           if (socks_version == 4) {
-                               update_proxy = this._proxyservice.newProxyInfo("socks4", socks_proxy, socks_port,
-                                   flag, 0x7ffffffe, null);
-                           } else {
-                               update_proxy = this._proxyservice.newProxyInfo("socks", socks_proxy, socks_port,
-                                   flag, 0x7ffffffe, null);
-                           }
-                       } else {
-                           update_proxy = this._proxyservice.newProxyInfo("http", http_proxy, http_port,
-                                   Ci.nsIProxyInfo.TRANSPARENT_PROXY_RESOLVES_HOST, 0x7ffffffe, null);
-                       }
-                   }
-               }
-               if (update_proxy != proxy)
-                   torbutton_log(3, "Performing Torbutton update check via Tor proxy for: "+
-                                  uri.spec);
-               return update_proxy;
-          }
-      }
-      return proxy;
-    }
-    catch (e) {
-      torbutton_eclog(3, 'applyFilter failed:' +e);
-    }
-  },
-  register : function() {
-    torbutton_eclog(3, 'Proxy filter Registering...');
-    try {
-    this._proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
-      .getService(Components.interfaces.nsIProtocolProxyService);
-    this._proxyservice.registerFilter(this, 0);
-    } catch (e) {
-      torbutton_eclog(3, 'RegisterFilter failed:'+e);
-    }
-  },
-  unregister : function() {
-    torbutton_eclog(3, 'Proxy filter Unregistering...');
-    try {
-    this._proxyservice = Components.classes["@mozilla.org/network/protocol-proxy-service;1"]
-      .getService(Components.interfaces.nsIProtocolProxyService);
-    this._proxyservice.unregisterFilter(this);
-    } catch (e) {
-      torbutton_eclog(3, 'UnregisterFilter failed:'+e);
-    }
-  }
-}
 
 // Bug 1506 P1/P3: This removes any platform-specific junk
 // from the omnibox. In Tor Browser, it should not be needed.
@@ -4085,19 +3118,12 @@ function torbutton_do_main_window_startup()
         getService(Components.interfaces.nsIWebProgress);
 
     progress.addProgressListener(torbutton_weblistener,
-            //   Components.interfaces.nsIWebProgress.NOTIFY_STATE_ALL|
-            //   Components.interfaces.nsIWebProgress.NOTIFY_ALL);
-        Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT|
             Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
     // Wrap Google search service.
     torbutton_wrap_search_service();
 
     torbutton_unique_pref_observer.register();
-    torbutton_http_observer.register();
-    torbutton_cookie_observer.register();
-    // Not needed
-    //torbutton_proxyservice.register();
 
     // Bug 1506: This is probably the most important observer in this function
     // XXX: We should fold this into our code/move it to its own component
@@ -4189,17 +3215,6 @@ function torbutton_do_startup()
         }
         var tor_enabled = torbutton_check_status();
 
-        // XXX: There is a timer at startup. this is not enough..
-        if(m_tb_ff35 &&
-           m_tb_prefs.getBoolPref("extensions.torbutton.disable_livemarks")) {
-          var livemarks = Cc["@mozilla.org/browser/livemark-service;2"].
-                            getService(Ci.nsILivemarkService);
-          if (tor_enabled) {
-            livemarks.stopUpdateLivemarks();
-            torbutton_log(3, "Disabled livemarks");
-          }
-        }
-
         // Bug 1506: Still want to do this
         torbutton_set_timezone(tor_enabled, true);
 
@@ -4220,12 +3235,6 @@ function torbutton_do_startup()
         // Bug 1506: Still want to do this
         torbutton_toggle_plugins(tor_enabled
                 && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
-
-
-        if (tor_enabled) {
-          // Need to maybe generate google cookie if tor is enabled
-          torbutton_new_google_cookie();
-        }
 
         if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {
           var o_stringbundle = torbutton_get_stringbundle();
@@ -4274,8 +3283,6 @@ function torbutton_new_tab(event)
       torbutton_do_async_versioncheck();
     }
 
-    torbutton_tag_new_browser(browser, tor_tag, no_plugins);
-
     // XXX: This is possibly slightly the wrong place to do this check,
     // but we know the TabOpen effect is late enough to provide the popup
     // after firefox is visible, which makes it more clear whose popup this is.
@@ -4312,67 +3319,6 @@ function torbutton_is_windowed(wind) {
         
     torbutton_log(2, "Window is normal");
     return true;
-}
-
-// Bug 1506 P0: Kill this
-// 
-// XXX: This function is unused. We can't make it work
-// without a way to tell when the user has stopped resizing..
-function torbutton_do_resize(ev)
-{
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-            && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-        var bWin = window.getBrowser().contentWindow;
-        // only resize if outer window size has changed (ignore stuff like
-        // scrollbars and find bars)
-        if((m_tb_window_height != window.outerHeight ||
-                m_tb_window_width != window.outerWidth) && 
-                torbutton_is_windowed(window)) {
-            torbutton_log(3, "Resizing window on event: "+window.windowState);
-            /*
-             * Instead of direct adjustment, we must update the outer window
-             * size, because firefox is sloppy about repositioning widgets
-             * properly after inner size changes.
-               bWin.innerHeight = Math.round(bWin.innerHeight/50.0)*50;
-               bWin.innerWidth = Math.round(bWin.innerWidth/50.0)*50;
-            */
-            var hDelta = Math.round(bWin.innerHeight/50.0)*50 - bWin.innerHeight;
-            var wDelta = Math.round(bWin.innerWidth/50.0)*50 - bWin.innerWidth;
-
-            bWin.resizeBy(wDelta,hDelta);
-            torbutton_log(2, "Resized window: ("+window.outerHeight+","+window.outerWidth+") ?= ("
-                    +bWin.innerHeight+","+bWin.innerWidth+")");
-        }
-    }
-
-    m_tb_window_height = window.outerHeight;
-    m_tb_window_width = window.outerWidth;
-}
-
-// Bug 1506 P0: Kill this
-// XXX: unused. Use torbutton_set_window_size instead
-function torbutton_check_round(browser) 
-{
-    if(torbutton_is_windowed(window)
-            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-            && m_tb_prefs.getBoolPref("extensions.torbutton.resize_on_toggle")) {
-        var bWin = browser.contentWindow;
-        var height = Math.round((bWin.innerHeight)/50.0)*50;
-        var width = Math.round((bWin.innerWidth)/50.0)*50;
-
-        torbutton_log(3, "About to resize load window: "+bWin.innerWidth
-                +"x"+bWin.innerHeight+" -> "+width+"x"+height+" in state "
-                +window.windowState);
-
-        // This is fun. any attempt to directly set the inner window actually resizes the outer width
-        // to that value instead. Must use resizeBy() instead of assignment or resizeTo()
-        bWin.resizeBy(width-bWin.innerWidth,height-bWin.innerHeight);
-        torbutton_log(3, "Resized window on load to: "+bWin.innerWidth+"x"+bWin.innerHeight+" in state "+window.windowState);
-
-        m_tb_window_height = window.outerHeight;
-        m_tb_window_width = window.outerWidth;
-
-    }
 }
 
 // Bug 1506 P1/P3: Setting a fixed window size is important, but
@@ -4457,10 +3403,6 @@ function torbutton_new_window(event)
 
     torbutton_get_plugin_mimetypes();
 
-    torbutton_tag_new_browser(browser.browsers[0], 
-            !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
-            m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
-
     torbutton_set_window_size(browser.contentWindow);
 
     // Check the version on every new window. We're already pinging check in these cases.    
@@ -4498,10 +3440,6 @@ function torbutton_close_window(event) {
 
         progress.removeProgressListener(torbutton_weblistener);
         torbutton_unique_pref_observer.unregister();
-        torbutton_http_observer.unregister();
-        torbutton_cookie_observer.unregister();
-        // Not needed
-        //torbutton_proxyservice.unregister();
 
         // XXX: We should fold this into our code..
         SSC_controller.removeListener();
@@ -4518,353 +3456,6 @@ function torbutton_close_window(event) {
 
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
-// getBrowser() is not available at this point for FF4..
-// XXX: This registration is possibly related to why TabMixPlus fails.
-//getBrowser().tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
-
-
-// ----------- JAVASCRIPT HOOKING + EVENT HANDLERS ----------------
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-function torbutton_init_jshooks() {
-    torbutton_log(2, "torbutton_init_jshooks()");
-    var nsio = Components.classes["@mozilla.org/network/io-service;1"]
-                .getService(Components.interfaces.nsIIOService);
-    var chan = null;
-    if (m_tb_ff4) {
-        chan = nsio.newChannel("chrome://torbutton/content/jshooks4.js", 
-                               null, null);
-    } else {
-        chan = nsio.newChannel("chrome://torbutton/content/jshooks.js", 
-                               null, null);
-    }
-    var istream = Components.classes["@mozilla.org/scriptableinputstream;1"].
-            createInstance(Components.interfaces.nsIScriptableInputStream);
-
-    istream.init(chan.open());
-    m_tb_jshooks = istream.read(istream.available());
-    istream.close();
-}
-
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-function torbutton_getbody(doc) {
-    if (doc.body)
-        return doc.body;
-    else if (doc.documentElement)
-        return doc.documentElement;
-    return null;
-}
-
-/* This seems to be necessary due to javascript's
- * nebulous scoping/parsing/evaluations issues. Having this as
- * a standalone statement seems to cause the flag
- * to become defined after just parsing, not execution */
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-function torbutton_set_flag(obj, flag) {
-    obj[flag] = true;
-}
-
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-function torbutton_check_flag(obj, flag) {
-    try {
-        return (typeof(obj[flag]) != 'undefined');
-    } catch(e) {
-        torbutton_log(5, "Exception on flag "+flag+" check: "+e); 
-        return true;
-    }
-}
-
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-function torbutton_is_same_origin(win, source, target) { // unused.
-    var fixup = Components.classes["@mozilla.org/docshell/urifixup;1"]
-        .getService(Components.interfaces.nsIURIFixup);
-    var source = fixup.createFixupURI(win.top.location.href, 0);
-    var target = fixup.createFixupURI(win.location.href, 0);
-
-    var secmgr = Components.classes["@mozilla.org/scriptsecuritymanager;1"]
-        .getService(Components.interfaces.nsIScriptSecurityManager);
-
-    if(!source || !target) {
-        torbutton_log(5, "Can't convert one of: "+win.document.location+", parent is: "+win.top.document.location);
-    }
-
-    // TODO: this doesn't work.. esp if document modifies document.domain
-    // window.windowRoot instead? Also, prints an error message
-    // to the error console..
-    try {
-        secmgr.checkSameOriginURI(source, target);
-        torbutton_log(3, "Same-origin non-toplevel window: "+win.document.location+", parent is: "+win.top.document.location);
-        win = win.top;
-    } catch(e) {
-        torbutton_log(3, "Exception w/ non-same-origin non-toplevel window: "+win.document.location+", parent is: "+win.top.document.location);
-    }
-}
-
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-// Also, tagging can be deprecated.
-function torbutton_update_tags(win, new_loc) {
-    var tag_change = false;
-    torbutton_eclog(2, "Updating tags.");
-    if(typeof(win.wrappedJSObject) == 'undefined') {
-        torbutton_eclog(3, "No JSObject: "+win.location);
-        return;
-    }
-
-    var wm = Components.classes["@torproject.org/content-window-mapper;1"]
-        .getService(Components.interfaces.nsISupports)
-        .wrappedJSObject;
-
-    // Expire the cache on page loads. TODO: Do a timer instead.. 
-    if(win == win.top) wm.expireOldCache();
-
-    var browser = wm.getBrowserForContentWindow(win.top);
-    if(!browser) {
-        torbutton_log(5, "No window found!1");
-        return;
-        //win.alert("No window found!");
-    }
-
-    // This sometimes happens with CoolPreviews..
-    try {
-        // XXX: sometimes we get a dialog window here in FF4?
-        if (!browser.contentWindow) {
-          torbutton_log(3, "No content window for: "+browser.location);
-          return;
-        }
-
-        torbutton_log(2, "Got browser "+browser.contentWindow.location+" for: " 
-            + win.location + ", under: "+win.top.location);
-    } catch(e) {
-        torbutton_log(4, "Missing content window: "+e);
-    }
-
-    // Base this tag off of proxies_applied, since we want to go
-    // by whatever the actual load proxy was
-    var tor_tag = !m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
-    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
-    var kill_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
-
-    if (new_loc && !torbutton_check_flag(win.top, "__tb_js_refresh")) {
-        torbutton_log(2, "Tagging browser for: " + win.location);
-
-        if(typeof(browser.__tb_tor_fetched) == "undefined") {
-            torbutton_log(5, "Untagged browser at: "+win.location);
-            // Defensive programming to tag this window here to 
-            // an alternate tor state. It wil lmake this window totally
-            // useless, but that is better than some undefined state
-            torbutton_apply_tab_tag(null, browser, tor_tag);
-        }
-        if(browser.__tb_tor_fetched != !tor_tag) {
-            tag_change = true;
-            // Purge session history every time we fetch a new doc 
-            // in a new tor state
-            torbutton_log(2, "Purging session history");
-            // sessionHistory can be null now...
-            if(browser.webNavigation.sessionHistory
-                    && browser.webNavigation.sessionHistory.count > 1
-                    && m_tb_prefs.getBoolPref("extensions.torbutton.block_js_history")) {
-                // FIXME: This isn't quite right.. For some reason
-                // this breaks in some cases..
-                /*
-                var current = browser.webNavigation
-                    .QueryInterface(Components.interfaces.nsIDocShellHistory)
-                    .getChildSHEntry(0).clone(); // FIXME: Use index??
-                    */
-                var current = browser.webNavigation.contentViewer.historyEntry;
-
-                browser.webNavigation.sessionHistory.PurgeHistory(
-                        browser.webNavigation.sessionHistory.count);
-
-                if(current) {
-                    // Add current page back in
-                    browser.webNavigation
-                        .QueryInterface(Components.interfaces.nsISHistoryInternal)
-                        .addChildSHEntry(current, true);
-                }
-            }
-        }
-
-        torbutton_apply_tab_tag(null, browser, !tor_tag);
-
-        if (!m_tb_tbb) {
-          browser.docShell.allowPlugins = tor_tag || !kill_plugins;
-        }
-
-        /* We want to disable allowDNSPrefetch on Tor-loaded tabs
-         * before the load, because we don't want prefetch to be enabled
-         * on tor tabs once we leave Tor. */
-        if(m_tb_ff35) {
-            if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
-              browser.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
-            browser.docShell.allowDNSPrefetch = tor_tag;
-        }
-
-        if(js_enabled && !browser.docShell.allowJavascript) {
-            // Only care about re-enabling javascript. 
-            // The js engine obeys the pref over the docshell attribute
-            // for disabling js, and this is the source of a conflict with
-            // NoScript
-            torbutton_log(3, "Javascript changed from "+browser.docShell.allowJavascript+" to: "+js_enabled);
-            browser.docShell.allowJavascript = js_enabled;
-
-            // Tag this specially, so that the next onLocationChange
-            // doesn't redo these hooks.
-            torbutton_set_flag(win.top, "__tb_js_refresh");
-
-            // JS was not fully enabled for some page elements. 
-            // Need to reload
-            browser.reload(); 
-        }
-    }
-
-    torbutton_log(2, "Tags updated.");
-    return tag_change;
-}
-
-// Same-origin policy may prevent our hooks from applying
-// to inner iframes.. Test with frames, iframes, and
-// popups. Test these extensively:
-// http://taossa.com/index.php/2007/02/08/same-origin-policy/
-//  - http://www.htmlbasix.com/popup.shtml
-//  - http://msdn2.microsoft.com/en-us/library/ms531202.aspx
-//  - Url-free: http://www.yourhtmlsource.com/javascript/popupwindows.html#accessiblepopups
-//    - Blocked by default (tho perhaps only via onload). 
-//      see popup blocker detectors:
-//      - http://javascript.internet.com/snippets/popup-blocker-detection.html
-//      - http://www.visitor-stats.com/articles/detect-popup-blocker.php 
-//      - http://www.dynamicdrive.com/dynamicindex8/dhtmlwindow.htm
-//  - popup blocker tests:
-//    - http://swik.net/User:Staple/JavaScript+Popup+Windows+Generation+and+Testing+Tutorials
-//  - pure javascript pages/non-text/html pages
-//  - Messing with variables/existing hooks
-// Bug 1506 P1: All of our JS hooks should be redone in patch form (#5856)
-// Also, tagging can be deprecated.
-function torbutton_hookdoc(win, doc, state_change, referrer) {
-    /* Firefox 15 broke the last of our JS hooks.
-     * So did 10.0.8-ESR... */
-    if (m_tb_ff15 || m_tb_ff10_8) {
-        return;
-    }
-
-    if(typeof(win.wrappedJSObject) == 'undefined') {
-        torbutton_eclog(3, "No JSObject: "+win.location);
-        return;
-    }
-
-    torbutton_log(2, "Hooking document: "+win.location);
-    if(doc && doc.doctype) {
-        torbutton_log(2, "Type: "+doc.doctype.name);
-    }
-
-    try {
-        // Ticket #3414: Apply referer policy to window.name.
-        //
-        // This keeps window.name clean between fresh urls.
-        // It should also apply to iframes because hookdoc gets called for all
-        // frames and subdocuments.
-        //
-        // The about:blank check handles the 'name' attribute of framesets, which
-        // get set before the referer is set on the channel.
-        if ((!referrer || referrer.spec == "") && win.location != "about:blank") {
-            if (win.top == win.window) {
-                // Only reset if we're the top-level window
-                //torbutton_log(4, "Resetting window.name: "+win.name+" for "+win.location);
-                win.name = "";
-                win.window.name = "";
-            }
-        }
-    } catch(e) {
-        torbutton_log(4, "Failed to reset window.name: "+e)
-    }
-
-    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
-
-    // No need to hook js if tor is off
-    if(!js_enabled 
-            || !m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled") 
-            || !m_tb_prefs.getBoolPref('extensions.torbutton.kill_bad_js')) {
-        torbutton_log(2, "Finished non-hook of: " + win.location);
-        return;
-    }
-
-    // Date Hooking:
-
-    /* Q: Do this better with XPCOM?
-     *    http://www.mozilla.org/projects/xpcom/nsIClassInfo.html
-     * A: Negatory.. Date() is not an XPCOM component :(
-     */
-    
-    // So it looks like the race condition is actually a result of
-    // the insertion function returning before the injected code is evaluated.
-    // This code seems to do what we want.
-
-    var str2 = "window.__tb_state_changed="+state_change+";\r\n";
-    if(m_tb_ff3) {
-        str2 += "window.__tb_set_uagent=false;\r\n";
-        str2 += "window.__tb_hook_date=false;\r\n";
-    } else {
-        str2 += "window.__tb_hook_date=true;\r\n";
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
-            str2 += "window.__tb_set_uagent="+m_tb_prefs.getBoolPref('extensions.torbutton.set_uagent')+";\r\n";
-        } else {
-            // Abandon ship on user agent spoofing if user wants plugins.
-            // OS+platform can be obtained from plugins anyways, and complications
-            // with XPCNativeWrappers makes it hard to provide
-            // plugin information in window.navigator properly with plugins
-            // enabled.
-            str2 += "window.__tb_set_uagent=false;\r\n";
-        }
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.spoof_english")) {
-            str2 += "window.__tb_locale=\""+m_tb_prefs.getCharPref('extensions.torbutton.spoof_locale')+"\";\r\n";
-        } else {
-            str2 += "window.__tb_locale=false;\r\n";
-        }
-        str2 += "window.__tb_oscpu=\""+m_tb_prefs.getCharPref('extensions.torbutton.oscpu_override')+"\";\r\n";
-        str2 += "window.__tb_platform=\""+m_tb_prefs.getCharPref('extensions.torbutton.platform_override')+"\";\r\n";
-        str2 += "window.__tb_productSub=\""+m_tb_prefs.getCharPref('extensions.torbutton.productsub_override')+"\";\r\n";
-    }
-    str2 += m_tb_jshooks;
-
-    try {
-        var s = null;
-        torbutton_log(2, "Type of window: " + typeof(win));
-        torbutton_log(2, "Type of wrapped window: " + typeof(win.wrappedJSObject));
-        
-        // Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=627494
-        // https://developer.mozilla.org/en/Components.utils.Sandbox#Optional_parameter
-        
-        if (m_tb_ff4) {
-           s = new Components.utils.Sandbox(win.wrappedJSObject,
-                   {  sandboxPrototype: win.wrappedJSObject,
-                      wantXrays: false });
-        } else {
-           s = new Components.utils.Sandbox(win.wrappedJSObject);
-        }
-        torbutton_log(2, "Type of sandbox: " + typeof(s));
-
-        // FIXME: FF3 issues 
-        // http://developer.mozilla.org/en/docs/XPConnect_wrappers#XPCSafeJSObjectWrapper
-        // http://developer.mozilla.org/en/docs/Code_snippets:Interaction_between_privileged_and_non-privileged_pages
-        s.window = win.wrappedJSObject; 
-        //s.__proto__ = win.wrappedJSObject;
-        var result = Components.utils.evalInSandbox(str2, s);
-        torbutton_log(2, "Type of result: " + typeof(result));
-        if(result === 23) { // secret confirmation result code.
-            torbutton_log(3, "Javascript hooks applied successfully at: " + win.location);
-        } else if(result === 13) {
-            torbutton_log(3, "Double-hook at: " + win.location);
-        } else {
-            window.alert("Torbutton Sandbox evaluation failed. Date hooks not applied!");
-            torbutton_log(5, "Hook evaluation failure at " + win.location);
-        }
-    } catch (e) {
-        window.alert("Torbutton Exception in sandbox evaluation. Date hooks not applied:\n"+e);
-        torbutton_log(5, "Hook exception at: "+win.location+", "+e);
-    }
-
-    torbutton_log(2, "Finished hook: " + win.location);
-
-    return;
-}
 
 // FIXME: Tons of exceptions get thrown from this function on account
 // of its being called so early. Need to find a quick way to check if
@@ -4912,125 +3503,43 @@ function torbutton_check_progress(aProgress, aRequest, aFlags, new_loc) {
         } catch(e) { }
     }
     
-    // FIXME if intstanceof nsIHttpChannel check headers for 
-    // Content-Disposition..
-
-    // This noise is a workaround for firefox bugs involving
-    // enforcement of docShell.allowPlugins and docShell.allowJavascript
-    // (Bugs 401296 and 409737 respectively) 
-    try {
-        if(aRequest) {
-            var chanreq = aRequest.QueryInterface(Components.interfaces.nsIChannel);
-            if(chanreq
-                    && chanreq instanceof Components.interfaces.nsIChannel
-                    && aRequest.isPending()) {
-
-                try { torbutton_eclog(2, 'Pending request: '+aRequest.name); }
-                catch(e) { }
-
-                if(DOMWindow && DOMWindow.opener 
-                        && m_tb_prefs.getBoolPref("extensions.torbutton.isolate_content")) {
-
-                    try { torbutton_eclog(3, 'Popup request: '+aRequest.name); } 
-                    catch(e) { }
-
-                    if(!(DOMWindow.top instanceof Components.interfaces.nsIDOMChromeWindow)) {
-                        // Workaround for Firefox bug 409737
-                        // The idea is that the content policy should stop all
-                        // forms of javascript fetches except for popups. This
-                        // code handles blocking popups from alternate tor states.
-                        var wm = Components.classes["@torproject.org/content-window-mapper;1"]
-                            .getService(Components.interfaces.nsISupports)
-                            .wrappedJSObject;
-
-                        var browser = wm.getBrowserForContentWindow(DOMWindow.opener);
-                        torbutton_eclog(3, 'Got browser for request: ' + (browser != null));
-
-                        // XXX: This may block ssl popups in the first tab
-                        if(browser && 
-                                (browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                                 || browser.__tb_tor_fetched != m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied"))) {
-                            try {
-                                torbutton_eclog(3, 'Stopping document: '+DOMWindow.location);
-                                aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
-                                DOMWindow.stop();
-                                torbutton_eclog(3, 'Stopped document: '+DOMWindow.location);
-                                DOMWindow.document.clear();
-                                torbutton_eclog(3, 'Cleared document: '+DOMWindow.location);
-                            } catch(e) { 
-                            } 
-                            torbutton_eclog(4, 'Torbutton blocked state-changed popup');
-                            DOMWindow.close();
-                            return 0;
-                        }
-                    }
-                }
-
-                torbutton_eclog(2, 'LocChange: '+aRequest.contentType);
-
-                // Workaround for Firefox Bug 401296
-                if((m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                            && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")
-                            && aRequest.contentType in m_tb_plugin_mimetypes)) {
-                    aRequest.cancel(0x804b0002); // NS_BINDING_ABORTED
-                    var o_stringbundle = torbutton_get_stringbundle();
-                    var warning = o_stringbundle.GetStringFromName("torbutton.popup.plugin.warning");
-                    if(DOMWindow) {
-                        // ZOMG DIE DIE DXIE!!!!!@
-                        try {
-                            DOMWindow.stop();
-                            torbutton_eclog(2, 'Stopped document');
-                            DOMWindow.document.clear();
-                            torbutton_eclog(2, 'Cleared document');
-
-                            if(typeof(DOMWindow.__tb_kill_flag) == 'undefined') {
-                                var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                                           .getService(Components.interfaces.nsIWindowMediator);
-                                var chrome = wm.getMostRecentWindow("navigator:browser");
-                                chrome.alert(warning);
-                                DOMWindow.__tb_kill_flag = true;
-                            }
-                            // This doesn't seem to actually remove the child..
-                            // It usually just causes an exception to be thrown,
-                            // which strangely enough, actually does finally 
-                            // kill the plugin.
-                            DOMWindow.document.removeChild(
-                                    DOMWindow.document.firstChild);
-                        } catch(e) {
-                            torbutton_eclog(3, 'Exception on stop/clear');
-                        }
-                    } else {
-                        torbutton_eclog(4, 'No progress for document cancel!');
-                        var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                                   .getService(Components.interfaces.nsIWindowMediator);
-                        var chrome = wm.getMostRecentWindow("navigator:browser");
-                        chrome.alert(warning);
-                    }
-                    torbutton_eclog(3, 'Killed plugin document');
-                    return 0;
-                }
-            } else {
-                torbutton_eclog(2, 'Nonpending: '+aRequest.name);
-                torbutton_eclog(2, 'Type: '+aRequest.contentType);
-            }
-        }
-    } catch(e) {
-        torbutton_eclog(3, 'Exception on request cancel');
-    }
-
     // TODO: separate this from the above?
     if(DOMWindow) {
         var doc = DOMWindow.document;
         try {
             if(doc) {
-                var tag_change = torbutton_update_tags(DOMWindow.window, new_loc);
                 if(doc.domain) {
-                    var referrer = null;
-                    try {
-                        var hreq = aRequest.QueryInterface(Ci.nsIHttpChannel);
-                        referrer = hreq.referrer;
-                    } catch(e) {}
-                    torbutton_hookdoc(DOMWindow.window, doc, tag_change, referrer);
+                  var referrer = null;
+                  var win = DOMWindow.window;
+
+                  try {
+                      var hreq = aRequest.QueryInterface(Ci.nsIHttpChannel);
+                      referrer = hreq.referrer;
+                  } catch(e) {}
+
+                  try {
+                      // XXX: The patch from https://bugzilla.mozilla.org/show_bug.cgi?id=444222
+                      // might be better here..
+                      //
+                      // Ticket #3414: Apply referer policy to window.name.
+                      //
+                      // This keeps window.name clean between fresh urls.
+                      // It should also apply to iframes because hookdoc gets called for all
+                      // frames and subdocuments.
+                      //
+                      // The about:blank check handles the 'name' attribute of framesets, which
+                      // get set before the referer is set on the channel.
+                      if ((!referrer || referrer.spec == "") && win.location != "about:blank") {
+                          if (win.top == win.window) {
+                              // Only reset if we're the top-level window
+                              //torbutton_log(4, "Resetting window.name: "+win.name+" for "+win.location);
+                              win.name = "";
+                              win.window.name = "";
+                          }
+                      }
+                  } catch(e) {
+                      torbutton_log(4, "Failed to reset window.name: "+e)
+                  }
                 }
             }
         } catch(e) {
@@ -5072,12 +3581,6 @@ var torbutton_weblistener =
    throw Components.results.NS_NOINTERFACE;
   },
 
-  onStateChange: function(aProgress, aRequest, aFlag, aStatus)
-  { 
-      torbutton_eclog(2, 'State change()');
-      return torbutton_check_progress(aProgress, aRequest, aFlag, false);
-  },
-
   onLocationChange: function(aProgress, aRequest, aURI)
   {
       torbutton_eclog(2, 'onLocationChange: '+aURI.asciiSpec);
@@ -5086,6 +3589,13 @@ var torbutton_weblistener =
       } else {
           return torbutton_check_progress(aProgress, aRequest, 0, true);
       }
+  },
+
+  // XXX: The following can probably go
+  onStateChange: function(aProgress, aRequest, aFlag, aStatus)
+  { 
+      torbutton_eclog(2, 'State change()');
+      return torbutton_check_progress(aProgress, aRequest, aFlag, false);
   },
 
   onProgressChange: function(aProgress, aRequest, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) 
