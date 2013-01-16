@@ -30,6 +30,7 @@ const kExternalInterfaces = ["nsIObserver", "nsIMIMEService",
                              
 const kREAL_DRAG_CID = "{8b5314bb-db01-11d2-96ce-0060b0fb9956}";
 const kDragInterfaces = ["nsIDragService"];
+                        //, "nsIDragSession"];
 
 const Cr = Components.results;
 const Cc = Components.classes;
@@ -81,12 +82,21 @@ ExternalWrapper.prototype =
       return this;
     }
 
-    try {
-      var external = this._external().QueryInterface(iid);
-      this.copyMethods(external);
-    } catch(e) {
+    /* We perform this explicit check first because otherwise
+     * the JSD exception logs are full of noise */
+    if (iid.equals(Components.interfaces.nsIDragService)
+        || iid.equals(Components.interfaces.nsIDragSession)) {
       var drag = this._drag().QueryInterface(iid);
       this.copyMethods(drag);
+    } else {
+      try {
+        var external = this._external().QueryInterface(iid);
+        this.copyMethods(external);
+      } catch(e) {
+        this.logger.log(3, "Drag+drop QI: "+iid);
+        var drag = this._drag().QueryInterface(iid);
+        this.copyMethods(drag);
+      }
     }
     return this;
   },
