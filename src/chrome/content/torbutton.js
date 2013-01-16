@@ -1888,11 +1888,6 @@ function torbutton_update_status(mode, force_update) {
                 !mode, mode, changed);
     }
 
-    if (m_tb_ff4) {
-      torbutton_setBoolPref("webgl.disabled", "webgl_disabled", mode, mode,
-                changed);
-    }
-
     if(m_tb_ff35) {
         // Disable geolocation
         torbutton_setBoolPref("geo.enabled", "geo_enabled", !mode, mode,
