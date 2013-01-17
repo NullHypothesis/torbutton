@@ -6,7 +6,7 @@ pref("extensions.torbutton.logmethod",1); // 0=stdout, 1=errorconsole, 2=debuglo
 // Display prefs
 pref("extensions.torbutton.display_panel",true);
 pref("extensions.torbutton.panel_style",'text');
-pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.description", "chrome://torbutton/locale/torbutton.properties");
+pref("extensions.torbutton@torproject.org.description", "chrome://torbutton/locale/torbutton.properties");
 
 // proxy prefs
 pref("extensions.torbutton.settings_method",'recommended');
@@ -172,8 +172,7 @@ pref("extensions.torbutton.update_torbutton_via_tor",true);
 pref("extensions.torbutton.tor_urls",false);
 // Opt out of Firefox addon pings:
 // https://developer.mozilla.org/en/Addons/Working_with_AMO
-pref("extensions.e0204bd5-9d31-402b-a99d-a6aa8ffebdca.getAddons.cache.enabled", false);
-pref("extensions.{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}.getAddons.cache.enabled", false);
+pref("extensions.torbutton@torproject.org.getAddons.cache.enabled", false);
 
 
 // Google Captcha prefs

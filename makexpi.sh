@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 APP_NAME=torbutton
-VERSION=`grep em:version src/install.rdf | sed -e 's/["]//g' | cut -f2 -d=`
-XPI_NAME=$APP_NAME-$VERSION.xpi
+#VERSION=`grep em:version src/install.rdf | sed -e 's/["]//g' | cut -f2 -d=`
+XPI_NAME="$APP_NAME-`grep em:version src/install.rdf | sed -e 's/[<>]/	/g' | cut -f3`.xpi"
 
 if [ -e "pkg/$XPI_NAME" ]; then
   echo pkg/$XPI_NAME already exists.

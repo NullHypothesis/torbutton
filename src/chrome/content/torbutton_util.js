@@ -252,7 +252,7 @@ function torbutton_about_init() {
     try {
         // Firefox 4 and later; Mozilla 2 and later
         Components.utils.import("resource://gre/modules/AddonManager.jsm");
-        AddonManager.getAddonByID("{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}",function(addon) {
+        AddonManager.getAddonByID("torbutton@torproject.org",function(addon) {
             var extensionVersion = document.getElementById("torbuttonVersion");
             extensionVersion.setAttribute("value", addon.version);
         });
@@ -260,7 +260,7 @@ function torbutton_about_init() {
         // Firefox 3.6 and before; Mozilla 1.9.2 and before
         var em = Components.classes["@mozilla.org/extensions/manager;1"]
                  .getService(Components.interfaces.nsIExtensionManager);
-        var addon = em.getItemForID("{e0204bd5-9d31-402b-a99d-a6aa8ffebdca}");
+        var addon = em.getItemForID("torbutton@torproject.org");
         var extensionVersion = document.getElementById("torbuttonVersion");
         extensionVersion.setAttribute("value", addon.version);
     }
