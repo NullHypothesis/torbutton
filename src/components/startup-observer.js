@@ -38,19 +38,6 @@ function StartupObserver() {
             getService(Ci.nsIObserverService);
     observerService.addObserver(this, "quit-application-granted", false);
 
-    // Determine if we are firefox 4 or not.. They changed the addon listeners
-    // in a backwards-incompatible way...
-    var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
-        .getService(Components.interfaces.nsIXULAppInfo);
-    var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
-        .getService(Components.interfaces.nsIVersionComparator);
-
-    if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
-        this.is_ff4 = true;
-    } else {
-        this.is_ff4 = false;
-    }
-
     try {
       var test = this._prefs.getCharPref("torbrowser.version");
       this.is_tbb = true;
@@ -59,24 +46,18 @@ function StartupObserver() {
       this.logger.log(3, "This is not a Tor Browser's XPCOM");
     }
 
-    if (this.is_ff4) {
-      // Bug 1506 P2/P3: You probably want to register this observer to clean up
-      // prefs if you're going to support using normal firefox. 
-      Components.utils.import("resource://gre/modules/AddonManager.jsm");
-      this.onEnabling = this.onOperationCancelled;
-      this.onDisabling = this.onUninstalling;
-      AddonManager.addAddonListener(this);
-    } else {
-      observerService.addObserver(this, "em-action-requested", false);
-    }
+    // Bug 1506 P2/P3: You probably want to register this observer to clean up
+    // prefs if you're going to support using normal firefox. 
+    Components.utils.import("resource://gre/modules/AddonManager.jsm");
+    this.onEnabling = this.onOperationCancelled;
+    this.onDisabling = this.onUninstalling;
+    AddonManager.addAddonListener(this);
 }
 
 StartupObserver.prototype = {
     // AddonListeners. We need to listen to see if we are about to be
     // disabled or uninstalled. We also need to track this, and listen
     // for an arbitrary "cancel" event that changes the current state.
-    // This is for FF4 and above. The logic in em-action-requested handles
-    // it for earlier versions
     // XXX: If firefox crashes before quit here, and still manages to uninstall
     // us somehow, we will leave the browser in a sorry state... Let's hope they
     // have the sense not to uninstall addons after an improper shutdown/crash
@@ -110,7 +91,7 @@ StartupObserver.prototype = {
     // Bug 6803: We need to get the env vars early due to
     // some weird proxy caching code that showed up in FF15.
     // Otherwise, homepage domain loads fail forever.
-    getProxySettings: function() {
+    setProxySettings: function() {
       // Bug 1506: Still want to get these env vars
       var environ = Components.classes["@mozilla.org/process/environment;1"]
                  .getService(Components.interfaces.nsIEnvironment);
@@ -162,21 +143,7 @@ StartupObserver.prototype = {
         // but only for hackish reasons.
         this._prefs.setBoolPref("extensions.torbutton.startup", true);
 
-        this.getProxySettings();
-      } else if (topic == "em-action-requested") {
-        this.logger.log(3, "Uninstall action requested..");
-        // http://xulsolutions.blogspot.com/2006/07/creating-uninstall-script-for.html
-        subject.QueryInterface(Components.interfaces.nsIUpdateItem);
-        this.logger.log(3, "Uninstall: "+data+" "+subject.id.toUpperCase());
-
-        if (subject.id.toUpperCase() == TORBUTTON_EXTENSION_UUID) {
-          this.logger.log(3, "Uninstall: "+data);
-          if (data == "item-uninstalled" || data == "item-disabled") {
-            this._uninstall = true;
-          } else if (data == "item-cancel-action") {
-            this._uninstall = false;
-          }
-        }
+        this.setProxySettings();
       } else if (topic == "quit-application-granted") {
         // Bug 1506 P2/P3: You probably want to register this observer to clean up
         // prefs if you're going to support using normal firefox. 
