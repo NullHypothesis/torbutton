@@ -3,7 +3,7 @@
 // listening to. Search for 1506 in the code.
 
 /*************************************************************************
- * Crash observer (JavaScript XPCOM component)
+ * Startup observer (JavaScript XPCOM component)
  *
  * Cases tested (each during Tor and Non-Tor, FF4 and FF3.6)
  *    1. Crash
@@ -21,18 +21,18 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 
 // Module specific constants
-const kMODULE_NAME = "Session crash detector";
-const kMODULE_CONTRACTID = "@torproject.org/crash-observer;1";
+const kMODULE_NAME = "Startup";
+const kMODULE_CONTRACTID = "@torproject.org/startup-observer;1";
 const kMODULE_CID = Components.ID("06322def-6fde-4c06-aef6-47ae8e799629");
 const TORBUTTON_EXTENSION_UUID = "{E0204BD5-9D31-402B-A99D-A6AA8FFEBDCA}";
 
-function CrashObserver() {
+function StartupObserver() {
     this._uninstall = false;
     this.logger = Components.classes["@torproject.org/torbutton-logger;1"]
          .getService(Components.interfaces.nsISupports).wrappedJSObject;
     this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
          .getService(Components.interfaces.nsIPrefBranch);
-    this.logger.log(3, "Crash Observer created");
+    this.logger.log(3, "Startup Observer created");
 
     var observerService = Cc["@mozilla.org/observer-service;1"].
             getService(Ci.nsIObserverService);
@@ -71,7 +71,7 @@ function CrashObserver() {
     }
 }
 
-CrashObserver.prototype = {
+StartupObserver.prototype = {
     // AddonListeners. We need to listen to see if we are about to be
     // disabled or uninstalled. We also need to track this, and listen
     // for an arbitrary "cancel" event that changes the current state.
@@ -239,7 +239,7 @@ CrashObserver.prototype = {
   },
 
   // method of nsIClassInfo
-  classDescription: "Torbutton Crash Observer",
+  classDescription: "Torbutton Startup Observer",
   classID: kMODULE_CID,
   contractID: kMODULE_CONTRACTID,
 
@@ -261,6 +261,6 @@ CrashObserver.prototype = {
 */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 if (XPCOMUtils.generateNSGetFactory)
-    var NSGetFactory = XPCOMUtils.generateNSGetFactory([CrashObserver]);
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([StartupObserver]);
 else
-    var NSGetModule = XPCOMUtils.generateNSGetModule([CrashObserver]);
+    var NSGetModule = XPCOMUtils.generateNSGetModule([StartupObserver]);
