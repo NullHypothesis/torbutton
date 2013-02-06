@@ -280,14 +280,6 @@ function torbutton_prefs_init(doc) {
             = doc.getElementById('torbutton_allShutdown');
     }
 
-    if(o_torprefs.getBoolPref('restore_tor')) {
-        doc.getElementById('torbutton_restoreTorGroup').selectedItem =
-            doc.getElementById('torbutton_restoreTor');
-    } else {
-        doc.getElementById('torbutton_restoreTorGroup').selectedItem =
-            doc.getElementById('torbutton_restoreNonTor');
-    }
-
     /*
     switch(o_torprefs.getIntPref('startup_state')) {
         case 0: // non-tor
@@ -537,10 +529,6 @@ function torbutton_prefs_save(doc) {
     }
     
 
-    o_torprefs.setBoolPref('restore_tor', 
-            doc.getElementById('torbutton_restoreTorGroup').selectedItem ==
-            doc.getElementById('torbutton_restoreTor'));
-
     /*
     if(doc.getElementById('torbutton_startupStateGroup').selectedItem ==
             doc.getElementById('torbutton_startNonTor')) {
@@ -727,7 +715,6 @@ function torbutton_prefs_reset_defaults() {
     torbutton_reset_browser_prefs();
 
     chrome.torbutton_init_prefs();
-    chrome.torbutton_do_fresh_install();
     torbutton_log(3, "Prefs reset");
 
     if(was_enabled) {

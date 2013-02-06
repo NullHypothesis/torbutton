@@ -11,7 +11,6 @@
 var m_tb_wasinited = false;
 var m_tb_prefs = false;
 var m_tb_jshooks = false;
-var m_tb_plugin_mimetypes = false;
 var m_tb_plugin_string = false;
 var m_tb_is_main_window = false;
 var m_tb_hidden_browser = false;
@@ -2860,87 +2859,6 @@ function torbutton_reload_homepage() {
     gBrowser.loadURI(homepage, null, null);
 }
 
-// Bug 1506 P0: There are no states, only Tor.
-function torbutton_set_launch_state(state, session_restore) {
-    if (!m_tb_wasinited) torbutton_init();
-    var no_plugins = m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins");
-            
-    torbutton_log(3, "Conditional set");
-    
-    // Need to set the tag on all tabs, some of them can be mis-set when
-    // the first window is created (before session restore)
-    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-                       .getService(Components.interfaces.nsIWindowMediator);
-    var enumerator = wm.getEnumerator("navigator:browser");
-    var js_enabled = m_tb_prefs.getBoolPref("javascript.enabled");
-    while(enumerator.hasMoreElements()) {
-        var win = enumerator.getNext();
-        var browser = win.getBrowser();
-        if(!browser) {
-          // XXX: Could add a location here..
-          torbutton_log(5, "No browser for plugin window in set_launch_state.");
-          continue;
-        }
-        var browsers = browser.browsers;
-
-        for (var i = 0; i < browsers.length; ++i) {
-            var b = browser.browsers[i];
-
-            if (state) {
-                if(b && b.docShell){
-                    if(no_plugins && !m_tb_tbb) b.docShell.allowPlugins = false;
-                    if(m_tb_ff35) {
-                        if (!m_tb_ff36) /* Unified with nsIDocShell in 3.6 */
-                          b.docShell.QueryInterface(Ci.nsIDocShell_MOZILLA_1_9_1_dns);
-                        b.docShell.allowDNSPrefetch = false;
-                    }
-                } else {
-                    try {
-                        if (b && b.currentURI) 
-                            torbutton_log(5, "Initial docShell is null for: "+b.currentURI.spec);
-                        else 
-                            torbutton_log(5, "Initial docShell is null for unknown URL");
-                    } catch(e) {
-                        torbutton_log(5, "Initial docShell is null for unparsable URL: "+e);
-                    }
-                }
-            }
-        }
-    }
-
-
-    if (torbutton_check_status() == state) {
-      // Do a quick toggle if tor is always enabled to ensure we update prefs properly
-      // in the event of an upgrade, offline proxy change, etc
-      if (state) {
-        torbutton_disable_tor();
-        torbutton_enable_tor(true);
-        torbutton_log(3, "Tor state updated.");
-
-        torbutton_do_async_versioncheck();
-        
-        // Load our homepage again. We just killed it via the toggle.
-        if (!session_restore) {
-          torbutton_reload_homepage();
-        }
-      } else {
-        torbutton_log(3, "Leaving tor disabled");
-      }
-    } else {
-        torbutton_log(4, "Restoring proper tor state");
-
-        if(state) torbutton_enable_tor(true);
-        else  torbutton_disable_tor();
-        
-        torbutton_do_async_versioncheck();
-
-        // Load our homepage again. We just killed it via the toggle.
-        if (!session_restore) {
-            torbutton_reload_homepage();
-        }
-    }
-}
-
 // Bug 1506 P0: Toggle, kill it.
 function torbutton_restore_cookies(tor_enabled)
 {
@@ -2964,92 +2882,6 @@ function torbutton_restore_cookies(tor_enabled)
         }
     }
 }
-
-// Bug 1506 P0: We only care about crashes in a toggle world. Kill this.
-function torbutton_crash_recover()
-{
-    if (!m_tb_wasinited) torbutton_init();
-    torbutton_log(3, "Crash recover check");
-
-    // Crash detection code (works w/ components/crash-observer.js)
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.crashed")) {
-        torbutton_log(4, "Crash detected, attempting recovery");
-
-        /* These prefs get set in this order during toggle: */
-        /* extentions.torbutton.saved.* */
-        var te = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-        var state = torbutton_check_status();
-        var pa = m_tb_prefs.getBoolPref("extensions.torbutton.proxies_applied");
-        var sa = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
-
-        // TODO: This might not properly preserve a user's settings if
-        // Firefox crashes on the very *first* toggle they ever do,
-        // but it should at least not break in that case either.
-        if(state != te || state != pa || state != sa) {
-            if (state != te && state != pa && state != sa) {
-                // redo the whole toggle from the top
-                torbutton_log(4, "Crash state conflict: "+state+","
-                            +te+","+pa+","+sa);
-
-                if (te) {
-                   torbutton_activate_tor_settings();
-                } else {
-                   torbutton_activate_nontor_settings();
-                }
-            } else if (state == te && state != pa && state != sa) {
-                // redo the whole toggle from the top
-                torbutton_log(4, "Crash state conflict: "+state+","
-                            +te+","+pa+","+sa);
-                // Update_status did not run at all..
-                torbutton_update_status(state, true);
-            } else if (state == te && state == pa && state != sa) {
-                // Tor->Non-Tor is safe to redo, so long as first_toggle is
-                // false..
-                // However, Non-Tor->Tor needs to first perform Tor->Non-Tor
-                // and then retry
-                if (state) {
-                    torbutton_restore_cookies(true); // Restore Tor cookies
-                    torbutton_update_status(false, true); // Toggle into Non-Tor
-                    torbutton_update_status(true, true); // Toggle into Tor
-                } else {
-                    torbutton_restore_cookies(true); // Restore Tor cookies
-                    torbutton_update_status(false, true); // Toggle into Non-Tor
-                }
-            } else {
-                window.alert("Torbutton crash state conflict! Please file bug report with these four values: "
-                            +state+","+te+","+pa+","+sa);
-                torbutton_log(5, "Crash state conflict: "+state+","
-                            +te+","+pa+","+sa);
-            }
-        } else {
-            // Do the restore cookies first because we potentially save
-            // cookies by toggling tor state in the next pref. If we
-            // do this first, we can be sure we have the 'right' cookies
-            // currently loaded before the switch writes out a new jar
-            if(m_tb_prefs.getBoolPref("extensions.torbutton.reload_crashed_jar"))
-                torbutton_restore_cookies(state);
-        }
-
-        m_tb_prefs.setBoolPref("extensions.torbutton.tor_enabled", state);
-        m_tb_prefs.setBoolPref("extensions.torbutton.proxies_applied", state);
-        m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", state);
-
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor"))
-            torbutton_set_launch_state(true, !m_tb_prefs.getBoolPref("extensions.torbutton.notor_sessionstore"));
-        else
-            torbutton_set_launch_state(false, !m_tb_prefs.getBoolPref("extensions.torbutton.nonontor_sessionstore"));
-
-        m_tb_prefs.setBoolPref("extensions.torbutton.crashed", false);
-
-        // Force prefs to be synced to disk
-        var prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                                           .getService(Components.interfaces.nsIPrefService);
-        prefService.savePrefFile(null);
-    }
-
-    torbutton_log(3, "End crash recover check");
-}
-
 
 // ---------------------- Event handlers -----------------
 
@@ -3125,56 +2957,6 @@ function torbutton_do_main_window_startup()
     SSC_startup();
 }
 
-// Bug 1506 P0: We should always start with Tor enabled based on
-// prefs.js. We probably don't need this code to enforce it.
-function torbutton_set_initial_state() {
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.noncrashed")) {
-        var restore_tor = m_tb_prefs.getBoolPref("extensions.torbutton.restore_tor");
-        
-        torbutton_log(3, "Setting initial tor state to: "+restore_tor);
-
-        torbutton_set_launch_state(restore_tor, false);
-
-        m_tb_prefs.setBoolPref("extensions.torbutton.noncrashed", false);
-
-        // Force prefs to be synced to disk
-        var prefService = Components.classes["@mozilla.org/preferences-service;1"]
-                                           .getService(Components.interfaces.nsIPrefService);
-        prefService.savePrefFile(null);
-    }
-}
-
-// Bug 1506 P1: This is a relic of the need to sync up user prefs to
-// tor prefs. See #3100 for a more generalized approach
-function torbutton_do_fresh_install() 
-{
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.fresh_install")) {
-        if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-            // Make our cookie prefs more closely match the user's 
-            // so we don't change people's settings on install.
-            if(m_tb_prefs.getIntPref("network.cookie.lifetimePolicy") == 2) {
-                m_tb_prefs.setBoolPref("extensions.torbutton.nontor_memory_jar", 
-                        true);
-            }
-            // perform updates in ff3 if the user's non-tor prefs allow it
-            if(m_tb_ff3 && m_tb_prefs.getBoolPref("app.update.auto")
-                    && m_tb_prefs.getBoolPref("extensions.update.enabled")) {
-                m_tb_prefs.setBoolPref("extensions.torbutton.no_updates", false);
-            }
-        } else {
-            // Punt. Allow updates via Tor now.
-            if(m_tb_ff3) {
-                // Perform updates if FF3. They are secure now.
-                m_tb_prefs.setBoolPref("extensions.torbutton.no_updates", false);
-            }
-        }
-
-        m_tb_prefs.setBoolPref("extensions.torbutton.fresh_install", false);
-
-        torbutton_log(4, "First time startup completed");
-    }
-}
-
 // Bug 1506 P4: Most of this function is now useless, save
 // for the very important SOCKS environment vars at the end.
 // Those could probably be rolled into a function with the
@@ -3182,55 +2964,17 @@ function torbutton_do_fresh_install()
 function torbutton_do_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
-        // Do this before the unique pref observer is registered
-        // in torbutton_do_main_window_startup to avoid
-        // popup notification.
-        torbutton_do_fresh_install();
-
-        // The cookie protections pref was added recently, and we would like
-        // it to be the new default. We must update the older prefs to match
-        // if it is set, to handle upgrade inconsistencies.
-        //
-        // We do this before the pref observers get registered to avoid
-        // popups and non-tor policy changes.
-        if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections')) {
-          m_tb_prefs.setBoolPref('extensions.torbutton.cookie_jars', false);
-          m_tb_prefs.setBoolPref('extensions.torbutton.dual_cookie_jars', true);
-          m_tb_prefs.setBoolPref('extensions.torbutton.clear_cookies', false);
-        }
-
         // Bug 1506: Should probably be moved to an XPCOM component
         torbutton_do_main_window_startup();
-
-        // This is due to Bug 908: UserAgent Switcher is resetting
-        // the user agent at startup to default
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                    && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
-            torbutton_set_uagent();
-        }
-        var tor_enabled = torbutton_check_status();
 
         // Bug 1506: Still want to do this
         torbutton_set_timezone(tor_enabled, true);
 
-        // FIXME: This is probably better done by reimplementing the 
-        // component.
-        if(m_tb_prefs.getBoolPref("extensions.torbutton.block_remoting")) {
-            var appSupport = Cc["@mozilla.org/toolkit/native-app-support;1"]
-                .getService(Ci.nsINativeAppSupport);
-            if(!appSupport.stop()) {
-                torbutton_log(5, "Remoting stop() failed. Forcing quit");
-                // We really want this thing gone.
-                appSupport.quit();
-            } else {
-                torbutton_log(3, "Remoting window closed.");
-            }
-        }
-    
         // Bug 1506: Still want to do this
-        torbutton_toggle_plugins(tor_enabled
-                && m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+        torbutton_toggle_plugins(tor_enabled &&
+                       m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
+        // Still need this in case people shove this thing back into FF
         if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {
           var o_stringbundle = torbutton_get_stringbundle();
           var warning = o_stringbundle.GetStringFromName("torbutton.popup.short_torbrowser");
@@ -3242,22 +2986,6 @@ function torbutton_do_startup()
         m_tb_prefs.setBoolPref("extensions.torbutton.startup", false);
     }
 }
-
-// Bug 1506 P0: Old way of blocking plugins. Kill it
-function torbutton_get_plugin_mimetypes()
-{
-    m_tb_plugin_mimetypes = { null : null };
-    var plugin_list = [];
-    for(var i = 0; i < window.navigator.mimeTypes.length; ++i) {
-        var mime = window.navigator.mimeTypes.item(i);
-        if(mime && mime.enabledPlugin) {
-            m_tb_plugin_mimetypes[mime.type] = true;
-            plugin_list.push(mime.type);
-        }
-    }
-    m_tb_plugin_string = plugin_list.join();
-}
-
 
 // Bug 1506 P0: Has some tagging code (can be removed) 
 // and the language prompt (probably the wrong place for the
@@ -3393,10 +3121,6 @@ function torbutton_new_window(event)
     browser.tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
 
     torbutton_do_startup();
-    torbutton_crash_recover();
-    torbutton_set_initial_state();
-
-    torbutton_get_plugin_mimetypes();
 
     torbutton_set_window_size(browser.contentWindow);
 

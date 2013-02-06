@@ -5,9 +5,6 @@
 /*************************************************************************
  * Crash observer (JavaScript XPCOM component)
  *
- * Provides the chrome with a notification ("extensions.torbutton.crashed"
- * pref event) that the browser in fact crashed.
- *
  * Cases tested (each during Tor and Non-Tor, FF4 and FF3.6)
  *    1. Crash
  *    2. Upgrade
@@ -163,16 +160,7 @@ CrashObserver.prototype = {
       if(topic == "profile-after-change") {
         // Bug 1506 P1: We listen to these prefs as signals for startup,
         // but only for hackish reasons.
-        if(this._prefs.getBoolPref("extensions.torbutton.fresh_install")) {
-          this._prefs.setBoolPref("extensions.torbutton.normal_exit", true);
-        }
         this._prefs.setBoolPref("extensions.torbutton.startup", true);
-        if (this._prefs.getBoolPref("extensions.torbutton.normal_exit")) {
-          this._prefs.setBoolPref("extensions.torbutton.noncrashed", true);
-        } else {
-          this._prefs.setBoolPref("extensions.torbutton.crashed", true);
-        }
-        this._prefs.setBoolPref("extensions.torbutton.normal_exit", false);
 
         this.getProxySettings();
       } else if (topic == "em-action-requested") {
@@ -212,16 +200,6 @@ CrashObserver.prototype = {
                         "User asked to uninstall, but we have no window!");
             }
         }
-
-        // Remove the cookie observer so clearing cookies below does not
-        // issue a new request.
-        if (chrome) chrome.torbutton_cookie_observer.unregister();
-
-        // Set pref in case this is just an upgrade (So we don't
-        // mess with cookies)
-        this._prefs.setBoolPref("extensions.torbutton.normal_exit", true);
-        this._prefs.setBoolPref("extensions.torbutton.crashed", false);
-        this._prefs.setBoolPref("extensions.torbutton.noncrashed", false);
 
         if((this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
             this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))
