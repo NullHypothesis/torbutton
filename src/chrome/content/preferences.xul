@@ -101,11 +101,9 @@
                      </hbox>
                       <radiogroup align="center" orient="horizontal" id="torbutton_socksGroup">
                           <radio id="torbutton_socksv4"
-                                label="&torbutton.prefs.socks_vfour;" 
-                                oncommand="torbutton_prefs_set_field_attributes(document)"/>
+                                label="&torbutton.prefs.socks_vfour;"/>
                           <radio id="torbutton_socksv5" 
-                                label="&torbutton.prefs.socks_vfive;" 
-                                oncommand="torbutton_prefs_set_field_attributes(document)"/>
+                                label="&torbutton.prefs.socks_vfive;"/>
                       </radiogroup>
                     </row>
                     <row align="center">
@@ -139,8 +137,7 @@
        
         
         <checkbox id="torbutton_lockedMode"
-        label="&torbutton.prefs.locked_mode;"
-        oncommand="torbutton_prefs_set_field_attributes(document)"/>
+        label="&torbutton.prefs.locked_mode;"/>
 
         <hbox>
          <spacer flex="1"/>
@@ -163,17 +160,13 @@
     <tabpanel>
      <vbox>
        <checkbox id="torbutton_blockDisk" 
-              label="&torbutton.prefs.block_disk;" 
-              oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              label="&torbutton.prefs.block_disk;"/>
        <checkbox id="torbutton_blockPlugins" 
-              label="&torbutton.prefs.block_plugins;" 
-              oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              label="&torbutton.prefs.block_plugins;"/>
        <checkbox id="torbutton_restrictThirdParty" 
-              label="&torbutton.prefs.restrict_thirdparty;" 
-              oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              label="&torbutton.prefs.restrict_thirdparty;"/>
        <checkbox id="torbutton_resistFingerprinting" 
-              label="&torbutton.prefs.resist_fingerprinting;" 
-              oncommand="torbutton_prefs_set_field_attributes(document)"/>
+              label="&torbutton.prefs.resist_fingerprinting;"/>
      </vbox>
     </tabpanel>
     <tabpanel>
