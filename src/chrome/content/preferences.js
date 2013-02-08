@@ -137,8 +137,6 @@ function torbutton_prefs_set_field_attributes(doc)
         doc.getElementById('torbutton_socksPort').value    = o_customprefs.getIntPref('socks_port');
         */
     }
-
-    doc.getElementById('torbutton_searchEngine').disabled = !doc.getElementById('torbutton_noCaptcha').checked;
 }
 
 function torbutton_prefs_init(doc) {
@@ -193,214 +191,14 @@ function torbutton_prefs_init(doc) {
         doc.getElementById('torbutton_settingsMethod').selectedItem = doc.getElementById('torbutton_transparentTor');
     }
 
-    // doc.getElementById('torbutton_warnUponExcludedSite').checked = o_torprefs.getBoolPref('prompt_before_visiting_excluded_sites');
-
-    doc.getElementById('torbutton_disablePlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
-    doc.getElementById('torbutton_clearHistory').checked = o_torprefs.getBoolPref('clear_history');
-    doc.getElementById('torbutton_killBadJS').checked = o_torprefs.getBoolPref('kill_bad_js');
-    doc.getElementById('torbutton_resizeOnToggle').checked = o_torprefs.getBoolPref('resize_on_toggle');
-   
-    if(o_torprefs.getBoolPref('clear_cache')) {
-        doc.getElementById('torbutton_cacheGroup').selectedItem =
-            doc.getElementById('torbutton_clearCache');
-        o_torprefs.setBoolPref('block_cache', false);
-    } else {
-        doc.getElementById('torbutton_cacheGroup').selectedItem =
-            doc.getElementById('torbutton_blockCache');
-        o_torprefs.setBoolPref('block_cache', true);
-        o_torprefs.setBoolPref('clear_cache', false);
-    }
-
-    if(o_torprefs.getBoolPref('clear_cookies')) {
-        doc.getElementById('torbutton_cookieGroup').selectedItem = 
-            doc.getElementById('torbutton_clearCookies');
-        o_torprefs.setBoolPref('cookie_jars', false);
-        o_torprefs.setBoolPref('dual_cookie_jars', false);
-        o_torprefs.setBoolPref('clear_cookies', true); 
-        o_torprefs.setBoolPref('cookie_protections',false);
-        o_torprefs.setBoolPref('tor_memory_jar', true);
-        o_torprefs.setBoolPref('nontor_memory_jar', true);
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
-    } else if(o_torprefs.getBoolPref('cookie_jars')) {
-        doc.getElementById('torbutton_cookieGroup').selectedItem =
-            doc.getElementById('torbutton_cookieJars');
-        o_torprefs.setBoolPref('cookie_jars', true);
-        o_torprefs.setBoolPref('dual_cookie_jars', false);
-        o_torprefs.setBoolPref('clear_cookies', false);
-        o_torprefs.setBoolPref('cookie_protections',false);        
-        o_torprefs.setBoolPref('tor_memory_jar', true);
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;        
-    } else if(o_torprefs.getBoolPref('cookie_protections')) {
-        doc.getElementById('torbutton_cookieGroup').selectedItem =
-            doc.getElementById('torbutton_cookieProtections');
-        o_torprefs.setBoolPref('cookie_jars', false);
-        o_torprefs.setBoolPref('dual_cookie_jars', true);
-        o_torprefs.setBoolPref('clear_cookies', false); 
-        doc.getElementById('torbutton_torMemoryJar').disabled = false;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
-    } 
-    else if(o_torprefs.getBoolPref('dual_cookie_jars')) {
-        doc.getElementById('torbutton_cookieGroup').selectedItem =
-            doc.getElementById('torbutton_dualCookieJars');
-        o_torprefs.setBoolPref('cookie_jars', false);
-        o_torprefs.setBoolPref('dual_cookie_jars', true);
-        o_torprefs.setBoolPref('clear_cookies', false); 
-        o_torprefs.setBoolPref('cookie_protections',false);
-        doc.getElementById('torbutton_torMemoryJar').disabled = false;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
-    }  else {
-        doc.getElementById('torbutton_cookieGroup').selectedItem =
-            doc.getElementById('torbutton_mmmCookies');
-        o_torprefs.setBoolPref('cookie_jars', false);
-        o_torprefs.setBoolPref('dual_cookie_jars', false);
-        o_torprefs.setBoolPref('clear_cookies', false); 
-        o_torprefs.setBoolPref('tor_memory_jar', false);
-        o_torprefs.setBoolPref('nontor_memory_jar', false);
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
-    }
-
-    doc.getElementById('torbutton_torMemoryJar').checked = o_torprefs.getBoolPref('tor_memory_jar');
-    doc.getElementById('torbutton_nonTorMemoryJar').checked = o_torprefs.getBoolPref('nontor_memory_jar');
-
-    doc.getElementById('torbutton_noDomStorage').checked = 
-        o_torprefs.getBoolPref('disable_domstorage');
-    
-    if(o_torprefs.getIntPref('shutdown_method') == 0) {
-        doc.getElementById('torbutton_shutdownGroup').selectedItem
-            = doc.getElementById('torbutton_noShutdown');
-    } else if(o_torprefs.getIntPref('shutdown_method') == 1) {
-        doc.getElementById('torbutton_shutdownGroup').selectedItem
-            = doc.getElementById('torbutton_torShutdown');
-    } else {
-        o_torprefs.setIntPref('shutdown_method', 2); 
-        doc.getElementById('torbutton_shutdownGroup').selectedItem
-            = doc.getElementById('torbutton_allShutdown');
-    }
-
-    /*
-    switch(o_torprefs.getIntPref('startup_state')) {
-        case 0: // non-tor
-            doc.getElementById("torbutton_startupStateGroup").selectedItem =
-                doc.getElementById('torbutton_startNonTor');
-            break;
-        case 1: // tor
-            doc.getElementById("torbutton_startupStateGroup").selectedItem =
-                doc.getElementById('torbutton_startTor');
-            break;
-        case 2: // shutdown state
-            doc.getElementById("torbutton_startupStateGroup").selectedItem =
-                doc.getElementById('torbutton_startPrevious');
-            break;
-    }*/
-    
-    if ((doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof'))==4)
-      doc.getElementById('torbutton_CustomRef').value = o_torprefs.getCharPref('customref');
-    
-    doc.getElementById('torbutton_torSessionStore').checked = !o_torprefs.getBoolPref('notor_sessionstore');
-    doc.getElementById('torbutton_nonTorSessionStore').checked = !o_torprefs.getBoolPref('nonontor_sessionstore');
-
-    //doc.getElementById('torbutton_reloadCrashedJar').checked = o_torprefs.getBoolPref('reload_crashed_jar');
-    
-    doc.getElementById('torbutton_blockTorHRead').checked = o_torprefs.getBoolPref('block_thread');
-    doc.getElementById('torbutton_blockTorHWrite').checked = o_torprefs.getBoolPref('block_thwrite');
-    doc.getElementById('torbutton_blockNonTorHRead').checked = o_torprefs.getBoolPref('block_nthread');
-    doc.getElementById('torbutton_blockNonTorHWrite').checked = o_torprefs.getBoolPref('block_nthwrite');
-    doc.getElementById('torbutton_blockTorForms').checked = o_torprefs.getBoolPref('block_tforms');
-    doc.getElementById('torbutton_blockNonTorForms').checked = o_torprefs.getBoolPref('block_ntforms');
-    doc.getElementById('torbutton_isolateContent').checked = o_torprefs.getBoolPref('isolate_content');
-    doc.getElementById('torbutton_noSearch').checked = o_torprefs.getBoolPref('no_search');
-    doc.getElementById('torbutton_disableLivemarks').checked = o_torprefs.getBoolPref('disable_livemarks');
-    doc.getElementById('torbutton_closeTor').checked = o_torprefs.getBoolPref('close_tor');
-    doc.getElementById('torbutton_closeNonTor').checked = o_torprefs.getBoolPref('close_nontor');
-    doc.getElementById('torbutton_setUagent').checked = o_torprefs.getBoolPref('set_uagent');
-    doc.getElementById('torbutton_refererSpoofGroup').selectedIndex = o_torprefs.getIntPref('refererspoof');
-    doc.getElementById('torbutton_spoofEnglish').checked = o_torprefs.getBoolPref('spoof_english');
-    doc.getElementById('torbutton_clearHttpAuth').checked = o_torprefs.getBoolPref('clear_http_auth');
-    doc.getElementById('torbutton_blockJSHistory').checked = o_torprefs.getBoolPref('block_js_history');
-    doc.getElementById('torbutton_blockTorFileNet').checked = o_torprefs.getBoolPref('block_tor_file_net');
-    doc.getElementById('torbutton_blockNonTorFileNet').checked = o_torprefs.getBoolPref('block_nontor_file_net');
-
-    doc.getElementById('torbutton_fixGoogleSrch').checked = o_torprefs.getBoolPref('fix_google_srch');
     doc.getElementById('torbutton_lockedMode').checked = o_torprefs.getBoolPref('locked_mode');
-
-    switch(o_torprefs.getIntPref('google_redir_url')) {
-        case 1:
-            doc.getElementById("torbutton_searchEngine").selectedItem =
-                doc.getElementById('torbutton_engine1');
-            break;
-        case 2:
-            doc.getElementById("torbutton_searchEngine").selectedItem =
-                doc.getElementById('torbutton_engine2');
-            break;
-        case 3:
-            doc.getElementById("torbutton_searchEngine").selectedItem =
-                doc.getElementById('torbutton_engine3');
-            break;
-        case 4:
-            doc.getElementById("torbutton_searchEngine").selectedItem =
-                doc.getElementById('torbutton_engine4');
-            break;
-        case 5:
-            doc.getElementById("torbutton_searchEngine").selectedItem =
-                doc.getElementById('torbutton_engine5');
-            break;
-
-    }
-    doc.getElementById('torbutton_noCaptcha').checked = o_torprefs.getBoolPref('dodge_google_captcha');
-    doc.getElementById('torbutton_searchEngine').disabled = !o_torprefs.getBoolPref('dodge_google_captcha');
-
-    /*
-    doc.getElementById('torbutton_jarCerts').checked = o_torprefs.getBoolPref('jar_certs');
-    doc.getElementById('torbutton_jarCACerts').checked = o_torprefs.getBoolPref('jar_ca_certs');
-    */
-
-    doc.getElementById('torbutton_noUpdates').checked = o_torprefs.getBoolPref('no_updates');
-    doc.getElementById('torbutton_updateTorbuttonViaTor').checked = o_torprefs.getBoolPref('update_torbutton_via_tor');
+    
+    doc.getElementById('torbutton_blockDisk').checked = o_torprefs.getBoolPref('block_disk');
+    doc.getElementById('torbutton_resistFingerprinting').checked = o_torprefs.getBoolPref('resist_fingerprinting');
+    doc.getElementById('torbutton_blockPlugins').checked = o_torprefs.getBoolPref('no_tor_plugins');
+    doc.getElementById('torbutton_restrictThirdParty').checked = o_torprefs.getBoolPref('restrict_thirdparty');
 
     torbutton_prefs_set_field_attributes(doc);
-}
-
-function torbutton_cookie_update(doc) {
-    var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-    doc.getElementById('torbutton_torMemoryJar').checked = o_torprefs.getBoolPref('tor_memory_jar');
-    doc.getElementById('torbutton_nonTorMemoryJar').checked = o_torprefs.getBoolPref('nontor_memory_jar');
-
-    if(doc.getElementById('torbutton_cookieGroup').selectedItem 
-            == doc.getElementById('torbutton_clearCookies')) {
-        doc.getElementById('torbutton_torMemoryJar').checked = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').checked = true;
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
-
-    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
-            == doc.getElementById('torbutton_cookieJars')) {
-        doc.getElementById('torbutton_torMemoryJar').checked = true;
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
-
-    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
-            == doc.getElementById('torbutton_dualCookieJars')) {
-        doc.getElementById('torbutton_torMemoryJar').disabled = false;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
-
-    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
-            == doc.getElementById('torbutton_mmmCookies')) {
-        doc.getElementById('torbutton_torMemoryJar').checked = false;
-        doc.getElementById('torbutton_nonTorMemoryJar').checked = false;
-        doc.getElementById('torbutton_torMemoryJar').disabled = true;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = true;
-
-    } else if(doc.getElementById('torbutton_cookieGroup').selectedItem
-            == doc.getElementById('torbutton_cookieProtections')) {
-        doc.getElementById('torbutton_torMemoryJar').checked = o_torprefs.getBoolPref('tor_memory_jar');
-        doc.getElementById('torbutton_nonTorMemoryJar').checked = o_torprefs.getBoolPref('nontor_memory_jar');
-        doc.getElementById('torbutton_torMemoryJar').disabled = false;
-        doc.getElementById('torbutton_nonTorMemoryJar').disabled = false;
-
-    }
 }
 
 function torbutton_prefs_save(doc) {
@@ -485,112 +283,12 @@ function torbutton_prefs_save(doc) {
             o_customprefs.setIntPref('socks_version', 5); 
         }
     }
-    // o_torprefs.setBoolPref('prompt_before_visiting_excluded_sites', doc.getElementById('torbutton_warnUponExcludedSite').checked);
-  o_torprefs.setIntPref('refererspoof', doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
-    o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_disablePlugins').checked);
-    o_torprefs.setBoolPref('clear_history', doc.getElementById('torbutton_clearHistory').checked);
-    o_torprefs.setBoolPref('kill_bad_js', doc.getElementById('torbutton_killBadJS').checked);
-    o_torprefs.setBoolPref('resize_on_toggle', doc.getElementById('torbutton_resizeOnToggle').checked);
-    o_torprefs.setBoolPref('isolate_content', doc.getElementById('torbutton_isolateContent').checked);
-
-    o_torprefs.setBoolPref('clear_cache', doc.getElementById('torbutton_clearCache').selected);
-    o_torprefs.setBoolPref('block_cache', doc.getElementById('torbutton_blockCache').selected);
-
-    o_torprefs.setBoolPref('clear_cookies', doc.getElementById('torbutton_clearCookies').selected);
-    o_torprefs.setBoolPref('cookie_jars', doc.getElementById('torbutton_cookieJars').selected);
-    o_torprefs.setBoolPref('dual_cookie_jars', doc.getElementById('torbutton_dualCookieJars').selected || doc.getElementById('torbutton_cookieProtections').selected);
-    o_torprefs.setBoolPref('cookie_protections', doc.getElementById('torbutton_cookieProtections').selected);
-    o_torprefs.setBoolPref('disable_domstorage', doc.getElementById('torbutton_noDomStorage').checked);
-    o_torprefs.setBoolPref('clear_http_auth', doc.getElementById('torbutton_clearHttpAuth').checked);
-    o_torprefs.setBoolPref('block_js_history', doc.getElementById('torbutton_blockJSHistory').checked);
-    o_torprefs.setBoolPref('block_tor_file_net', doc.getElementById('torbutton_blockTorFileNet').checked);
-    o_torprefs.setBoolPref('block_nontor_file_net', doc.getElementById('torbutton_blockNonTorFileNet').checked);
-    
-    o_torprefs.setBoolPref('tor_memory_jar', doc.getElementById('torbutton_torMemoryJar').checked);
-    o_torprefs.setBoolPref('nontor_memory_jar', doc.getElementById('torbutton_nonTorMemoryJar').checked);
-
-    if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
-            doc.getElementById('torbutton_noShutdown')) {
-        o_torprefs.setIntPref('shutdown_method', 0); 
-    } else if(doc.getElementById('torbutton_shutdownGroup').selectedItem ==
-            doc.getElementById('torbutton_torShutdown')) {
-        o_torprefs.setIntPref('shutdown_method', 1); 
-    } else {
-        o_torprefs.setIntPref('shutdown_method', 2); 
-    }
-
-    /* Reset the shutdown option if the user wants to manage own cookies */
-    if(!o_torprefs.getBoolPref('cookie_jars') 
-            && !o_torprefs.getBoolPref('clear_cookies')
-            && !o_torprefs.getBoolPref('dual_cookie_jars')) {
-        o_torprefs.setIntPref('shutdown_method', 0); 
-        doc.getElementById('torbutton_shutdownGroup').selectedItem
-            = doc.getElementById('torbutton_noShutdown');
-    }
-    
-
-    /*
-    if(doc.getElementById('torbutton_startupStateGroup').selectedItem ==
-            doc.getElementById('torbutton_startNonTor')) {
-        o_torprefs.setIntPref('startup_state', 0);
-    } else if(doc.getElementById('torbutton_startupStateGroup').selectedItem ==
-            doc.getElementById('torbutton_startTor')) {
-        o_torprefs.setIntPref('startup_state', 1);
-    } else {
-        o_torprefs.setIntPref('startup_state', 2);
-    }*/
-
-    o_torprefs.setBoolPref('notor_sessionstore', !doc.getElementById('torbutton_torSessionStore').checked);
-    o_torprefs.setBoolPref('nonontor_sessionstore', !doc.getElementById('torbutton_nonTorSessionStore').checked);
-    //o_torprefs.setBoolPref('reload_crashed_jar', doc.getElementById('torbutton_reloadCrashedJar').checked);
-    o_torprefs.setBoolPref('block_thread', doc.getElementById('torbutton_blockTorHRead').checked);
-    o_torprefs.setBoolPref('block_thwrite', doc.getElementById('torbutton_blockTorHWrite').checked);
-    o_torprefs.setBoolPref('block_nthread', doc.getElementById('torbutton_blockNonTorHRead').checked);
-    o_torprefs.setBoolPref('block_nthwrite', doc.getElementById('torbutton_blockNonTorHWrite').checked);
-    o_torprefs.setBoolPref('block_tforms', doc.getElementById('torbutton_blockTorForms').checked);
-    o_torprefs.setBoolPref('block_ntforms', doc.getElementById('torbutton_blockNonTorForms').checked);
-    o_torprefs.setBoolPref('no_search', doc.getElementById('torbutton_noSearch').checked);
-    o_torprefs.setBoolPref('disable_livemarks', doc.getElementById('torbutton_disableLivemarks').checked);
-    o_torprefs.setBoolPref('close_tor', doc.getElementById('torbutton_closeTor').checked);
-    o_torprefs.setBoolPref('close_nontor', doc.getElementById('torbutton_closeNonTor').checked);
-    o_torprefs.setBoolPref('no_updates', doc.getElementById('torbutton_noUpdates').checked);
-
-    o_torprefs.setBoolPref('set_uagent', doc.getElementById('torbutton_setUagent').checked);
-    o_torprefs.setBoolPref('spoof_english', doc.getElementById('torbutton_spoofEnglish').checked);
-
     o_torprefs.setBoolPref('locked_mode', doc.getElementById('torbutton_lockedMode').checked);
 
-    o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
-    o_torprefs.setBoolPref('fix_google_srch', doc.getElementById('torbutton_fixGoogleSrch').checked);
-    o_torprefs.setBoolPref('dodge_google_captcha', doc.getElementById('torbutton_noCaptcha').checked);
-
-    if(doc.getElementById('torbutton_searchEngine').selectedItem ==
-            doc.getElementById('torbutton_engine1')) {
-        o_torprefs.setIntPref('google_redir_url', 1);
-    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
-            doc.getElementById('torbutton_engine2')) {
-        o_torprefs.setIntPref('google_redir_url', 2);
-    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
-            doc.getElementById('torbutton_engine3')) {
-        o_torprefs.setIntPref('google_redir_url', 3);
-    } else if(doc.getElementById('torbutton_searchEngine').selectedItem ==
-            doc.getElementById('torbutton_engine4')) {
-        o_torprefs.setIntPref('google_redir_url', 4);
-    } else {
-        o_torprefs.setIntPref('google_redir_url', 5);
-    }
-
-    /*
-    o_torprefs.setBoolPref('jar_certs', doc.getElementById('torbutton_jarCerts').checked);
-    o_torprefs.setBoolPref('jar_ca_certs',
-            o_torprefs.getBoolPref('jar_certs') &&
-            doc.getElementById('torbutton_jarCACerts').checked);
-    */
-
-    o_torprefs.setBoolPref('no_updates',
-            doc.getElementById('torbutton_noUpdates').checked);
-    o_torprefs.setBoolPref('update_torbutton_via_tor',
-            doc.getElementById('torbutton_updateTorbuttonViaTor').checked);
+    o_torprefs.setBoolPref('block_disk', doc.getElementById('torbutton_blockDisk').checked);
+    o_torprefs.setBoolPref('resist_fingerprinting', doc.getElementById('torbutton_resistFingerprinting').checked);
+    o_torprefs.setBoolPref('no_tor_plugins', doc.getElementById('torbutton_blockPlugins').checked);
+    o_torprefs.setBoolPref('restrict_thirdparty', doc.getElementById('torbutton_restrictThirdParty').checked);
 
     // if tor settings were initially active, update the active settings to reflect any changes
     if (tor_enabled) torbutton_activate_tor_settings();
