@@ -35,10 +35,6 @@
             <radio value="custom" id="torbutton_useCustomSettings"
                    label="&torbutton.prefs.custom_settings;"
                    oncommand="torbutton_prefs_set_field_attributes(document)"/>
-<!--
-        <checkbox id="torbutton_useRecommendedSettings" label="&torbutton.prefs.recommended_settings;"
-                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
--->
                 <grid class="indent" flex="1">
                     <columns>
                     <column/>
@@ -146,16 +142,6 @@
          oncommand="torbutton_prefs_test_settings()"/>
         </hbox>
        </vbox>
-<!--
-        <label value="&torbutton.prefs.non_socks;" control="nonsocks_proxy"/>
-        <textbox id="nonsocks_proxy"/>
-        <label value="&torbutton.prefs.port;" control="nonsocks_port"/>
-        <textbox id="nonsocks_port"/>
-        <label value="&torbutton.prefs.socks;" control="socks_host"/>
-        <textbox id="socks_host"/>
-        <label value="&torbutton.prefs.port;" control="socks_port"/>
-        <textbox id="socks_port"/>
--->
     </tabpanel>
     <tabpanel>
      <vbox>
@@ -186,10 +172,4 @@
 	</tabpanels>
    </tabbox>
 
-<!--
-    <checkbox id="torbutton_warnUponExcludedSite" label="&torbutton.prefs.prompt_before_visiting_excluded_sites;" />
-    <description>
-        <textnode value="&torbutton.prefs.warning_explanation;"/>
-    </description>
--->
 </dialog>
