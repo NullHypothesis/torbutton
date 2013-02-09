@@ -89,10 +89,7 @@ var torbutton_unique_pref_observer =
         this._branch.addObserver("extensions.torbutton", this, false);
         this._branch.addObserver("network.proxy", this, false);
         this._branch.addObserver("network.cookie", this, false);
-        this._branch.addObserver("general.useragent", this, false);
-        if (m_tb_ff4) {
-          this._branch.addObserver("places.history", this, false);
-        }
+        this._branch.addObserver("browser.privatebrowsing.autostart", this, false);
     },
 
     unregister: function()
@@ -101,10 +98,7 @@ var torbutton_unique_pref_observer =
         this._branch.removeObserver("extensions.torbutton", this);
         this._branch.removeObserver("network.proxy", this);
         this._branch.removeObserver("network.cookie", this);
-        this._branch.removeObserver("general.useragent", this);
-        if (m_tb_ff4) {
-          this._branch.removeObserver("places.history", this);
-        }
+        this._branch.removeObserver("browser.privatebrowsing.autostart", this);
     },
 
     // topic:   what event occurred
@@ -114,21 +108,6 @@ var torbutton_unique_pref_observer =
     {
         if (topic != "nsPref:changed") return;
         switch (data) {
-            // FIXME: If there are other addons than useragentswitcher 
-            // that we need to fight with, we should probably check
-            // every user agent pref here.. but for now, just these
-            // two are enough to reset everything back for UAS.
-            case "general.useragent.vendorSub":
-            case "general.useragent.override":
-                if((!m_tb_prefs.prefHasUserValue("general.useragent.override")
-                    || !m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
-                    && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-                    && m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied")
-                    && m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
-                    torbutton_log(4, "Some other addond tried to clear user agent settings.");
-                    torbutton_set_uagent();
-                }
-                break;
             case "network.proxy.http":
             case "network.proxy.http_port":
             case "network.proxy.ssl":
@@ -147,207 +126,33 @@ var torbutton_unique_pref_observer =
                 torbutton_set_status();
                 break;
 
-            case "places.history.enabled":
-                // This code keeps our prefs in sync with the places global pref
-                var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-                var he = m_tb_prefs.getBoolPref("places.history.enabled");
-                if(tor_mode) {
-                    if (he) {
-                       // User just enabled places. They must want us to stop blocking it...
-                       m_tb_prefs.setBoolPref("extensions.torbutton.block_thwrite", false);
-                    } else {
-                       m_tb_prefs.setBoolPref("extensions.torbutton.block_thwrite", true);
-                    }
-                } else {
-                    if (he) {
-                       m_tb_prefs.setBoolPref("extensions.torbutton.block_nthwrite", false);
-                    } else {
-                       m_tb_prefs.setBoolPref("extensions.torbutton.block_nthwrite", true);
-                    }
-                }
+            case "browser.privatebrowsing.autostart":
+                var mode = m_tb_prefs.getBoolPref("browser.privatebrowsing.autostart");
+                var ourmode = m_tb_prefs.getBoolPref("extensions.torbutton.block_disk");
+                if (mode != ourmode)
+                  m_tb_prefs.setBoolPref("extensions.torbutton.block_disk", mode);
                 break;
-
-            case "extensions.torbutton.block_thwrite":
-            case "extensions.torbutton.block_nthwrite":
-                // This code keeps our prefs in sync with the places global pref for ff4
-                if (m_tb_ff4) {
-                    var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-                    if (tor_mode) {
-                        if (m_tb_prefs.getBoolPref("extensions.torbutton.block_thwrite")) {
-                            m_tb_prefs.setBoolPref("places.history.enabled", false);
-                        } else {
-                            m_tb_prefs.setBoolPref("places.history.enabled", true);
-                        }
-                    } else {
-                        if (m_tb_prefs.getBoolPref("extensions.torbutton.block_nthwrite")) {
-                            m_tb_prefs.setBoolPref("places.history.enabled", false);
-                        } else {
-                            m_tb_prefs.setBoolPref("places.history.enabled", true);
-                        }
-                    }
-                }
-                break;
-
-            case "network.cookie.lifetimePolicy":
-                // Keep our prefs in sync with the lifetime policy for non-tor
-                torbutton_log(2, "Got FF cookie pref change");
-                var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-                var lp = m_tb_prefs.getIntPref("network.cookie.lifetimePolicy");
-
-                if(!tor_mode) {
-                    if(lp == 0 && 
-                            m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar")) {
-                        m_tb_prefs.setBoolPref("extensions.torbutton.nontor_memory_jar", false);
-                    } else if(lp == 1) {
-                        if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar'))
-                            m_tb_prefs.setBoolPref('extensions.torbutton.tor_memory_jar', false);
-                        if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar'))
-                            m_tb_prefs.setBoolPref('extensions.torbutton.nontor_memory_jar', false);
-                    } else if(lp == 2) {
-                        if(!m_tb_prefs.getBoolPref("extensions.torbutton.nontor_memory_jar"))
-                             m_tb_prefs.setBoolPref("extensions.torbutton.nontor_memory_jar", true);
-                        if(!m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar"))
-                             m_tb_prefs.setBoolPref("extensions.torbutton.tor_memory_jar", true);
-                    }
-                } else {
-                    if(lp == 0) { // The cookie's lifetime is supplied by the server.
-                        if(m_tb_prefs.getBoolPref("extensions.torbutton.clear_cookies"))
-                            m_tb_prefs.setBoolPref("extensions.torbutton.clear_cookies", false);
-                        if(m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar"))
-                            m_tb_prefs.setBoolPref("extensions.torbutton.tor_memory_jar", false);
-                        if(m_tb_prefs.getBoolPref("extensions.torbutton.cookie_jars"))
-                            m_tb_prefs.setBoolPref("extensions.torbutton.cookie_jars", false);
-                        if(!m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars"))
-                            m_tb_prefs.setBoolPref("extensions.torbutton.dual_cookie_jars", true);
-                    } else if(lp == 1) { // The user is prompted for the cookie's lifetime. 
-                        if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar'))
-                            m_tb_prefs.setBoolPref('extensions.torbutton.tor_memory_jar', false);
-                        if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar'))
-                            m_tb_prefs.setBoolPref('extensions.torbutton.nontor_memory_jar', false);
-                    } else if(lp == 2 && // The cookie expires when the browser closes. 
-                            !m_tb_prefs.getBoolPref("extensions.torbutton.tor_memory_jar")) {
-                        m_tb_prefs.setBoolPref("extensions.torbutton.tor_memory_jar", true);
-                    }
-                }
-                break;
-
-            case "extensions.torbutton.tor_memory_jar":
-            case "extensions.torbutton.nontor_memory_jar":
-            case "extensions.torbutton.dual_cookie_jars":
-            case "extensions.torbutton.cookie_jars":
-            case "extensions.torbutton.clear_cookies":
-                torbutton_log(2, "Got cookie pref change");
-                var tor_mode =  m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
-                var lp = m_tb_prefs.getIntPref("network.cookie.lifetimePolicy");
-
-                if(lp == 1) {
-                    torbutton_log(3, "Ignoring lifetime policy of 1 (ask user)");
-                    if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar'))
-                        m_tb_prefs.setBoolPref('extensions.torbutton.tor_memory_jar', false);
-                    if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar'))
-                        m_tb_prefs.setBoolPref('extensions.torbutton.nontor_memory_jar', false);
-                    break;
-                }
-
-                if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
-                    lp = 2;
-                } else if(m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars')) {
-                    lp = tor_mode ? 2 : 0;
-                } else if(m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars")) {
-                    lp = 0;
-                } else {
-                    lp = 0;
-                }
-
-                if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar') 
-                        && tor_mode) {
-                    lp = 2;
-                }
-
-                if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar') 
-                        && !tor_mode) {
-                    lp = 2;
-                }
-
-                if(lp != m_tb_prefs.getIntPref("network.cookie.lifetimePolicy")) {
-                    m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", lp);
-                }
-
-                break;
-
-            case "extensions.torbutton.set_uagent":
-                // If the user turns off the pref, reset their user agent to
-                // vanilla
-                if(!m_tb_prefs.getBoolPref("extensions.torbutton.set_uagent")) {
-                    if(m_tb_prefs.prefHasUserValue("general.appname.override"))
-                        m_tb_prefs.clearUserPref("general.appname.override");
-                    if(m_tb_prefs.prefHasUserValue("general.appversion.override"))
-                        m_tb_prefs.clearUserPref("general.appversion.override");
-                    if(m_tb_prefs.prefHasUserValue("general.useragent.override"))
-                        m_tb_prefs.clearUserPref("general.useragent.override");
-                    if(m_tb_prefs.prefHasUserValue("general.useragent.vendor"))
-                        m_tb_prefs.clearUserPref("general.useragent.vendor");
-                    if(m_tb_prefs.prefHasUserValue("general.useragent.vendorSub"))
-                        m_tb_prefs.clearUserPref("general.useragent.vendorSub");
-                    if(m_tb_prefs.prefHasUserValue("general.platform.override"))
-                        m_tb_prefs.clearUserPref("general.platform.override");
-                    
-                    if(m_tb_prefs.prefHasUserValue("general.oscpu.override"))
-                        m_tb_prefs.clearUserPref("general.oscpu.override");
-                    if(m_tb_prefs.prefHasUserValue("general.buildID.override"))
-                        m_tb_prefs.clearUserPref("general.buildID.override");
-                    if(m_tb_prefs.prefHasUserValue("general.productSub.override"))
-                        m_tb_prefs.clearUserPref("general.productSub.override");
-
-                } else {
-                    torbutton_log(1, "Got update message, updating status");
-                    torbutton_update_status(
-                            m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
-                            true);
-                }
+            case "network.cookie.cookieBehavior":
+                var val = m_tb_prefs.getIntPref("network.cookie.cookieBehavior");
+                var block_thirdparty = m_tb_prefs.getBoolPref("extensions.torbutton.restrict_thirdparty");
+                if (val == 0 && block_thirdparty) // Allow all cookies
+                  m_tb_prefs.setBoolPref("extensions.torbutton.restrict_thirdparty", false);
+                else if (val == 1 && !block_thirdparty) // Block third party cookies
+                  m_tb_prefs.setBoolPref("extensions.torbutton.restrict_thirdparty", true);
                 break;
 
             case "extensions.torbutton.no_tor_plugins":
-                torbutton_update_status(
-                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
-                        true);
-            // XXX: We should try to get rid of these warnings now that toggle
-            // is not supported in TBB.
-            case "extensions.torbutton.disable_domstorage":
-            case "extensions.torbutton.no_updates":
-            case "extensions.torbutton.no_search":
-            case "extensions.torbutton.block_tforms":
-            case "extensions.torbutton.block_cache":
-            case "extensions.torbutton.block_thwrite":
-                if(!this.did_toggle_warning &&
-                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-                    var o_stringbundle = torbutton_get_stringbundle();
-                    var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
-                    this.did_toggle_warning = true;
-                    var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-                               .getService(Components.interfaces.nsIWindowMediator);
-                    var chrome = wm.getMostRecentWindow("navigator:browser");
-                    chrome.alert(warning);
-                }
+                torbutton_toggle_plugins(
+                        m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
                 break;
-
-            case "extensions.torbutton.block_nthwrite":
-            case "extensions.torbutton.block_ntforms":
-                if(!this.did_toggle_warning &&
-                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")) {
-                    var o_stringbundle = torbutton_get_stringbundle();
-                    var warning = o_stringbundle.GetStringFromName("torbutton.popup.toggle.warning");
-                    this.did_toggle_warning = true;
-                    chrome.alert(warning);
-                }
+            case "extensions.torbutton.block_disk":
+                torbutton_update_disk_prefs();
                 break;
-
-            case "extensions.torbutton.disable_livemarks":
-            case "extensions.torbutton.spoof_english":
-                torbutton_log(1, "Got update message, updating status");
-                torbutton_update_status(
-                        m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled"),
-                        true);
+            case "extensions.torbutton.resist_fingerprinting":
+                torbutton_update_fingerprinting_prefs();
+                break;
+            case "extensions.torbutton.restrict_thirdparty":
+                torbutton_update_thirdparty_prefs();
                 break;
         }
     }
@@ -410,13 +215,13 @@ function torbutton_toggle(force) {
     }
 }
 
-// Bug 1506 P0: Die toggle, die! 
+// Bug 1506 P0: Die toggle, die!
 function torbutton_set_status() {
     var state = false;
     if (torbutton_check_status()) {
         state = true;
         try {
-            torbutton_update_status(true, false);
+            torbutton_update_status(true);
         } catch(e) {
             torbutton_log(5,'Error applying tor settings: '+e);
             var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
@@ -447,7 +252,7 @@ function torbutton_set_status() {
     } else {
         state = false;
         try {
-            torbutton_update_status(false, false);
+            torbutton_update_status(false);
         } catch(e) {
             torbutton_log(5,'Error applying nontor settings: '+e);
 
@@ -1328,60 +1133,6 @@ function torbutton_get_general_useragent_locale() {
     }
 }
 
-// Bug 1506 P3: Useragent spoofing code.. Important, but perhaps
-// we only need to do this in code for toggling. Can probably be
-// directly in prefs.js
-function torbutton_set_uagent() {
-    try {
-        var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-        var lang = new RegExp("LANG", "gm");
-        var appname = torprefs.getCharPref("appname_override");
-        var appvers = torprefs.getCharPref("appversion_override");
-        var generalLocale = torbutton_get_general_useragent_locale();
-        if(torprefs.getBoolPref("spoof_english")) {
-            appname = appname.replace(lang, 
-                    torprefs.getCharPref("spoof_locale"));
-            appvers = appvers.replace(lang, 
-                    torprefs.getCharPref("spoof_locale"));
-        } else {
-            appname = appname.replace(lang, generalLocale);
-            appvers = appvers.replace(lang, generalLocale);
-        }
-        m_tb_prefs.setCharPref("general.appname.override", appname);
-
-        m_tb_prefs.setCharPref("general.appversion.override", appvers);
-
-        m_tb_prefs.setCharPref("general.platform.override",
-                torprefs.getCharPref("platform_override"));
-
-        var agent = torprefs.getCharPref("useragent_override");
-        if(torprefs.getBoolPref("spoof_english")) {
-            agent = agent.replace(lang,
-                    torprefs.getCharPref("spoof_locale"));
-        } else {
-            agent = agent.replace(lang, generalLocale);
-        }
-        m_tb_prefs.setCharPref("general.useragent.override", agent);
-
-        m_tb_prefs.setCharPref("general.useragent.vendor",
-                torprefs.getCharPref("useragent_vendor"));
-
-        m_tb_prefs.setCharPref("general.useragent.vendorSub",
-                torprefs.getCharPref("useragent_vendorSub"));
-
-        m_tb_prefs.setCharPref("general.oscpu.override",
-                torprefs.getCharPref("oscpu_override"));
-
-        m_tb_prefs.setCharPref("general.buildID.override",
-                torprefs.getCharPref("buildID_override"));
-
-        m_tb_prefs.setCharPref("general.productSub.override",
-                torprefs.getCharPref("productsub_override"));
-    } catch(e) {
-        torbutton_log(5, "Prefset error");
-    }
-}
-
 // Bug 1506 P4: Control port interaction. Needed for New Identity.
 function torbutton_socket_readline(input) {
   var str = "";
@@ -1652,21 +1403,98 @@ function torbutton_toggle_plugins(disable_plugins) {
   }
 }
 
+function torbutton_update_disk_prefs() {
+    var mode = m_tb_prefs.getBoolPref("extensions.torbutton.block_disk");
 
-// Bug 1506 P1/P4: This code is *mostly* a toggle-relic. 
+    m_tb_prefs.setBoolPref("browser.privatebrowsing.autostart", mode);
+    m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
+    m_tb_prefs.setBoolPref("dom.indexedDB.enabled", !mode);
+
+    if (m_tb_tbb) m_tb_prefs.setBoolPref("permissions.memory_only", mode);
+
+    // XXX: Third party abuse?
+    m_tb_prefs.setBoolPref("browser.cache.offline.enable", !mode);
+
+    if (mode) {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
+        m_tb_prefs.setIntPref("browser.download.manager.retention", 1);
+    } else {
+        m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 0);
+        m_tb_prefs.setIntPref("browser.download.manager.retention", 2);
+    }
+
+    // Force prefs to be synced to disk
+    var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefService);
+    prefService.savePrefFile(null);
+}
+
+function torbutton_update_fingerprinting_prefs() {
+    var mode = m_tb_prefs.getBoolPref("extensions.torbutton.resist_fingerprinting");
+
+    if (m_tb_tbb) {
+      if (mode) {
+        m_tb_prefs.setIntPref("browser.display.max_font_attempts",10);
+        m_tb_prefs.setIntPref("browser.display.max_font_count",5);
+
+        m_tb_prefs.setCharPref("intl.accept_languages", "en-us, en");
+        m_tb_prefs.setCharPref("intl.accept_charsets", "iso-8859-1,*,utf-8");
+        m_tb_prefs.setCharPref("intl.charsetmenu.browser.cache", "UTF-8");
+      } else {
+        m_tb_prefs.setIntPref("browser.display.max_font_attempts",-1);
+        m_tb_prefs.setIntPref("browser.display.max_font_count",-1);
+
+        if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
+            m_tb_prefs.clearUserPref("intl.accept_languages");
+        if(m_tb_prefs.prefHasUserValue("intl.charsetmenu.browser.cache"))
+            m_tb_prefs.clearUserPref("intl.charsetmenu.browser.cache");
+        if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
+            m_tb_prefs.clearUserPref("intl.accept_charsets");
+
+      }
+    }
+
+    m_tb_prefs.setBoolPref("webgl.min_capability_mode", mode);
+    m_tb_prefs.setBoolPref("webgl.disable-extensions", mode);
+    m_tb_prefs.setBoolPref("dom.battery.enabled", !mode);
+    m_tb_prefs.setBoolPref("dom.network.enabled", !mode);
+    m_tb_prefs.setBoolPref("dom.enable_performance", !mode);
+    m_tb_prefs.setBoolPref("plugin.expose_full_path", !mode);
+    m_tb_prefs.setBoolPref("browser.zoom.siteSpecific", !mode);
+
+    m_tb_prefs.setBoolPref("extensions.torbutton.resize_new_windows", mode);
+
+    // XXX: How do we undo timezone?
+
+    // Force prefs to be synced to disk
+    var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefService);
+    prefService.savePrefFile(null);
+}
+
+function torbutton_update_thirdparty_prefs() {
+    var mode = m_tb_prefs.getBoolPref("extensions.torbutton.restrict_thirdparty");
+    
+    if (mode) {
+      m_tb_prefs.setIntPref("network.cookie.cookieBehavior", 1);
+    } else {
+      m_tb_prefs.setIntPref("network.cookie.cookieBehavior", 0);
+    }
+
+    pref("security.enable_tls_session_tickets", !mode);
+    pref("network.http.spdy.enabled", !mode);
+
+    // Force prefs to be synced to disk
+    var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefService);
+    prefService.savePrefFile(null);
+}
+
+// Bug 1506 P0: This code is a toggle-relic. 
 //
-// For full browser implementations, this function is P1, and you should
-// just use https://gitweb.torproject.org/torbrowser.git/blob/HEAD:/build-scripts/config/prefs.js
-//
-// For native Firefox implementations, this code might be P4, since you'll
-// need to set all those prefs, as well as preserve people's originals for
-// uninstall. There are also two prefs that should be set in a native
-// Firefox implementation at level P5. I believe Proxy Mobile already
-// sets them, though.
-//
-// NOTE: If you touch any additional prefs in here, be sure to update
-// the list in torbutton_util.js::torbutton_reset_browser_prefs()
-function torbutton_update_status(mode, force_update) {
+// It basically just enforces the three Torbutton prefs
+// so that the Torbutton state and button UI is consistent
+function torbutton_update_status(mode) {
     var o_toolbutton = false;
     var o_statuspanel = false;
     var o_stringbundle = false;
@@ -1679,468 +1507,12 @@ function torbutton_update_status(mode, force_update) {
 
     torbutton_log(2, 'called update_status: '+mode+","+changed);
 
-    // this function is called every time there is a new window! Alot of this
-    // stuff expects to be called on toggle only.. like the cookie jars and
-    // history/cookie clearing
-    if(!changed && !force_update) return;
-
+    if (!changed) return;
+ 
     torprefs.setBoolPref('proxies_applied', mode);
     if(torprefs.getBoolPref("tor_enabled") != mode) {
         torbutton_log(3, 'Got external update for: '+mode);
         torprefs.setBoolPref("tor_enabled", mode);
-    }
-
-    /*
-    if(m_tb_ff3 
-            && !m_tb_prefs.getBoolPref("extensions.torbutton.warned_ff3")
-            && mode && changed) {
-        var o_stringbundle = torbutton_get_stringbundle();
-        var warning = o_stringbundle.GetStringFromName("torbutton.popup.ff3.warning");
-        var ret = window.confirm(warning);
-
-        if(!ret) {
-            torbutton_disable_tor();
-            return;
-        }
-        m_tb_prefs.setBoolPref("extensions.torbutton.warned_ff3", true);
-    }*/
-    
-    // Toggle JS state early, since content window JS runs in a different
-    // thread
-    torbutton_log(2, 'Toggling JS state');
-
-    // Bug 1506 P5: You want to call torbutton_toggle_plugins, but during
-    // startup, not toggle.
-    torbutton_toggle_plugins(mode && torprefs.getBoolPref("no_tor_plugins"));
-
-    torbutton_log(2, 'Setting user agent');
-
-    if(torprefs.getBoolPref("set_uagent")) {
-        try {
-            var torprefs = torbutton_get_prefbranch('extensions.torbutton.');
-            var lang = new RegExp("LANG", "gm");
-            var appname = torprefs.getCharPref("appname_override");
-            var appvers = torprefs.getCharPref("appversion_override");
-            if(torprefs.getBoolPref("spoof_english")) {
-                appname = appname.replace(lang,
-                        torprefs.getCharPref("spoof_locale"));
-                appvers = appvers.replace(lang,
-                        torprefs.getCharPref("spoof_locale"));
-            } else {
-                appname = appname.replace(lang,
-                        m_tb_prefs.getCharPref("general.useragent.locale"));
-                appvers = appvers.replace(lang,
-                        m_tb_prefs.getCharPref("general.useragent.locale"));
-            }
-
-            torbutton_setCharPref("general.appname.override",
-                                "appname_override", appname, mode, changed);
-
-            torbutton_setCharPref("general.appversion.override",
-                                "appversion_override", appvers, mode, changed);
-
-            torbutton_setCharPref("general.platform.override",
-                                "platform_override",
-                                torprefs.getCharPref("platform_override"),
-                                mode, changed);
-
-            var agent = torprefs.getCharPref("useragent_override");
-            if(torprefs.getBoolPref("spoof_english")) {
-                agent = agent.replace(lang,
-                        torprefs.getCharPref("spoof_locale"));
-            } else {
-                agent = agent.replace(lang,
-                        m_tb_prefs.getCharPref("general.useragent.locale"));
-            }
-
-            torbutton_setCharPref("general.useragent.override",
-                                "useragent_override", agent, mode, changed);
-
-            torbutton_setCharPref("general.useragent.vendor",
-                                "useragent_vendor",
-                                torprefs.getCharPref("useragent_vendor"),
-                                mode, changed);
-
-            torbutton_setCharPref("general.useragent.vendorSub",
-                                "useragent_vendorSub",
-                                torprefs.getCharPref("useragent_vendorSub"),
-                                mode, changed);
-
-            torbutton_setCharPref("general.oscpu.override",
-                                "oscpu_override",
-                                torprefs.getCharPref("oscpu_override"),
-                                mode, changed);
-
-            torbutton_setCharPref("general.buildID.override",
-                                "buildID_override",
-                                torprefs.getCharPref("buildID_override"),
-                                mode, changed);
-
-            torbutton_setCharPref("general.productSub.override",
-                                "productsub_override",
-                                torprefs.getCharPref("productsub_override"),
-                                mode, changed);
-        } catch(e) {
-            torbutton_log(5, "Useragent set error: "+e);
-        }
-    }
-
-    torbutton_log(2, 'Done with user agent: '+changed);
-
-    // FIXME: This is not ideal, but the refspoof method is not compatible
-    // with FF2.0
-    // Taken out when updated to smart referer method -KK
-    /*if(torprefs.getIntPref("")) {
-        torbutton_setBoolPref("network.http.sendSecureXSiteReferrer", 
-                "sendSecureXSiteReferrer", !mode, mode, changed);
-        torbutton_setIntPref("network.http.sendRefererHeader", 
-                "sendRefererHeader", mode?0:2, mode, changed);
-    } else {
-        torbutton_setBoolPref("network.http.sendSecureXSiteReferrer", 
-                "sendSecureXSiteReferrer", true, mode, changed);
-        torbutton_setIntPref("network.http.sendRefererHeader", 
-                "sendRefererHeader", 2, mode, changed);
-    }*/
-
-    if(torprefs.getBoolPref("disable_domstorage")) {
-        torbutton_setBoolPref("dom.storage.enabled", 
-                "dom_storage", !mode, mode, changed);
-    } else {
-        torbutton_setBoolPref("dom.storage.enabled", 
-                "dom_storage", true, mode, changed);
-    }
-
-    if(torprefs.getBoolPref("spoof_english")) {
-        torbutton_setCharPref("intl.accept_charsets",
-                "accept_charsets", torprefs.getCharPref("spoof_charset"),
-                mode, changed);
-        torbutton_setCharPref("intl.accept_languages",
-                "accept_languages", torprefs.getCharPref("spoof_language"),
-                mode, changed);
-    }
-
-    if (torprefs.getBoolPref("no_updates")) {
-        torbutton_setBoolPref("extensions.update.enabled", "extension_update",
-                !mode, mode, changed);
-        torbutton_setBoolPref("app.update.enabled", "app_update",
-                !mode, mode, changed);
-        torbutton_setBoolPref("app.update.auto", "auto_update",
-                !mode, mode, changed);
-        torbutton_setBoolPref("browser.search.update", "search_update",
-                !mode, mode, changed);
-    } else {
-        torbutton_setBoolPref("extensions.update.enabled", "extension_update",
-                true, mode, changed);
-        // In TBB, do not touch these two. They must remain off.
-        if (!m_tb_tbb) {
-            torbutton_setBoolPref("app.update.enabled", "app_update",
-                true, mode, changed);
-            torbutton_setBoolPref("app.update.auto", "auto_update",
-                true, mode, changed);
-        }
-        torbutton_setBoolPref("browser.search.update", "search_update",
-                true, mode, changed);
-    }
-
-    if (torprefs.getBoolPref('block_cache')) {
-        torbutton_setBoolPref("browser.cache.memory.enable", 
-                "mem_cache", !mode, mode, changed);
-        torbutton_setBoolPref("network.http.use-cache", 
-                "http_cache", !mode, mode, changed);
-    } else {
-        torbutton_setBoolPref("browser.cache.memory.enable", 
-                "mem_cache", true, mode, changed);
-        torbutton_setBoolPref("network.http.use-cache", 
-                "http_cache", true, mode, changed);
-    }
-
-    var children = m_tb_prefs.getChildList("network.protocol-handler.warn-external", 
-            new Object());
-    torbutton_log(2, 'Children: '+ children.length);
-    for(var i = 0; i < children.length; i++) {
-        torbutton_log(2, 'Children: '+ children[i]);
-        if(mode) {
-            m_tb_prefs.setBoolPref(children[i], mode);
-        } else {
-            if(m_tb_prefs.prefHasUserValue(children[i]))
-                m_tb_prefs.clearUserPref(children[i]);
-        }
-    }
-
-    // Always block disk cache during Tor. We clear it on toggle, 
-    // so no need to keep it around for someone to rifle through.
-    torbutton_setBoolPref("browser.cache.disk.enable", "disk_cache", !mode, 
-            mode, changed);
-
-    torbutton_setBoolPref("browser.cache.offline.enable", "offline_cache",
-            !mode, mode, changed);
-
-    if (!m_tb_tbb) {
-      torbutton_setBoolPref("browser.zoom.siteSpecific", "zoom_specific",
-            !mode, mode, changed);
-    }
-
-    // Disable safebrowsing in Tor for FF2. It fetches some info in 
-    // cleartext with no HMAC (Firefox Bug 360387)
-    if(!m_tb_ff3) {
-        torbutton_setBoolPref("browser.safebrowsing.enabled", "safebrowsing", 
-                !mode, mode, changed);
-    }
-
-    if(m_tb_ff35) {
-        // Disable geolocation
-        torbutton_setBoolPref("geo.enabled", "geo_enabled", !mode, mode,
-                changed);
-        torbutton_setBoolPref("network.dns.disablePrefetch", "dns_prefetch",
-                mode, mode, changed);
-        try {
-            if(m_tb_prefs.prefHasUserValue("geo.wifi.access_token")) {
-                m_tb_prefs.clearUserPref("geo.wifi.access_token");
-            }
-        } catch(e) {
-            torbutton_log(3, "Exception on wifi token clear: "+e);
-        }
-    }
-
-    try {
-        if(m_tb_prefs.prefHasUserValue("general.open_location.last_url")) {
-            m_tb_prefs.clearUserPref("general.open_location.last_url");
-        }
-    } catch(e) {
-        torbutton_log(3, "Exception on wifi token clear: "+e);
-    }
-
-    // I think this pref is evil (and also hidden from user configuration, 
-    // which makes it extra evil) and so therefore am disabling it 
-    // by fiat for both tor and non-tor. Basically, I'm not willing 
-    // to put the code in to allow it to be enabled until someone 
-    // complains that it breaks stuff.
-    m_tb_prefs.setBoolPref("browser.send_pings", false);
-
-    // Always, always disable remote "safe browsing" lookups.
-    m_tb_prefs.setBoolPref("browser.safebrowsing.remoteLookups", false);
-
-    // Prevent pages from pinging the Tor ports regardless tor mode
-    m_tb_prefs.setCharPref("network.security.ports.banned", 
-            m_tb_prefs.getCharPref("extensions.torbutton.banned_ports"));
-
-    if (m_tb_prefs.getBoolPref("extensions.torbutton.no_search")) {
-        torbutton_setBoolPref("browser.search.suggest.enabled", 
-                "search_suggest", !mode, mode, changed);
-    } else {
-        torbutton_setBoolPref("browser.search.suggest.enabled", 
-                "search_suggest", true, mode, changed);
-    }
-        
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
-        torbutton_setBoolPref("security.enable_java", "enable_java", !mode, 
-                mode, changed);
-    } else {
-        torbutton_setBoolPref("security.enable_java", "enable_java", true,
-                mode, changed);
-    }
-
-    if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cache')) {
-        var cache = Components.classes["@mozilla.org/network/cache-service;1"].
-        getService(Components.interfaces.nsICacheService);
-        // Throws exception on FF3 sometimes.. who knows why. FF3 bug?
-        try {
-            cache.evictEntries(0);
-        } catch(e) {
-            torbutton_log(3, "Exception on cache clearing: "+e);
-        }
-    }
-
-    if(mode) {
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
-            torbutton_setIntPref("browser.download.manager.retention", 
-                    "download_retention", 0, mode, changed);
-        }
-
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
-            torbutton_setBoolPref("browser.formfill.enable", "formfill",
-                    false, mode, changed);
-            torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
-                    false, mode, changed);
-        } else {
-            torbutton_setBoolPref("browser.formfill.enable", "formfill",
-                    true, mode, changed);
-            torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
-                    true, mode, changed);
-        }
-
-        torbutton_setBoolPref("signon.autofillForms", "autofillForms",
-                false, mode, changed);
-
-        if (m_tb_ff4) {
-            if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
-                m_tb_prefs.setBoolPref("places.history.enabled", false);
-            } else {
-                m_tb_prefs.setBoolPref("places.history.enabled", true);
-            }
-        }
-    } else {
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
-            m_tb_prefs.setIntPref("browser.download.manager.retention", 0);
-        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.block_thwrite')) {
-            // Only restore this pref if it was blocked during tor...
-            torbutton_setIntPref("browser.download.manager.retention", 
-                    "download_retention", 0, mode, changed);
-        }
-
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.block_ntforms')) {
-            m_tb_prefs.setBoolPref("browser.formfill.enable", false);
-            m_tb_prefs.setBoolPref("signon.rememberSignons", false);
-        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.block_tforms')) {
-            // Only restore this pref if it was blocked during tor...
-            torbutton_setBoolPref("browser.formfill.enable", "formfill", 
-                    false, mode, changed);
-            torbutton_setBoolPref("signon.rememberSignons", "remember_signons", 
-                    false, mode, changed);
-        }
-
-        torbutton_setBoolPref("signon.autofillForms", "autofillForms",
-                true, mode, changed);
-
-        if (m_tb_ff4) {
-            if(m_tb_prefs.getBoolPref('extensions.torbutton.block_nthwrite')) {
-                m_tb_prefs.setBoolPref("places.history.enabled", false);
-            } else {
-                m_tb_prefs.setBoolPref("places.history.enabled", true);
-            }
-        }
-    }
-
-    torbutton_log(2, "Prefs pretty much done");
-    
-    if(m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins")) {
-        torbutton_setCharPref("plugin.disable_full_page_plugin_for_types",
-                "full_page_plugins", m_tb_plugin_string, mode, changed);
-    } else {
-        torbutton_setCharPref("plugin.disable_full_page_plugin_for_types",
-                "full_page_plugins", m_tb_plugin_string, false, changed);
-    }
-
-    // No need to clear cookies if just updating prefs
-    if(!changed && force_update) {
-        // Force prefs to be synced to disk
-        var prefService = Components.classes["@mozilla.org/preferences-service;1"]
-            .getService(Components.interfaces.nsIPrefService);
-        prefService.savePrefFile(null);
-        return;
-    }
-
-    // #5758: Last ditch effort to keep Vanilla Torbutton users from totally
-    // being pwnt.  This is a pretty darn ugly hack, too. But because of #5863,
-    // we really don't care about preserving the user's values for this.
-    if (!m_tb_tbb) {
-        // Bug 1506 P5: You have to set these two for non-TBB Firefoxen
-        m_tb_prefs.setBoolPref("network.websocket.enabled", false);
-        m_tb_prefs.setBoolPref("dom.indexedDB.enabled", false);
-    }
-
-    torbutton_set_timezone(mode, false);
-
-    // This call also has to be here for 3rd party proxy changers.
-    torbutton_close_on_toggle(mode, false);
-
-    if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
-        var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
-        getService(Components.interfaces.nsIHttpAuthManager);
-        auth.clearAll();
-    }
-
-    try {
-      var secMgr = Cc["@mozilla.org/security/crypto;1"].
-                   getService(Ci.nsIDOMCrypto);
-      secMgr.logout();
-      torbutton_log(3, "nsIDOMCrypto logout succeeded");
-    } catch(e) {
-      torbutton_log(4, "Failed to use nsIDOMCrypto to clear SSL Session ids. Falling back to old method. Error: "+e);
-
-      // This clears the SSL Identifier Cache.
-      // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747 and
-      // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134
-      m_tb_prefs.setBoolPref("security.enable_ssl2", 
-          !m_tb_prefs.getBoolPref("security.enable_ssl2"));
-      m_tb_prefs.setBoolPref("security.enable_ssl2", 
-          !m_tb_prefs.getBoolPref("security.enable_ssl2"));
-    }
-
-    // Disable ssl session tickets for tor usage
-    // https://trac.torproject.org/projects/tor/ticket/4099
-    m_tb_prefs.setBoolPref("security.enable_tls_session_tickets", !mode);
-
-    // Lower keep-alive timeout to reduce cross-domain linkability
-    // https://trac.torproject.org/projects/tor/ticket/4603
-    if (mode) {
-      m_tb_prefs.setIntPref("network.http.keep-alive.timeout", 20);
-    } else {
-      m_tb_prefs.clearUserPref("network.http.keep-alive.timeout");
-    }
-
-    // This clears the OCSP cache.
-    //
-    // nsNSSComponent::Observe() watches security.OCSP.enabled, which calls
-    // setOCSPOptions(), which if set to 0, calls CERT_DisableOCSPChecking(),
-    // which calls CERT_ClearOCSPCache().
-    // See: http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp
-    var ocsp = m_tb_prefs.getIntPref("security.OCSP.enabled");
-    m_tb_prefs.setIntPref("security.OCSP.enabled", 0);
-    m_tb_prefs.setIntPref("security.OCSP.enabled", ocsp);
-
-    // This clears the STS cache and site permissions on Tor Browser
-    // XXX: Tie to some kind of disk-ok pref?
-    try {
-      m_tb_prefs.setBoolPref('permissions.memory_only', mode);
-    } catch(e) {
-      // Actually, this catch does not appear to be needed. Leaving it in for
-      // safety though.
-      torbutton_log(3, "Can't clear STS/Permissions: Not Tor Browser: "+e);
-    }
-
-    // This clears the undo tab history.
-    var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
-    m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
-    m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
- 
-    var lp = m_tb_prefs.getIntPref("network.cookie.lifetimePolicy");
-
-    if(lp == 1) {
-        torbutton_log(3, "Ignoring update lifetime policy of 1 (ask user)");
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar'))
-            m_tb_prefs.setBoolPref('extensions.torbutton.tor_memory_jar', false);
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar'))
-            m_tb_prefs.setBoolPref('extensions.torbutton.nontor_memory_jar', false);
-    } else {
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
-            lp = 2;
-        } else if(m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars')) {
-            lp = mode ? 2 : 0;
-        } else if(m_tb_prefs.getBoolPref("extensions.torbutton.dual_cookie_jars")) {
-            lp = 0;
-        }
-
-        /* Don't write cookies to disk no matter what if memory jars are enabled
-         * for this mode. */
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.tor_memory_jar') && mode) {
-            lp = 2;
-        }
-
-        if(m_tb_prefs.getBoolPref('extensions.torbutton.nontor_memory_jar') && !mode) {
-            lp = 2;
-        }
-
-        if(lp != m_tb_prefs.getIntPref("network.cookie.lifetimePolicy")) {
-            m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", lp);
-        }
-    }
-
-    if (m_tb_prefs.getBoolPref('extensions.torbutton.clear_cookies')) {
-        torbutton_clear_cookies();
-    } else if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_jars') 
-            || m_tb_prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
-        torbutton_jar_cookies(mode);
     }
 
     m_tb_prefs.setBoolPref("extensions.torbutton.settings_applied", mode);
@@ -2556,11 +1928,23 @@ function torbutton_do_startup()
         torbutton_do_main_window_startup();
 
         // Bug 1506: Still want to do this
-        torbutton_set_timezone(tor_enabled, true);
+        torbutton_set_timezone(true, true);
+
+        // For charsets
+        torbutton_update_fingerprinting_prefs();
 
         // Bug 1506: Still want to do this
-        torbutton_toggle_plugins(tor_enabled &&
-                       m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+        torbutton_toggle_plugins(
+                m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+
+        // #5758: Last ditch effort to keep Vanilla Torbutton users from totally
+        // being pwnt.  This is a pretty darn ugly hack, too. But because of #5863,
+        // we really don't care about preserving the user's values for this.
+        if (!m_tb_tbb) {
+            // Bug 1506 P5: You have to set these two for non-TBB Firefoxen
+            m_tb_prefs.setBoolPref("network.websocket.enabled", false);
+            m_tb_prefs.setBoolPref("dom.indexedDB.enabled", false);
+        }
 
         // Still need this in case people shove this thing back into FF
         if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {

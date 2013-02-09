@@ -167,7 +167,9 @@ pref("extensions.torbutton.tor_urls",false);
 // Opt out of Firefox addon pings:
 // https://developer.mozilla.org/en/Addons/Working_with_AMO
 pref("extensions.torbutton@torproject.org.getAddons.cache.enabled", false);
-
+pref("extensions.torbutton.block_disk", true);
+pref("extensions.torbutton.resist_fingerprinting", true);
+pref("extensions.torbutton.restrict_thirdparty", true);
 
 // Google Captcha prefs
 // FIXME: NID cookie?

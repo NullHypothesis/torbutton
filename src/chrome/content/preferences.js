@@ -231,7 +231,7 @@ function torbutton_prefs_save(doc) {
     o_torprefs.setIntPref('gopher_port',      doc.getElementById('torbutton_gopherPort').value);
     o_torprefs.setCharPref('socks_host',      doc.getElementById('torbutton_socksHost').value);
     o_torprefs.setIntPref('socks_port',       doc.getElementById('torbutton_socksPort').value);
-    o_torprefs.setIntPref('refererspoof',doc.getElementById('torbutton_refererSpoofGroup').selectedIndex);
+
     if(doc.getElementById('torbutton_socksGroup').selectedItem ==
             doc.getElementById('torbutton_socksv4')) {
         o_torprefs.setIntPref('socks_version', 4); 
