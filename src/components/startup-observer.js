@@ -97,7 +97,6 @@ StartupObserver.prototype = {
                  .getService(Components.interfaces.nsIEnvironment);
 
       if (environ.exists("TOR_SOCKS_PORT")) {
-        this.logger.log(3, "Resetting socks port to "+environ.get("TOR_SOCKS_PORT"));
         this._prefs.setIntPref('extensions.torbutton.socks_port',
                 parseInt(environ.get("TOR_SOCKS_PORT")));
         if (this.is_tbb) {
@@ -109,6 +108,7 @@ StartupObserver.prototype = {
             this._prefs.setBoolPref('network.proxy.socks_remote_dns', true);
             this._prefs.setIntPref('network.proxy.type', 1);
         }
+        this.logger.log(3, "Reset socks port to "+environ.get("TOR_SOCKS_PORT"));
       } else if (this._prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
         this._prefs.setIntPref('extensions.torbutton.socks_port', 9050);
       }
@@ -135,6 +135,13 @@ StartupObserver.prototype = {
             this._prefs.setCharPref('network.proxy.socks', "");
         }
       }
+
+      // Force prefs to be synced to disk
+      var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+          .getService(Components.interfaces.nsIPrefService);
+      prefService.savePrefFile(null);
+    
+      this.logger.log(3, "Synced network settings to environment.");
     },
 
     observe: function(subject, topic, data) {
