@@ -1248,8 +1248,11 @@ function torbutton_do_new_identity() {
             getService(Components.interfaces.imgICache);
     imgCache.clearCache(false); // evict all but chrome cache
   } catch(e) {
-    torbutton_log(5, "Exception on image cache clearing: "+e);
-    window.alert("Torbutton: Unexpected error during image cache clearing: "+e);
+    // FIXME: This can happen in some rare cases involving XULish image data
+    // in combination with our image cache isolation patch. Sure isn't
+    // a good thing, but it's not really a super-cookie vector either.
+    // We should fix it eventually.
+    torbutton_log(4, "Exception on image cache clearing: "+e);
   }
 
   var cache = Components.classes["@mozilla.org/network/cache-service;1"].
@@ -1647,8 +1650,9 @@ function torbutton_disable_browser_js(browser) {
     } catch(e) {
         torbutton_log(4, "Failed to disable JS events: "+e)
     }
-    
-    browser.docShell.allowJavascript = false;
+   
+    if (browser.docShell)
+      browser.docShell.allowJavascript = false;
 
     try {
         // My estimation is that this does not get the inner iframe windows,
