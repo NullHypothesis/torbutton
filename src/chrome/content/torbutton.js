@@ -729,18 +729,27 @@ function torbutton_do_async_versioncheck() {
             for (var v in version_list) {
               if (version_list[v] == my_version) {
                 torbutton_log(3, "Version check passed.");
-                var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
+                var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
+                       Components.interfaces.nsIPrefLocalizedString).data;
                 if (homepage.indexOf("https://check.torproject.org/") == 0) {
-                  m_tb_prefs.setCharPref("browser.startup.homepage",
-                      "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1");
+                  var str = Components.classes["@mozilla.org/supports-string;1"]
+                                    .createInstance(Components.interfaces.nsISupportsString);
+                  str.data = "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1";
+                  m_tb_prefs.setComplexValue("browser.startup.homepage",
+                                             Components.interfaces.nsISupportsString,
+                                             str);
                 }
                 return;
               }
             }
             torbutton_log(5, "Your Tor Browser is out of date.");
             // Not up to date
-            m_tb_prefs.setCharPref("browser.startup.homepage",
-                "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0");
+            var str = Components.classes["@mozilla.org/supports-string;1"]
+                              .createInstance(Components.interfaces.nsISupportsString);
+            str.data = "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0";
+            m_tb_prefs.setComplexValue("browser.startup.homepage",
+                                       Components.interfaces.nsISupportsString,
+                                       str);
             return;
           } catch(e) {
             torbutton_log(5, "Version check failed! JSON parsing error: "+e);
@@ -1700,26 +1709,6 @@ function torbutton_disable_all_js() {
         var win = enumerator.getNext();
         torbutton_disable_window_js(win);
     }
-}
-
-// Bug 1506 P0: This has been deprecated in favor of an async check
-function torbutton_do_versioncheck() {
-  if (m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.versioncheck_enabled")) {
-    var is_updated = torbutton_check_version();
-    var locale = m_tb_prefs.getCharPref("general.useragent.locale");
-    if (is_updated == 0) {
-      // In an ideal world, we'd just check for hasUserValue, but we can't do
-      // that, because we set browser.startup.homepage to have a user value already...
-      m_tb_prefs.setCharPref("browser.startup.homepage",
-              "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0");
-    } else if (is_updated == 1) {
-      var homepage = m_tb_prefs.getCharPref("browser.startup.homepage");
-      if (homepage.indexOf("https://check.torproject.org/") == 0) {
-        m_tb_prefs.setCharPref("browser.startup.homepage",
-                  "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1");
-      }
-    }
-  }
 }
 
 // Bug 1506 P2: We may want to replace this with a XUl solution.
