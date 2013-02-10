@@ -1234,9 +1234,14 @@ function torbutton_do_new_identity() {
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
 
-  var imgCache = Components.classes["@mozilla.org/image/cache;1"].
+  try {
+    var imgCache = Components.classes["@mozilla.org/image/cache;1"].
             getService(Components.interfaces.imgICache);
-  imgCache.clearCache(false); // evict all but chrome cache
+    imgCache.clearCache(false); // evict all but chrome cache
+  } catch(e) {
+    torbutton_log(5, "Exception on image cache clearing: "+e);
+    window.alert("Torbutton: Unexpected error during image cache clearing: "+e);
+  }
 
   var cache = Components.classes["@mozilla.org/network/cache-service;1"].
       getService(Components.interfaces.nsICacheService);
