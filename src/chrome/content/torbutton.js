@@ -1694,8 +1694,15 @@ function torbutton_disable_window_js(win) {
         if (b && b.docShell) {
             torbutton_disable_browser_js(b);
 
-            // kill meta-refresh and existing page loading 
-            b.webNavigation.stop(b.webNavigation.STOP_ALL);
+            // kill meta-refresh and existing page loading
+            // XXX: Despite having JUST checked b.docShell, it can
+            // actually end up NULL here in some cases?
+            try {
+              if (b.docShell && b.webNavigation)
+                b.webNavigation.stop(b.webNavigation.STOP_ALL);
+            } catch(e) {
+              torbutton_log(4, "DocShell error: "+e);
+            }
         }
     }
 }
@@ -1722,7 +1729,11 @@ function torbutton_reload_homepage() {
                        Components.interfaces.nsIPrefLocalizedString).data;
 
     torbutton_log(3, "Reloading homepage: "+homepage);
-    gBrowser.loadURI(homepage, null, null);
+    try {
+      gBrowser.loadURI(homepage, null, null);
+    } catch(e) {
+      torbutton_log(4, "Failure reloading homepage "+homepage+": "+e);
+    }
 }
 
 // Bug 1506 P0: Toggle, kill it.
