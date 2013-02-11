@@ -46,6 +46,15 @@ function StartupObserver() {
       this.logger.log(3, "This is not a Tor Browser's XPCOM");
     }
 
+    try {
+      // XXX: We're in a race with HTTPS-Everywhere to update our proxy settings
+      // before the initial SSL-Observatory test... If we lose the race, Firefox
+      // caches the old proxy settings for check.tp.o somehwere, and it never loads :(
+      this.setProxySettings();
+    } catch(e) {
+      this.logger.log(4, "Early proxy change failed. Will try again at profile load. Error: "+e);
+    }
+
     // Bug 1506 P2/P3: You probably want to register this observer to clean up
     // prefs if you're going to support using normal firefox. 
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
