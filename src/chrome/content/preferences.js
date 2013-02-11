@@ -72,7 +72,7 @@ function torbutton_prefs_set_field_attributes(doc)
         if (environ.exists("TOR_SOCKS_PORT")) {
           doc.getElementById('torbutton_socksPort').value = parseInt(environ.get("TOR_SOCKS_PORT"));
         } else {
-          doc.getElementById('torbutton_socksPort').value = 9050;
+          doc.getElementById('torbutton_socksPort').value = 9150;
         }
 
         if (environ.exists("TOR_SOCKS_HOST")) {

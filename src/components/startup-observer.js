@@ -119,7 +119,7 @@ StartupObserver.prototype = {
         }
         this.logger.log(3, "Reset socks port to "+environ.get("TOR_SOCKS_PORT"));
       } else if (this._prefs.getCharPref('extensions.torbutton.settings_method') == 'recommended') {
-        this._prefs.setIntPref('extensions.torbutton.socks_port', 9050);
+        this._prefs.setIntPref('extensions.torbutton.socks_port', 9150);
       }
 
       if (environ.exists("TOR_SOCKS_HOST")) {
