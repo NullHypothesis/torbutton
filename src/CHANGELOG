@@ -1,7 +1,18 @@
 1.5.0-alpha
- ?? Jan 2013
+ ?? Feb 2013
   * bug 5279: Remove old toggle observers and related code
+  * bug 3100: Simplify Security Preference UI and associated pref updates
+  * bug 7470: Eliminate redundancy in our Flash/plugin disabling code
+  * bug 3944: Leave most preferences under Tor Browser's control 
+  * bug 7974: Disable toggle-on-startup and crash detection logic
+  * bug 5379: Disable/remove toggle-mode code and related observers
+  * bug 6431: Add menu hint to Torbutton icon
+  * bug 6096: Perform version check every time there's a new tab.
+  * bug 6156: Rate limit version check queries
   * misc: Allow WebGL and DOM storage.
+  * misc: Disable independent Torbutton updates
+  * misc: Disable Drag+Drop support on MacOS X (hopefully temporary)
+  * misc: Change the recommended SOCKSPort to 9150 (to match TBB)
 
 1.4.6.3
  9 Oct 2012
