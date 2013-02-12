@@ -1,147 +1,151 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.display_settings "Display Settings">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
-<!ENTITY torbutton.prefs.panel_format "Status bar display format:">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Icon">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "About Torbutton">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
-<!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.prefs.title "Torbutton preferences">
+<!ENTITY torbutton.prefs.display_settings "Rādīt iestatījumus">
+<!ENTITY torbutton.prefs.display_panel "Rādīt Tor'a starpnieka iestatījumus statusa joslā">
+<!ENTITY torbutton.prefs.panel_format "Statusa joslas rādīšanas formāts:">
+<!ENTITY torbutton.prefs.panel_text_format "Teksts">
+<!ENTITY torbutton.prefs.panel_icon_format "Piktogramma">
+<!ENTITY torbutton.prefs.tor_settings "Starpnieka iestatījumi">
+<!ENTITY torbutton.prefs.recommended_settings "Lietot manai Firefox'a versijai ieteiktos starpnieka iestatījumus">
+<!ENTITY torbutton.prefs.use_privoxy "Lietot Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Lietot Polipo">
+<!ENTITY torbutton.prefs.custom_settings "Lietot starpnieka pielāgotus iestatījumus">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP starpnieks:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL starpnieks:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP starpnieks:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher starpnieks:">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS'a viesotājs:">
+<!ENTITY torbutton.prefs.proxy.port "Ports:">
+<!ENTITY torbutton.about.title "Par Torbutton">
+<!ENTITY torbutton.about.version "Versija:">
+<!ENTITY torbutton.about.summary "Aizsargā Jūsu Tor pārlūkošanas privātumu.">
+<!ENTITY torbutton.about.code "Koda izstrādes līdzdalībnieki:">
+<!ENTITY torbutton.about.maintainer "Turētājs:">
+<!ENTITY torbutton.about.security_review "Drošības pārskats:">
+<!ENTITY torbutton.about.donate "Ja Jums patīk lietot Tor, variet apsvērt">
+<!ENTITY torbutton.about.make_donation "ziedojuma veikšanu.">
+<!ENTITY torbutton.pref_connection.notice "Atspējot Torbutton, lai mainītu šos iestatījumus.">
+<!ENTITY torbutton.pref_connection.more_info "Papildu informācija">
+<!ENTITY torbutton.pref_connection_more_info.title "Palīdzība">
+<!ENTITY torbutton.pref_connection_more_info.text "Šobrīd Torbutton ir iespējots.  Ja vēlaties mainīt savus ārpus-Tor starpnieka iestatījumus, lūdzu atspējojiet Torbutton un tad atgriezieties te.  Ja vēlaties mainīt savus Tor iestatījumus, lūdzu lietojiet Torbutton'a preferenču logu.">
+<!ENTITY torbutton.context_menu.new_identity "Jauna identitāte">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
-<!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
+<!ENTITY torbutton.context_menu.toggle "Pārslēgt Tor statusu">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferences...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "About Torbutton...">
+<!ENTITY torbutton.context_menu.about "Par Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Aizsardzība no sīkdatnēm">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "Kopēt Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "Atvērt jaunā cilnē Tor'a URL">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "Atvērt jaunā logā Tor'a URL">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
-<!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
-<!ENTITY torbutton.prefs.dynamic "Dynamic Content">
-<!ENTITY torbutton.prefs.cookies "Cookies">
-<!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
-<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
-<!ENTITY torbutton.prefs.shutdown "Shutdown">
-<!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
-<!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
-<!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
-<!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
-<!ENTITY torbutton.prefs.headers "Headers">
-<!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.button.tooltip "Noklikšķināt, lai inicializētu Torbutton">
+<!ENTITY torbutton.prefs.sec_settings "Drošības iestatījumi">
+<!ENTITY torbutton.prefs.block_thread "Bloķēt vēstures nolasi Tor'a darbības laikā (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.block_thwrite "Bloķēt vēstures rakstīšanu Tor'a darbības laikā (ieteicami)">
+<!ENTITY torbutton.prefs.block_nthread "Bloķēt vēstures nolasi ārpus-Tor'a darbības laikā (neobligāti)">
+<!ENTITY torbutton.prefs.block_nthwrite "Bloķēt vēstures rakstīšanu ārpus-Tor'a darbības laikā (neobligāti)">
+<!ENTITY torbutton.prefs.clear_history "Nodzēst vēsturi, pārslēdzot Tor'u (neobligāti)">
+<!ENTITY torbutton.prefs.clear_cache "Bloķēt Tor diska kešatmiņu un iztīrīt visas kešatmiņas, pārslēdzot Tor'u">
+<!ENTITY torbutton.prefs.block_cache "Bloķēt atmiņas un diska kešatmiņas, Tor'a darbības laikā">
+<!ENTITY torbutton.prefs.cookie_jars "Glabāt ārpus-Tor'a sīkdatnes aizsargātā traukā">
+<!ENTITY torbutton.prefs.cookie_protection "Lai izvēlētos, lietot Aizsardzības no sīkdatnēm dialogu">
+<!ENTITY torbutton.prefs.mmm_cookies "Pats pārraudzīšu sīkdatnes (bīstami)">
+<!ENTITY torbutton.prefs.clear_cookies "Nodzēts sīkdatnes, pārslēdzot Tor'u">
+<!ENTITY torbutton.prefs.disable_plugins "Tor'a lietošanas laikā atspējot spraudņus (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.kill_bad_js "Ķert bīstamus javascript'us (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.isolate_content "Izolēt dinamisku saturu pašreizējā Tor stāvokļa ietvaros (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.no_updates "Tor'a lietošanas laikā atspējot atjauninājumus">
+<!ENTITY torbutton.prefs.set_uagent "Iestatīt lietotāja aģentu Tor lietošanai (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.dynamic "Dinamisks saturs">
+<!ENTITY torbutton.prefs.cookies "Sīkdatnes">
+<!ENTITY torbutton.prefs.cache "Kešatmiņa">
+<!ENTITY torbutton.prefs.history "Vēsture">
+<!ENTITY torbutton.prefs.no_search "Tor'a lietošanas laikā atspējot meklēšanas ieteikumus (ieteicami)">
+<!ENTITY torbutton.prefs.shutdown "Izslēgšana">
+<!ENTITY torbutton.prefs.tor_shutdown "Tor-iespējota pārlūka izslēgšanas laikā izdzēst Tor'a sīkdatnes">
+<!ENTITY torbutton.prefs.all_shutdown "Izdzēst sīkdatnes jebkura pārlūka izslēgšanās laikā">
+<!ENTITY torbutton.prefs.no_shutdown "Izslēgšanās laikā neizdzēst manas sīkdatnes">
+<!ENTITY torbutton.prefs.disable_sessionstore "Atspējot sesijas saglabāšanu (ieteicami)">
+<!ENTITY torbutton.prefs.headers "Galvenes">
+<!ENTITY torbutton.prefs.spoof_english "Maldināt, uzdodoties par pārlūku, kurš strādā amerikāņu angļu valodā">
+<!ENTITY torbutton.prefs.refererspoofing "Maldināšana, norādot aplamas atsauces">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Vieda maldināšana, Tor'a lietošanas laikā norādot aplamas atsauces (maldina, norādot šķērsdomēnu atsauces)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
-<!ENTITY torbutton.prefs.disable_domstorage "Disable DOM Storage during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.forms "Forms">
-<!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.disable_domstorage "Tor'a lietošanas laikā atspējot dokumentu objektu moduļa jeb DOM glabāšanu (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.forms "Veidlapas">
+<!ENTITY torbutton.prefs.block_tforms "Tor'a darbības laikā bloķēt parole+veidlapa saglabāšanu (ieteicami)">
+<!ENTITY torbutton.prefs.block_ntforms "Ārpus-Tor'a darbības laikā bloķēt parole+veidlapa saglabāšanu (neobligāti)">
 <!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "Non-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Reload cookie jar/clear cookies on Firefox crash (recommended)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
-<!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.close_tor "Close all Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.close_nontor "Close all Non-Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
-<!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.non_tor "Ārpus-Tor">
+<!ENTITY torbutton.prefs.restore_tor "Startējot atjaunotu sesiju, iestatīt Tor stāvokli:">
+<!ENTITY torbutton.prefs.startup_tor "Startējot pārlūku, iestatīt Tor stāvokli uz:">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Firefox'a avārijas gadījumā pārlādēt sīkdatņu trauku / nodzēst sīkdatnes (ieteicami)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "Glabāt gan Tor, gan ārpus-Tor sīkdatnes aizsargātos traukos (bīstami)">
+<!ENTITY torbutton.prefs.clear_http_auth "Izdzēst HTTP autentifikācijas sesijas (ieteicami)">
+<!ENTITY torbutton.prefs.block_js_history "Izolēt piekļuvi vēstures navigācijai tikai Tor stāvokļa ietvaros (ļoti svarīgi)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Tor'a izmantošanas laikā mainīt logu izmērus 50 px soļos (ieteicami)">
+<!ENTITY torbutton.prefs.close_tor "Pārslēdzot aizvērt visus Tor logus un cilnes (neobligāti)">
+<!ENTITY torbutton.prefs.close_nontor "Pārslēdzot aizvērt visus ārpus-Tor logus un cilnes (neobligāti)">
+<!ENTITY torbutton.prefs.block_links "Bloķēt saišu klikšķus un lapu pārlādes no citiem Tor stāvokļiem (neobligāti)">
+<!ENTITY torbutton.prefs.jar_certs "Glabāt SSL sertifikātus atsevišķos traukos Tor'am/Ārpus-Tor'am (ieteicami)">
+<!ENTITY torbutton.prefs.jar_ca_certs "Glabāt sertificēšanas iestādes, SI jeb angļu val. CA sertifikātus atsevišķos traukos Tor'am/Ārpus-Tor'am (ieteicami)">
+<!ENTITY torbutton.prefs.locked_mode "Karstie taustiņi un Poga Atspējot, lai novērstu nejaušu pārslēgšanos">
+<!ENTITY torbutton.prefs.startup_state "Startējot ierasti, iestatīt Tor stāvokli:">
+<!ENTITY torbutton.prefs.shutdown_state "Izslēgšanas stāvoklis">
+<!ENTITY torbutton.prefs.startup "Startēšana">
+<!ENTITY torbutton.prefs.block_tor_file_net "Bloķēt Tor piekļuvi tīklam no file:// urls (ieteicami)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Bloķēt ārpus-Tor piekļuvi tīklam no file:// urls">
+<!ENTITY torbutton.prefs.restore_defaults "Atjaunot noklusējuma vērtības">
+<!ENTITY torbutton.prefs.test_settings "Pārbaudīt iestatījumus">
+<!ENTITY torbutton.prefs.test_auto "Katrā Firefox startēšanas laikā pārbaudīt manus Tor iestatījumus pēc tam kad pirmo reizi pārslēdzos">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.tor_memory_jar "Nerakstīt Tor sīkdatnes diskā">
+<!ENTITY torbutton.prefs.nontor_memory_jar "Nerakstīt ārpus-Tor sīkdatnes diskā">
+<!ENTITY torbutton.prefs.session_restore "Sesijas glabātuvē saglabāt un no tās atjaunot šīs cilnes:">
+<!ENTITY torbutton.prefs.nontor_tabs "Cilnes, kuras ielādētas ārpus-Tor'ā">
+<!ENTITY torbutton.prefs.tor_tabs "Cilnes, kuras ielādētas Tor'ā">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
-<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
-<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
+<!ENTITY torbutton.prefs.no_proxies_on "Nav starpnieku priekš: ">
+<!ENTITY torbutton.prefs.no_proxy_warning "Brīdinājums: Izvairieties lietot ikvienu no augstāk norādītajiem viesotājnosaukumiem">
+<!ENTITY torbutton.prefs.spoofreresh "Maldināšanas atjaunošana">
+<!ENTITY torbutton.prefs.refereroptions "Atsauču maldināšanas iespējas">
+<!ENTITY torbutton.prefs.nospoof "Nemaldināt ar atsaucēm">
+<!ENTITY torbutton.prefs.spoofroot "Maldināt ar lapas saturošo mapi">
+<!ENTITY torbutton.prefs.spoofdomain "Maldināt ar domēna norādi">
+<!ENTITY torbutton.prefs.spoofblank "Padarīt atsauces tukšas">
+<!ENTITY torbutton.cookiedialog.title "Pārvaldīt aizsardzību no sīkdatnēm">
+<!ENTITY torbutton.cookiedialog.lockCol "Aizsargāts">
+<!ENTITY torbutton.cookiedialog.domainCol "Viesotājs">
+<!ENTITY torbutton.cookiedialog.nameCol "Nosaukums">
+<!ENTITY torbutton.cookiedialog.pathCol "Ceļš">
+<!ENTITY torbutton.cookiedialog.protectCookie "Aizsargāt sīkdatni">
+<!ENTITY torbutton.cookiedialog.removeCookie "Noņemt sīkdatni">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Noņemt sīkdatnes aizsardzību">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Noņemt visas, izņemot aizsargātās">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Aizsargāt jaunās sīkdatnes">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Neaizsargāt jaunās sīkdatnes">
+<!ENTITY torbutton.prefs.disable_livemarks "Tor's lietošanas laikā atspējot Livemark jeb dzīvatzīmju atjaunošanu">
+<!ENTITY torbutton.prefs.dtd_recommended "(ieteicami)">
+<!ENTITY torbutton.prefs.dtd_optional "(neobligāti)">
+<!ENTITY torbutton.prefs.dtd_crucial "(ļoti svarīgi)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Novirzīt Torbutton atjaunotnes caur Tor'u">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Sastopoties ar Google Captcha, automātiski lietot citu meklētājprogrammu:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
-<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.fix_google_srch "Noņemt platformu un valodu no gūgļa meklēšanas lodziņu jeb Google Search Box vaicājumiem">
+<!ENTITY torbutton.prefs.transparentTor "Pārredzama torifikācija (nepieciešams pielāgots pārstarpnieks jeb transproxy vai Tor'a maršrutētājs)">
+<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
+<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">

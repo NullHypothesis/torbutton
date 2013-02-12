@@ -145,3 +145,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Usuń nazwę systemu i język z zapytań Google">
 <!ENTITY torbutton.prefs.transparentTor "Przezroczysta toryfikacja (wymaga własnego transproxy lub routera Tora)">
+<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
+<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
