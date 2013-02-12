@@ -239,6 +239,17 @@ ExternalWrapper.prototype =
 
   // from nsIDragService
   invokeDragSessionWithImage: function(aDOMNode, aTransferableArray, aRegion, aActionType, aImage, aImageX, aImageY, aDragEvent, aDataTransfer) {
+    /* Drag and drop is perpetually crashy on MacOS. We should to rewrite this whole filter in C++..
+    try {
+        var tbb_ver = this._prefs.getCharPref("torbrowser.version");
+        if (tbb_ver.indexOf("MacOS") != -1) {
+           this.logger.log(3, "Silently blocking MacOS Drag+Drop");
+           return 0;
+        }
+    } catch(e) {
+        this.logger.log(3, "Error inspecting TBB version: "+e);
+    }*/
+
     for(var i = 0; i < aTransferableArray.Count(); i++) {
         this.logger.log(3, "Inspecting drag+drop transfer: "+i);
         var tr = aTransferableArray.GetElementAt(i);
