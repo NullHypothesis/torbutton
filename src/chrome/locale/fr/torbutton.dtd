@@ -35,6 +35,8 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "À propos de Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Protections de cookies">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copier l'URL Tor">
@@ -145,7 +147,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Supprimer les informations relatives à la plateforme et à la langue des requêtes Google">
 <!ENTITY torbutton.prefs.transparentTor "Torification transparente (requiert un transproxy personnalisé ou un routeur Tor)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "Ne pas sauvegarder l'historique de navigation et les données des sites webs (active le Mode de Navigation Privée)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Limiter les cookies tiers ainsi que les autres données de traçage">
+<!ENTITY torbutton.prefs.block_plugins "Désactiver les greffons du navigateur (tels que Flash)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Modifier les détails qui vous distingue des autres utilisateurs du Navigateur Tor">

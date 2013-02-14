@@ -35,6 +35,8 @@
 <!ENTITY torbutton.context_menu.preferences.key "U">
 <!ENTITY torbutton.context_menu.about "O Torbutton">
 <!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Ochrona Ciasteczek">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Kopiuj URL Tora">

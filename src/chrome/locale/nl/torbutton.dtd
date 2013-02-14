@@ -35,6 +35,8 @@
 <!ENTITY torbutton.context_menu.preferences.key "V">
 <!ENTITY torbutton.context_menu.about "Over Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "O">
+<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Beveiligingen">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Kopieer Tor URL">

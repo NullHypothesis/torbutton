@@ -35,6 +35,8 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Acerca de Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Protecciones de cookie">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copiar URL de Tor">
@@ -49,7 +51,7 @@
 <!ENTITY torbutton.prefs.block_thread "Bloquear lecturas del historial al usar Tor (crucial)">
 <!ENTITY torbutton.prefs.block_thwrite "Bloquear escrituras al historial al usar Tor (recomendado)">
 <!ENTITY torbutton.prefs.block_nthread "Bloquear lecturas del historial al no usar Tor (opcional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Bloquear escrituras al historial al no usar Tor(opcional)">
+<!ENTITY torbutton.prefs.block_nthwrite "Bloquear escrituras al historial al no usar Tor (opcional)">
 <!ENTITY torbutton.prefs.clear_history "Borrar el historial al cambiar el estado de Tor (opcional)">
 <!ENTITY torbutton.prefs.clear_cache "Bloquear caché de disco de Tor y limpiar toda la caché al cambiar el estado de Tor">
 <!ENTITY torbutton.prefs.block_cache "Bloquear el acceso a caché de disco y de memoria al usar Tor">
@@ -143,9 +145,9 @@
 <!ENTITY torbutton.prefs.engine3 "yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
-<!ENTITY torbutton.prefs.fix_google_srch "Despojar de información de sun plataforma e idioma a las consultas en los cuadros de busqueda de Google">
+<!ENTITY torbutton.prefs.fix_google_srch "Despojar de información de su plataforma e idioma a las consultas en los cuadros de busqueda de Google">
 <!ENTITY torbutton.prefs.transparentTor "Torificación transparente (requiere un transproxy personalizado o un router Tor)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "No registrar historial de navegación o datos del sitio web (habilita Modo de Navegación Privada)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Restringir cookies de terceras partes y otros datos de seguimiento">
+<!ENTITY torbutton.prefs.block_plugins "Deshabilitar plugins del navegador (tales como Flash)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Cambiar los detalles que le distinguen de otros usuarios de Navegador Tor">

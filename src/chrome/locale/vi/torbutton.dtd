@@ -35,6 +35,8 @@
 <!ENTITY torbutton.context_menu.preferences.key "y">
 <!ENTITY torbutton.context_menu.about "Thông tin về Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">

@@ -35,6 +35,8 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Torbuttoni buruz...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Babesak">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Kopiatu Tor URLa">
@@ -145,7 +147,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Kendu plataforma eta hizkuntza Google Searh Box eskaeretatik">
 <!ENTITY torbutton.prefs.transparentTor "Torifikazio Gardena (transproxy pertsonalizatua edo Tor routerra behar du)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "Ez grabatu nabigatze historia edo webgune datuak (Nabigatze pribatu modua gaitzen du)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Hirugarrenen cookie-ak eta beste jarraipen datuak murriztu">
+<!ENTITY torbutton.prefs.block_plugins "Nabigatzaile pluginak ezgaitu (Flash bezala)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Zu beste Tor Browser erabiltzaileengandik nabarmentzen zaituzten xehetasunak aldatu">
