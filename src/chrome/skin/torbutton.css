@@ -7,6 +7,9 @@
 #torbutton-button[tbstatus="off"] {
   list-style-image: url("chrome://torbutton/skin/tor-disabled-24.png");
 }
+#torbutton-button[tbUpdateNeeded="true"] {
+  list-style-image: url("chrome://torbutton/skin/tor-update-24.gif");
+}
 toolbar[iconsize="small"] #torbutton-button {
   list-style-image: url("chrome://torbutton/skin/tor-16.png");
 }
@@ -15,6 +18,9 @@ toolbar[iconsize="small"] #torbutton-button[tbstatus="on"] {
 }
 toolbar[iconsize="small"] #torbutton-button[tbstatus="off"] {
   list-style-image: url("chrome://torbutton/skin/tor-disabled-16.png");
+}
+toolbar[iconsize="small"] #torbutton-button[tbUpdateNeeded="true"] {
+  list-style-image: url("chrome://torbutton/skin/tor-update-16.gif");
 }
 
 #torbutton-panel {
@@ -86,3 +92,6 @@ statusbarpanel#plugins-status[status="0"] {
     list-style-image: url("chrome://torbutton/skin/poff.png");
 }
 
+#torbutton-downloadUpdate {
+    font-weight: bold;
+}

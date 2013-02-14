@@ -7,6 +7,7 @@ pref("extensions.torbutton.logmethod",1); // 0=stdout, 1=errorconsole, 2=debuglo
 pref("extensions.torbutton.display_panel",true);
 pref("extensions.torbutton.panel_style",'text');
 pref("extensions.torbutton@torproject.org.description", "chrome://torbutton/locale/torbutton.properties");
+pref("extensions.torbutton.updateNeeded", false);
 
 // proxy prefs
 pref("extensions.torbutton.settings_method",'recommended');

@@ -36,6 +36,15 @@
                   accesskey="&torbutton.context_menu.about.key;"
                   insertafter="context-stop"
                   oncommand="window.open('chrome://torbutton/content/about.xul', '', 'chrome,centerscreen');"/>
+
+        <menuseparator hidden="true"/>
+        <menuitem id="torbutton-downloadUpdate"
+                  label="&torbutton.context_menu.downloadUpdate;"
+                  accesskey="&torbutton.context_menu.downloadUpdate.key;"
+                  insertafter="context-stop"
+                  oncommand="torbutton_download_update()"
+                  hidden="true"/>
+
     </menupopup>
 
 </overlay>

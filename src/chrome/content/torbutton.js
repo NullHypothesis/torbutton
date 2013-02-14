@@ -7,6 +7,8 @@
 // TODO: Double-check there are no strange exploits to defeat:
 //       http://kb.mozillazine.org/Links_to_local_pages_don%27t_work
 
+const k_tb_browser_update_needed_pref = "extensions.torbutton.updateNeeded";
+
 // status
 var m_tb_wasinited = false;
 var m_tb_prefs = false;
@@ -68,6 +70,9 @@ var torbutton_window_pref_observer =
                 var mode = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
                 torbutton_update_toolbutton(mode);
                 torbutton_update_statusbar(mode);
+                break;
+            case k_tb_browser_update_needed_pref:
+                torbutton_notify_if_update_needed();
                 break;
         }
     }
@@ -441,6 +446,7 @@ function torbutton_init() {
     var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
     torbutton_update_toolbutton(mode);
     torbutton_update_statusbar(mode);
+    torbutton_notify_if_update_needed();
 
     torbutton_log(3, 'init completed');
 }
@@ -593,6 +599,50 @@ function torbutton_get_statuspanel() {
     return o_statuspanel;
 }
 
+function torbutton_notify_if_update_needed() {
+    function setOrClearAttribute(aElement, aAttrName, aValue)
+    {
+        if (!aElement || !aAttrName)
+            return;
+
+        if (aValue)
+            aElement.setAttribute(aAttrName, aValue);
+        else
+            aElement.removeAttribute(aAttrName);
+    }
+
+    var updateNeeded = false;
+    try {
+        updateNeeded = m_tb_prefs.getBoolPref(k_tb_browser_update_needed_pref);
+    } catch (e) {}
+
+    // Change look of toolbar item (enable/disable animated update icon).
+    var btn = torbutton_get_toolbutton();
+    setOrClearAttribute(btn, "tbUpdateNeeded", updateNeeded);
+
+    // Hide/show download menu item and preceding separator.
+    var item = document.getElementById("torbutton-downloadUpdate");
+    setOrClearAttribute(item, "hidden", !updateNeeded);
+    if (item)
+        setOrClearAttribute(item.previousSibling, "hidden", !updateNeeded);
+}
+
+function torbutton_download_update() {
+    var downloadURI = "https://www.torproject.org/download/download-easy.html";
+    var rtSvc = Components.classes["@mozilla.org/xre/app-info;1"]
+                          .getService(Components.interfaces.nsIXULRuntime);
+    downloadURI += "?os=" + rtSvc.OS + "&arch=" + rtSvc.XPCOMABI;
+    if (rtSvc.OS == "Darwin")
+      downloadURI += "#mac";
+    else if (rtSvc.OS == "WINNT")
+      downloadURI += "#win";
+    else if (rtSvc.OS == "Linux")
+      downloadURI += "#linux";
+
+    var newTab = gBrowser.addTab(downloadURI);
+    gBrowser.selectedTab = newTab;
+}
+
 // Bug 1506 P0: Toggle. Kill kill kill.
 function torbutton_save_nontor_settings()
 {
@@ -690,7 +740,7 @@ function torbutton_do_async_versioncheck() {
   }
 
   // Suppress update check if done recently.
-  const kLastCheckPref = "extension.torbutton.lastUpdateCheck";
+  const kLastCheckPref = "extensions.torbutton.lastUpdateCheck";
   const kMinSecsBetweenChecks = 90 * 60; // 1.5 hours
   var now = Date.now() / 1000;
   var lastCheckTime;
@@ -729,6 +779,7 @@ function torbutton_do_async_versioncheck() {
             for (var v in version_list) {
               if (version_list[v] == my_version) {
                 torbutton_log(3, "Version check passed.");
+                m_tb_prefs.setBoolPref(k_tb_browser_update_needed_pref, false);
                 var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
                        Components.interfaces.nsIPrefLocalizedString).data;
                 if (homepage.indexOf("https://check.torproject.org/") == 0) {
@@ -743,6 +794,7 @@ function torbutton_do_async_versioncheck() {
               }
             }
             torbutton_log(5, "Your Tor Browser is out of date.");
+            m_tb_prefs.setBoolPref(k_tb_browser_update_needed_pref, true);
             // Not up to date
             var str = Components.classes["@mozilla.org/supports-string;1"]
                               .createInstance(Components.interfaces.nsISupportsString);
