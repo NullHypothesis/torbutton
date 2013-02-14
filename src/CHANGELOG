@@ -7,11 +7,11 @@
   * bug 7974: Disable toggle-on-startup and crash detection logic
   * bug 5379: Disable/remove toggle-mode code and related observers
   * bug 6431: Add menu hint to Torbutton icon
+  * bug 7495: Make Torbutton icon flash a warning symbol if TBB is out of date
   * bug 6096: Perform version check every time there's a new tab.
-  * bug 6156: Rate limit version check queries
+  * bug 6156: Rate limit version check queries to once every 1.5hrs max.
   * misc: Allow WebGL and DOM storage.
   * misc: Disable independent Torbutton updates
-  * misc: Disable Drag+Drop support on MacOS X (hopefully temporary)
   * misc: Change the recommended SOCKSPort to 9150 (to match TBB)
 
 1.4.6.3
