@@ -154,6 +154,7 @@ var torbutton_unique_pref_observer =
                 torbutton_update_disk_prefs();
                 break;
             case "extensions.torbutton.resist_fingerprinting":
+            case "extensions.torbutton.spoof_english":
                 torbutton_update_fingerprinting_prefs();
                 break;
             case "extensions.torbutton.restrict_thirdparty":
@@ -1411,22 +1412,35 @@ function torbutton_update_fingerprinting_prefs() {
 
     if (m_tb_tbb) {
       if (mode) {
-        m_tb_prefs.setIntPref("browser.display.max_font_attempts",10);
-        m_tb_prefs.setIntPref("browser.display.max_font_count",5);
-
-        m_tb_prefs.setCharPref("intl.accept_languages", "en-us, en");
-        m_tb_prefs.setCharPref("intl.accept_charsets", "iso-8859-1,*,utf-8");
-        m_tb_prefs.setCharPref("intl.charsetmenu.browser.cache", "UTF-8");
+        // Use TBB pref defaults for these two.
+        if(m_tb_prefs.prefHasUserValue("browser.display.max_font_attempts"))
+          m_tb_prefs.clearUserPref("browser.display.max_font_attempts");
+        if(m_tb_prefs.prefHasUserValue("browser.display.max_font_count"))
+          m_tb_prefs.clearUserPref("browser.display.max_font_count");
+ 
+        // Governed also by the spoof_english dialog..       
+        if (m_tb_prefs.getBoolPref("extensions.torbutton.spoof_english")) {
+          m_tb_prefs.setCharPref("intl.accept_languages", "en-us, en");
+          m_tb_prefs.setCharPref("intl.accept_charsets", "iso-8859-1,*,utf-8");
+          m_tb_prefs.setCharPref("intl.charsetmenu.browser.cache", "UTF-8");
+        } else {
+          if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
+            m_tb_prefs.clearUserPref("intl.accept_languages");
+          if(m_tb_prefs.prefHasUserValue("intl.charsetmenu.browser.cache"))
+            m_tb_prefs.clearUserPref("intl.charsetmenu.browser.cache");
+          if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
+            m_tb_prefs.clearUserPref("intl.accept_charsets");
+        }
       } else {
         m_tb_prefs.setIntPref("browser.display.max_font_attempts",-1);
         m_tb_prefs.setIntPref("browser.display.max_font_count",-1);
 
         if(m_tb_prefs.prefHasUserValue("intl.accept_languages"))
-            m_tb_prefs.clearUserPref("intl.accept_languages");
+          m_tb_prefs.clearUserPref("intl.accept_languages");
         if(m_tb_prefs.prefHasUserValue("intl.charsetmenu.browser.cache"))
-            m_tb_prefs.clearUserPref("intl.charsetmenu.browser.cache");
+          m_tb_prefs.clearUserPref("intl.charsetmenu.browser.cache");
         if(m_tb_prefs.prefHasUserValue("intl.accept_charsets"))
-            m_tb_prefs.clearUserPref("intl.accept_charsets");
+          m_tb_prefs.clearUserPref("intl.accept_charsets");
 
       }
     }
