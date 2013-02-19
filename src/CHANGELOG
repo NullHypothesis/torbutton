@@ -1,5 +1,5 @@
-1.5.0-alpha
- ?? Feb 2013
+1.5.0
+ 18 Feb 2013
   * bug 5279: Remove old toggle observers and related code
   * bug 3100: Simplify Security Preference UI and associated pref updates
   * bug 7470: Eliminate redundancy in our Flash/plugin disabling code
