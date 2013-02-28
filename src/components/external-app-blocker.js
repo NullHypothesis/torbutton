@@ -15,8 +15,6 @@ const kMODULE_CONTRACTID_APP = "@mozilla.org/uriloader/external-helper-app-servi
 const kMODULE_CONTRACTID_PROTO = "@mozilla.org/uriloader/external-protocol-service;1";
 const kMODULE_CONTRACTID_MIME = "@mozilla.org/mime;1";
 
-const kMODULE_CONTRACTID_DRAG = "@mozilla.org/widget/dragservice;1";
-
 
 const kMODULE_CID = Components.ID("3da0269f-fc29-4e9e-a678-c3b1cafcf13f");
 
@@ -28,10 +26,6 @@ const kExternalInterfaces = ["nsIObserver", "nsIMIMEService",
                              "nsIExternalProtocolService",
                              "nsPIExternalAppLauncher"];
                              
-const kREAL_DRAG_CID = "{8b5314bb-db01-11d2-96ce-0060b0fb9956}";
-const kDragInterfaces = ["nsIDragService"];
-                        //, "nsIDragSession"];
-
 const Cr = Components.results;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -48,7 +42,6 @@ function ExternalWrapper() {
   this.logger.log(3, "Component Load 0: New ExternalWrapper.");
 
   this._real_external = Components.classesByID[kREAL_EXTERNAL_CID];
-  this._real_drag = Components.classesByID[kREAL_DRAG_CID];
   this._interfaces = kExternalInterfaces;
 
   this._prefs = Components.classes["@mozilla.org/preferences-service;1"]
@@ -64,14 +57,13 @@ function ExternalWrapper() {
     
   this.copyMethods(this._external());
 
-  this._drag = function() {
-    var drag = this._real_drag.getService();
-    for (var i = 0; i < kDragInterfaces.length; i++) {
-      drag.QueryInterface(Components.interfaces[kDragInterfaces]);
-    }
-    return drag;
-  };
-  this.copyMethods(this._drag());
+  try {
+    var observerService = Cc["@mozilla.org/observer-service;1"].
+        getService(Ci.nsIObserverService);
+    observerService.addObserver(this, "on-modify-drag-list", false);
+  } catch(e) {
+    this.logger.log(5, "Failed to register drag observer");
+  }
 }
 
 ExternalWrapper.prototype =
@@ -84,20 +76,9 @@ ExternalWrapper.prototype =
 
     /* We perform this explicit check first because otherwise
      * the JSD exception logs are full of noise */
-    if (iid.equals(Components.interfaces.nsIDragService)
-        || iid.equals(Components.interfaces.nsIDragSession)) {
-      var drag = this._drag().QueryInterface(iid);
-      this.copyMethods(drag);
-    } else {
-      try {
-        var external = this._external().QueryInterface(iid);
-        this.copyMethods(external);
-      } catch(e) {
-        this.logger.log(3, "Drag+drop QI: "+iid);
-        var drag = this._drag().QueryInterface(iid);
-        this.copyMethods(drag);
-      }
-    }
+    var external = this._external().QueryInterface(iid);
+    this.copyMethods(external);
+
     return this;
   },
 
@@ -115,10 +96,6 @@ ExternalWrapper.prototype =
     var interfaceList = [Components.interfaces.nsIClassInfo];
     for (var i = 0; i < this._interfaces.length; i++) {
       interfaceList.push(Components.interfaces[this._interfaces[i]]);
-    }
-
-    for (var i = 0; i < kDragInterfaces.length; i++) {
-      interfaceList.push(Components.interfaces[kDragInterfaces[i]]);
     }
 
     count.value = interfaceList.length;
@@ -237,43 +214,42 @@ ExternalWrapper.prototype =
     return this._external().doContent(aMimeContentType, aRequest, aWindowContext, aForceSave);
   },
 
-  // from nsIDragService
-  invokeDragSessionWithImage: function(aDOMNode, aTransferableArray, aRegion, aActionType, aImage, aImageX, aImageY, aDragEvent, aDataTransfer) {
-    /* Drag and drop is perpetually crashy on MacOS. We should to rewrite this whole filter in C++..
-    try {
-        var tbb_ver = this._prefs.getCharPref("torbrowser.version");
-        if (tbb_ver.indexOf("MacOS") != -1) {
-           this.logger.log(3, "Silently blocking MacOS Drag+Drop");
-           return 0;
-        }
-    } catch(e) {
-        this.logger.log(3, "Error inspecting TBB version: "+e);
-    }*/
+  observe: function(subject, topic, data) {
+    if(topic == "on-modify-drag-list") {
+      this.logger.log(3, "Got drag observer event");
+      try {
+        subject.QueryInterface(Ci.nsISupportsArray);
+      } catch(e) {
+        this.logger.log(5, "Drag and Drop subject is not an array: "+e);
+      }
 
-    for(var i = 0; i < aTransferableArray.Count(); i++) {
-        this.logger.log(3, "Inspecting drag+drop transfer: "+i);
-        var tr = aTransferableArray.GetElementAt(i);
-        tr.QueryInterface(Ci.nsITransferable);
-
-        var flavors = tr.flavorsTransferableCanExport()
-                        .QueryInterface(Ci.nsISupportsArray);
-
-        for (var f=0; f < flavors.Count(); f++) {
-          var flavor =flavors.GetElementAt(f); 
-          flavor.QueryInterface(Ci.nsISupportsCString);
-
-          this.logger.log(3, "Got drag+drop flavor: "+flavor);
-          if (flavor == "text/x-moz-url" ||
-              flavor == "text/x-moz-url-data" ||
-              flavor == "text/uri-list" ||
-              flavor == "application/x-moz-file-promise-url") {
-            this.logger.log(3, "Removing "+flavor);
-            try { tr.removeDataFlavor(flavor); } catch(e) {}
-          }
-        }
+      return this.filterDragURLs(subject);
     }
+  },
 
-    return this._drag().invokeDragSessionWithImage(aDOMNode, aTransferableArray, aRegion, aActionType, aImage, aImageX, aImageY, aDragEvent, aDataTransfer);
+  filterDragURLs: function(aTransferableArray) {
+    for(var i = 0; i < aTransferableArray.Count(); i++) {
+      this.logger.log(3, "Inspecting drag+drop transfer: "+i);
+      var tr = aTransferableArray.GetElementAt(i);
+      tr.QueryInterface(Ci.nsITransferable);
+
+      var flavors = tr.flavorsTransferableCanExport()
+                      .QueryInterface(Ci.nsISupportsArray);
+
+      for (var f=0; f < flavors.Count(); f++) {
+        var flavor =flavors.GetElementAt(f); 
+        flavor.QueryInterface(Ci.nsISupportsCString);
+
+        this.logger.log(3, "Got drag+drop flavor: "+flavor);
+        if (flavor == "text/x-moz-url" ||
+            flavor == "text/x-moz-url-data" ||
+            flavor == "text/uri-list" ||
+            flavor == "application/x-moz-file-promise-url") {
+          this.logger.log(3, "Removing "+flavor);
+          try { tr.removeDataFlavor(flavor); } catch(e) {}
+        }
+      }
+    }
   },
 
 };
@@ -324,13 +300,6 @@ function (compMgr, fileSpec, location, type) {
   compMgr.registerFactoryLocation(kMODULE_CID,
                                   kMODULE_NAME,
                                   kMODULE_CONTRACTID_MIME,
-                                  fileSpec,
-                                  location,
-                                  type);
-
-  compMgr.registerFactoryLocation(kMODULE_CID,
-                                  kMODULE_NAME,
-                                  kMODULE_CONTRACTID_DRAG,
                                   fileSpec,
                                   location,
                                   type);
