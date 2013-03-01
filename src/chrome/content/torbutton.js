@@ -1210,6 +1210,7 @@ function torbutton_new_identity() {
  */
 // Bug 1506 P4: Needed for New Identity.
 function torbutton_do_new_identity() {
+  torbutton_log(3, "New Identity: Disabling JS");
   torbutton_disable_all_js();
 
   m_tb_prefs.setBoolPref("browser.zoom.siteSpecific",
@@ -1234,6 +1235,8 @@ function torbutton_do_new_identity() {
   } catch(e) {
       torbutton_log(3, "Exception on wifi token clear: "+e);
   }
+  
+  torbutton_log(3, "New Identity: Closing tabs and clearing searchbox");
 
   torbutton_close_on_toggle(true, true);
 
@@ -1246,12 +1249,16 @@ function torbutton_do_new_identity() {
       findbox.reset();
       gFindBar.close();
   }
+  
+  torbutton_log(3, "New Identity: Clearing HTTP Auth");
 
   if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
       var auth = Components.classes["@mozilla.org/network/http-auth-manager;1"].
           getService(Components.interfaces.nsIHttpAuthManager);
       auth.clearAll();
   }
+  
+  torbutton_log(3, "New Identity: Clearing Crypto Tokens");
 
   try {
       var secMgr = Cc["@mozilla.org/security/crypto;1"].
@@ -1295,6 +1302,8 @@ function torbutton_do_new_identity() {
   var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
+  
+  torbutton_log(3, "New Identity: Clearing Image Cache");
 
   try {
     var imgCache = Components.classes["@mozilla.org/image/cache;1"].
@@ -1308,6 +1317,8 @@ function torbutton_do_new_identity() {
     torbutton_log(4, "Exception on image cache clearing: "+e);
   }
 
+  torbutton_log(3, "New Identity: Clearing Disk Cache");
+
   var cache = Components.classes["@mozilla.org/network/cache-service;1"].
       getService(Components.interfaces.nsICacheService);
   try {
@@ -1316,6 +1327,8 @@ function torbutton_do_new_identity() {
       torbutton_log(5, "Exception on cache clearing: "+e);
       window.alert("Torbutton: Unexpected error during cache clearing: "+e);
   }
+  
+  torbutton_log(3, "New Identity: Clearing Cookies and DOM Storage");
 
   if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections')) {
     var selector = Components.classes["@torproject.org/cookie-jar-selector;1"]
@@ -1327,21 +1340,29 @@ function torbutton_do_new_identity() {
   } else {
     torbutton_clear_cookies();
   }
+  
+  torbutton_log(3, "New Identity: Closing open connections");
 
   // Clear keep-alive
   var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
   obsSvc.notifyObservers(this, "net:prune-all-connections", null);
+  
+  torbutton_log(3, "New Identity: Clearing Content Preferences");
 
   // XXX: This may not clear zoom site-specific
   // browser.content.full-zoom
   var cps = Cc["@mozilla.org/content-pref/service;1"].
       createInstance(Ci.nsIContentPrefService);
   cps.removeGroupedPrefs();
+  
+  torbutton_log(3, "New Identity: Syncing prefs");
 
   // Force prefs to be synced to disk
   var prefService = Components.classes["@mozilla.org/preferences-service;1"]
       .getService(Components.interfaces.nsIPrefService);
   prefService.savePrefFile(null);
+  
+  torbutton_log(3, "New Identity: Sending NEWNYM");
 
   // We only support TBB for newnym.
   if (!m_tb_control_pass || !m_tb_control_port) {
@@ -1357,6 +1378,8 @@ function torbutton_do_new_identity() {
       window.alert(warning);
     }
   }
+  
+  torbutton_log(3, "New Identity: Opening a new browser window");
 
   // Open a new window with the TBB check homepage
   OpenBrowserWindow();
