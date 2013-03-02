@@ -1999,6 +1999,10 @@ function torbutton_do_main_window_startup()
 function torbutton_do_startup()
 {
     if(m_tb_prefs.getBoolPref("extensions.torbutton.startup")) {
+        // Bug 1506: Still want to do this
+        torbutton_toggle_plugins(
+                m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
+
         // Bug 1506: Should probably be moved to an XPCOM component
         torbutton_do_main_window_startup();
 
@@ -2007,10 +2011,6 @@ function torbutton_do_startup()
 
         // For charsets
         torbutton_update_fingerprinting_prefs();
-
-        // Bug 1506: Still want to do this
-        torbutton_toggle_plugins(
-                m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"));
 
         // #5758: Last ditch effort to keep Vanilla Torbutton users from totally
         // being pwnt.  This is a pretty darn ugly hack, too. But because of #5863,
