@@ -483,13 +483,12 @@ function torbutton_prompt_for_language_preference() {
       .getService(Components.interfaces.nsIPromptService);
 
   // Display two buttons, both with string titles.
-  var flags = prompts.BUTTON_POS_0 * prompts.BUTTON_TITLE_IS_STRING +
-      prompts.BUTTON_POS_1 * prompts.BUTTON_TITLE_IS_STRING;
+  var flags = prompts.STD_YES_NO_BUTTONS;
 
   var strings = torbutton_get_stringbundle();
   var message = strings.GetStringFromName("torbutton.popup.prompted_language");
 
-  var response = prompts.confirmEx(null, "", message, flags, "Yes", "No", null,
+  var response = prompts.confirmEx(null, "", message, flags, null, null, null,
       null, {value: false});
 
   // Update preferences to reflect their response and to prevent the prompt from
