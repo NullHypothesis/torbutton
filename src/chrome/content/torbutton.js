@@ -95,6 +95,11 @@ var torbutton_unique_pref_observer =
         this._branch.addObserver("network.proxy", this, false);
         this._branch.addObserver("network.cookie", this, false);
         this._branch.addObserver("browser.privatebrowsing.autostart", this, false);
+
+        // We observe xpcom-category-entry-added for plugins w/ Gecko-Content-Viewers
+        var observerService = Cc["@mozilla.org/observer-service;1"].
+            getService(Ci.nsIObserverService);
+        observerService.addObserver(this, "xpcom-category-entry-added", false);
     },
 
     unregister: function()
@@ -104,6 +109,10 @@ var torbutton_unique_pref_observer =
         this._branch.removeObserver("network.proxy", this);
         this._branch.removeObserver("network.cookie", this);
         this._branch.removeObserver("browser.privatebrowsing.autostart", this);
+
+        var observerService = Cc["@mozilla.org/observer-service;1"].
+            getService(Ci.nsIObserverService);
+        observerService.removeObserver(this, "xpcom-category-entry-added");
     },
 
     // topic:   what event occurred
@@ -111,7 +120,18 @@ var torbutton_unique_pref_observer =
     // data:    which pref has been changed (relative to subject)
     observe: function(subject, topic, data)
     {
+        if (topic == "xpcom-category-entry-added") {
+          // Hrmm. should we inspect subject too? it's just mime type..
+          subject.QueryInterface(Ci.nsISupportsCString);
+          if (data == "Gecko-Content-Viewers" &&
+              m_tb_prefs.getBoolPref("extensions.torbutton.confirm_plugins")) {
+             torbutton_confirm_plugins();
+          }
+          return;
+        }
+ 
         if (topic != "nsPref:changed") return;
+
         switch (data) {
             case "network.proxy.http":
             case "network.proxy.http_port":
@@ -475,6 +495,54 @@ function torbutton_prompt_for_language_preference() {
   // being displayed again.
   m_tb_prefs.setBoolPref("extensions.torbutton.spoof_english", response == 0);
   m_tb_prefs.setBoolPref("extensions.torbutton.prompted_language", true);
+}
+
+function torbutton_confirm_plugins() {
+  var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
+      .getService(Components.interfaces.nsIPromptService);
+
+  // Display two buttons, both with string titles.
+  var flags = prompts.STD_YES_NO_BUTTONS + prompts.BUTTON_DELAY_ENABLE;
+      
+  var strings = torbutton_get_stringbundle();
+  var message = strings.GetStringFromName("torbutton.popup.confirm_plugins");
+  var askAgainText = strings.GetStringFromName("torbutton.popup.never_ask_again");
+  var askAgain = {value: false};
+
+  var no_plugins = (prompts.confirmEx(null, "", message, flags, null, null, null,
+      askAgainText, askAgain) == 1);
+
+  m_tb_prefs.setBoolPref("extensions.torbutton.confirm_plugins", !askAgain.value);
+
+  // The pref observer for no_tor_plugins will set the appropriate plugin state.
+  // So, we only touch the pref if it has changed.
+  if (no_plugins != 
+      m_tb_prefs.getBoolPref("extensions.torbutton.no_tor_plugins"))
+    m_tb_prefs.setBoolPref("extensions.torbutton.no_tor_plugins", no_plugins);
+  else
+    torbutton_toggle_plugins(no_plugins);
+
+  // Now, if any tabs were open to about:addons, reload them. Our popup
+  // messed up that page.
+  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                     .getService(Components.interfaces.nsIWindowMediator);
+  var browserEnumerator = wm.getEnumerator("navigator:browser");
+ 
+  // Check each browser instance for our URL
+  while (browserEnumerator.hasMoreElements()) {
+    var browserWin = browserEnumerator.getNext();
+    var tabbrowser = browserWin.gBrowser;
+ 
+    // Check each tab of this browser instance
+    var numTabs = tabbrowser.browsers.length;
+    for (var index = 0; index < numTabs; index++) {
+      var currentBrowser = tabbrowser.getBrowserAtIndex(index);
+      if ("about:addons" == currentBrowser.currentURI.spec) {
+        torbutton_log(5, "Got browser: "+currentBrowser.currentURI.spec);
+        currentBrowser.reload();
+      }
+    }
+  }
 }
 
 function torbutton_inform_about_tbb() {
@@ -1399,7 +1467,8 @@ function torbutton_toggle_plugins(disable_plugins) {
     var PH=Cc["@mozilla.org/plugin/host;1"].getService(Ci.nsIPluginHost);
     var P=PH.getPluginTags({});
     for(var i=0; i<P.length; i++) {
-        P[i].disabled=disable_plugins;
+        if (P[i].disabled != disable_plugins)
+          P[i].disabled=disable_plugins;
     }
   }
 }
