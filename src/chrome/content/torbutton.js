@@ -124,6 +124,7 @@ var torbutton_unique_pref_observer =
           // Hrmm. should we inspect subject too? it's just mime type..
           subject.QueryInterface(Ci.nsISupportsCString);
           if (data == "Gecko-Content-Viewers" &&
+              !m_tb_prefs.getBoolPref("extensions.torbutton.startup") &&
               m_tb_prefs.getBoolPref("extensions.torbutton.confirm_plugins")) {
              torbutton_confirm_plugins();
           }
