@@ -126,6 +126,7 @@ var torbutton_unique_pref_observer =
           if (data == "Gecko-Content-Viewers" &&
               !m_tb_prefs.getBoolPref("extensions.torbutton.startup") &&
               m_tb_prefs.getBoolPref("extensions.torbutton.confirm_plugins")) {
+             torbutton_log(3, "Got plugin enabled notification: "+subject);
              torbutton_confirm_plugins();
           }
           return;
@@ -498,6 +499,21 @@ function torbutton_prompt_for_language_preference() {
 }
 
 function torbutton_confirm_plugins() {
+  var any_plugins_enabled = false;
+  var PH=Cc["@mozilla.org/plugin/host;1"].getService(Ci.nsIPluginHost);
+  var P=PH.getPluginTags({});
+  for(var i=0; i<P.length; i++) {
+      if (!P[i].disabled)
+        any_plugins_enabled = true;
+  }
+
+  if (!any_plugins_enabled) {
+    torbutton_log(3, "False positive on plugin notification. Ignoring");
+    return;
+  }
+  
+  torbutton_log(3, "Confirming plugin usage.");
+
   var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
       .getService(Components.interfaces.nsIPromptService);
 
