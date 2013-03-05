@@ -17,6 +17,8 @@ var m_tb_plugin_string = false;
 var m_tb_is_main_window = false;
 var m_tb_hidden_browser = false;
 
+var m_tb_confirming_plugins = false;
+
 var m_tb_window_height = window.outerHeight;
 var m_tb_window_width = window.outerWidth;
 
@@ -127,7 +129,20 @@ var torbutton_unique_pref_observer =
               !m_tb_prefs.getBoolPref("extensions.torbutton.startup") &&
               m_tb_prefs.getBoolPref("extensions.torbutton.confirm_plugins")) {
              torbutton_log(3, "Got plugin enabled notification: "+subject);
-             torbutton_confirm_plugins();
+
+             /* We need to protect this call with a flag becuase we can
+              * get multiple observer events for each mime type a plugin
+              * registers. Thankfully, these notifications arrive only on
+              * the main thread, *however*, our confirmation dialog suspends
+              * execution and allows more events to arrive until it is answered
+              */ 
+             if (!m_tb_confirming_plugins) {
+               m_tb_confirming_plugins = true;
+               torbutton_confirm_plugins();
+               m_tb_confirming_plugins = false;
+             } else {
+               torbutton_log(3, "Skipping notification for mime type: "+subject);
+             }
           }
           return;
         }
@@ -554,7 +569,7 @@ function torbutton_confirm_plugins() {
     for (var index = 0; index < numTabs; index++) {
       var currentBrowser = tabbrowser.getBrowserAtIndex(index);
       if ("about:addons" == currentBrowser.currentURI.spec) {
-        torbutton_log(5, "Got browser: "+currentBrowser.currentURI.spec);
+        torbutton_log(3, "Got browser: "+currentBrowser.currentURI.spec);
         currentBrowser.reload();
       }
     }
