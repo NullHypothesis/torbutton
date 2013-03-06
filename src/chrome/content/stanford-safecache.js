@@ -109,6 +109,7 @@ SSC_RequestListener.prototype =
 
   onModifyRequest: function(channel) {
     var parent_host = null;
+    var parent_spec = null;
     if (channel.notificationCallbacks ||
            channel.loadGroup && channel.loadGroup.notificationCallbacks) {
       var callbacks = null;
@@ -122,6 +123,7 @@ SSC_RequestListener.prototype =
                   Components.interfaces.nsIInterfaceRequestor).getInterface(
                       Components.interfaces.nsIDOMWindow);
           parent_host = wind.window.top.location.hostname;
+          parent_spec = wind.window.top.location.href;
       } catch(e) {
       }
       SSC_dump("Parent "+parent_host+" for "+ channel.URI.spec);
@@ -129,17 +131,20 @@ SSC_RequestListener.prototype =
 
     if (channel.documentURI && channel.documentURI == channel.URI) {
       parent_host = null;  // first party interaction
+      parent_spec = null;
     } else if(!parent_host) {
       // Questionable first party interaction..
       try {
         var anuri = this.cookie_permissions.getOriginatingURI(channel);
         parent_host = anuri.host;
+        parent_spec = anuri.spec;
       } catch(e) {
         torbutton_safelog(2, "Cookie API failed to get parent: "+e,channel.URI.spec);
         if (!channel.referrer) {
           torbutton_safelog(3, "SSC: No parent for ", channel.URI.spec);
         } else {
           parent_host = channel.referrer.host;
+          parent_spec = channel.referrer.spec;
         }
       }
     }
@@ -152,15 +157,20 @@ SSC_RequestListener.prototype =
       this.setCacheKey(channel, parent_host);
       referrer = parent_host;
       try {
-        // Disable 3rd party http auth
+        // Disable 3rd party http auth, but exempt the browser (for favicon loads)
         // FIXME: Hrmm, this is just going to disable auth for 3rd party domains.
         // It would be better if we could isolate the auth, but still
         // allow it to be transmitted.. But I guess, who still uses http auth anyways?
         if (channel.getRequestHeader("Authorization") !== null) {
-          torbutton_safelog(4, "Removing 3rd party HTTP auth for url: ", channel.URI.spec);
-          channel.setRequestHeader("Authorization", null, false);
-          channel.setRequestHeader("Pragma", null, false);
-          channel.setRequestHeader("Cache-Control", null, false);
+          if (parent_spec == "chrome://browser/content/browser.xul") {
+            torbutton_log(3, "Allowing auth for browser load of "+channel.URI.spec);
+          } else {
+            torbutton_safelog(4, "Removing 3rd party HTTP auth for url ",
+                              channel.URI.spec+", parent: "+parent_spec);
+            channel.setRequestHeader("Authorization", null, false);
+            channel.setRequestHeader("Pragma", null, false);
+            channel.setRequestHeader("Cache-Control", null, false);
+          }
         }
       } catch (e) {}
     } else {
