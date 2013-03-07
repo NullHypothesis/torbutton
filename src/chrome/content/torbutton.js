@@ -1307,6 +1307,8 @@ function torbutton_new_identity() {
  *
  * XXX: intermediate SSL certificates are not cleared.
  */
+// XXX: Test urls:
+// http://www.stevesouders.com/blog/2012/09/10/clearing-browser-data/
 // Bug 1506 P4: Needed for New Identity.
 function torbutton_do_new_identity() {
   torbutton_log(3, "New Identity: Disabling JS");
@@ -1416,10 +1418,31 @@ function torbutton_do_new_identity() {
     torbutton_log(4, "Exception on image cache clearing: "+e);
   }
 
-  torbutton_log(3, "New Identity: Clearing Disk Cache");
+  torbutton_log(3, "New Identity: Clearing Offline Cache");
 
   var cache = Components.classes["@mozilla.org/network/cache-service;1"].
       getService(Components.interfaces.nsICacheService);
+
+  try {
+      cache.evictEntries(Ci.nsICache.STORE_OFFLINE);
+  } catch(e) {
+      torbutton_log(5, "Exception on cache clearing: "+e);
+      window.alert("Torbutton: Unexpected error during offline cache clearing: "+e);
+  }
+
+  torbutton_log(3, "New Identity: Clearing LocalStorage");
+  
+  try {
+    var storageManagerService = Cc["@mozilla.org/dom/storagemanager;1"].
+        getService(Ci.nsIDOMStorageManager);
+    storageManagerService.clearOfflineApps();
+  } catch(e) {
+      torbutton_log(5, "Exception on localStorage clearing: "+e);
+      window.alert("Torbutton: Unexpected error during localStorage clearing: "+e);
+  }
+
+  torbutton_log(3, "New Identity: Clearing Disk Cache");
+
   try {
       cache.evictEntries(0);
   } catch(e) {
@@ -1445,6 +1468,9 @@ function torbutton_do_new_identity() {
   // Clear keep-alive
   var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
   obsSvc.notifyObservers(this, "net:prune-all-connections", null);
+
+  torbutton_log(3, "New Identity: Emitting Private Browsing Session clear event");
+  obsSvc.notifyObservers(null, "browser:purge-session-history", "");
   
   torbutton_log(3, "New Identity: Clearing Content Preferences");
 
