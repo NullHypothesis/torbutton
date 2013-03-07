@@ -34,7 +34,8 @@ var cookiesTreeView = {
   getColumnProperties : function(column,columnElement,prop){},
   getCellProperties : function(row,column,prop) {}
  };
- 
+
+// XXX: Must match the definition in cookie-jar-selector :/
 function Cookie(number,name,value,isDomain,host,rawHost,HttpOnly,path,isSecure,isSession,
                 expires,isProtected) {
   this.number = number;
@@ -166,24 +167,10 @@ function DeleteCookie() {
 
 function getProtectedCookies()
 {
-  var tor_enabled = prefs.getBoolPref("extensions.torbutton.tor_enabled");                
-  var cookiesAsXml = selector.getProtectedCookies(tor_enabled? "tor" : "nontor");
-  if (cookiesAsXml == null)
+  var gotCookies = selector.getProtectedCookies("tor");
+  if (gotCookies == null)
     return;
-  for (var i = 0; i < cookiesAsXml.cookie.length(); i++) {
-            var xml = cookiesAsXml.cookie[i];
-            var value = xml.toString();
-            var cname = xml.@name; 
-            var host = xml.@host;
-            var path = xml.@path;
-            var expiry = xml.@expiry;
-            var isSecure = (xml.@isSecure == 1);
-            var isSession = (xml.@isSession == 1);
-            var isHttpOnly = (xml.@isHttpOnly == 1);
-            //this.logger.log(2, "Loading cookie: "+host+":"+cname+" until: "+expiry);
-            protectedCookies[i] = new Cookie(i,cname,value,true,host,(host.charAt(0)=="."),isHttpOnly, path, isSecure, isSession,
-                expiry, true)
-        }                  
+  protectedCookies = gotCookies;
 }
 
 //Tree Utils
@@ -216,13 +203,8 @@ function SortTree(tree, view, table, column, lastSortColumn, lastSortAscending, 
       if (table[s].number == selectedNumber) {
         // update selection
         // note: we need to deselect before reselecting in order to trigger ...Selected()
-        if (oldTreeCode) {
-        	tree.treeBoxObject.view.selection.select(-1);
-        	tree.treeBoxObject.view.selection.select(s);
-        } else {
-        	tree.view.selection.select(-1);
-        	tree.view.selection.select(s);
-        }
+        tree.view.selection.select(-1);
+        tree.view.selection.select(s);
         selectedRow = s;
         break;
       }
@@ -389,11 +371,7 @@ function DeleteAllFromTree
   // update selection and/or buttons
   if (table.length) {
     // update selection to top
-    if (oldTreeCode) {
-    	tree.treeBoxObject.view.selection.select(0);
-    } else {
-    	tree.view.selection.select(0);
-    }
+    tree.view.selection.select(0);
     tree.treeBoxObject.ensureRowIsVisible(0);
     //if it exists is must already be protected
         document.getElementById(unprotButton).disabled = false;
