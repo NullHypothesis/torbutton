@@ -1,15 +1,23 @@
 1.5.1:
- 28 Feb 2013
+ 07 Mar 2013
   * bug 8324: Fix Drag+Drop crash by using a new TBB drag observer
+  * bug 6202: Fix XML/E4X errors with Cookie Protections
+  * bug 8423: Don't clear cookies at shutdown if user wants disk history
+  * bug 8382: Leave IndexedDB and Offline Storage disabled.
+  * bug 8422: Clear DOM localStorage on New Identity.
+  * bug 8335: Don't strip "third party" HTTP auth from favicons
+  * bug 5183: Localize the "Spoof english" button strings
+  * bug 8313: Ask user for confirmation before enabling plugins
+  * misc: Emit private browsing session clearing event on "New Identity"
 
 1.5.0
  18 Feb 2013
   * bug 5279: Remove old toggle observers and related code
   * bug 3100: Simplify Security Preference UI and associated pref updates
-  * bug 7470: Eliminate redundancy in our Flash/plugin disabling code
+  * bug 1305: Eliminate redundancy in our Flash/plugin disabling code
   * bug 3944: Leave most preferences under Tor Browser's control 
   * bug 7974: Disable toggle-on-startup and crash detection logic
-  * bug 5379: Disable/remove toggle-mode code and related observers
+  * bug 5279: Disable/remove toggle-mode code and related observers
   * bug 6431: Add menu hint to Torbutton icon
   * bug 7495: Make Torbutton icon flash a warning symbol if TBB is out of date
   * bug 6096: Perform version check every time there's a new tab.
