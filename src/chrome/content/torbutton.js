@@ -1307,10 +1307,9 @@ function torbutton_new_identity() {
  *
  * XXX: intermediate SSL certificates are not cleared.
  */
-// XXX: Test urls:
-// http://www.stevesouders.com/blog/2012/09/10/clearing-browser-data/
 // Bug 1506 P4: Needed for New Identity.
 function torbutton_do_new_identity() {
+  var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
   torbutton_log(3, "New Identity: Disabling JS");
   torbutton_disable_all_js();
 
@@ -1350,7 +1349,10 @@ function torbutton_do_new_identity() {
       findbox.reset();
       gFindBar.close();
   }
-  
+
+  torbutton_log(3, "New Identity: Emitting Private Browsing Session clear event");
+  obsSvc.notifyObservers(null, "browser:purge-session-history", "");
+   
   torbutton_log(3, "New Identity: Clearing HTTP Auth");
 
   if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
@@ -1466,12 +1468,8 @@ function torbutton_do_new_identity() {
   torbutton_log(3, "New Identity: Closing open connections");
 
   // Clear keep-alive
-  var obsSvc = Components.classes["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
   obsSvc.notifyObservers(this, "net:prune-all-connections", null);
-
-  torbutton_log(3, "New Identity: Emitting Private Browsing Session clear event");
-  obsSvc.notifyObservers(null, "browser:purge-session-history", "");
-  
+ 
   torbutton_log(3, "New Identity: Clearing Content Preferences");
 
   // XXX: This may not clear zoom site-specific
