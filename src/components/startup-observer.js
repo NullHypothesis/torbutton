@@ -184,23 +184,6 @@ StartupObserver.prototype = {
             }
         }
 
-        if((this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 1 && 
-            this._prefs.getBoolPref("extensions.torbutton.tor_enabled"))
-            || this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
-            var selector =
-                Components.classes["@torproject.org/cookie-jar-selector;1"]
-                .getService(Components.interfaces.nsISupports)
-                .wrappedJSObject;
-            selector.clearCookies();
-            // clear the cookie jar by saving the empty cookies to it.
-            if(this._prefs.getIntPref("extensions.torbutton.shutdown_method") == 2) {
-                if(this._prefs.getBoolPref('extensions.torbutton.dual_cookie_jars'))
-                    selector.saveCookies("tor");
-                selector.saveCookies("nontor");
-            } else if(this._prefs.getBoolPref('extensions.torbutton.dual_cookie_jars')) {
-                selector.saveCookies("tor");
-            }
-        }
         this.logger.log(3, "Torbutton normal exit.");
         //this.unregister();
       }
