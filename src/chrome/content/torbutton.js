@@ -1535,12 +1535,14 @@ function torbutton_update_disk_prefs() {
 
     m_tb_prefs.setBoolPref("browser.privatebrowsing.autostart", mode);
     m_tb_prefs.setBoolPref("browser.cache.disk.enable", !mode);
-    m_tb_prefs.setBoolPref("dom.indexedDB.enabled", !mode);
+
+    // No way to clear this beast during New Identity. Leave it off.
+    //m_tb_prefs.setBoolPref("dom.indexedDB.enabled", !mode);
 
     if (m_tb_tbb) m_tb_prefs.setBoolPref("permissions.memory_only", mode);
 
-    // XXX: Third party abuse?
-    m_tb_prefs.setBoolPref("browser.cache.offline.enable", !mode);
+    // Third party abuse. Leave it off for now.
+    //m_tb_prefs.setBoolPref("browser.cache.offline.enable", !mode);
 
     if (mode) {
         m_tb_prefs.setIntPref("network.cookie.lifetimePolicy", 2);
