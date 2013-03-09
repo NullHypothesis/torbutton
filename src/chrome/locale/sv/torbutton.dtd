@@ -17,17 +17,17 @@
 <!ENTITY torbutton.prefs.proxy.port "Port:">
 <!ENTITY torbutton.about.title "Om Torbutton">
 <!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
+<!ENTITY torbutton.about.summary "Skyddar din personliga integritet med Tor.">
+<!ENTITY torbutton.about.code "Övriga programmerare:">
+<!ENTITY torbutton.about.maintainer "Underhålls av:">
 <!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.donate "Om du gillar Tor, överväg att">
+<!ENTITY torbutton.about.make_donation "ge ett bidrag.">
 <!ENTITY torbutton.pref_connection.notice "Avaktivera Torbutton för att ändra dessa inställningar.">
 <!ENTITY torbutton.pref_connection.more_info "Mer information">
 <!ENTITY torbutton.pref_connection_more_info.title "Hjälp">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton är för närvarande aktiverad. Om du vill ändra dina icke-Tor proxy inställningar, var vänlig avaktivera Torbutton och kom tillbaka hit. Om du vill ändra dina Tor inställningar, var vänlig använd Torbuttons inställningsruta.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Ny identitet">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Slå på/av Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -35,7 +35,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Om Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate "Ladda ner uppdatering för Tor Browser Bundle">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Kak Skydd">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
@@ -104,7 +104,7 @@
 <!ENTITY torbutton.prefs.startup "Startup">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
+<!ENTITY torbutton.prefs.restore_defaults "Återställ till standard">
 <!ENTITY torbutton.prefs.test_settings "Test Settings">
 <!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
@@ -147,7 +147,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
 <!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "Spara ingen historik eller webbplatsdata (aktiverar privat surfning)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Begränsa tredjepartskakor och annan tracking data">
+<!ENTITY torbutton.prefs.block_plugins "Avaktivera insticksmoduler (så som Flash)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Ändra detailjer som utmärker dig ifrån andra Tor Browser användare">

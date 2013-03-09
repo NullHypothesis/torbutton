@@ -35,7 +35,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "关于 Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate "下载 Tor Browser Bundle 更新...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie 隐私保护">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
@@ -58,7 +58,7 @@
 <!ENTITY torbutton.prefs.cookie_jars "在受保护的 jar 中保存非 Tor 的 Cookie">
 <!ENTITY torbutton.prefs.cookie_protection "请在 Cookie 隐私保护对话框内选择">
 <!ENTITY torbutton.prefs.mmm_cookies "我要手动管理我的 cookies （危险）">
-<!ENTITY torbutton.prefs.clear_cookies "切换 Tor 时清除 cookies">
+<!ENTITY torbutton.prefs.clear_cookies "切换 Tor 时清除 cookie">
 <!ENTITY torbutton.prefs.disable_plugins "使用 Tor 时禁用插件（重要）">
 <!ENTITY torbutton.prefs.kill_bad_js "挂勾危险的 Java 脚本（重要）">
 <!ENTITY torbutton.prefs.isolate_content "根据 Tor 状态隔离动态网页内容（(重要）">
@@ -147,7 +147,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "在 Google 搜索栏搜索时分割平台和语言信息。">
 <!ENTITY torbutton.prefs.transparentTor "Tor 强化透明代理（需要自设 TransProxy 或 Tor 路由）">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "禁止记录浏览历史或网站数据（启用隐私浏览模式）">
+<!ENTITY torbutton.prefs.restrict_thirdparty "限制第三方 cookie 和其他数据跟踪程序">
+<!ENTITY torbutton.prefs.block_plugins "禁用浏览器插件（比如 Flash）">
+<!ENTITY torbutton.prefs.resist_fingerprinting "请修改区别你与其他 Tor 浏览器用户的详细信息">
