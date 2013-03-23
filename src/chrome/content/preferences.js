@@ -249,6 +249,7 @@ function torbutton_prefs_save(doc) {
         var chrome = wm.getMostRecentWindow("navigator:browser");
         var ret = chrome.torbutton_test_settings();
         if (ret != 4) {
+            var strings = torbutton_get_stringbundle();
             var warning = strings.GetStringFromName("torbutton.popup.test.failure");
             window.alert(warning);
         } else {
