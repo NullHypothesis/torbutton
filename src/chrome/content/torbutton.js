@@ -2281,6 +2281,14 @@ function torbutton_close_window(event) {
     }
 }
 
+
+function torbutton_open_network_settings() {
+  var obsSvc = Components.classes["@mozilla.org/observer-service;1"]
+                .getService(Ci.nsIObserverService);
+  obsSvc.notifyObservers(this, "TorOpenNetworkSettings", null);
+}
+
+
 window.addEventListener('load',torbutton_new_window,false);
 window.addEventListener('unload', torbutton_close_window, false);
 
