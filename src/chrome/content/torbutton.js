@@ -1,4 +1,3 @@
-// Bug 1506 P0-P5: This is the main Torbutton overlay file. Much needs to be
 // preserved here, but in an ideal world, most of this code should perhaps be
 // moved into an XPCOM service, and much can also be tossed. See also
 // individual 1506 comments for details.
@@ -8,6 +7,7 @@
 //       http://kb.mozillazine.org/Links_to_local_pages_don%27t_work
 
 const k_tb_browser_update_needed_pref = "extensions.torbutton.updateNeeded";
+const k_tb_tor_check_failed_topic = "Torbutton:TorCheckFailed";
 
 // status
 var m_tb_wasinited = false;
@@ -33,6 +33,8 @@ var m_tb_tbb = false;
 var m_tb_control_port = null;
 var m_tb_control_host = null;
 var m_tb_control_pass = null;
+
+var m_tb_orig_BrowserOnAboutPageLoad = null;
 
 // Bug 1506 P1: This object is only for updating the UI for toggling and style
 var torbutton_window_pref_observer =
@@ -72,6 +74,9 @@ var torbutton_window_pref_observer =
                 var mode = m_tb_prefs.getBoolPref("extensions.torbutton.settings_applied");
                 torbutton_update_toolbutton(mode);
                 torbutton_update_statusbar(mode);
+
+                // Update all open about:tor pages.
+                torbutton_update_all_abouttor_pages(undefined, undefined);
                 break;
             case k_tb_browser_update_needed_pref:
                 torbutton_notify_if_update_needed();
@@ -200,6 +205,41 @@ var torbutton_unique_pref_observer =
         }
     }
 }
+
+var torbutton_tor_check_observer = {
+    register: function()
+    {
+        this._obsSvc = Cc["@mozilla.org/observer-service;1"]
+                         .getService(Ci.nsIObserverService);
+        this._obsSvc.addObserver(this, k_tb_tor_check_failed_topic, false);
+    },
+
+    unregister: function()
+    {
+        if (this._obsSvc)
+          this._obsSvc.removeObserver(this, k_tb_tor_check_failed_topic);
+    },
+
+    observe: function(subject, topic, data)
+    {
+      if (topic == k_tb_tor_check_failed_topic) {
+        // Update toolbar icon and tooltip.
+        var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+        torbutton_update_toolbutton(mode);
+
+        // Update all open about:tor pages. If the user does not have an
+        // about:tor page open in the front most window, open one.
+        if (torbutton_update_all_abouttor_pages(undefined, false) < 1) {
+          var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+              .getService(Components.interfaces.nsIWindowMediator);
+          var win = wm.getMostRecentWindow("navigator:browser");
+          if (win == window) {
+            gBrowser.selectedTab = gBrowser.addTab("about:tor");
+          }
+        }
+      }
+    }
+};
 
 // Bug 1506 P1
 function torbutton_set_panel_view() {
@@ -457,6 +497,10 @@ function torbutton_init() {
 		}
     }
 
+    // Add our hook into about page load
+    m_tb_orig_BrowserOnAboutPageLoad = window.BrowserOnAboutPageLoad;
+    window.BrowserOnAboutPageLoad = torbutton_override_BrowserOnAboutPageLoad;
+
     // initialize preferences before we start our prefs observer
     torbutton_init_prefs();
 
@@ -468,6 +512,9 @@ function torbutton_init() {
 
     torbutton_log(1, 'registering pref observer');
     torbutton_window_pref_observer.register(); 
+
+    torbutton_log(1, "registering Tor check observer");
+    torbutton_tor_check_observer.register();
     
     //setting up context menu
     //var contextMenu = document.getElementById("contentAreaContextMenu");
@@ -716,6 +763,15 @@ function torbutton_get_statuspanel() {
     return o_statuspanel;
 }
 
+function torbutton_update_is_needed() {
+    var updateNeeded = false;
+    try {
+        updateNeeded = m_tb_prefs.getBoolPref(k_tb_browser_update_needed_pref);
+    } catch (e) {}
+
+    return updateNeeded;
+}
+
 function torbutton_notify_if_update_needed() {
     function setOrClearAttribute(aElement, aAttrName, aValue)
     {
@@ -728,14 +784,14 @@ function torbutton_notify_if_update_needed() {
             aElement.removeAttribute(aAttrName);
     }
 
-    var updateNeeded = false;
-    try {
-        updateNeeded = m_tb_prefs.getBoolPref(k_tb_browser_update_needed_pref);
-    } catch (e) {}
+    let updateNeeded = torbutton_update_is_needed();
 
     // Change look of toolbar item (enable/disable animated update icon).
     var btn = torbutton_get_toolbutton();
     setOrClearAttribute(btn, "tbUpdateNeeded", updateNeeded);
+
+    // Update all open about:tor pages.
+    torbutton_update_all_abouttor_pages(updateNeeded, undefined);
 
     // Hide/show download menu item and preceding separator.
     var item = document.getElementById("torbutton-downloadUpdate");
@@ -758,6 +814,77 @@ function torbutton_download_update() {
 
     var newTab = gBrowser.addTab(downloadURI);
     gBrowser.selectedTab = newTab;
+}
+
+// Pass undefined for a parameter to have this function determine it.
+// Returns a count of open pages that were updated,
+function torbutton_update_all_abouttor_pages(aUpdateNeeded, aTorIsOn) {
+  if (aUpdateNeeded === undefined)
+    aUpdateNeeded = torbutton_update_is_needed();
+  if (aTorIsOn === undefined)
+    aTorIsOn = torbutton_tor_check_ok();
+
+  var count = 0;
+  var tabBrowser = top.getBrowser();
+  var tabs = tabBrowser.mTabs;
+  if (tabs && (tabs.length > 0)) {
+    for (var tab = tabs[0]; tab != null; tab = tab.nextSibling) {
+      try {
+        let doc = tabBrowser.getBrowserForTab(tab).contentDocument;
+        if (torbutton_update_abouttor_doc(doc, aTorIsOn, aUpdateNeeded))
+          ++count;
+      } catch(e) {}
+    }
+  }
+
+  return count;
+}
+
+// Returns true if aDoc is an about:tor page.
+function torbutton_update_abouttor_doc(aDoc, aTorOn, aUpdateNeeded) {
+  var isAboutTor = torbutton_is_abouttor_doc(aDoc);
+  if (isAboutTor) {
+    if (aTorOn)
+      aDoc.body.setAttribute("toron", "yes");
+    else
+      aDoc.body.removeAttribute("toron");
+
+    if (aUpdateNeeded)
+      aDoc.body.setAttribute("torNeedsUpdate", "yes"); 
+    else
+      aDoc.body.removeAttribute("torNeedsUpdate");
+  }
+
+  return isAboutTor;
+}
+
+function torbutton_override_BrowserOnAboutPageLoad(aDoc) {
+  if (torbutton_is_abouttor_doc(aDoc) &&
+      !aDoc.documentElement.hasAttribute("aboutTorLoaded")) {
+    aDoc.documentElement.setAttribute("aboutTorLoaded", true);
+
+    // Show correct Tor on/off and "update needed" status.
+    let torOn = torbutton_tor_check_ok();
+    let needsUpdate = torbutton_update_is_needed();
+    torbutton_update_abouttor_doc(aDoc, torOn, needsUpdate);
+
+    // Insert "Test Tor Network Settings" url.
+    let elem = aDoc.getElementById("testTorSettings");
+    if (elem) {
+      let locale = m_tb_prefs.getCharPref("general.useragent.locale");
+      locale = locale.replace(/-/g, '_');
+      let url = m_tb_prefs.getCharPref(
+                      "extensions.torbutton.test_url_interactive");
+      elem.href = url.replace(/__LANG__/g, locale);
+    }
+  }
+
+  if (m_tb_orig_BrowserOnAboutPageLoad)
+    m_tb_orig_BrowserOnAboutPageLoad(aDoc);
+}
+
+function torbutton_is_abouttor_doc(aDoc) {
+  return (aDoc && /^about:tor$/i.test(aDoc.documentURI.toLowerCase()));
 }
 
 // Bug 1506 P0: Toggle. Kill kill kill.
@@ -890,35 +1017,17 @@ function torbutton_do_async_versioncheck() {
             return -1;
           }
           try {
-            var locale = m_tb_prefs.getCharPref("general.useragent.locale");
             var version_list = JSON.parse(req.responseText);
             var my_version = m_tb_prefs.getCharPref("torbrowser.version");
             for (var v in version_list) {
               if (version_list[v] == my_version) {
                 torbutton_log(3, "Version check passed.");
                 m_tb_prefs.setBoolPref(k_tb_browser_update_needed_pref, false);
-                var homepage = m_tb_prefs.getComplexValue("browser.startup.homepage",
-                       Components.interfaces.nsIPrefLocalizedString).data;
-                if (homepage.indexOf("https://check.torproject.org/") == 0) {
-                  var str = Components.classes["@mozilla.org/supports-string;1"]
-                                    .createInstance(Components.interfaces.nsISupportsString);
-                  str.data = "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=1";
-                  m_tb_prefs.setComplexValue("browser.startup.homepage",
-                                             Components.interfaces.nsISupportsString,
-                                             str);
-                }
                 return;
               }
             }
             torbutton_log(5, "Your Tor Browser is out of date.");
             m_tb_prefs.setBoolPref(k_tb_browser_update_needed_pref, true);
-            // Not up to date
-            var str = Components.classes["@mozilla.org/supports-string;1"]
-                              .createInstance(Components.interfaces.nsISupportsString);
-            str.data = "https://check.torproject.org/?lang="+locale+"&small=1&uptodate=0";
-            m_tb_prefs.setComplexValue("browser.startup.homepage",
-                                       Components.interfaces.nsISupportsString,
-                                       str);
             return;
           } catch(e) {
             torbutton_log(5, "Version check failed! JSON parsing error: "+e);
@@ -996,7 +1105,6 @@ function torbutton_check_version() {
 // but will need to be decoupled from the toggle logic :/
 function torbutton_test_settings() {
     var wasEnabled = true;
-    var ret = 0;
     if(!torbutton_check_status()) {
         wasEnabled = false;
         torbutton_enable_tor(true);
@@ -1006,12 +1114,9 @@ function torbutton_test_settings() {
 
     m_tb_prefs.setBoolPref("extensions.torbutton.test_failed", true);
     try {
-        var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-                                .createInstance(Components.interfaces.nsIXMLHttpRequest);
-        //var req = new XMLHttpRequest(); Blocked by content policy
-        var url = m_tb_prefs.getCharPref("extensions.torbutton.test_url");
-        req.open('GET', url, false);
-        req.overrideMimeType("text/xml");
+        var checkSvc = Cc["@torproject.org/torbutton-torCheckService;1"]
+                         .getService(Ci.nsISupports).wrappedJSObject;
+        var req = checkSvc.createCheckRequest(false);
         req.send(null);
     } catch(e) {
         // FIXME: This happens if this function is called from a browser
@@ -1027,44 +1132,12 @@ function torbutton_test_settings() {
         torbutton_log(5, "Test failed! Tor internal error: "+e);
         return 0;
     }
-    if(req.status == 200) {
-        if(!req.responseXML) {
-            if(!wasEnabled) torbutton_disable_tor();
-            torbutton_log(5, "Test failed! Not text/xml!");
-            return 1;
-        }
 
-        var result = req.responseXML.getElementById('TorCheckResult');
-
-        if(result===null) {
-            torbutton_log(5, "Test failed! No TorCheckResult element");
-            ret = 2;
-        } else if(typeof(result.target) == 'undefined' 
-                || result.target === null) {
-            torbutton_log(5, "Test failed! No target");
-            ret = 3;
-        } else if(result.target === "success") {
-            torbutton_log(3, "Test Successful");
-            m_tb_prefs.setBoolPref("extensions.torbutton.test_failed", false);
-            ret = 4;
-        } else if(result.target === "failure") {
-            torbutton_log(5, "Tor test failed!");
-            ret = 5;
-        } else if(result.target === "unknown") {
-            torbutton_log(5, "Tor test failed. TorDNSEL Failure?");
-            ret = 6;
-        } else {
-            torbutton_log(5, "Tor test failed. Strange target.");
-            ret = 7;
-        }
-    } else {
-        torbutton_log(5, "Tor test failed. HTTP Error: "+req.status);
-        ret = -req.status;
-    }
-    
-    torbutton_log(3, "Done testing Tor settings. Result: "+ret);
-        
+    var ret = checkSvc.parseCheckResponse(req);
+    if (ret == 4)
+      m_tb_prefs.setBoolPref("extensions.torbutton.test_failed", false);
     if(!wasEnabled) torbutton_disable_tor();
+    torbutton_log(3, "Done testing Tor settings. Result: "+ret);
     return ret;
 }
 
@@ -1103,7 +1176,7 @@ function torbutton_update_toolbutton(mode)
   var o_stringbundle = torbutton_get_stringbundle();
   var tooltip = "";
 
-  if (mode) {
+  if (mode && torbutton_tor_check_ok()) {
       tooltip = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
       o_toolbutton.setAttribute('tbstatus', 'on');
       o_toolbutton.setAttribute('tooltiptext', tooltip);
@@ -1123,7 +1196,7 @@ function torbutton_update_statusbar(mode)
     var label = "";
     var tooltip = "";
 
-    if (mode) {
+    if (mode && torbutton_tor_check_ok()) {
         label   = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
         tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.enabled");
         o_statuspanel.style.color = "#390";
@@ -1224,7 +1297,8 @@ function torbutton_socket_readline(input) {
   var str = "";
   var bytes;
   while((bytes = input.readBytes(1)) != "\n") {
-    str += bytes;
+    if (bytes != '\r')
+      str += bytes;
   }
   return str;
 }
@@ -1256,7 +1330,7 @@ function torbutton_array_to_hexdigits(array) {
 // Bug 1506 P4: Control port interaction. Needed for New Identity.
 //
 // Executes a command on the control port.
-// Return 0 in error, 1 for success.
+// Return a string response upon success and null upon error.
 function torbutton_send_ctrl_cmd(command) {
   try {
     var socketTransportService = Components.classes["@mozilla.org/network/socket-transport-service;1"]
@@ -1282,21 +1356,21 @@ function torbutton_send_ctrl_cmd(command) {
 
     if (bytes.indexOf("250") != 0) {
       torbutton_safelog(4, "Unexpected auth response on control port "+m_tb_control_port+":", bytes);
-      return 0;
+      return null;
     }
 
     outputStream.writeBytes(command, command.length);
     bytes = torbutton_socket_readline(inputStream);
     if(bytes.indexOf("250") != 0) {
       torbutton_safelog(4, "Unexpected command response on control port "+m_tb_control_port+":", bytes);
-      return 0;
+      return null;
     }
 
     socket.close(1);
-    return 1;
+    return bytes.substr(4);
   } catch(e) {
     torbutton_log(4, "Exception on control port "+e);
-    return 0;
+    return null;
   }
 }
 
@@ -1515,7 +1589,7 @@ function torbutton_do_new_identity() {
     torbutton_log(5, "Torbutton cannot safely newnym. It does not have access to the Tor Control Port.");
     window.alert(warning);
   } else {
-    if(torbutton_send_ctrl_cmd("SIGNAL NEWNYM\r\n") == 0) {
+    if (!torbutton_send_ctrl_cmd("SIGNAL NEWNYM\r\n")) {
       var o_stringbundle = torbutton_get_stringbundle();
       var warning = o_stringbundle.GetStringFromName("torbutton.popup.no_newnym");
       torbutton_log(5, "Torbutton was unable to request a new circuit from Tor");
@@ -1532,6 +1606,133 @@ function torbutton_do_new_identity() {
 
   // Close the current window for added safety
   window.close();
+}
+
+function torbutton_do_tor_check()
+{
+  let checkSvc = Cc["@torproject.org/torbutton-torCheckService;1"]
+                   .getService(Ci.nsISupports).wrappedJSObject;
+  if (checkSvc.kCheckNotInitiated != checkSvc.statusOfTorCheck)
+    return; // Only do the check once.
+
+  // If we have a tor control port and transparent torification is off,
+  // perform a check via the control port.
+  if (m_tb_control_port &&
+      !m_tb_prefs.getBoolPref("extensions.torbutton.saved.transparentTor")) {
+    if (torbutton_local_tor_check())
+      checkSvc.statusOfTorCheck = checkSvc.kCheckSuccessful;
+    else {
+      // The check failed.  Update toolbar icon and tooltip.
+      checkSvc.statusOfTorCheck = checkSvc.kCheckFailed;
+      var mode = m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled");
+      torbutton_update_toolbutton(mode);
+    }
+  }
+  else {
+    // A local check is not possible, so perform a remote check.
+    torbutton_initiate_remote_tor_check();
+  }
+}
+
+function torbutton_local_tor_check()
+{
+  let proxyType = m_tb_prefs.getIntPref("network.proxy.type");
+  if (0 == proxyType)
+    return false;
+
+  // Ask tor for its SOCKS listener address and port and compare to the
+  // browser preferences.
+  const kCmdArg = "net/listeners/socks";
+  let resp = torbutton_send_ctrl_cmd("GETINFO " + kCmdArg + "\r\n");
+  if (!resp)
+    return false;
+
+  function logUnexpectedResponse()
+  {
+    torbutton_log(5, "unexpected tor response: " + resp);
+  }
+
+  // Sample response: net/listeners/socks="127.0.0.1:9150"
+  // First, check for command argument prefix.
+  resp = resp.toLowerCase();
+  if (0 != resp.indexOf(kCmdArg + '=')) {
+    logUnexpectedResponse();
+    return false;
+  }
+
+  // Remove double quotes if present.
+  resp = resp.substr(kCmdArg.length + 1);
+  let len = resp.length;
+  if ((len > 2) && ('"' == resp.charAt(0)) && ('"' == resp.charAt(len - 1)))
+    resp = resp.substring(1, len - 1);
+
+  let tokens = resp.split(':');
+  if (tokens.length < 2) {
+    logUnexpectedResponse();
+    return false;
+  }
+
+  let torSocksAddr = tokens[0];
+  let torSocksPort = parseInt(tokens[1], 10);
+  if ((torSocksAddr.length < 1) || isNaN(torSocksPort)) {
+    logUnexpectedResponse();
+    return false;
+  }
+
+  torbutton_log(2, "Tor socks listener: " + torSocksAddr + ':' + torSocksPort);
+
+  let socksAddr = m_tb_prefs.getCharPref("network.proxy.socks");
+  let socksPort = m_tb_prefs.getIntPref("network.proxy.socks_port");
+
+  return ((socksAddr == torSocksAddr) && (socksPort == torSocksPort));
+} // torbutton_local_tor_check
+
+
+function torbutton_initiate_remote_tor_check()
+{
+  let obsSvc = Cc["@mozilla.org/observer-service;1"]
+                 .getService(Ci.nsIObserverService);
+
+  try {
+      let checkSvc = Cc["@torproject.org/torbutton-torCheckService;1"]
+                       .getService(Ci.nsISupports).wrappedJSObject;
+      let req = checkSvc.createCheckRequest(true); // async
+      req.onreadystatechange = function (aEvent) {
+          if (req.readyState === 4) {
+            let ret = checkSvc.parseCheckResponse(req);
+
+            // If we received an error response from check.torproject.org,
+            // set the status of the tor check to failure (we don't want
+            // to indicate failure if we didn't receive a response).
+            if (ret == 2 || ret == 3 || ret == 5 || ret == 6 || ret == 7) {
+              checkSvc.statusOfTorCheck = checkSvc.kCheckFailed;
+              obsSvc.notifyObservers(null, k_tb_tor_check_failed_topic, null);
+            } else if (ret == 4) {
+              checkSvc.statusOfTorCheck = checkSvc.kCheckSuccessful;
+            } // Otherwise, redo the check later
+
+            torbutton_log(3, "Tor remote check done. Result: " + ret);
+          }
+      };
+
+      torbutton_log(3, "Sending async Tor remote check");
+      req.send(null);
+  } catch(e) {
+    if (e.result == 0x80004005) // NS_ERROR_FAILURE
+      torbutton_log(5, "Tor check failed! Is tor running?");
+    else
+      torbutton_log(5, "Tor check failed! Tor internal error: "+e);
+
+    checkSvc.statusOfTorCheck = checkSvc.kCheckFailed;
+    obsSvc.notifyObservers(null, k_tb_tor_check_failed_topic, null);
+  }
+} // torbutton_initiate_remote_tor_check()
+
+function torbutton_tor_check_ok()
+{
+  let checkSvc = Cc["@torproject.org/torbutton-torCheckService;1"]
+                   .getService(Ci.nsISupports).wrappedJSObject;
+  return (checkSvc.kCheckFailed != checkSvc.statusOfTorCheck);
 }
 
 // Bug 1506 P5: Despite the name, this is the way we disable
@@ -2251,12 +2452,15 @@ function torbutton_new_window(event)
 
     // Check the version on every new window. We're already pinging check in these cases.    
     torbutton_do_async_versioncheck();
+
+    torbutton_do_tor_check();
 }
 
 // Bug 1506 P2: This is only needed because we have observers
 // in XUL that should be in an XPCOM component
 function torbutton_close_window(event) {
     torbutton_window_pref_observer.unregister();
+    torbutton_tor_check_observer.unregister();
 
     // TODO: This is a real ghetto hack.. When the original window
     // closes, we need to find another window to handle observing 

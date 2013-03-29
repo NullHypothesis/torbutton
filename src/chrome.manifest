@@ -146,6 +146,12 @@ contract @torproject.org/startup-observer;1 {06322def-6fde-4c06-aef6-47ae8e79962
 component {e6204253-b690-4159-bfe8-d4eedab6b3be} components/cookie-jar-selector.js
 contract @torproject.org/cookie-jar-selector;1 {e6204253-b690-4159-bfe8-d4eedab6b3be}
 
+component {84d47da6-79c3-4661-aa9f-8049476f7bf5} components/aboutTor.js
+contract @mozilla.org/network/protocol/about;1?what=tor {84d47da6-79c3-4661-aa9f-8049476f7bf5}
+
+component {5d57312b-5d8c-4169-b4af-e80d6a28a72e} components/torCheckService.js
+contract @torproject.org/torbutton-torCheckService;1 {5d57312b-5d8c-4169-b4af-e80d6a28a72e}
+
 component {f36d72c9-9718-4134-b550-e109638331d7} components/torbutton-logger.js
 contract @torproject.org/torbutton-logger;1 {f36d72c9-9718-4134-b550-e109638331d7}
 
