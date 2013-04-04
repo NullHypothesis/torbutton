@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Preferenze di Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Impostazioni di visualizzazione">
-<!ENTITY torbutton.prefs.display_panel "Mostra le impostazioni del proxy Tor nella barra di stato">
-<!ENTITY torbutton.prefs.panel_format "Formato di visualizzazione della barra di stato:">
-<!ENTITY torbutton.prefs.panel_text_format "Testo">
-<!ENTITY torbutton.prefs.panel_icon_format "Icona">
 <!ENTITY torbutton.prefs.tor_settings "Configurazione del proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Usa le impostazioni proxy consigliate per questa versione di Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Usa Privoxy">

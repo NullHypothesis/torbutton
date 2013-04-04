@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Preferințe Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Setări de vizualizare">
-<!ENTITY torbutton.prefs.display_panel "Arată setările proxy pentru Tor în bara de statut">
-<!ENTITY torbutton.prefs.panel_format "Bara de stare,formatul de afişare:">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Iconiță">
 <!ENTITY torbutton.prefs.tor_settings "Setările pentru proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Folosește setările pentru proxy recomandate pentru versiunea mea de Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Folosește Privoxy">

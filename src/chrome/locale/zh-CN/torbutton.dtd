@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton 首选项">
-<!ENTITY torbutton.prefs.display_settings "显示设置">
-<!ENTITY torbutton.prefs.display_panel "在状态栏显示 Tor 代理设置">
-<!ENTITY torbutton.prefs.panel_format "状态栏显示格式：">
-<!ENTITY torbutton.prefs.panel_text_format "文本">
-<!ENTITY torbutton.prefs.panel_icon_format "图标">
 <!ENTITY torbutton.prefs.tor_settings "代理设置">
 <!ENTITY torbutton.prefs.recommended_settings "为该版本 Firefox 使用推荐的代理设置">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">

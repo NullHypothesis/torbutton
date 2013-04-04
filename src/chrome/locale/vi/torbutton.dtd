@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Tùy chỉnh Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Thiết lập Hiển thị">
-<!ENTITY torbutton.prefs.display_panel "Hiển thị thiết lập proxy Tor trong thanh trạng thái">
-<!ENTITY torbutton.prefs.panel_format "Định dạng hiển thị thanh trạng thái:">
-<!ENTITY torbutton.prefs.panel_text_format "Chữ">
-<!ENTITY torbutton.prefs.panel_icon_format "Biểu tượng">
 <!ENTITY torbutton.prefs.tor_settings "Thiết lập Proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Dùng thiết lập proxy đã khuyến nghị cho Firefox của tôi">
 <!ENTITY torbutton.prefs.use_privoxy "Dùng Privoxy">

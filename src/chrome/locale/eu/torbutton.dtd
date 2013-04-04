@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton Hobespenak">
-<!ENTITY torbutton.prefs.display_settings "Erakutsi Ezarpenak">
-<!ENTITY torbutton.prefs.display_panel "Erakutsi Tor proxy ezarpenak egoera barran">
-<!ENTITY torbutton.prefs.panel_format "Egoera barran agertzeko formatua:">
-<!ENTITY torbutton.prefs.panel_text_format "Testua">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikonoa">
 <!ENTITY torbutton.prefs.tor_settings "Proxy Ezarpenak">
 <!ENTITY torbutton.prefs.recommended_settings "Erabili nire Firefox bertsiorako proxy ezarpen gomendatuak">
 <!ENTITY torbutton.prefs.use_privoxy "Erabili Privoxy">

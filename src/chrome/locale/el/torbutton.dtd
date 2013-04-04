@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Επιλογές Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Ρυθμίσεις εμφάνισης">
-<!ENTITY torbutton.prefs.display_panel "Εμφάνιση της ρύθμισης του διαμεσολαβητή Tor στην γραμμή κατάστασης">
-<!ENTITY torbutton.prefs.panel_format "Προβολή στη γραμμή κατάστασης με :">
-<!ENTITY torbutton.prefs.panel_text_format "Κείμενο">
-<!ENTITY torbutton.prefs.panel_icon_format "Εικονίδιο">
 <!ENTITY torbutton.prefs.tor_settings "Ρυθμίσεις διαμεσολαβητή">
 <!ENTITY torbutton.prefs.recommended_settings "Χρήση των προτεινόμενων ρυθμίσεων για την τρέχουσα έκδοση του Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Χρήση του Privoxy">

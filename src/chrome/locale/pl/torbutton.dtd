@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton - ustawienia">
-<!ENTITY torbutton.prefs.display_settings "Ustawienia wyświetlania">
-<!ENTITY torbutton.prefs.display_panel "Wyświetlaj stan proxy Tor na pasku stanu">
-<!ENTITY torbutton.prefs.panel_format "Format wyświetlania na pasku stanu:">
-<!ENTITY torbutton.prefs.panel_text_format "Tekst">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikona">
 <!ENTITY torbutton.prefs.tor_settings "Ustawienia proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Użyj zalecanych ustawień proxy dla tej wersji Firefoksa">
 <!ENTITY torbutton.prefs.use_privoxy "Użyj Privoxy">

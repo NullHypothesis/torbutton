@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton Asetukset">
-<!ENTITY torbutton.prefs.display_settings "Ulkoasu">
-<!ENTITY torbutton.prefs.display_panel "Näytä Tor-välityspalvelimen asetukset tilarivillä">
-<!ENTITY torbutton.prefs.panel_format "Tilapalkin ulkoasu:">
-<!ENTITY torbutton.prefs.panel_text_format "Teksti">
-<!ENTITY torbutton.prefs.panel_icon_format "Kuvake">
 <!ENTITY torbutton.prefs.tor_settings "Välityspalvelin Asetukset">
 <!ENTITY torbutton.prefs.recommended_settings "Käytä suositeltuja välityspalvelin asetuksia minun Firefox versiolleni.">
 <!ENTITY torbutton.prefs.use_privoxy "Käytä Privoxyä">

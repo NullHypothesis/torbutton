@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Tor Button ဦးစားေပးညႊန္ျပခ်က္မ်ား">
-<!ENTITY torbutton.prefs.display_settings "ျပသရန္ ခ်ိန္ညိႇခ်က္မ်ား">
-<!ENTITY torbutton.prefs.display_panel "Tor proxy ခ်ိန္ညႇိခ်က္မ်ားကို Status Bar တြင္ ျပသရန္">
-<!ENTITY torbutton.prefs.panel_format "Status bar ျပသမႈ ပံုစံ">
-<!ENTITY torbutton.prefs.panel_text_format "စာသား">
-<!ENTITY torbutton.prefs.panel_icon_format "အိုင္ကြန္ ရုပ္ပံု">
 <!ENTITY torbutton.prefs.tor_settings "Proxy ခ်ိန္ညႇိခ်က္မ်ား">
 <!ENTITY torbutton.prefs.recommended_settings "အၾကံျပဳ ေထာက္ခံေသာ proxy ခ်ိန္ညိႇခ်က္မ်ားကို မိမိ၏ Firefox version တြင္ အသံုးျပဳရန္">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy ကို အသံုးျပဳရန္">

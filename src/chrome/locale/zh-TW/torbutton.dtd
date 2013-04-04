@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton 設置">
-<!ENTITY torbutton.prefs.display_settings "顯示設定">
-<!ENTITY torbutton.prefs.display_panel "在狀態列顯示 Tor proxy 設定">
-<!ENTITY torbutton.prefs.panel_format "狀態列顯示格式:">
-<!ENTITY torbutton.prefs.panel_text_format "文字">
-<!ENTITY torbutton.prefs.panel_icon_format "圖示">
 <!ENTITY torbutton.prefs.tor_settings "Proxy 設定">
 <!ENTITY torbutton.prefs.recommended_settings "在Firefox 使用建議的 Proxy 設定">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">

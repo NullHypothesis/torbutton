@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Inställningar för Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Visa Inställningar">
-<!ENTITY torbutton.prefs.display_panel "Visa inställningar för Tor proxy i statusraden">
-<!ENTITY torbutton.prefs.panel_format "Status meny visningsformat">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikon">
 <!ENTITY torbutton.prefs.tor_settings "Inställningar för proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Använd dom inställningar som rekommenderas för min version av Firefox för att ställa in proxyn">
 <!ENTITY torbutton.prefs.use_privoxy "Använd Privoxy">

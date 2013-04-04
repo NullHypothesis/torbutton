@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton поставке">
-<!ENTITY torbutton.prefs.display_settings "Поставке приказа">
-<!ENTITY torbutton.prefs.display_panel "Прикажи поставке посредника у статусној траци">
-<!ENTITY torbutton.prefs.panel_format "Формат приказивања статусне траке:">
-<!ENTITY torbutton.prefs.panel_text_format "Текст">
-<!ENTITY torbutton.prefs.panel_icon_format "Икона">
 <!ENTITY torbutton.prefs.tor_settings "Поставке посредника">
 <!ENTITY torbutton.prefs.recommended_settings "Користи препоручене поставке посредника за моје издање фајерфокса">
 <!ENTITY torbutton.prefs.use_privoxy "Користи Privoxy">

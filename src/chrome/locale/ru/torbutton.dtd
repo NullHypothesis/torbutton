@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Настройки Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Отобразить настройки">
-<!ENTITY torbutton.prefs.display_panel "Показать Tor-прокси настройки в строке состояния">
-<!ENTITY torbutton.prefs.panel_format "Строка состояния формата отображения:">
-<!ENTITY torbutton.prefs.panel_text_format "Текст">
-<!ENTITY torbutton.prefs.panel_icon_format "Значок">
 <!ENTITY torbutton.prefs.tor_settings "Настройки прокси">
 <!ENTITY torbutton.prefs.recommended_settings "Использовать параметры прокси, рекомендованные для данной версии Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Использовать Privoxy">

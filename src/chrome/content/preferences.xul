@@ -20,7 +20,6 @@
      <tabs>
       <tab label="&torbutton.prefs.tor_settings;"/>
       <tab label="&torbutton.prefs.sec_settings;"/>
-      <tab label="&torbutton.prefs.display_settings;"/>
      </tabs>
      <tabpanels>
     <tabpanel>
@@ -154,19 +153,6 @@
        <checkbox id="torbutton_resistFingerprinting" 
               label="&torbutton.prefs.resist_fingerprinting;"/>
      </vbox>
-    </tabpanel>
-    <tabpanel>
-       <vbox>
-        <label class="indent" control="torbutton_panelStyle" value="&torbutton.prefs.panel_format;"/>
-        <radiogroup class="indent" id="torbutton_panelStyle">
-            <radio value="text" id="torbutton_panelStyleText" label="&torbutton.prefs.panel_text_format;"/>
-
-            <radio value="iconic" id="torbutton_panelStyleIcon" label="&torbutton.prefs.panel_icon_format;"/>
-
-        </radiogroup>
-        <checkbox id="torbutton_displayStatusPanel" label="&torbutton.prefs.display_panel;" 
-                  oncommand="torbutton_prefs_set_field_attributes(document)"/>
-       </vbox>
     </tabpanel>
 
 	</tabpanels>

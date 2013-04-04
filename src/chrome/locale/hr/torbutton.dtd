@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton postavke">
-<!ENTITY torbutton.prefs.display_settings "Prikaži postavke">
-<!ENTITY torbutton.prefs.display_panel "Prikaži Tor proxy postavke u statusnoj traci">
-<!ENTITY torbutton.prefs.panel_format "Oblik prikazivanja u statusnoj traci:">
-<!ENTITY torbutton.prefs.panel_text_format "Tekst">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikona">
 <!ENTITY torbutton.prefs.tor_settings "Proxy postavke">
 <!ENTITY torbutton.prefs.recommended_settings "Koristi preporučene proxy postavke za moju inačicu Firefoxa">
 <!ENTITY torbutton.prefs.use_privoxy "Koristi Privoxy">

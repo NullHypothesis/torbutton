@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton beállítások">
-<!ENTITY torbutton.prefs.display_settings "Megjelenítési beállítások">
-<!ENTITY torbutton.prefs.display_panel "A Tor proxy beállítások megjelenítése az állapot soron">
-<!ENTITY torbutton.prefs.panel_format "Állapot sor megjelenési formátum:">
-<!ENTITY torbutton.prefs.panel_text_format "Szöveg">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikon">
 <!ENTITY torbutton.prefs.tor_settings "Proxy beállítások">
 <!ENTITY torbutton.prefs.recommended_settings "Az ajánlott proxy beállítások használata a Firefox verziómhoz">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy használata">

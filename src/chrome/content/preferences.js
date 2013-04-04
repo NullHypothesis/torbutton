@@ -13,10 +13,6 @@ function torbutton_prefs_set_field_attributes(doc)
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
     var o_customprefs = torbutton_get_prefbranch('extensions.torbutton.custom.');
 
-    doc.getElementById('torbutton_panelStyle').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
-    doc.getElementById('torbutton_panelStyleText').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
-    doc.getElementById('torbutton_panelStyleIcon').setAttribute("disabled", !doc.getElementById('torbutton_displayStatusPanel').checked);
-
     // Privoxy is always recommended for Firefoxes not supporting socks_remote_dns
     if (doc.getElementById('torbutton_transparentTor').selected) {
         doc.getElementById('torbutton_settingsMethod').value = 'transparent';
@@ -151,13 +147,6 @@ function torbutton_prefs_init(doc) {
 
     var o_torprefs = torbutton_get_prefbranch('extensions.torbutton.');
 
-    doc.getElementById('torbutton_displayStatusPanel').checked = o_torprefs.getBoolPref('display_panel');
-    var panel_style = doc.getElementById('torbutton_panelStyle');
-    var panel_style_pref = o_torprefs.getCharPref('panel_style');
-    if (panel_style_pref == 'text')
-        panel_style.selectedItem = doc.getElementById('torbutton_panelStyleText');
-    else if (panel_style_pref == 'iconic')
-        panel_style.selectedItem = doc.getElementById('torbutton_panelStyleIcon');
     // doc.getElementById('torbutton_panelStyle').value = o_torprefs.getCharPref('panel_style');
     var settings_method = doc.getElementById('torbutton_settingsMethod');
     var settings_method_pref = o_torprefs.getCharPref('settings_method');
@@ -217,8 +206,6 @@ function torbutton_prefs_save(doc) {
         }
     }
 
-    o_torprefs.setBoolPref('display_panel',   doc.getElementById('torbutton_displayStatusPanel').checked);
-    o_torprefs.setCharPref('panel_style',     doc.getElementById('torbutton_panelStyle').value);
     o_torprefs.setCharPref('settings_method', doc.getElementById('torbutton_settingsMethod').value);
     o_torprefs.setBoolPref('use_privoxy',     doc.getElementById('torbutton_usePrivoxy').checked);
     o_torprefs.setCharPref('http_proxy',      doc.getElementById('torbutton_httpProxy').value);

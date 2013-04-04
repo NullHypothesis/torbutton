@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Agordoj de Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Fasad‐agordoj">
-<!ENTITY torbutton.prefs.display_panel "Display Tor proxy setting in the status bar">
-<!ENTITY torbutton.prefs.panel_format "Status bar display format:">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Icon">
 <!ENTITY torbutton.prefs.tor_settings "Retperant‐agordoj">
 <!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Uzi Privoxy’on">

@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Nastavení Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Zobrazit nastavení">
-<!ENTITY torbutton.prefs.display_panel "Zobrazit nastavení proxy serveru ve stavovém řádku">
-<!ENTITY torbutton.prefs.panel_format "Formát zobrazení status baru">
-<!ENTITY torbutton.prefs.panel_text_format "Text">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikona">
 <!ENTITY torbutton.prefs.tor_settings "Nastavení Proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Použít doporučená nastavení proxy pro mou verzi Firefoxu">
 <!ENTITY torbutton.prefs.use_privoxy "Použití Proxy">

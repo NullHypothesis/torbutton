@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Ayarlar">
-<!ENTITY torbutton.prefs.display_settings "Görünüm">
-<!ENTITY torbutton.prefs.display_panel "Durum çubuğunda proxy ayarlarını göster">
-<!ENTITY torbutton.prefs.panel_format "Durum çubuğu görüntüleme formatı:">
-<!ENTITY torbutton.prefs.panel_text_format "Metin">
-<!ENTITY torbutton.prefs.panel_icon_format "İkon">
 <!ENTITY torbutton.prefs.tor_settings "Proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Firefoxta varsayılan proxy ayarlarımı kullan">
 <!ENTITY torbutton.prefs.use_privoxy "Proxoy'i kullan">

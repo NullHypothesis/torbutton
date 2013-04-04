@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton設定">
-<!ENTITY torbutton.prefs.display_settings "表示設定">
-<!ENTITY torbutton.prefs.display_panel "Torプロクシ設定をステータスバーに表示する">
-<!ENTITY torbutton.prefs.panel_format "ステータスバーの表示方法: ">
-<!ENTITY torbutton.prefs.panel_text_format "テキスト">
-<!ENTITY torbutton.prefs.panel_icon_format "アイコン">
 <!ENTITY torbutton.prefs.tor_settings "プロクシ設定">
 <!ENTITY torbutton.prefs.recommended_settings "Firefoxのプロクシ設定を使う">
 <!ENTITY torbutton.prefs.use_privoxy "プロクシを使う">

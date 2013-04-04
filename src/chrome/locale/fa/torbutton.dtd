@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "تنظيمات دکمه تُر">
-<!ENTITY torbutton.prefs.display_settings "تنظيمات نمايش">
-<!ENTITY torbutton.prefs.display_panel "نمايش تنظيمات پراکسی تُر در نوار وضعيت">
-<!ENTITY torbutton.prefs.panel_format "چگونگی نمايش نوار وضعيت:">
-<!ENTITY torbutton.prefs.panel_text_format "متن">
-<!ENTITY torbutton.prefs.panel_icon_format "شمايل">
 <!ENTITY torbutton.prefs.tor_settings "تنظيمات پراکسی">
 <!ENTITY torbutton.prefs.recommended_settings "بکاربردن تنظيمات پراکسی توصيه شده برای نسخه فايرفاکس من">
 <!ENTITY torbutton.prefs.use_privoxy "استفاده از پرايواکسی (Privoxy)">

@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "הגדרות Torbutton">
-<!ENTITY torbutton.prefs.display_settings "הצג הגדרות">
-<!ENTITY torbutton.prefs.display_panel "הצג  הגדרות Tor proxy ">
-<!ENTITY torbutton.prefs.panel_format "פורמט שורת המצב:">
-<!ENTITY torbutton.prefs.panel_text_format "טקסט">
-<!ENTITY torbutton.prefs.panel_icon_format "אייקון">
 <!ENTITY torbutton.prefs.tor_settings "הגדרות פרוקסי">
 <!ENTITY torbutton.prefs.recommended_settings 'השתמש בהגדרות פרוקסי מומלצות עבור גרסת ה"פיירפוקס" שלי'>
 <!ENTITY torbutton.prefs.use_privoxy "השתמש בפריבוקסי">

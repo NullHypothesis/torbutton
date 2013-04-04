@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton ဦးစားပေးချက်များ">
-<!ENTITY torbutton.prefs.display_settings "ပြသမှု ချိန်ညှိချက်များ">
-<!ENTITY torbutton.prefs.display_panel "Tor proxy ချိန်ညှိချက်များကို status bar ထဲတွင် ပြသရန်">
-<!ENTITY torbutton.prefs.panel_format "Status bar ၌ ဖေါ်ပြမည့် ပုံစံ -">
-<!ENTITY torbutton.prefs.panel_text_format "စာသား">
-<!ENTITY torbutton.prefs.panel_icon_format "အိုင်ကွန်">
 <!ENTITY torbutton.prefs.tor_settings "ပရောက်ဇီ ချိန်ညှိချက်များ">
 <!ENTITY torbutton.prefs.recommended_settings "ကျွန်တော့် မီးလျှံမြေခွေး ဗားရှင်းအတွက် အကြံပြုထားသော ပရောက်ဇီ ချိန်ညှိချက်များကို အသုံးပြုရန်">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy ကို သုံးရန်">

@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "ટોરબટન પ્રાથમિકતાઓ">
-<!ENTITY torbutton.prefs.display_settings "દેખાવ ગોઠવણીઓ">
-<!ENTITY torbutton.prefs.display_panel "સ્થિતિપટ્ટીમાં ટોર પ્રોક્સી ગોઠવણીઓ દર્શાવો">
-<!ENTITY torbutton.prefs.panel_format "સ્થિતિપટ્ટી દેખાવ બંધારણ:">
-<!ENTITY torbutton.prefs.panel_text_format "લખાણ">
-<!ENTITY torbutton.prefs.panel_icon_format "ચિહ્ન">
 <!ENTITY torbutton.prefs.tor_settings "પ્રોક્સી ગોઠવણીઓ">
 <!ENTITY torbutton.prefs.recommended_settings "મારી ફાયરફોક્સ આવૃત્તિ માટે સૂચવેલ પ્રોક્સી ગોઠવણીઓ વાપરો">
 <!ENTITY torbutton.prefs.use_privoxy "પ્રોક્સી વાપરો">

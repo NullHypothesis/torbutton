@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton 환경 설정">
-<!ENTITY torbutton.prefs.display_settings "화면 설정">
-<!ENTITY torbutton.prefs.display_panel "상태바에 Tor 프록시 설정을 표시">
-<!ENTITY torbutton.prefs.panel_format "상태 바 표시 형태 : ">
-<!ENTITY torbutton.prefs.panel_text_format "텍스트">
-<!ENTITY torbutton.prefs.panel_icon_format "아이콘">
 <!ENTITY torbutton.prefs.tor_settings "프록시 설정">
 <!ENTITY torbutton.prefs.recommended_settings "내가 사용하고 있는 파이어폭스를 위한 추천 설정 사용">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy 사용">

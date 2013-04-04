@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "تفضيلات زر تور">
-<!ENTITY torbutton.prefs.display_settings "إعدادات العرض">
-<!ENTITY torbutton.prefs.display_panel "أظهر حالة الوسيط في شريط المتصفح">
-<!ENTITY torbutton.prefs.panel_format "صيغة عرض الحالة في الشريط:">
-<!ENTITY torbutton.prefs.panel_text_format "نص">
-<!ENTITY torbutton.prefs.panel_icon_format "أيقونة">
 <!ENTITY torbutton.prefs.tor_settings "إعدادات الوسيط">
 <!ENTITY torbutton.prefs.recommended_settings "استخدم إعدادات الوسيط المحبّذة لنسختي من فيرفكس">
 <!ENTITY torbutton.prefs.use_privoxy "استخدم Privoxy">

@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Preferensi Torbutton">
-<!ENTITY torbutton.prefs.display_settings "Pengaturan Tampilan">
-<!ENTITY torbutton.prefs.display_panel "Tampilkan pengaturan proxy Tor pada status bar">
-<!ENTITY torbutton.prefs.panel_format "Susunan tampilan status bar">
-<!ENTITY torbutton.prefs.panel_text_format "Teks">
-<!ENTITY torbutton.prefs.panel_icon_format "Ikon">
 <!ENTITY torbutton.prefs.tor_settings "Pengaturan proxy">
 <!ENTITY torbutton.prefs.recommended_settings "Gunakan pengaturan proxy yang disarankan untuk versi Firefox saya">
 <!ENTITY torbutton.prefs.use_privoxy "Gunakan Privoxy">

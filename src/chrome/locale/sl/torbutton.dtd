@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton nastavitve">
-<!ENTITY torbutton.prefs.display_settings "Nastavitve prikaza">
-<!ENTITY torbutton.prefs.display_panel "Prikaži nastavitev anonimizacije v statusni vrstici">
-<!ENTITY torbutton.prefs.panel_format "Način prikaza v statusni vrstici:">
-<!ENTITY torbutton.prefs.panel_text_format "besedilo">
-<!ENTITY torbutton.prefs.panel_icon_format "ikona">
 <!ENTITY torbutton.prefs.tor_settings "Nastavitve posredniškega (proxy) strežnika">
 <!ENTITY torbutton.prefs.recommended_settings "Uporabi priporočene nastavitve posredniškega strežnika za mojo različico Firefoxa">
 <!ENTITY torbutton.prefs.use_privoxy "Uporabi tudi povezavo preko Privoxy-a">

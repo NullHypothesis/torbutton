@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton voorkeuren">
-<!ENTITY torbutton.prefs.display_settings "Weergave-instellingen">
-<!ENTITY torbutton.prefs.display_panel "Tor proxy-instelling weergeven in de statusbalk">
-<!ENTITY torbutton.prefs.panel_format "Weergave in statusbalk:">
-<!ENTITY torbutton.prefs.panel_text_format "Tekst">
-<!ENTITY torbutton.prefs.panel_icon_format "Pictogram">
 <!ENTITY torbutton.prefs.tor_settings "Proxy-instellingen">
 <!ENTITY torbutton.prefs.recommended_settings "De aanbevolen proxy-instellingen voor mijn versie van Firefox gebruiken">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy gebruiken">

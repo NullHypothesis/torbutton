@@ -1,9 +1,4 @@
 <!ENTITY torbutton.prefs.title "Torbutton preferences">
-<!ENTITY torbutton.prefs.display_settings "Rādīt iestatījumus">
-<!ENTITY torbutton.prefs.display_panel "Rādīt Tor'a starpnieka iestatījumus statusa joslā">
-<!ENTITY torbutton.prefs.panel_format "Statusa joslas rādīšanas formāts:">
-<!ENTITY torbutton.prefs.panel_text_format "Teksts">
-<!ENTITY torbutton.prefs.panel_icon_format "Piktogramma">
 <!ENTITY torbutton.prefs.tor_settings "Starpnieka iestatījumi">
 <!ENTITY torbutton.prefs.recommended_settings "Lietot manai Firefox'a versijai ieteiktos starpnieka iestatījumus">
 <!ENTITY torbutton.prefs.use_privoxy "Lietot Privoxy">
