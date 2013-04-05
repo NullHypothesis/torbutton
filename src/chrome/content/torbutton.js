@@ -1245,8 +1245,12 @@ function torbutton_send_ctrl_cmd(command) {
     var socketTransportService = Components.classes["@mozilla.org/network/socket-transport-service;1"]
         .getService(Components.interfaces.nsISocketTransportService);
     var socket = socketTransportService.createTransport(null, 0, m_tb_control_host, m_tb_control_port, null);
-    var input = socket.openInputStream(3, 0, 0); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
-    var output = socket.openOutputStream(3, 0, 0); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
+
+    // If we don't get a response from the control port in 2 seconds, someting is wrong..
+    socket.setTimeout(Ci.nsISocketTransport.TIMEOUT_READ_WRITE, 2);
+
+    var input = socket.openInputStream(3, 1, 1); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
+    var output = socket.openOutputStream(3, 1, 1); // 3 == OPEN_BLOCKING|OPEN_UNBUFFERED
 
     var inputStream     = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
     var outputStream    = Cc["@mozilla.org/binaryoutputstream;1"].createInstance(Ci.nsIBinaryOutputStream);
