@@ -428,16 +428,33 @@ function torbutton_init() {
         } catch(e) {
             torbutton_log(4, 'unable to read authentication cookie');
         }
-    }
+    } else {
+        // Try to get password from Tor Launcher.
+        try {
+		    let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"]
+						 .getService(Ci.nsISupports).wrappedJSObject;
+            m_tb_control_pass = tlps.TorGetPassword(false);
+        } catch(e) {}
+	}
 
     if (environ.exists("TOR_CONTROL_PORT")) {
         m_tb_control_port = environ.get("TOR_CONTROL_PORT");
+    } else {
+        try {
+            const kTLControlPortPref = "extensions.torlauncher.control_port";
+            m_tb_control_port = m_tb_prefs.getIntPref(kTLControlPortPref);
+        } catch(e) {}
     }
 
     if (environ.exists("TOR_CONTROL_HOST")) {
         m_tb_control_host = environ.get("TOR_CONTROL_HOST");
     } else {
-        m_tb_control_host = "127.0.0.1";
+        try {
+            const kTLControlHostPref = "extensions.torlauncher.control_host";
+            m_tb_control_host = m_tb_prefs.getCharPref(kTLControlHostPref);
+        } catch(e) {
+            m_tb_control_host = "127.0.0.1";
+		}
     }
 
     // initialize preferences before we start our prefs observer
