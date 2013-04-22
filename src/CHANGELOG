@@ -1,3 +1,10 @@
+1.5.2:
+ 22 Apr 2013
+  * bug 8457: Allow session restore if the user allows disk actvity
+  * bug 8301: Remove the Display Settings panel and associated locales
+  * bug 6566: Fix "Transparent Torification" option.
+  * bug 8642: Fix a hang on New Identity.
+
 1.5.1:
  07 Mar 2013
   * bug 8324: Fix Drag+Drop crash by using a new TBB drag observer
