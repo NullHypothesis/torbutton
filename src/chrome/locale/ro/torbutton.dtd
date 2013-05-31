@@ -30,8 +30,10 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Despre Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Protectii Cookie-uri.">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copiaza URL-ul Tor">
@@ -51,7 +53,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Blochează Tor cache si sterge toate chache-urile când  comuţ Tor">
 <!ENTITY torbutton.prefs.block_cache "Blocheaza accesarea discului so memoriei când Tor este pornit">
 <!ENTITY torbutton.prefs.cookie_jars "Păstrează cookie-urile non-Tor într-o cutie protejate">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Foloseşte fereastra Protecţii Cookie pentru a alege">
 <!ENTITY torbutton.prefs.mmm_cookies "Eu voi gestiona manual cookie-urile mele (periculos)">
 <!ENTITY torbutton.prefs.clear_cookies "Şterge cookie-urile când comut Tor">
 <!ENTITY torbutton.prefs.disable_plugins "Opreşte plugin-urile in timpul funcţionări lui Tor(esenţial)">
@@ -118,14 +120,14 @@
 <!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
 <!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
 <!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
+<!ENTITY torbutton.cookiedialog.title "Gestionează Protecţii Cookie">
 <!ENTITY torbutton.cookiedialog.lockCol "Protejat">
 <!ENTITY torbutton.cookiedialog.domainCol "Gazda">
 <!ENTITY torbutton.cookiedialog.nameCol "Nume">
 <!ENTITY torbutton.cookiedialog.pathCol "Cale">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protejeaza Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Indeparteaza Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Deprotejează Cookie">
 <!ENTITY torbutton.cookiedialog.removeAllBut "Indeparteaza tot, mai putin protejat">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protejeaza Cookie-urile noi">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Nu proteja Cookie-urile noi">
@@ -141,7 +143,7 @@
 <!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Eliminați informații despre platformă și limbă din cererile câmpurilor de căutare Google">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
+<!ENTITY torbutton.prefs.transparentTor "Torificare transparentă (Necesită transproy sau Tor modificat)">
 <!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
 <!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
 <!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">

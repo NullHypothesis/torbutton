@@ -22,7 +22,7 @@
 <!ENTITY torbutton.pref_connection.more_info "Thông tin thêm">
 <!ENTITY torbutton.pref_connection_more_info.title "Trợ giúp">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton hiện đang được bật.  Nếu bạn muốn thay đổi thiết lập proxy không-Tor của bạn, vui lòng tắt Torbutton và quay trở lại đây.  Nếu bạn muốn thay đổi thiết lập Tor, vui lòng dùng cửa sổ tùy chỉnh Torbutton.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Giám định Mới">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Bật/tắt trạng thái Tor">
 <!ENTITY torbutton.context_menu.toggle.key "B">
@@ -30,12 +30,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "y">
 <!ENTITY torbutton.context_menu.about "Thông tin về Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "T">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
-<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.copyTor.key "y">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
@@ -130,9 +132,9 @@
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Vô hiệu hóa việc cập nhật đánh-dấu-động trong quá trình dùng Tor">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(khuyến cáo)">
+<!ENTITY torbutton.prefs.dtd_optional "(phụ)">
+<!ENTITY torbutton.prefs.dtd_crucial "(cấp thiết)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">

@@ -22,7 +22,7 @@
 <!ENTITY torbutton.pref_connection.more_info "Més informació">
 <!ENTITY torbutton.pref_connection_more_info.title "Ajuda">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton està activat.   Si voleu canviar la configuració del vostre proxy quan no funciona Tor, desactiveu Torbutton i torneu aquí.  Si voleu canviar la configuració de Tor, utilitzeu la finestra de preferències de Torbutton.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Nova identitat">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Commuta l'estat de Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -30,8 +30,10 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Sobre Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Protecció de les galetes">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copia la direcció URL de Tor">
@@ -58,7 +60,7 @@
 <!ENTITY torbutton.prefs.kill_bad_js "Bloquejar javascript perillós (vital)">
 <!ENTITY torbutton.prefs.isolate_content "Aïllar contingut dinàmic mentre Tor estigui activat (vital)">
 <!ENTITY torbutton.prefs.no_updates "Desactivar actualitzacions mentre Tor estigui activat">
-<!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
+<!ENTITY torbutton.prefs.set_uagent "Designa l'agent d'usuari quan Tor estigui activat (vital)">
 <!ENTITY torbutton.prefs.dynamic "Contingut dinàmic">
 <!ENTITY torbutton.prefs.cookies "Galetes">
 <!ENTITY torbutton.prefs.cache "Memòria cau">
@@ -75,43 +77,43 @@
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
-<!ENTITY torbutton.prefs.disable_domstorage "Disable DOM Storage during Tor usage (crucial)">
+<!ENTITY torbutton.prefs.disable_domstorage "Desactiva l'emmagatzematge DOM quan Tor estigui activat (vital)">
 <!ENTITY torbutton.prefs.forms "Forms">
-<!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.block_tforms "Bloqueja el desat de form i contrasenya quan Tor estigui activat (recomanat)">
+<!ENTITY torbutton.prefs.block_ntforms "Bloqueja el desat de form i contrassenya quan Tor no estigui activat (opcional)">
 <!ENTITY torbutton.prefs.tor "Tor">
-<!ENTITY torbutton.prefs.non_tor "Non-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
+<!ENTITY torbutton.prefs.non_tor "No-Tor">
+<!ENTITY torbutton.prefs.restore_tor "Quan s'inicii una sessió recuperada, situa l'estat de Tor com a:">
 <!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Reload cookie jar/clear cookies on Firefox crash (recommended)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
-<!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.close_tor "Close all Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.close_nontor "Close all Non-Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
-<!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Recarrega les galetes/esborra les galetes quan Firefox falli (recomanat)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "Emmagatzema les galetes amb Tor activat i sense en pots protegits (perillós)">
+<!ENTITY torbutton.prefs.clear_http_auth "Esborra sessions d'autenticació HTTP (recomanat)">
+<!ENTITY torbutton.prefs.block_js_history "Impedeix l'accés a l'historial quan Tor no estigui activat (vital)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Dimensiona les finestres a múltiples de 50px quan Tor estigui activat (recomanat)">
+<!ENTITY torbutton.prefs.close_tor "Tanca totes les finestres i pestanyes de Tor quan es desactivi (opcional)">
+<!ENTITY torbutton.prefs.close_nontor "Tanca totes les finestres i pestanyes fora de Tor quan aquest s'activi (opcional)">
+<!ENTITY torbutton.prefs.block_links "Bloqueja els clics als enllaços i actualitzacions de pàgina des de estats de Tor diferents (opcional)">
+<!ENTITY torbutton.prefs.jar_certs "Emmagatzema certificats SSL en pots separats per a Tor i fora de Tor (recomanat)">
+<!ENTITY torbutton.prefs.jar_ca_certs "Emmagatzema certificats CA en pots separats per a Tor i fora de Tor (recomanat)">
+<!ENTITY torbutton.prefs.locked_mode "Desactiva el botó i les dreceres de teclat per a evitar l'activació accidental de Tor">
+<!ENTITY torbutton.prefs.startup_state "En una arrencada normal, l'estat de Tor inicial serà:">
+<!ENTITY torbutton.prefs.shutdown_state "Estat de tancada">
+<!ENTITY torbutton.prefs.startup "Arrencada">
+<!ENTITY torbutton.prefs.block_tor_file_net "Bloqueja l'accés de Tor a la xarxa des de direccions file:// (recomanat)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "Bloqueja l'accés fora de Tor a la xarxa des de direccions file://">
+<!ENTITY torbutton.prefs.restore_defaults "Reestableix predeterminats">
+<!ENTITY torbutton.prefs.test_settings "Test de configuració">
+<!ENTITY torbutton.prefs.test_auto "Executa un test de configuració el primer cop que s'activi Tor per a cada arrencada de Firefox">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.tor_memory_jar "No desis les galetes de Tor al disc">
+<!ENTITY torbutton.prefs.nontor_memory_jar "No desis les galetes fora de Tor al disc">
+<!ENTITY torbutton.prefs.session_restore "Fes que la sessió desi i recuperi aquestes pestanyes:">
+<!ENTITY torbutton.prefs.nontor_tabs "Pestanyes sense Tor">
+<!ENTITY torbutton.prefs.tor_tabs "Pestanyes amb Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
+<!ENTITY torbutton.prefs.no_proxies_on "No hi ha Proxys per a:">
+<!ENTITY torbutton.prefs.no_proxy_warning "Alerta: eviteu utilitzar cap dels noms de l'equip d'aquí sobre.">
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
 <!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
 <!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
@@ -121,7 +123,7 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "Nom">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
@@ -129,18 +131,18 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
-<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
-<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
+<!ENTITY torbutton.prefs.disable_livemarks "Desactiva les adreces d'interès actives quan Tor estigui activat">
+<!ENTITY torbutton.prefs.dtd_recommended "(recomanat)">
+<!ENTITY torbutton.prefs.dtd_optional "(opcional)">
+<!ENTITY torbutton.prefs.dtd_crucial "(vital)">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirecciona les actualitzacions de Torbutton via Tor">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Utilitza automàticament un motor de cerca alternatiu quan aquest es presenti amb un Captcha de Google:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
-<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
+<!ENTITY torbutton.prefs.fix_google_srch "Desactiva les prioritats d'idioma dels suggeriments de la barra Google Search">
 <!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
 <!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
 <!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">

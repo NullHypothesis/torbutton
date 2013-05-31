@@ -30,12 +30,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "P/प">
 <!ENTITY torbutton.context_menu.about "टोर बटन के बरे मे ...">
 <!ENTITY torbutton.context_menu.about.key "A/अ">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A/अ">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
-<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.copyTor.key "P/प">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
@@ -79,7 +81,7 @@
 <!ENTITY torbutton.prefs.forms "Forms">
 <!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.tor "Tor">
+<!ENTITY torbutton.prefs.tor "टो">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">

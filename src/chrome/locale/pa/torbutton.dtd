@@ -1,9 +1,9 @@
 <!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
+<!ENTITY torbutton.prefs.tor_settings "ਪਰਾਕਸੀ ਸੈਟਿੰਗ">
 <!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
 <!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
 <!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
+<!ENTITY torbutton.prefs.custom_settings "ਖੁਦ ਪਰਾਕਸੀ ਸੈਟਿੰਗ ਦਿਓ">
 <!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
 <!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
@@ -20,16 +20,18 @@
 <!ENTITY torbutton.about.make_donation "making a donation.">
 <!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
 <!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
+<!ENTITY torbutton.pref_connection_more_info.title "ਸਹਾਇਤਾ">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
 <!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity_key "S">
 <!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Preferences...">
-<!ENTITY torbutton.context_menu.preferences.key "P">
+<!ENTITY torbutton.context_menu.preferences.key "p">
 <!ENTITY torbutton.context_menu.about "About Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
@@ -37,12 +39,12 @@
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
-<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorTab.key "p">
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
+<!ENTITY torbutton.prefs.sec_settings "ਸੁਰੱਖਿਆ ਸੈਟਿੰਗ">
 <!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
 <!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
@@ -79,7 +81,7 @@
 <!ENTITY torbutton.prefs.forms "Forms">
 <!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.tor "Tor">
+<!ENTITY torbutton.prefs.tor "ਟੌਰ">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
 <!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
@@ -100,7 +102,7 @@
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
-<!ENTITY torbutton.prefs.test_settings "Test Settings">
+<!ENTITY torbutton.prefs.test_settings "ਟੇਸਟ ਸੈਟਿੰਗ">
 <!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">

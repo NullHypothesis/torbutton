@@ -30,7 +30,9 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Torbutton에 대하여">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
+<!ENTITY torbutton.context_menu.downloadUpdate "Tor browser bundle 업데이트 다운로드">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "쿠키 보호">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
@@ -142,7 +144,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "구글 검색 쿼리시 플랫폼과 언어 정보를 벗겨냄">
 <!ENTITY torbutton.prefs.transparentTor "투명 Toritication (사용자 transproxy나 Tor 라우터 필요)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "브라우징 히스토리나 웹사이트 데이터를 기록하지 마십시오 (Private Browsing 모드 활성화)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "제 3자 쿠키와 다른 추적 데이터 제한">
+<!ENTITY torbutton.prefs.block_plugins "브라우저 플러그인 비활성화 (예 : 플래시)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "다른 Tor browser 사용자로부터 구별되는 세부 사항 변경">

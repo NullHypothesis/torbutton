@@ -22,22 +22,24 @@
 <!ENTITY torbutton.pref_connection.more_info "Daha fazla bilgi">
 <!ENTITY torbutton.pref_connection_more_info.title "Yardım">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbuton şu anda devredışı. Proxy ayarlarını değiştirmek istiyorsan, Torbutonu tekrar devredışı bırak. Genel ayarları değiştirecekten, ayarlar penceresini kullan.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity "Yeni Bağlantı">
+<!ENTITY torbutton.context_menu.new_identity_key "S">
 <!ENTITY torbutton.context_menu.toggle "Durum">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Ayarlar">
 <!ENTITY torbutton.context_menu.preferences.key "A">
 <!ENTITY torbutton.context_menu.about "Hakkında">
 <!ENTITY torbutton.context_menu.about.key "H">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "H">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
-<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorTab.key "p">
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbuton">
@@ -121,7 +123,7 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "İsim">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">

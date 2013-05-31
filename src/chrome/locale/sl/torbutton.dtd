@@ -1,4 +1,4 @@
-<!ENTITY torbutton.prefs.title "Torbutton nastavitve">
+<!ENTITY torbutton.prefs.title "Nastavitve za Torbutton">
 <!ENTITY torbutton.prefs.tor_settings "Nastavitve posredniškega (proxy) strežnika">
 <!ENTITY torbutton.prefs.recommended_settings "Uporabi priporočene nastavitve posredniškega strežnika za mojo različico Firefoxa">
 <!ENTITY torbutton.prefs.use_privoxy "Uporabi tudi povezavo preko Privoxy-a">
@@ -9,7 +9,7 @@
 <!ENTITY torbutton.prefs.proxy.host.ftp "FTP posredniški strežnik:">
 <!ENTITY torbutton.prefs.proxy.host.gopher "Gopher posredniški strežnik:">
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS gostitelj:">
-<!ENTITY torbutton.prefs.proxy.port "vrata:">
+<!ENTITY torbutton.prefs.proxy.port "Vrata:">
 <!ENTITY torbutton.about.title "O razširitvi Torbutton">
 <!ENTITY torbutton.about.version "verzija">
 <!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
@@ -21,7 +21,7 @@
 <!ENTITY torbutton.pref_connection.notice "Če želite spremeniti te nastavitve onemogočite razširitev Torbutton.">
 <!ENTITY torbutton.pref_connection.more_info "Več informacij">
 <!ENTITY torbutton.pref_connection_more_info.title "Pomoč">
-<!ENTITY torbutton.pref_connection_more_info.text "Razširitev Torbutton je trenutno omogočena. Če želite spremeniti nastavitve ne-Tor posredniškega strežnika (proxy), razširitev Torbutton najprej onemogočite, nato pa se vrnite na to mesto. Če želite spremeniti nastavitve povezave v Tor omrežje uporabite nastavitve razširitve Torbutton.">
+<!ENTITY torbutton.pref_connection_more_info.text "Razširitev Torbutton je trenutno omogočena. Če želite spremeniti nastavitve ne-Tor posredniškega strežnika (proxy) najprej onemogočite razširitev Torbutton, nato pa se vrnite na to mesto. Če želite spremeniti nastavitve povezave v Tor omrežje uporabite nastavitve razširitve Torbutton.">
 <!ENTITY torbutton.context_menu.new_identity "nova indetiteta">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Zamenjaj status anonimizacije">
@@ -30,19 +30,21 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "O razširitvi Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "piškotkina zaščita">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "kopiraj tor URL">
-<!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "odpri tor URL v novem zavitku">
+<!ENTITY torbutton.context_menu.copyTor "Kopiraj Tor URL">
+<!ENTITY torbutton.context_menu.copyTor.key "P">
+<!ENTITY torbutton.context_menu.openTorTab "Odpri Tor URL v novem zavitku">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "odpri tor URL v novem oknu">
+<!ENTITY torbutton.context_menu.openTorWindow "Odpri Tor URL v novem oknu">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Klikni za inicializiranje razširitve Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Varnostne Nastavitve">
+<!ENTITY torbutton.prefs.sec_settings "Varnostne nastavitve">
 <!ENTITY torbutton.prefs.block_thread "Prepovej branje zgodovine med uporabo Tor-a (obvezno)">
 <!ENTITY torbutton.prefs.block_thwrite "Prepovej zapisovanje zgodovine med uporabo Tor-a (priporočeno)">
 <!ENTITY torbutton.prefs.block_nthread "Prepovej branje zgodovine, ko Tor ni v uporabi (neobvezno)">

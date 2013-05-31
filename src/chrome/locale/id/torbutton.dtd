@@ -22,7 +22,7 @@
 <!ENTITY torbutton.pref_connection.more_info "Informasi lebih lanjut">
 <!ENTITY torbutton.pref_connection_more_info.title "Bantuan">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton sedang aktif.  Apabila Anda ingin mengubah pengaturan proxy selain proxy Tor, Silahkan nonaktifkan Torbutton dan kembali ke sini.  Apabila Anda ingin mengubah pengaturan Tor, silahkan gunakan jendela preferensi Torbutton.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Identitas Baru">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Alihkan Status Tor">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -30,12 +30,14 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Tentang Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
-<!ENTITY torbutton.context_menu.copyTor.key "p">
+<!ENTITY torbutton.context_menu.copyTor.key "P">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
@@ -121,7 +123,7 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "Nama">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">

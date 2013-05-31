@@ -30,8 +30,10 @@
 <!ENTITY torbutton.context_menu.preferences.key "ف">
 <!ENTITY torbutton.context_menu.about "عن زر تور...">
 <!ENTITY torbutton.context_menu.about.key "ح">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "ح">
+<!ENTITY torbutton.context_menu.downloadUpdate "تنزيل تحديث حزمة متصفح تور...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "ت">
 <!ENTITY torbutton.context_menu.cookieProtections "كعكة الحماية">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "نسخ رابط تور">
@@ -142,7 +144,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "أزل المنصة واللغة من استفسارات محرك بحث غوغل">
 <!ENTITY torbutton.prefs.transparentTor "شفافية توريفكيشن (تحتاج موجه تور أو ترانسبوكسي مخصص)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "لا تسجل سجل التصفح أو بيانات المواقع الألكترونية (تفعيل التصفح الخصوصي)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "تقييد الـCookies الخاصة بالطرف الثالث و بيانات التتبع الأخري.">
+<!ENTITY torbutton.prefs.block_plugins "تعطيل إضافات المتصفح (مثل فلاش)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "تغيير التفاصيل التي تميزك عن المستخدمين الآخرين لمتصفح تور">

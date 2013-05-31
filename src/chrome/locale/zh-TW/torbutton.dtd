@@ -22,7 +22,7 @@
 <!ENTITY torbutton.pref_connection.more_info "更多資訊">
 <!ENTITY torbutton.pref_connection_more_info.title "幫助">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton 現在已經啟用。如果您想改變非-Tor Proxy的設定，請停用Torbutton並回到這裏。如果您想改變Tor的設定，請使用Torbutton 設置視窗。">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "更換身份">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "切換 Tor 狀態">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -30,8 +30,10 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "關於Torbutton...(A)">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "複製 Tor 網際網路位址">
@@ -99,7 +101,7 @@
 <!ENTITY torbutton.prefs.startup "Startup">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
+<!ENTITY torbutton.prefs.restore_defaults "回復預設值">
 <!ENTITY torbutton.prefs.test_settings "Test Settings">
 <!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
@@ -121,7 +123,7 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "名稱">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
@@ -130,9 +132,9 @@
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(建議值)">
+<!ENTITY torbutton.prefs.dtd_optional "(選擇性)">
+<!ENTITY torbutton.prefs.dtd_crucial "(重要的)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">

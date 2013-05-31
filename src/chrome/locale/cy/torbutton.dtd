@@ -1,16 +1,16 @@
-<!ENTITY torbutton.prefs.title "Torbutton Preferences">
-<!ENTITY torbutton.prefs.tor_settings "Proxy Settings">
-<!ENTITY torbutton.prefs.recommended_settings "Use the recommended proxy settings for my version of Firefox">
-<!ENTITY torbutton.prefs.use_privoxy "Use Privoxy">
-<!ENTITY torbutton.prefs.use_polipo "Use Polipo">
-<!ENTITY torbutton.prefs.custom_settings "Use custom proxy settings">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "Port:">
-<!ENTITY torbutton.about.title "About Torbutton">
+<!ENTITY torbutton.prefs.title "Dewisiadau Torbutton">
+<!ENTITY torbutton.prefs.tor_settings "Gosodiadau Procsi">
+<!ENTITY torbutton.prefs.recommended_settings "Defnyddiwch y gosodiadau procsi a argymhellir ar gyfer fy fersiwn o Firefox">
+<!ENTITY torbutton.prefs.use_privoxy "Defnyddiwch Privoxy">
+<!ENTITY torbutton.prefs.use_polipo "Defnyddiwch Polipo">
+<!ENTITY torbutton.prefs.custom_settings "Defnyddiwch gosodiadau procsi addasiedig">
+<!ENTITY torbutton.prefs.proxy.host.http "Procsi HTTP:">
+<!ENTITY torbutton.prefs.proxy.host.https "Procsi SSL:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "Procsi FTP:">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Procsi Gopher:">
+<!ENTITY torbutton.prefs.proxy.host.socks "Gwesteiwr SOCKS:">
+<!ENTITY torbutton.prefs.proxy.port "Porth">
+<!ENTITY torbutton.about.title "Amdan Torbutton">
 <!ENTITY torbutton.about.version "Version:">
 <!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
 <!ENTITY torbutton.about.code "Code Contributors:">
@@ -18,32 +18,34 @@
 <!ENTITY torbutton.about.security_review "Security Review:">
 <!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
 <!ENTITY torbutton.about.make_donation "making a donation.">
-<!ENTITY torbutton.pref_connection.notice "Disable Torbutton to change these settings.">
-<!ENTITY torbutton.pref_connection.more_info "More information">
-<!ENTITY torbutton.pref_connection_more_info.title "Help">
+<!ENTITY torbutton.pref_connection.notice "Analluoga Torbutton i newid y gosodiadau yma.">
+<!ENTITY torbutton.pref_connection.more_info "Mwy o gwybodaeth">
+<!ENTITY torbutton.pref_connection_more_info.title "Допомога">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton is currently enabled.  If you would like to change your non-Tor proxy settings, please disable Torbutton and return here.  If you would like to change your Tor settings, please use the Torbutton preference window.">
 <!ENTITY torbutton.context_menu.new_identity "New Identity">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Toggle Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Preferences...">
-<!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "About Torbutton...">
-<!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.preferences "Dewisiadau">
+<!ENTITY torbutton.context_menu.preferences.key "p">
+<!ENTITY torbutton.context_menu.about "Amdan Torbutton...">
+<!ENTITY torbutton.context_menu.about.key "T">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
 <!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
-<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorTab.key "p">
 <!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
-<!ENTITY torbutton.button.tooltip "Click to initialize Torbutton">
-<!ENTITY torbutton.prefs.sec_settings "Security Settings">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
+<!ENTITY torbutton.button.tooltip "Cliciwch i ymgychwyn Torbutton">
+<!ENTITY torbutton.prefs.sec_settings "Gosodiadau Diogelwch">
+<!ENTITY torbutton.prefs.block_thread "Blociwch ddarllen hanes yn ystod Tor (hanfodol)">
 <!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
 <!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
 <!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
@@ -62,7 +64,7 @@
 <!ENTITY torbutton.prefs.dynamic "Dynamic Content">
 <!ENTITY torbutton.prefs.cookies "Cookies">
 <!ENTITY torbutton.prefs.cache "Cache">
-<!ENTITY torbutton.prefs.history "History">
+<!ENTITY torbutton.prefs.history "Hanes">
 <!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
 <!ENTITY torbutton.prefs.shutdown "Shutdown">
 <!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
@@ -94,9 +96,9 @@
 <!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
 <!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
-<!ENTITY torbutton.prefs.startup_state "On normal startup, set Tor state to:">
-<!ENTITY torbutton.prefs.shutdown_state "Shutdown state">
-<!ENTITY torbutton.prefs.startup "Startup">
+<!ENTITY torbutton.prefs.startup_state "Ar y cychwyn arferol, gosod cyflwr Tor i:">
+<!ENTITY torbutton.prefs.shutdown_state "Cyflwr cau i lawr">
+<!ENTITY torbutton.prefs.startup "Cychwyn">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
 <!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
@@ -109,7 +111,7 @@
 <!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
 <!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
-<!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
+<!ENTITY torbutton.prefs.socks_vfive "SOCKS V5">
 <!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
 <!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
@@ -121,7 +123,7 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "Enw">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
@@ -130,9 +132,9 @@
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(argymhellwyd)">
+<!ENTITY torbutton.prefs.dtd_optional "(dewisol)">
+<!ENTITY torbutton.prefs.dtd_crucial "(hanfodol)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">

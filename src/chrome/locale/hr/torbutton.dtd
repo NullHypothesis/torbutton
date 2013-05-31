@@ -30,14 +30,16 @@
 <!ENTITY torbutton.context_menu.preferences.key "p">
 <!ENTITY torbutton.context_menu.about "O Torbuttonu...">
 <!ENTITY torbutton.context_menu.about.key "O">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "O">
 <!ENTITY torbutton.context_menu.cookieProtections "Zaštite kolačića">
 <!ENTITY torbutton.context_menu.cookieProtections.key "Z">
 <!ENTITY torbutton.context_menu.copyTor "Kopiraj Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "k">
 <!ENTITY torbutton.context_menu.openTorTab "Otvori Tor URL u novoj kartici">
-<!ENTITY torbutton.context_menu.openTorTab.key "r">
+<!ENTITY torbutton.context_menu.openTorTab.key "k">
 <!ENTITY torbutton.context_menu.openTorWindow "Otvori Tor URL u novom prozoru">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">

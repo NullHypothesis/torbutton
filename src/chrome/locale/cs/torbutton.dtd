@@ -22,16 +22,18 @@
 <!ENTITY torbutton.pref_connection.more_info "Více informací">
 <!ENTITY torbutton.pref_connection_more_info.title "Nápověda">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton je momentálně zapnutý.    Pokud chcete změnit vaše non-Tor proxy nastavení, vypněte prosím Torbutton a vraťte se.    Pokud chcete změnit vaše Tor nastavení, použijte prosím okno nastavení Torbutton">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
-<!ENTITY torbutton.context_menu.new_identity_key "I">
+<!ENTITY torbutton.context_menu.new_identity "Nova identita">
+<!ENTITY torbutton.context_menu.new_identity_key "S">
 <!ENTITY torbutton.context_menu.toggle "Změnit Tor status">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "Nastavení...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "O Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "A">
 <!ENTITY torbutton.context_menu.cookieProtections "Ochrana před cookies">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Kopírovat Tor URL">
@@ -48,7 +50,7 @@
 <!ENTITY torbutton.prefs.block_nthread "Blokovat čtení historie během Non-Tor (volitelné)">
 <!ENTITY torbutton.prefs.block_nthwrite "Blokovat zápis do historie při používání Non-Tor (volitelné)">
 <!ENTITY torbutton.prefs.clear_history "Vymazat historii při přepnutí Tor (volitelné)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
+<!ENTITY torbutton.prefs.clear_cache "Blokovat diskovou mezipaměť a vymaž ji při přepnutí Tora">
 <!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
 <!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
@@ -99,7 +101,7 @@
 <!ENTITY torbutton.prefs.startup "Startup">
 <!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
 <!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
-<!ENTITY torbutton.prefs.restore_defaults "Restore Defaults">
+<!ENTITY torbutton.prefs.restore_defaults "Původní nastavení">
 <!ENTITY torbutton.prefs.test_settings "Test nastavení">
 <!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
@@ -121,7 +123,7 @@
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
+<!ENTITY torbutton.cookiedialog.nameCol "Jméno">
 <!ENTITY torbutton.cookiedialog.pathCol "Path">
 <!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
 <!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
@@ -130,9 +132,9 @@
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
-<!ENTITY torbutton.prefs.dtd_recommended "(recommended)">
-<!ENTITY torbutton.prefs.dtd_optional "(optional)">
-<!ENTITY torbutton.prefs.dtd_crucial "(crucial)">
+<!ENTITY torbutton.prefs.dtd_recommended "(doporučeno)">
+<!ENTITY torbutton.prefs.dtd_optional "(volitelné)">
+<!ENTITY torbutton.prefs.dtd_crucial "(důležité)">
 <!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
 <!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">

@@ -11,18 +11,18 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKS-palvelin:">
 <!ENTITY torbutton.prefs.proxy.port "Portti:">
 <!ENTITY torbutton.about.title "Tietoja Torbuttonista">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.version "Versio:">
+<!ENTITY torbutton.about.summary "Suojelee Tor-selailusi yksityisyyttä.">
+<!ENTITY torbutton.about.code "Ohjelmointiin osallistuneet:">
+<!ENTITY torbutton.about.maintainer "Ylläpitäjä:">
+<!ENTITY torbutton.about.security_review "Turvallisuuskatselmus:">
+<!ENTITY torbutton.about.donate "Jos pidät Torista, sinun on mahdollista">
+<!ENTITY torbutton.about.make_donation "antaa lahjoitus.">
 <!ENTITY torbutton.pref_connection.notice "Poista Torbutton käytöstä muuttaaksesi asetuksia.">
 <!ENTITY torbutton.pref_connection.more_info "Lisää tietoja">
 <!ENTITY torbutton.pref_connection_more_info.title "Apua">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton on tällähetkellä käytössä. Jos haluat muuttaa välityspalvelinasetuksia joita käytät silloin kun Torbutton ei ole käytössä, ota ensin Torbutton pois päältä (Tor Disabled) ja palaa sitten tänne. Jos haluat muuttaa Tor asetuksia, käytä Torbutton asetukset ikkunaa.">
-<!ENTITY torbutton.context_menu.new_identity "New Identity">
+<!ENTITY torbutton.context_menu.new_identity "Uusi identiteetti">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Vaihda Tor tilaa">
 <!ENTITY torbutton.context_menu.toggle.key "T">
@@ -30,16 +30,18 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Tietoja Torbuttonista...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
-<!ENTITY torbutton.context_menu.downloadUpdate.key "U">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
-<!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "S">
+<!ENTITY torbutton.context_menu.downloadUpdate "Lataa Tor Browser Bundle -päivitys...">
+<!ENTITY torbutton.context_menu.downloadUpdate.key "L">
+<!ENTITY torbutton.context_menu.cookieProtections "Evästeiden suojaukset">
+<!ENTITY torbutton.context_menu.cookieProtections.key "E">
+<!ENTITY torbutton.context_menu.copyTor "Kopioi Tor-URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
-<!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
-<!ENTITY torbutton.context_menu.openTorWindow.key "d">
+<!ENTITY torbutton.context_menu.openTorTab "Avaa Tor-URL uuteen välilehteen">
+<!ENTITY torbutton.context_menu.openTorTab.key "R">
+<!ENTITY torbutton.context_menu.openTorWindow "Avaa Tor-URL uuteen ikkunaan">
+<!ENTITY torbutton.context_menu.openTorWindow.key "U">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Klikkaa Torbutton aktiiviseksi">
 <!ENTITY torbutton.prefs.sec_settings "Turvallisuus (asetukset)">
@@ -51,7 +53,7 @@
 <!ENTITY torbutton.prefs.clear_cache "Estä Tor välimuisti ja tyhjennä kaikki välimuistissa oleva Tor tilaa vaihdettaessa.">
 <!ENTITY torbutton.prefs.block_cache "Estä levyn ja muistin välimuistiin pääsy Torin ollessa käytössä.">
 <!ENTITY torbutton.prefs.cookie_jars "Talleta ei-Tor käytönaikaiset evästeet suojattuun hakemistoon.">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
+<!ENTITY torbutton.prefs.cookie_protection "Käytä valintaan Evästeiden suojaukset -valintaikkunaa">
 <!ENTITY torbutton.prefs.mmm_cookies "Huolehdin evästeistä itse manuaalisesti. (vaarallista)">
 <!ENTITY torbutton.prefs.clear_cookies "Poista evästeet vaihdettaessa Tor-käytön tilaa.">
 <!ENTITY torbutton.prefs.disable_plugins "Poista lisäosat toiminnasta Torin ollessa käytössä (tärkeää)">
@@ -71,9 +73,9 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "Estä istunnon (Session) tallennus (suositeltavaa)">
 <!ENTITY torbutton.prefs.headers "Tunnistetiedot">
 <!ENTITY torbutton.prefs.spoof_english 'Näytä selaimen asetus ulospäin "US English"'>
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.refererspoofing "Referer-tunnisteen väärentäminen">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Väärennä referer-tunniste älykkäästi, kun Tor on käytössä (lähettää väärennetyn tunnisteen)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Poista DOM-säilytys käytöstä kun Tor on käynnissä (kriittinen)">
 <!ENTITY torbutton.prefs.forms "Lomakkeet">
@@ -82,7 +84,7 @@
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Ei-Tor">
 <!ENTITY torbutton.prefs.restore_tor "Palautettaessa kaatunutta istuntoa, aseta Tor tilaksi:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
+<!ENTITY torbutton.prefs.startup_tor "Kun selain käynnistyy, aseta Torin tilaksi:">
 <!ENTITY torbutton.prefs.reload_crashed_jar "Lataa ja poista evästeet kun FF kaatuu (suositeltava)">
 <!ENTITY torbutton.prefs.dual_cookie_jars "Tallenna sekä Tor että Ei-Tor evästeet suojattuun hakemistoon(vaarallista)">
 <!ENTITY torbutton.prefs.clear_http_auth "Poista HTTP tunnistetut istunnot (suositeltava)">
@@ -112,23 +114,23 @@
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
 <!ENTITY torbutton.prefs.no_proxies_on "Ei välityspalvelimia osoitteille:">
 <!ENTITY torbutton.prefs.no_proxy_warning "Varoitus: Vältä yllä olevia osoitteita">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
-<!ENTITY torbutton.cookiedialog.nameCol "Name">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
+<!ENTITY torbutton.prefs.spoofreresh "Väärennä sivun päivitys">
+<!ENTITY torbutton.prefs.refereroptions "Referer-asetukset">
+<!ENTITY torbutton.prefs.nospoof "Älä väärennä referer-tunnistetta">
+<!ENTITY torbutton.prefs.spoofroot "Väärennä referer-tunnisteeksi sivun kansion osoite">
+<!ENTITY torbutton.prefs.spoofdomain "Väärennä referer-tunnisteeksi verkkotunnus">
+<!ENTITY torbutton.prefs.spoofblank "Väärennä referer-tunniste tyhjäksi">
+<!ENTITY torbutton.cookiedialog.title "Hallitse evästeiden suojauksia">
+<!ENTITY torbutton.cookiedialog.lockCol "Suojaus">
+<!ENTITY torbutton.cookiedialog.domainCol "Palvelin">
+<!ENTITY torbutton.cookiedialog.nameCol "Nimi">
+<!ENTITY torbutton.cookiedialog.pathCol "Polku">
+<!ENTITY torbutton.cookiedialog.protectCookie "Suojaa eväste">
+<!ENTITY torbutton.cookiedialog.removeCookie "Poista eväste">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Poista evästeen suojaus">
+<!ENTITY torbutton.cookiedialog.removeAllBut "Poista kaikki paitsi suojatut">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "Suojaa uudet evästeet">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Älä suojaa uusia evästeitä">
 <!ENTITY torbutton.prefs.disable_livemarks "Estä välilehtipäivitykset Torin ollessa käytössä.">
 <!ENTITY torbutton.prefs.dtd_recommended "(suositeltu)">
 <!ENTITY torbutton.prefs.dtd_optional "(valinnainen)">
@@ -141,8 +143,8 @@
 <!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Poista yksilöintitiedot (laitteisto ja kieliasetukset) Google hakuja suoritettaessa ">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.transparentTor "Käytä Toria läpinäkyvästi (edellyttää mukautetun transproxyn tai Tor-reitittimen käyttöä)">
+<!ENTITY torbutton.prefs.block_disk "Älä säilytä selaushistoriaa tai verkkosivuston tietoa (käynnistää yksityisen selauksen)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "Estä kolmannen osapuolen evästeet ja muut seurantatiedot">
+<!ENTITY torbutton.prefs.block_plugins "Poista liitännäiset (Flash yms.) käytöstä">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Muuta lisätietoja, jotka erottavat sinut muista Tor Browser -käyttäjistä">

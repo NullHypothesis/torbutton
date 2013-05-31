@@ -30,7 +30,9 @@
 <!ENTITY torbutton.context_menu.preferences.key "B">
 <!ENTITY torbutton.context_menu.about "A Torbutton névjegye...">
 <!ENTITY torbutton.context_menu.about.key "N">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings.key "M">
+<!ENTITY torbutton.context_menu.downloadUpdate "Tor Böngésző csomag frissítésének letöltése">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Süti védelem">
 <!ENTITY torbutton.context_menu.cookieProtections.key "S">
@@ -142,7 +144,7 @@
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
 <!ENTITY torbutton.prefs.fix_google_srch "Szedje ki az operációs rendszert és a nyelvet a Google kereső ablakokból">
 <!ENTITY torbutton.prefs.transparentTor "Átlátszó Tor-osítás (Egyedi transproxy-t vagy Tor routert igényel)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.block_disk "Ne rögzítsen böngésző előzményeket, vagy weboldal adatot (engedélyezi a Privát böngésző módot)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "A harmadik féltől származó sütik és nyomkövetési adatok korlátozása">
+<!ENTITY torbutton.prefs.block_plugins "Böngésző kiegészítők kikapcsolása (mint pl. a Flash)">
+<!ENTITY torbutton.prefs.resist_fingerprinting "Változtassa meg a részleteket, amik megkülönböztetik a többi Tor böngésző felhasználótól">
