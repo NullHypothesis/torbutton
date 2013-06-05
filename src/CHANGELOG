@@ -1,3 +1,12 @@
+1.6.0:
+ 05 Jun 2013
+  * bug 7494: Create a local home page for TBB as about:tor
+  * misc: Perform a control port test of proper Tor configuration by default.
+          Only use check.torproject.org if the control port is unavailable.
+  * misc: Add an icon menu option for Tor Launcher's Network Settings
+  * misc: Add branding string overrides (primarily controls browser name and
+          homepage)
+
 1.5.2:
  22 Apr 2013
   * bug 8457: Allow session restore if the user allows disk actvity
