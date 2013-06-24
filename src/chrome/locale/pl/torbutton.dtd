@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "U">
 <!ENTITY torbutton.context_menu.about "O Torbutton">
 <!ENTITY torbutton.context_menu.about.key "T">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "Otwórz ustawienia sieci...">
 <!ENTITY torbutton.context_menu.networksettings.key "Z">
 <!ENTITY torbutton.context_menu.downloadUpdate "Pobierz aktualizację Paczki Tora z Przeglądarką">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "u">

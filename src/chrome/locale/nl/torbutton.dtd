@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "V">
 <!ENTITY torbutton.context_menu.about "Over Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "O">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "Open netwerkinstellingen">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle update...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">

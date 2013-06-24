@@ -11,13 +11,13 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "SOCKSホスト">
 <!ENTITY torbutton.prefs.proxy.port "ポート">
 <!ENTITY torbutton.about.title "Torbuttonについて">
-<!ENTITY torbutton.about.version "Version:">
-<!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
-<!ENTITY torbutton.about.code "Code Contributors:">
-<!ENTITY torbutton.about.maintainer "Maintainer:">
-<!ENTITY torbutton.about.security_review "Security Review:">
-<!ENTITY torbutton.about.donate "If you like using Tor, you might consider">
-<!ENTITY torbutton.about.make_donation "making a donation.">
+<!ENTITY torbutton.about.version "バージョン:">
+<!ENTITY torbutton.about.summary "あなたのTorブラウジングのプライバシーを保護します。">
+<!ENTITY torbutton.about.code "プログラムの貢献者:">
+<!ENTITY torbutton.about.maintainer "メンテナ―:">
+<!ENTITY torbutton.about.security_review "セキュリティレビュー:">
+<!ENTITY torbutton.about.donate "Torを使うのが好きなら、検討しましょう">
+<!ENTITY torbutton.about.make_donation "寄付する">
 <!ENTITY torbutton.pref_connection.notice "これらの設定を変更するにはTorbuttonをオフにしてください">
 <!ENTITY torbutton.pref_connection.more_info "詳細情報">
 <!ENTITY torbutton.pref_connection_more_info.title "ヘルプ">
@@ -30,121 +30,121 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Torbuttonについて...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "ネットワーク設定を開く...">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
-<!ENTITY torbutton.context_menu.downloadUpdate "Download Tor Browser Bundle Update...">
+<!ENTITY torbutton.context_menu.downloadUpdate "Tor Browser Bundleのアップデートをダウンロード">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie Protections">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie保護">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
-<!ENTITY torbutton.context_menu.copyTor "Copy Tor URL">
+<!ENTITY torbutton.context_menu.copyTor "TorのURLをコピー">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "Open Tor URL in new Tab">
+<!ENTITY torbutton.context_menu.openTorTab "新しいタブでTorのURLを開く">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
-<!ENTITY torbutton.context_menu.openTorWindow "Open Tor URL in new Window">
+<!ENTITY torbutton.context_menu.openTorWindow "新しいウィンドウでTorのURLを開く">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Torbuttomを初期状態に戻す">
 <!ENTITY torbutton.prefs.sec_settings "セキュリティ設定">
-<!ENTITY torbutton.prefs.block_thread "Block history reads during Tor (crucial)">
-<!ENTITY torbutton.prefs.block_thwrite "Block history writes during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_nthread "Block history reads during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.block_nthwrite "Block history writes during Non-Tor (optional)">
-<!ENTITY torbutton.prefs.clear_history "Clear history on Tor toggle (optional)">
-<!ENTITY torbutton.prefs.clear_cache "Block Tor disk cache and clear all cache on Tor toggle">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
-<!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
-<!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
-<!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
-<!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
-<!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">
-<!ENTITY torbutton.prefs.isolate_content "Isolate dynamic content to Tor state (crucial)">
-<!ENTITY torbutton.prefs.no_updates "Disable updates during Tor usage">
-<!ENTITY torbutton.prefs.set_uagent "Set user agent for Tor usage (crucial)">
+<!ENTITY torbutton.prefs.block_thread "ブロック履歴がTor中に読みます (重要)">
+<!ENTITY torbutton.prefs.block_thwrite "ブロック履歴がTor中に書き込まれます (推奨)">
+<!ENTITY torbutton.prefs.block_nthread "非Tor中にブロック履歴を読みます (任意)">
+<!ENTITY torbutton.prefs.block_nthwrite "ブロック履歴が非Tor中に書き込まれます (任意)">
+<!ENTITY torbutton.prefs.clear_history "Tor切り替え時に履歴をクリア (任意)">
+<!ENTITY torbutton.prefs.clear_cache "Torのディスクキャッシュをブロックして、Torの切り替え時にすべてのキャッシュをクリアする">
+<!ENTITY torbutton.prefs.block_cache "Tor中ディスクとメモリーキャッシュのアクセスをブロックする">
+<!ENTITY torbutton.prefs.cookie_jars "非Torのcookieを保護されたjarで保管する">
+<!ENTITY torbutton.prefs.cookie_protection "選択するにはCookie保護ダイアログを使用しましょう">
+<!ENTITY torbutton.prefs.mmm_cookies "手動で自分のcookieを管理する (危険)">
+<!ENTITY torbutton.prefs.clear_cookies "Tor切り替え時にcookieをクリア">
+<!ENTITY torbutton.prefs.disable_plugins "Tor使用中プラグインを無効 (重要)">
+<!ENTITY torbutton.prefs.kill_bad_js "危険なjavascriptをフック (重要)">
+<!ENTITY torbutton.prefs.isolate_content "動的な内容をTorの状態に分離 (重要)">
+<!ENTITY torbutton.prefs.no_updates "Tor使用中アップデートを無効">
+<!ENTITY torbutton.prefs.set_uagent "Torの使用のためのユーザーエージェントを設定 (重要)">
 <!ENTITY torbutton.prefs.dynamic "コンテンツ">
 <!ENTITY torbutton.prefs.cookies "クッキー">
 <!ENTITY torbutton.prefs.cache "キャッシュ">
 <!ENTITY torbutton.prefs.history "履歴">
-<!ENTITY torbutton.prefs.no_search "Disable search suggestions during Tor (recommended)">
+<!ENTITY torbutton.prefs.no_search "Tor中は検索候補を無効 (推奨)">
 <!ENTITY torbutton.prefs.shutdown "停止">
-<!ENTITY torbutton.prefs.tor_shutdown "Clear Tor cookies during Tor-enabled browser shutdown">
-<!ENTITY torbutton.prefs.all_shutdown "Clear cookies during any browser shutdown">
-<!ENTITY torbutton.prefs.no_shutdown "Do not clear my cookies at shutdown">
-<!ENTITY torbutton.prefs.disable_sessionstore "Disable Session Saving (recommended)">
+<!ENTITY torbutton.prefs.tor_shutdown "Torが有効なブラウザーがシャットダウン中はTorのcookieをクリア">
+<!ENTITY torbutton.prefs.all_shutdown "全てのブラウザがシャットダウン中はcookieをクリア">
+<!ENTITY torbutton.prefs.no_shutdown "シャットダウン時に私のcookieを削除しない">
+<!ENTITY torbutton.prefs.disable_sessionstore "セッション保存を無効化 (推奨)">
 <!ENTITY torbutton.prefs.headers "ヘッダ送信">
-<!ENTITY torbutton.prefs.spoof_english "Spoof US English Browser">
-<!ENTITY torbutton.prefs.refererspoofing "Referer spoofing">
+<!ENTITY torbutton.prefs.spoof_english "アメリカ英語のブラウザを詐称する">
+<!ENTITY torbutton.prefs.refererspoofing "リファラを偽装する">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
-<!ENTITY torbutton.prefs.smartspoof "Smart referer spoof during Tor usage (spoofs cross domain referers)">
+<!ENTITY torbutton.prefs.smartspoof "Tor使用中はスマートなリファラ偽装 (クロスドメインのリファラを偽装する)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
-<!ENTITY torbutton.prefs.disable_domstorage "Disable DOM Storage during Tor usage (crucial)">
+<!ENTITY torbutton.prefs.disable_domstorage "Tor使用中はDOMストレージを無効化 (重要)">
 <!ENTITY torbutton.prefs.forms "フォーム入力">
-<!ENTITY torbutton.prefs.block_tforms "Block password+form saving during Tor (recommended)">
-<!ENTITY torbutton.prefs.block_ntforms "Block password+form saving during Non-Tor (optional)">
+<!ENTITY torbutton.prefs.block_tforms "Tor中はパスワードが保存されないようにする (推奨)">
+<!ENTITY torbutton.prefs.block_ntforms "非Tor中パスワードが保存されないようにする (任意)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
-<!ENTITY torbutton.prefs.restore_tor "On session restored startup, set Tor state to:">
-<!ENTITY torbutton.prefs.startup_tor "On browser startup, set Tor state to:">
-<!ENTITY torbutton.prefs.reload_crashed_jar "Reload cookie jar/clear cookies on Firefox crash (recommended)">
-<!ENTITY torbutton.prefs.dual_cookie_jars "Store both Tor and Non-Tor cookies in protected jars (dangerous)">
-<!ENTITY torbutton.prefs.clear_http_auth "Clear HTTP auth sessions (recommended)">
-<!ENTITY torbutton.prefs.block_js_history "Isolate access to history navigation to Tor state (crucial)">
-<!ENTITY torbutton.prefs.resize_on_toggle "Resize windows to multiples of 50px during Tor usage (recommended)">
-<!ENTITY torbutton.prefs.close_tor "Close all Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.close_nontor "Close all Non-Tor windows and tabs on toggle (optional)">
-<!ENTITY torbutton.prefs.block_links "Block link clicks and page reloads from different Tor states (optional)">
-<!ENTITY torbutton.prefs.jar_certs "Store SSL certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.jar_ca_certs "Store CA certs in seperate jars for Tor/Non-Tor (recommended)">
-<!ENTITY torbutton.prefs.locked_mode "Disable Button and Hotkeys to prevent accidental toggle">
+<!ENTITY torbutton.prefs.restore_tor "セッションが回復された起動時のTorの設定:">
+<!ENTITY torbutton.prefs.startup_tor "ブラウザ起動時のTorの設定:">
+<!ENTITY torbutton.prefs.reload_crashed_jar "Firefoxのクラッシュ時Cookie jarをリロード / cookieをクリア (推奨)">
+<!ENTITY torbutton.prefs.dual_cookie_jars "保護されたjarでTorと非Tor cookieの両方を保存する (危険)">
+<!ENTITY torbutton.prefs.clear_http_auth "HTTP認証セッションをクリアする (推奨)">
+<!ENTITY torbutton.prefs.block_js_history "履歴ナビゲーションへのアクセスをTorの状態に分離 (重要)">
+<!ENTITY torbutton.prefs.resize_on_toggle "Tor使用時ウィンドウを複数の50pxのサイズに変更する (推奨)">
+<!ENTITY torbutton.prefs.close_tor "切り替え時すべてのTorのウィンドウとタブを閉じる (任意)">
+<!ENTITY torbutton.prefs.close_nontor "切り替え時すべての非Torのウィンドウとタブを閉じる (任意)">
+<!ENTITY torbutton.prefs.block_links "異なるTor状態からのリンクのクリックやページのリロードをブロックする (任意)">
+<!ENTITY torbutton.prefs.jar_certs "Torと非Torごとに分割したJarでSSL証明書を保管 (推奨)">
+<!ENTITY torbutton.prefs.jar_ca_certs "Torと非Torごとに分割したJarでCA証明書を保管 (推奨)">
+<!ENTITY torbutton.prefs.locked_mode "予期せぬ切り替えを防ぐため、ボタンやホットキーを無効にする">
 <!ENTITY torbutton.prefs.startup_state "起動時のTorの設定: ">
 <!ENTITY torbutton.prefs.shutdown_state "停止状態">
 <!ENTITY torbutton.prefs.startup "起動">
-<!ENTITY torbutton.prefs.block_tor_file_net "Block Tor access to network from file:// urls (recommended)">
-<!ENTITY torbutton.prefs.block_nontor_file_net "Block Non-Tor access to network from file:// urls">
+<!ENTITY torbutton.prefs.block_tor_file_net "file://のURLからのネットワークへのTorアクセスをブロックする (推奨)">
+<!ENTITY torbutton.prefs.block_nontor_file_net "file://のURLからのネットワークへの非Torのアクセスをブロックする">
 <!ENTITY torbutton.prefs.restore_defaults "デフォルト設定に戻す">
 <!ENTITY torbutton.prefs.test_settings "設定をテストする">
-<!ENTITY torbutton.prefs.test_auto "Test my Tor settings after the first time I toggle on every Firefox start">
+<!ENTITY torbutton.prefs.test_auto "常に最初にFirefoxを起動した後自分のTorの設定をテストする">
 <!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
-<!ENTITY torbutton.prefs.tor_memory_jar "Do not write Tor cookies to disk">
-<!ENTITY torbutton.prefs.nontor_memory_jar "Do not write Non-Tor cookies to disk">
-<!ENTITY torbutton.prefs.session_restore "Have the session store save and restore these tabs:">
-<!ENTITY torbutton.prefs.nontor_tabs "Tabs loaded in Non-Tor">
-<!ENTITY torbutton.prefs.tor_tabs "Tabs loaded in Tor">
+<!ENTITY torbutton.prefs.tor_memory_jar "Torのcookieをディスクに書き込まない">
+<!ENTITY torbutton.prefs.nontor_memory_jar "非Torのcookieをディスクに書き込まない">
+<!ENTITY torbutton.prefs.session_restore "セッションストアに保存し回復するタブ:">
+<!ENTITY torbutton.prefs.nontor_tabs "非Torで読み込まれたタブ">
+<!ENTITY torbutton.prefs.tor_tabs "Torで読み込むタブ">
 <!ENTITY torbutton.prefs.socks_vfour "SOCKS v4">
 <!ENTITY torbutton.prefs.socks_vfive "SOCKS v5">
-<!ENTITY torbutton.prefs.no_proxies_on "No Proxies for: ">
-<!ENTITY torbutton.prefs.no_proxy_warning "Warning: Avoid using any hostnames above">
-<!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
-<!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
-<!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
-<!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
-<!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
-<!ENTITY torbutton.cookiedialog.lockCol "Protected">
-<!ENTITY torbutton.cookiedialog.domainCol "Host">
+<!ENTITY torbutton.prefs.no_proxies_on "プロキシを用いない:">
+<!ENTITY torbutton.prefs.no_proxy_warning "警告: 以上のどんなホストネームの使用も避けてください">
+<!ENTITY torbutton.prefs.spoofreresh "偽装更新">
+<!ENTITY torbutton.prefs.refereroptions "リファラ偽装オプション">
+<!ENTITY torbutton.prefs.nospoof "リファラ偽装しない">
+<!ENTITY torbutton.prefs.spoofroot "ページの含んでいるフォルダーを偽装する">
+<!ENTITY torbutton.prefs.spoofdomain "ドメインをリファラとして偽装する">
+<!ENTITY torbutton.prefs.spoofblank "リファラを空白にする">
+<!ENTITY torbutton.cookiedialog.title "Cookie保護を管理">
+<!ENTITY torbutton.cookiedialog.lockCol "保護済み">
+<!ENTITY torbutton.cookiedialog.domainCol "ホスト">
 <!ENTITY torbutton.cookiedialog.nameCol "名前">
-<!ENTITY torbutton.cookiedialog.pathCol "Path">
-<!ENTITY torbutton.cookiedialog.protectCookie "Protect Cookie">
-<!ENTITY torbutton.cookiedialog.removeCookie "Remove Cookie">
-<!ENTITY torbutton.cookiedialog.unprotectCookie "Unprotect Cookie">
-<!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
-<!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
-<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Disable Livemark updates during Tor usage">
+<!ENTITY torbutton.cookiedialog.pathCol "パス">
+<!ENTITY torbutton.cookiedialog.protectCookie "Cookieを保護">
+<!ENTITY torbutton.cookiedialog.removeCookie "Cookieを削除">
+<!ENTITY torbutton.cookiedialog.unprotectCookie "Cookieの保護を解除">
+<!ENTITY torbutton.cookiedialog.removeAllBut "保護されているもの以外削除">
+<!ENTITY torbutton.cookiedialog.saveAllCookies "新しいCookieを保護">
+<!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "新しいCOokieを保護しない">
+<!ENTITY torbutton.prefs.disable_livemarks "Torの使用中ライブブックマークの更新を無効化">
 <!ENTITY torbutton.prefs.dtd_recommended "(推奨)">
 <!ENTITY torbutton.prefs.dtd_optional "(オプション)">
 <!ENTITY torbutton.prefs.dtd_crucial "(重要)">
-<!ENTITY torbutton.prefs.update_torbutton_via_tor "Redirect Torbutton updates through Tor">
-<!ENTITY torbutton.prefs.dodge_google_captcha "Automatically use an alternate search engine when presented with a Google Captcha:">
+<!ENTITY torbutton.prefs.update_torbutton_via_tor "Tor越しにTorbuttonの更新をリダイレクト">
+<!ENTITY torbutton.prefs.dodge_google_captcha "Google Captchaが出たときは自動的に予備の検索エンジンを使用する">
 <!ENTITY torbutton.prefs.engine1 "ixquick.com">
 <!ENTITY torbutton.prefs.engine2 "Bing.com">
 <!ENTITY torbutton.prefs.engine3 "Yahoo.com">
 <!ENTITY torbutton.prefs.engine4 "startpage.com">
 <!ENTITY torbutton.prefs.engine5 "duckduckgo.com">
-<!ENTITY torbutton.prefs.fix_google_srch "Strip platform and language off of Google Search Box queries">
-<!ENTITY torbutton.prefs.transparentTor "Transparent Torification (Requires custom transproxy or Tor router)">
-<!ENTITY torbutton.prefs.block_disk "Don't record browsing history or website data (enables Private Browsing Mode)">
-<!ENTITY torbutton.prefs.restrict_thirdparty "Restrict third party cookies and other tracking data">
-<!ENTITY torbutton.prefs.block_plugins "Disable browser plugins (such as Flash)">
-<!ENTITY torbutton.prefs.resist_fingerprinting "Change details that distinguish you from other Tor Browser users">
+<!ENTITY torbutton.prefs.fix_google_srch "Google検索ボックスのクエリからプラットフォームと言語を外す">
+<!ENTITY torbutton.prefs.transparentTor "透過型Tor化 (カスタム透過型プロキシかTorのルーターが必要)">
+<!ENTITY torbutton.prefs.block_disk "ブラウジング履歴やウェブサイトのデータを記録しない (プライベートブラウジングモードを有効化)">
+<!ENTITY torbutton.prefs.restrict_thirdparty "サードパーティーのCookieやその他のトラッキングデータを制限">
+<!ENTITY torbutton.prefs.block_plugins "ブラウザのプラグイン(フラッシュなど)を無効化">
+<!ENTITY torbutton.prefs.resist_fingerprinting "あなたとほかのTorブラウザのユーザーを区別する詳細を変更">

@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "ف">
 <!ENTITY torbutton.context_menu.about "عن زر تور...">
 <!ENTITY torbutton.context_menu.about.key "ح">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "فتح إعدادات الشبكة...">
 <!ENTITY torbutton.context_menu.networksettings.key "ح">
 <!ENTITY torbutton.context_menu.downloadUpdate "تنزيل تحديث حزمة متصفح تور...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "ت">
@@ -73,7 +73,7 @@
 <!ENTITY torbutton.prefs.disable_sessionstore "عطّل حفظ الجلسة (محبّذ)">
 <!ENTITY torbutton.prefs.headers "الترويسات">
 <!ENTITY torbutton.prefs.spoof_english "انتحل متصفحًا إنجليزيًا أمريكيًا">
-<!ENTITY torbutton.prefs.refererspoofing "مرجعية خداعه">
+<!ENTITY torbutton.prefs.refererspoofing "تزييف المرجع">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.smartspoof "محاكاة ساخرة ذكية للتحويل أثناء عمل تور (سخرية المجال المرجعي المتقاطع)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">

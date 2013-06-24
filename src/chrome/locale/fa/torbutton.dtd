@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "درباره ي دکمه تُر...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "باز کردن تنظیمات شبکه">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "به‌روزرساندن مرورگر تُر">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">

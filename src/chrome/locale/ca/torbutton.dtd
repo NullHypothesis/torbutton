@@ -11,7 +11,7 @@
 <!ENTITY torbutton.prefs.proxy.host.socks "Amfitrió SOCKS:">
 <!ENTITY torbutton.prefs.proxy.port "Port:">
 <!ENTITY torbutton.about.title "Quant a Torbutton">
-<!ENTITY torbutton.about.version "Version:">
+<!ENTITY torbutton.about.version "Versió">
 <!ENTITY torbutton.about.summary "Protects the privacy of your Tor browsing.">
 <!ENTITY torbutton.about.code "Code Contributors:">
 <!ENTITY torbutton.about.maintainer "Maintainer:">

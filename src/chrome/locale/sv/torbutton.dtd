@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "I">
 <!ENTITY torbutton.context_menu.about "Om Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "O">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "Öppna nätverksinställningar...">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Ladda ner uppdatering för Tor Browser Bundle...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">

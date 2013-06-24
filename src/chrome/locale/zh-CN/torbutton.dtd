@@ -1,6 +1,6 @@
 <!ENTITY torbutton.prefs.title "Torbutton 首选项">
 <!ENTITY torbutton.prefs.tor_settings "代理设置">
-<!ENTITY torbutton.prefs.recommended_settings "为该版本 Firefox 使用推荐的代理设置">
+<!ENTITY torbutton.prefs.recommended_settings "该版本的 Firefox 使用推荐代理设置">
 <!ENTITY torbutton.prefs.use_privoxy "使用 Privoxy">
 <!ENTITY torbutton.prefs.use_polipo "使用 Polipo">
 <!ENTITY torbutton.prefs.custom_settings "使用自定义代理设置">
@@ -18,7 +18,7 @@
 <!ENTITY torbutton.about.security_review "安全审查：">
 <!ENTITY torbutton.about.donate "如果您喜欢使用 Tor，您也可以考虑">
 <!ENTITY torbutton.about.make_donation "给予捐赠。">
-<!ENTITY torbutton.pref_connection.notice "禁止 Torbutton 来改变这些设置。">
+<!ENTITY torbutton.pref_connection.notice "禁止 Torbutton 更改这些设置。">
 <!ENTITY torbutton.pref_connection.more_info "更多信息">
 <!ENTITY torbutton.pref_connection_more_info.title "帮助">
 <!ENTITY torbutton.pref_connection_more_info.text "Torbutton 当前已启用。如果您想要更改非 Tor 的代理设置，请禁用 Torbutton 后再返回这里。如果您想更改Tor 的设置，请到 Torbutton 的首选项窗口中进行设置。">
@@ -30,15 +30,15 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "关于 Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "打开网络设置…">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "下载 Tor Browser Bundle 更新...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
-<!ENTITY torbutton.context_menu.cookieProtections "Cookie 隐私保护">
+<!ENTITY torbutton.context_menu.cookieProtections "Cookie 保护">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "复制 Tor URL">
 <!ENTITY torbutton.context_menu.copyTor.key "p">
-<!ENTITY torbutton.context_menu.openTorTab "在新标签中打开Tor URL">
+<!ENTITY torbutton.context_menu.openTorTab "在新标签页中打开 Tor URL">
 <!ENTITY torbutton.context_menu.openTorTab.key "r">
 <!ENTITY torbutton.context_menu.openTorWindow "在新窗口中打开 Tor URL">
 <!ENTITY torbutton.context_menu.openTorWindow.key "d">
@@ -47,8 +47,8 @@
 <!ENTITY torbutton.prefs.sec_settings "安全设置">
 <!ENTITY torbutton.prefs.block_thread "使用 Tor 时禁止读取历史（重要）">
 <!ENTITY torbutton.prefs.block_thwrite "使用 Tor 时禁止写入历史（推荐）">
-<!ENTITY torbutton.prefs.block_nthread "停用 Tor 时禁止读取历史（可选）">
-<!ENTITY torbutton.prefs.block_nthwrite "停用 Tor 时禁止写入历史（可选）">
+<!ENTITY torbutton.prefs.block_nthread "使用 Tor 之外的代理时禁止读取历史（可选）">
+<!ENTITY torbutton.prefs.block_nthwrite "停用 Tor 时禁止历史写入（可选）">
 <!ENTITY torbutton.prefs.clear_history "切换 Tor 状态时清除历史（可选）">
 <!ENTITY torbutton.prefs.clear_cache "切换 Tor 时禁用磁盘缓存并清除所有缓存">
 <!ENTITY torbutton.prefs.block_cache "使用 Tor 时禁止访问磁盘和内存缓存">

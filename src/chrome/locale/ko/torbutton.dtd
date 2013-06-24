@@ -1,15 +1,15 @@
 <!ENTITY torbutton.prefs.title "Torbutton 환경 설정">
-<!ENTITY torbutton.prefs.tor_settings "프록시 설정">
+<!ENTITY torbutton.prefs.tor_settings "프록시  서버 설정">
 <!ENTITY torbutton.prefs.recommended_settings "내가 사용하고 있는 파이어폭스를 위한 추천 설정 사용">
 <!ENTITY torbutton.prefs.use_privoxy "Privoxy 사용">
 <!ENTITY torbutton.prefs.use_polipo "Polipo 사용">
-<!ENTITY torbutton.prefs.custom_settings "사용자 프록시 설정 사용">
-<!ENTITY torbutton.prefs.proxy.host.http "HTTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.https "SSL Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.ftp "FTP Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher Proxy:">
-<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS Host:">
-<!ENTITY torbutton.prefs.proxy.port "포트 : ">
+<!ENTITY torbutton.prefs.custom_settings "사용자 지정 프록시 설정 사용">
+<!ENTITY torbutton.prefs.proxy.host.http "HTTP 프록시 주소:">
+<!ENTITY torbutton.prefs.proxy.host.https "SSL 프록시 주소:">
+<!ENTITY torbutton.prefs.proxy.host.ftp "FTP 프록시 :">
+<!ENTITY torbutton.prefs.proxy.host.gopher "Gopher 프록시 :">
+<!ENTITY torbutton.prefs.proxy.host.socks "SOCKS :">
+<!ENTITY torbutton.prefs.proxy.port "포트  : ">
 <!ENTITY torbutton.about.title "Torbutton에 대하여">
 <!ENTITY torbutton.about.version "버전:">
 <!ENTITY torbutton.about.summary "Tor 브라우징의 프라이버시 보호">
@@ -19,22 +19,22 @@
 <!ENTITY torbutton.about.donate "Tor를 사용하는 것이 좋으시다면, 기여할 수 있습니다">
 <!ENTITY torbutton.about.make_donation "기부하기">
 <!ENTITY torbutton.pref_connection.notice "이 설정을 바꾸는 것을 비활성화합니다">
-<!ENTITY torbutton.pref_connection.more_info "더 많은 정보">
+<!ENTITY torbutton.pref_connection.more_info "추가 ">
 <!ENTITY torbutton.pref_connection_more_info.title "도움말">
-<!ENTITY torbutton.pref_connection_more_info.text "Torbutton이 현재 활성화되었습니다.  만약 Tor 프록시를 사용하지 않으시려면, Torbutton을 비활성화하고 여기를 방문해 주십시오.  만약 Tor 설정을 바꾸고 싶으시다면, Torbutton 설정 화면을 사용해 주십시오.">
+<!ENTITY torbutton.pref_connection_more_info.text "Torbutton이 현재 활성화되었습니다.  만약 Tor 프록시가 아닌 일반 프록시 서버 설정을 하시려면, Torbutton을 비활성화하고 복귀해 .  만약 Tor 프록시 설정을 바꾸고 싶으시다면, Torbutton 설정 화면을 사용해 주세요.">
 <!ENTITY torbutton.context_menu.new_identity "새로운 신원">
 <!ENTITY torbutton.context_menu.new_identity_key "I">
-<!ENTITY torbutton.context_menu.toggle "Tor 상태 토글">
+<!ENTITY torbutton.context_menu.toggle "Tor-Toggle 상태">
 <!ENTITY torbutton.context_menu.toggle.key "T">
 <!ENTITY torbutton.context_menu.preferences "설정...">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "Torbutton에 대하여">
+<!ENTITY torbutton.context_menu.about "Torbutton에 대하여...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "네트워크 설정 열기">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Tor browser bundle 업데이트 다운로드">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
-<!ENTITY torbutton.context_menu.cookieProtections "쿠키 보호">
+<!ENTITY torbutton.context_menu.cookieProtections "쿠키 ">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
 <!ENTITY torbutton.context_menu.copyTor "Tor URL 복사">
 <!ENTITY torbutton.context_menu.copyTor.key "P">
@@ -45,42 +45,42 @@
 <!ENTITY torbutton.button.label "Torbutton">
 <!ENTITY torbutton.button.tooltip "Torbutton 초기화">
 <!ENTITY torbutton.prefs.sec_settings "보안 설정">
-<!ENTITY torbutton.prefs.block_thread "Tor 사용하는 동안 히스토리를 읽는 것을 막기 (중요)">
+<!ENTITY torbutton.prefs.block_thread "Tor 사용하는 동안 히스토리를 외부에서 읽어가는  것을 막기 (중요)">
 <!ENTITY torbutton.prefs.block_thwrite "Tor 사용중 히스토리 쓰기 막기 (추천)">
-<!ENTITY torbutton.prefs.block_nthread "Tor를 사용하지 않을 때 히스토리를 읽는 것을 막기 (선택)">
+<!ENTITY torbutton.prefs.block_nthread "Tor를 사용하지 않을 때 히스토리를 외부에서 읽어가는 것을 막기 (선택)">
 <!ENTITY torbutton.prefs.block_nthwrite "Tor를 사용하지 않을 때 히스토리를 쓰는 것을 막기 (선택)">
-<!ENTITY torbutton.prefs.clear_history "Tor Toggle에서 히스토리 초기화 (선택)">
-<!ENTITY torbutton.prefs.clear_cache "Tor 디스크 캐시를 막고 Tor Toggle에서 모든 캐시 초기화">
+<!ENTITY torbutton.prefs.clear_history "Tor Toggle시 히스토리 초기화 (선택)">
+<!ENTITY torbutton.prefs.clear_cache " Tor Toggle 시 Tor 디스크 캐시를 막고 모든 캐시 초기화">
 <!ENTITY torbutton.prefs.block_cache "Tor 작동중 디스크와 메모리 캐시 접근 차단">
-<!ENTITY torbutton.prefs.cookie_jars "보호되는 항아리에 Tor가 아닌 쿠키 저장">
+<!ENTITY torbutton.prefs.cookie_jars "보호되는 영역에 일반 쿠키 저장">
 <!ENTITY torbutton.prefs.cookie_protection "선택하기 위한 쿠키 보호 다이어로그 사용">
-<!ENTITY torbutton.prefs.mmm_cookies "나는 수동으로 내 쿠키를 관리할 것입니다 (위험)">
+<!ENTITY torbutton.prefs.mmm_cookies "수동으로 3사 쿠키 관리(위험)">
 <!ENTITY torbutton.prefs.clear_cookies "Tor toggle에서 쿠키 초기화">
-<!ENTITY torbutton.prefs.disable_plugins "Tor 사용중 플러그인 비활성화 (중대)">
-<!ENTITY torbutton.prefs.kill_bad_js "위험한 자바스크립트 잡아채기 (중요)">
+<!ENTITY torbutton.prefs.disable_plugins "Tor 사용중 플러그인 비활성화 (중요)">
+<!ENTITY torbutton.prefs.kill_bad_js "위험한 자바스크립트 차단 (중요)">
 <!ENTITY torbutton.prefs.isolate_content "Tor 상태에서 동적인 콘텐츠 격리 (중요)">
-<!ENTITY torbutton.prefs.no_updates "Tor 사용중 업데이트 비활성화">
+<!ENTITY torbutton.prefs.no_updates "Tor 브라우저 사용중 업데이트 비활성화">
 <!ENTITY torbutton.prefs.set_uagent "Tor 사용시 유저 에이전트 설정  (중요)">
 <!ENTITY torbutton.prefs.dynamic "동적 콘텐츠">
 <!ENTITY torbutton.prefs.cookies "쿠키">
 <!ENTITY torbutton.prefs.cache "캐시">
-<!ENTITY torbutton.prefs.history "히스토리">
+<!ENTITY torbutton.prefs.history "방문/탐색 기록">
 <!ENTITY torbutton.prefs.no_search "Tor 사용중 검색 엔진 제안 비활성화 (추천)">
 <!ENTITY torbutton.prefs.shutdown "종료">
-<!ENTITY torbutton.prefs.tor_shutdown "Tor가 활성화된 브라우저가 꺼지는 동안 쿠키 삭제">
-<!ENTITY torbutton.prefs.all_shutdown "어떤 브라우저라도 꺼지면 쿠키 삭제">
+<!ENTITY torbutton.prefs.tor_shutdown "Tor가 활성화된 브라우저가 종료 시 3사 쿠키 삭제">
+<!ENTITY torbutton.prefs.all_shutdown "전체 인터넷 브라우저 종료 시 3사 쿠키 삭제">
 <!ENTITY torbutton.prefs.no_shutdown "종료시 쿠키를 삭제하지 않음">
 <!ENTITY torbutton.prefs.disable_sessionstore "세션을 저장하지 않음 (추천)">
 <!ENTITY torbutton.prefs.headers "헤더">
 <!ENTITY torbutton.prefs.spoof_english "US 영어 브라우저로 조작">
-<!ENTITY torbutton.prefs.refererspoofing "리퍼러 조작">
+<!ENTITY torbutton.prefs.refererspoofing "리퍼러 스푸핑">
 <!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.prefs.smartspoof "Tor 사용시 스마트 리퍼러 조작 (도메인 리퍼러를 가로질러 조작)">
 <!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.disable_domstorage "Tor 사용시 DOM 저장소 비활성화 (중요)">
 <!ENTITY torbutton.prefs.forms "양식">
-<!ENTITY torbutton.prefs.block_tforms "Tor 사용시 비밀번호와 양식 저장 막기 (추천)">
-<!ENTITY torbutton.prefs.block_ntforms "Tor를 시용하지 않을 때 비밀번호와 양식 저장 막기 (추천)">
+<!ENTITY torbutton.prefs.block_tforms "Tor 사용시 비밀번호와 양식 저장 안함 (추천)">
+<!ENTITY torbutton.prefs.block_ntforms "Tor를 사용하지 않을 때 비밀번호와 양식 저장 안함 (추천)">
 <!ENTITY torbutton.prefs.tor "Tor">
 <!ENTITY torbutton.prefs.non_tor "Non-Tor">
 <!ENTITY torbutton.prefs.restore_tor "시작시 저장된 세션이 있다면, Tor 상태를 다음과 같이 합니다.">

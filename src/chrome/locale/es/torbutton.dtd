@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Acerca de Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "Abrir Preferencias de Red...">
 <!ENTITY torbutton.context_menu.networksettings.key "G">
 <!ENTITY torbutton.context_menu.downloadUpdate "Descargar actualización del Paquete de Navegador Tor">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "a">

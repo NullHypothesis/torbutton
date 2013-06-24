@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "P">
 <!ENTITY torbutton.context_menu.about "Par Torbutton...">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "Atvērt tīkla iestatījumus...">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
 <!ENTITY torbutton.context_menu.downloadUpdate "Lejuplādēt Pārlūka Tor pakotnes jauninājumu...">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">

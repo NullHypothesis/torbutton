@@ -51,10 +51,10 @@
 <!ENTITY torbutton.prefs.block_nthwrite "Blokovat zápis do historie při používání Non-Tor (volitelné)">
 <!ENTITY torbutton.prefs.clear_history "Vymazat historii při přepnutí Tor (volitelné)">
 <!ENTITY torbutton.prefs.clear_cache "Blokovat diskovou mezipaměť a vymaž ji při přepnutí Tora">
-<!ENTITY torbutton.prefs.block_cache "Block disk and memory cache access during Tor">
+<!ENTITY torbutton.prefs.block_cache "Zablokovat přístup k diskové a paměťové cache když beží Tor">
 <!ENTITY torbutton.prefs.cookie_jars "Store Non-Tor cookies in a protected jar">
 <!ENTITY torbutton.prefs.cookie_protection "Use the Cookie Protections Dialog to choose">
-<!ENTITY torbutton.prefs.mmm_cookies "I will manually manage my cookies (dangerous)">
+<!ENTITY torbutton.prefs.mmm_cookies "Budu sám spravovat moje cookies (nebezpečné)">
 <!ENTITY torbutton.prefs.clear_cookies "Clear cookies on Tor toggle">
 <!ENTITY torbutton.prefs.disable_plugins "Disable plugins during Tor usage (crucial)">
 <!ENTITY torbutton.prefs.kill_bad_js "Hook dangerous javascript (crucial)">

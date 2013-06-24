@@ -30,7 +30,7 @@
 <!ENTITY torbutton.context_menu.preferences.key "B">
 <!ENTITY torbutton.context_menu.about "A Torbutton névjegye...">
 <!ENTITY torbutton.context_menu.about.key "N">
-<!ENTITY torbutton.context_menu.networksettings "Open Network Settings…">
+<!ENTITY torbutton.context_menu.networksettings "Hálózati beállítások megnyitása">
 <!ENTITY torbutton.context_menu.networksettings.key "M">
 <!ENTITY torbutton.context_menu.downloadUpdate "Tor Böngésző csomag frissítésének letöltése">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
