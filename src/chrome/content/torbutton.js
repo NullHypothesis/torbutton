@@ -2370,60 +2370,6 @@ function torbutton_is_windowed(wind) {
     return true;
 }
 
-// Bug 1506 P1/P3: Setting a fixed window size is important, but
-// probably not for android.
-function torbutton_set_window_size(bWin) {
-    if (!bWin || typeof(bWin) == "undefined") {
-        torbutton_log(5, "No initial browser content window?");
-        return;
-    }
-
-    if (m_tb_prefs.getBoolPref("extensions.torbutton.resize_new_windows")
-            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
-            && torbutton_is_windowed(window)) {
-        var screenMan = Components.classes["@mozilla.org/gfx/screenmanager;1"]
-                            .getService(Components.interfaces.nsIScreenManager);
-        var junk = {}, availWidth = {}, availHeight = {};
-        screenMan.primaryScreen.GetRect(junk, junk, availWidth, availHeight);
-
-        // We need to set the inner width to an initial value because it has none
-        // at this point...
-        bWin.innerWidth = 200;
-        bWin.innerHeight = 200;
-
-        // XXX: This is sufficient to prevent some kind of weird resize race condition on Linux.
-        // Why or how, you ask? I have no fucking clue, man.
-        if (bWin.innerWidth != 200 || bWin.innerHeight != 200) {
-            bWin.innerHeight = 200;
-            bWin.innerWidth = 200;
-        }
-        torbutton_log(3, "About to resize new window: "+window.outerWidth+"x"+window.outerHeight
-                +" inner: "+bWin.innerWidth+"x"+bWin.innerHeight+
-                " in state "+window.windowState+" Have "+availWidth.value+"x"+availHeight.value);
-
-        var maxHeight = availHeight.value - (window.outerHeight - bWin.innerHeight) - 51;
-        var maxWidth = availWidth.value - (window.outerWidth - bWin.innerWidth);
-        
-        torbutton_log(3, "Got max dimensions: "+maxWidth+"x"+maxHeight);
-
-        var width;
-        var height;
-
-        if (maxWidth > 1000) {
-            width = 1000;
-        } else {
-            width = Math.floor(maxWidth/200.0)*200;
-        }
-
-        height = Math.floor(maxHeight/100.0)*100;
-
-        // This is fun. any attempt to directly set the inner window actually resizes the outer width
-        // to that value instead. Must use resizeBy() instead of assignment or resizeTo()
-        bWin.resizeBy(width-bWin.innerWidth,height-bWin.innerHeight);
-        torbutton_log(3, "Resized new window from: "+bWin.innerWidth+"x"+bWin.innerHeight+" to "+width+"x"+height+" in state "+window.windowState);
-    }
-}
-
 // Bug 1506 P3: This is needed pretty much only for the version check
 // and the window resizing. See comments for individual functions for
 // details
@@ -2448,7 +2394,14 @@ function torbutton_new_window(event)
 
     torbutton_do_startup();
 
-    torbutton_set_window_size(browser.contentWindow);
+    if (m_tb_prefs.getBoolPref("extensions.torbutton.resize_new_windows")
+            && m_tb_prefs.getBoolPref("extensions.torbutton.tor_enabled")
+            && torbutton_is_windowed(window)) {
+      var progress = Cc["@mozilla.org/docloaderservice;1"].getService(Ci.
+        nsIWebProgress);
+      progress.addProgressListener(torbutton_resizelistener,
+        Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+    }
 
     // Check the version on every new window. We're already pinging check in these cases.    
     torbutton_do_async_versioncheck();
@@ -2672,5 +2625,80 @@ var torbutton_weblistener =
   { /*torbutton_eclog(1, 'called linkIcon'); */ return 0; }
 }
 
+// Bug 1506 P1/P3: Setting a fixed window size is important, but
+// probably not for android.
+var torbutton_resizelistener =
+{
+  QueryInterface: function(aIID)
+  {
+   if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+       aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+       aIID.equals(Components.interfaces.nsISupports))
+     return this;
+   throw Components.results.NS_NOINTERFACE;
+  },
+
+  onLocationChange: function(aProgress, aRequest, aURI) {},
+  onStateChange: function(aProgress, aRequest, aFlag, aStatus) {
+    if (aFlag & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
+      var progress =
+        Components.classes["@mozilla.org/docloaderservice;1"].
+        getService(Components.interfaces.nsIWebProgress);
+      var win = getBrowser().contentWindow;
+      if (!win || typeof(win) == "undefined") {
+        torbutton_log(5, "No initial browser content window?");
+        progress.removeProgressListener(this);
+        return;
+      }
+      var screenMan = Components.classes["@mozilla.org/gfx/screenmanager;1"].
+        getService(Components.interfaces.nsIScreenManager);
+      var junk = {}, availWidth = {}, availHeight = {};
+      screenMan.primaryScreen.GetRect(junk, junk, availWidth, availHeight);
+
+      // We need to set the inner width to an initial value because it has none
+      // at this point... Choosing "300" as this works even on Windows
+      // reliably.
+      win.innerWidth = 300;
+      win.innerHeight = 300;
+
+      torbutton_log(3, "About to resize new window: " + window.outerWidth +
+        "x" + window.outerHeight + " inner: " + win.innerWidth + "x" + win.
+        innerHeight + " in state " + window.windowState + " Have " +
+        availWidth.value + "x" + availHeight.value);
+
+      var maxHeight = availHeight.value -
+        (window.outerHeight - win.innerHeight) - 51;
+      var maxWidth = availWidth.value - (window.outerWidth - win.innerWidth);
+      torbutton_log(3, "Got max dimensions: " + maxWidth + "x" + maxHeight);
+
+      var width;
+      var height;
+
+      if (maxWidth > 1000) {
+        width = 1000;
+      } else {
+        width = Math.floor(maxWidth/200.0)*200;
+      }
+
+      height = Math.floor(maxHeight/100.0)*100;
+
+      // This is fun. any attempt to directly set the inner window actually
+      // resizes the outer width to that value instead. Must use resizeBy()
+      // instead of assignment or resizeTo()
+      win.resizeBy(width - win.innerWidth, height - win.innerHeight);
+      torbutton_log(3, "Resized new window from: " + win.innerWidth + "x" +
+        win.innerHeight + " to " + width + "x" + height + " in state " +
+        window.windowState);
+
+      progress.removeProgressListener(this);
+    }
+  },
+
+  onProgressChange: function(aProgress, aRequest, curSelfProgress,
+                             maxSelfProgress, curTotalProgress,
+                             maxTotalProgress) {},
+  onStatusChange: function(aProgress, aRequest, stat, message) {},
+  onSecurityChange: function() {}
+};
 
 //vim:set ts=4
