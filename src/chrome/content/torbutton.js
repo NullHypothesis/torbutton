@@ -801,7 +801,8 @@ function torbutton_notify_if_update_needed() {
 }
 
 function torbutton_download_update() {
-    var downloadURI = "https://www.torproject.org/download/download-easy.html";
+    // XXX: Super super ghetto, but we lack a download page for the alphas right now..
+    var downloadURI = "https://archive.torproject.org/tor-package-archive/torbrowser/3.0a4/";
     var rtSvc = Components.classes["@mozilla.org/xre/app-info;1"]
                           .getService(Components.interfaces.nsIXULRuntime);
     downloadURI += "?os=" + rtSvc.OS + "&arch=" + rtSvc.XPCOMABI;
