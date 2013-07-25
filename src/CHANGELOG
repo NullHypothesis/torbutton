@@ -1,3 +1,8 @@
+1.6.1:
+ * bug 8478: Change when window resizing code fires to avoid rounding errors
+ * bug 9331: Hack an update URL for the next TBB release
+ * bug 9144: Change an aboutTor.dtd string to something transifex might accept
+
 1.6.0:
  05 Jun 2013
   * bug 7494: Create a local home page for TBB as about:tor
