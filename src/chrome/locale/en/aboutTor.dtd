@@ -40,8 +40,8 @@
 <!ENTITY aboutTor.searchDDG.privacy.label "securely">
 <!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html">
 <!ENTITY aboutTor.searchDDG.privacy.link "https://duckduckgo.com/privacy.html">
-<!ENTITY aboutTor.searchSP.privacy.afterLink.label " ">
-<!ENTITY aboutTor.searchDDG.privacy.afterLink.label " ">
+<!ENTITY aboutTor.searchSP.privacy.afterLink.label "&nbsp;">
+<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "&nbsp;">
 <!ENTITY aboutTor.searchSP.search.beforeLink.label "with ">
 <!ENTITY aboutTor.searchDDG.search.beforeLink.label "with ">
 <!ENTITY aboutTor.searchSP.search.label "Startpage">
