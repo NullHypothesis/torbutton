@@ -13,12 +13,12 @@
 toolbar[iconsize="small"] #torbutton-button {
   list-style-image: url("chrome://torbutton/skin/tor-16.png");
 }
-// Although the tor-enabled-16.png, tor-disabled-16.png and tor-update-16.gif
-// indicate that they are 16x16 icons, they have 18x18 pixels in fact. This
-// leads to resizing the content window's height on start-up on Windows at
-// least. To guarantee a content window with a multiple of 200x100 we
-// therefore use only a x16 part of each icon while trying to minimize bad UI
-// effects until #8941 gets fixed.
+/* Although the tor-enabled-16.png, tor-disabled-16.png and tor-update-16.gif
+indicate that they are 16x16 icons, they have 18x18 pixels in fact. This
+leads to resizing the content window's height on start-up on Windows at
+least. To guarantee a content window with a multiple of 200x100 we
+therefore use only a x16 part of each icon while trying to minimize bad UI
+effects until #8941 gets fixed.*/
 toolbar[iconsize="small"] #torbutton-button[tbstatus="on"] {
   list-style-image: url("chrome://torbutton/skin/tor-enabled-16.png");
   -moz-image-region: rect(1px, 17px, 17px, 1px);
