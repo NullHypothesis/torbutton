@@ -854,6 +854,21 @@ function torbutton_update_abouttor_doc(aDoc, aTorOn, aUpdateNeeded) {
       aDoc.body.setAttribute("torNeedsUpdate", "yes"); 
     else
       aDoc.body.removeAttribute("torNeedsUpdate");
+
+    try
+    {
+      const kBrandBundle = "chrome://branding/locale/brand.properties";
+      let brandBundle = Cc["@mozilla.org/intl/stringbundle;1"]
+                          .getService(Ci.nsIStringBundleService)
+                          .createBundle(kBrandBundle);
+      let productName = brandBundle.GetStringFromName("brandFullName");
+      let tbbVersion = m_tb_prefs.getCharPref("torbrowser.version");
+      let e = aDoc.getElementById("torstatus-version");
+
+      while (e.firstChild)
+        e.removeChild(e.firstChild);
+      e.appendChild(aDoc.createTextNode(productName + '\n' + tbbVersion));
+    } catch (e) {}
   }
 
   return isAboutTor;
