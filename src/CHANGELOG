@@ -1,3 +1,8 @@
+1.6.2:
+ 18 Sep 2013
+ * bug 9492: Fix Torbutton logo on OSX and Windows (and related
+             initialization code)
+
 1.6.1:
  01 Aug 2013
  * bug 8478: Change when window resizing code fires to avoid rounding errors
