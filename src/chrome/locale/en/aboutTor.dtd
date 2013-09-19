@@ -32,7 +32,7 @@
    - The sentence contains two embedded links for "securely" and
    - the search engine ("Startpage" or "DuckDuckGo").
   -->
-<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/do/search">
+<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/rth/search">
 <!ENTITY aboutTor.searchDDGPost.link "https://duckduckgo.com/html/">
 <!ENTITY aboutTor.searchSP.privacy.beforeLink.label "Search ">
 <!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "Search ">
