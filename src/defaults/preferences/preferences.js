@@ -196,7 +196,7 @@ pref("extensions.torbutton.asked_google_captcha", false);
 pref("extensions.torbutton.redir_url.1", "https://www.ixquick.com/do/metasearch.pl?query=");
 pref("extensions.torbutton.redir_url.2", "http://www.bing.com/search?q=");
 pref("extensions.torbutton.redir_url.3", "http://search.yahoo.com/search?p=");
-pref("extensions.torbutton.redir_url.4", "https://www.startpage.com/do/search?query=");
+pref("extensions.torbutton.redir_url.4", "https://www.startpage.com/rto/search?query=");
 pref("extensions.torbutton.redir_url.5", "https://duckduckgo.com/?q=");
 pref("extensions.torbutton.fix_google_srch", true);
 
