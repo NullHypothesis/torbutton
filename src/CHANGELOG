@@ -1,3 +1,7 @@
+1.6.2.1:
+ 23 Sep 2013:
+ * Bug 8839: Switch about:tor search link to unfiltered startpage link
+
 1.6.2:
  18 Sep 2013
  * bug 9492: Fix Torbutton logo on OSX and Windows (and related
