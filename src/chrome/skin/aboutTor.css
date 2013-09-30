@@ -34,6 +34,18 @@ body[toron] {
   background-image: -moz-linear-gradient(top, #ffffff, #ffffff 10%, #d5ffd5 50%, #d5ffd5);
 }
 
+#torstatus-version {
+  position: fixed;
+  top: 6px;
+  right: 6px;
+  height: 30px;
+  width: 200px;
+  font-family: "Liberation Sans", Arial, Helvetica, sans-serif;
+  font-size: 1.4em;
+  white-space: pre-wrap;
+  text-align: right;
+}
+
 body[toron] #torstatus-image {
   background-image: url('chrome://torbutton/content/aboutTor/tor-on.png');
 }
