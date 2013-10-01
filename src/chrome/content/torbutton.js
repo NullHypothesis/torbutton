@@ -1652,6 +1652,8 @@ function torbutton_do_tor_check()
 
 function torbutton_local_tor_check()
 {
+  let didLogError = false;
+
   let proxyType = m_tb_prefs.getIntPref("network.proxy.type");
   if (0 == proxyType)
     return false;
@@ -1665,10 +1667,13 @@ function torbutton_local_tor_check()
 
   function logUnexpectedResponse()
   {
-    torbutton_log(5, "unexpected tor response: " + resp);
+    if (!didLogError) {
+      didLogError = true;
+      torbutton_log(5, "unexpected tor response: " + resp);
+    }
   }
 
-  // Sample response: net/listeners/socks="127.0.0.1:9150"
+  // Sample response: net/listeners/socks="127.0.0.1:9149" "127.0.0.1:9150"
   // First, check for command argument prefix.
   resp = resp.toLowerCase();
   if (0 != resp.indexOf(kCmdArg + '=')) {
@@ -1676,31 +1681,41 @@ function torbutton_local_tor_check()
     return false;
   }
 
-  // Remove double quotes if present.
-  resp = resp.substr(kCmdArg.length + 1);
-  let len = resp.length;
-  if ((len > 2) && ('"' == resp.charAt(0)) && ('"' == resp.charAt(len - 1)))
-    resp = resp.substring(1, len - 1);
-
-  let tokens = resp.split(':');
-  if (tokens.length < 2) {
-    logUnexpectedResponse();
-    return false;
-  }
-
-  let torSocksAddr = tokens[0];
-  let torSocksPort = parseInt(tokens[1], 10);
-  if ((torSocksAddr.length < 1) || isNaN(torSocksPort)) {
-    logUnexpectedResponse();
-    return false;
-  }
-
-  torbutton_log(2, "Tor socks listener: " + torSocksAddr + ':' + torSocksPort);
-
+  // Retrieve configured proxy settings and check each listener against them.
   let socksAddr = m_tb_prefs.getCharPref("network.proxy.socks");
   let socksPort = m_tb_prefs.getIntPref("network.proxy.socks_port");
+  let addrArray = resp.substr(kCmdArg.length + 1).split(' ');
+  let foundSocksListener = false;
+  for (let i = 0; !foundSocksListener && (i < addrArray.length); ++i)
+  {
+    var addr = addrArray[i];
 
-  return ((socksAddr == torSocksAddr) && (socksPort == torSocksPort));
+    // Remove double quotes if present.
+    let len = addr.length;
+    if ((len > 2) && ('"' == addr.charAt(0)) && ('"' == addr.charAt(len - 1)))
+      addr = addr.substring(1, len - 1);
+
+    // Check against the configured proxy.
+    let tokens = addr.split(':');
+    if (tokens.length < 2)
+      logUnexpectedResponse();
+    else
+    {
+      let torSocksAddr = tokens[0];
+      let torSocksPort = parseInt(tokens[1], 10);
+      if ((torSocksAddr.length < 1) || isNaN(torSocksPort))
+        logUnexpectedResponse();
+      else
+      {
+        torbutton_log(2, "Tor socks listener: " + torSocksAddr + ':'
+                         + torSocksPort);
+        foundSocksListener = ((socksAddr == torSocksAddr) &&
+                              (socksPort == torSocksPort));
+      }
+    }
+  }
+
+  return foundSocksListener;
 } // torbutton_local_tor_check
 
 
