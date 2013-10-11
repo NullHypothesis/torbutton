@@ -1,3 +1,8 @@
+1.6.3:
+ 11 Oct 2013:
+ * Bug 9224: Support multiple Tor socks ports for about:tor status check
+ * Bug 9587: Add TBB version number to about:tor
+
 1.6.2.1:
  23 Sep 2013:
  * Bug 8839: Switch about:tor search link to unfiltered startpage link
