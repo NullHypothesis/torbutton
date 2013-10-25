@@ -1546,9 +1546,8 @@ function torbutton_do_new_identity() {
   torbutton_log(3, "New Identity: Clearing LocalStorage");
   
   try {
-    var storageManagerService = Cc["@mozilla.org/dom/storagemanager;1"].
-        getService(Ci.nsIDOMStorageManager);
-    storageManagerService.clearOfflineApps();
+      Components.utils.import("resource:///modules/offlineAppCache.jsm");
+      OfflineAppCacheHelper.clear();
   } catch(e) {
       torbutton_log(5, "Exception on localStorage clearing: "+e);
       window.alert("Torbutton: Unexpected error during localStorage clearing: "+e);
@@ -1585,9 +1584,18 @@ function torbutton_do_new_identity() {
 
   // XXX: This may not clear zoom site-specific
   // browser.content.full-zoom
-  var cps = Cc["@mozilla.org/content-pref/service;1"].
-      createInstance(Ci.nsIContentPrefService);
-  cps.removeGroupedPrefs();
+  if (Ci.nsIContentPrefService2) {   // Firefox >= 20
+    XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+                            "resource://gre/modules/PrivateBrowsingUtils.jsm");
+    var pbCtxt = PrivateBrowsingUtils.privacyContextFromWindow(window);
+    var cps = Cc["@mozilla.org/content-pref/service;1"]
+                .getService(Ci.nsIContentPrefService2);
+    cps.removeAllDomains(pbCtxt);
+  } else {                           // Firefox < 20
+    var cps = Cc["@mozilla.org/content-pref/service;1"].
+        createInstance(Ci.nsIContentPrefService);
+    cps.removeGroupedPrefs();
+  }
   
   torbutton_log(3, "New Identity: Syncing prefs");
 
@@ -1616,6 +1624,8 @@ function torbutton_do_new_identity() {
   torbutton_log(3, "New Identity: Opening a new browser window");
 
   // Open a new window with the TBB check homepage
+  // In Firefox >=19, can pass {private: true} but we do not need it because
+  // we have browser.privatebrowsing.autostart = true
   OpenBrowserWindow();
 
   torbutton_log(3, "New identity successful");
