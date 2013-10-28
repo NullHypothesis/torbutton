@@ -1518,18 +1518,7 @@ function torbutton_do_new_identity() {
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
   
   torbutton_log(3, "New Identity: Clearing Image Cache");
-
-  try {
-    var imgCache = Components.classes["@mozilla.org/image/cache;1"].
-            getService(Components.interfaces.imgICache);
-    imgCache.clearCache(false); // evict all but chrome cache
-  } catch(e) {
-    // FIXME: This can happen in some rare cases involving XULish image data
-    // in combination with our image cache isolation patch. Sure isn't
-    // a good thing, but it's not really a super-cookie vector either.
-    // We should fix it eventually.
-    torbutton_log(4, "Exception on image cache clearing: "+e);
-  }
+  torbutton_clear_image_caches();
 
   torbutton_log(3, "New Identity: Clearing Offline Cache");
 
@@ -1632,6 +1621,60 @@ function torbutton_do_new_identity() {
 
   // Close the current window for added safety
   window.close();
+}
+
+function torbutton_clear_image_caches()
+{
+  try {
+    let imgCache;
+    let imgTools = Cc["@mozilla.org/image/tools;1"].getService(Ci.imgITools);
+    if (!("getImgCacheForDocument" in imgTools)) {
+      // In Firefox 17 and older, there is one global image cache.  Clear it.
+      imgCache = Cc["@mozilla.org/image/cache;1"].getService(Ci.imgICache);
+      imgCache.clearCache(false); // evict all but chrome cache
+    } else {
+      // In Firefox 18 and newer, there are two image caches:  one that is
+      // used for regular browsing and one that is used for private browsing.
+
+      // Clear the non-private browsing image cache.
+      imgCache = imgTools.getImgCacheForDocument(null);
+      imgCache.clearCache(false); // evict all but chrome cache
+
+      // Try to clear the private browsing cache.  To do so, we must locate
+      // a content document that is contained within a private browsing window.
+      let didClearPBCache = false;
+      let wm = Cc["@mozilla.org/appshell/window-mediator;1"]
+                 .getService(Ci.nsIWindowMediator);
+      let enumerator = wm.getEnumerator("navigator:browser");
+      while (!didClearPBCache && enumerator.hasMoreElements()) {
+        let win = enumerator.getNext();
+        let browserDoc = win.document.documentElement;
+        if (!browserDoc.hasAttribute("privatebrowsingmode"))
+          continue;
+
+        let tabbrowser = win.getBrowser();
+        if (!tabbrowser)
+          continue;
+
+        var tabCount = tabbrowser.browsers.length;
+        for (var i = 0; i < tabCount; i++) {
+          let doc = tabbrowser.browsers[i].contentDocument;
+          if (doc) {
+            imgCache = imgTools.getImgCacheForDocument(doc);
+            imgCache.clearCache(false); // evict all but chrome cache
+            didClearPBCache = true;
+            break;
+          }
+        }
+      }
+    }
+  } catch(e) {
+    // FIXME: This can happen in some rare cases involving XULish image data
+    // in combination with our image cache isolation patch. Sure isn't
+    // a good thing, but it's not really a super-cookie vector either.
+    // We should fix it eventually.
+    torbutton_log(4, "Exception on image cache clearing: "+e);
+  }
 }
 
 function torbutton_do_tor_check()
