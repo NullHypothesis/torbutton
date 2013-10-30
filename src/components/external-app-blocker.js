@@ -181,15 +181,13 @@ ExternalWrapper.prototype =
                 prompts.BUTTON_DELAY_ENABLE +
                 prompts.BUTTON_POS_1_DEFAULT;
 
-    var bundle = chrome.torbutton_get_stringbundle();
-
-    var title = bundle.GetStringFromName("torbutton.popup.external.title");
-    var app = bundle.GetStringFromName("torbutton.popup.external.app");
-    var note = bundle.GetStringFromName("torbutton.popup.external.note");
-    var suggest = bundle.GetStringFromName("torbutton.popup.external.suggest");
-    var launch = bundle.GetStringFromName("torbutton.popup.launch");
-    var cancel = bundle.GetStringFromName("torbutton.popup.cancel");
-    var dontask = bundle.GetStringFromName("torbutton.popup.dontask");
+    var title = chrome.torbutton_get_property_string("torbutton.popup.external.title");
+    var app = chrome.torbutton_get_property_string("torbutton.popup.external.app");
+    var note = chrome.torbutton_get_property_string("torbutton.popup.external.note");
+    var suggest = chrome.torbutton_get_property_string("torbutton.popup.external.suggest");
+    var launch = chrome.torbutton_get_property_string("torbutton.popup.launch");
+    var cancel = chrome.torbutton_get_property_string("torbutton.popup.cancel");
+    var dontask = chrome.torbutton_get_property_string("torbutton.popup.dontask");
 
     var result = prompts.confirmEx(chrome, title, app+urispec+note+suggest+" ",
                                    flags, launch, cancel, "", dontask, check);

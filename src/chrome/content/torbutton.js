@@ -310,15 +310,14 @@ function torbutton_set_status() {
             var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
                 .getService(Components.interfaces.nsIWindowMediator);
             var chrome = wm.getMostRecentWindow("navigator:browser");
-            var o_stringbundle = torbutton_get_stringbundle();
-            var warning1 = o_stringbundle.GetStringFromName("torbutton.popup.pref_error");
+            var warning1 = torbutton_get_property_string("torbutton.popup.pref_error");
 
             if (e.result == 0x80520015 || e.result == 0x80520013) { // NS_ERROR_FILE_ACCESS_DENIED/NS_ERROR_FILE_READ_ONLY
-                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.permission_denied");
+                var warning2 = torbutton_get_property_string("torbutton.popup.permission_denied");
                 chrome.alert(warning1+"\n\n"+warning2);
             } else if (e.result == 0x80520010) { // NS_ERROR_FILE_NO_DEVICE_SPACE
                 var o_stringbundle = torbutton_get_stringbundle();
-                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.device_full");
+                var warning2 = torbutton_get_property_string("torbutton.popup.device_full");
                 chrome.alert(warning1+"\n\n"+warning2);
             } else {
                 // This should never happen.. 
@@ -342,15 +341,13 @@ function torbutton_set_status() {
             var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
                 .getService(Components.interfaces.nsIWindowMediator);
             var chrome = wm.getMostRecentWindow("navigator:browser");
-            var o_stringbundle = torbutton_get_stringbundle();
-            var warning1 = o_stringbundle.GetStringFromName("torbutton.popup.pref_error");
+            var warning1 = torbutton_get_property_string("torbutton.popup.pref_error");
 
             if (e.result == 0x80520015 || e.result == 0x80520013) { // NS_ERROR_FILE_ACCESS_DENIED/NS_ERROR_FILE_READ_ONLY
-                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.permission_denied");
+                var warning2 = torbutton_get_property_string("torbutton.popup.permission_denied");
                 chrome.alert(warning1+"\n\n"+warning2);
             } else if (e.result == 0x80520010) { // NS_ERROR_FILE_NO_DEVICE_SPACE
-                var o_stringbundle = torbutton_get_stringbundle();
-                var warning2 = o_stringbundle.GetStringFromName("torbutton.popup.device_full");
+                var warning2 = torbutton_get_property_string("torbutton.popup.device_full");
                 chrome.alert(warning1+"\n\n"+warning2);
             } else {
                 // This should never happen.. 
@@ -565,8 +562,7 @@ function torbutton_prompt_for_language_preference() {
   // Display two buttons, both with string titles.
   var flags = prompts.STD_YES_NO_BUTTONS;
 
-  var strings = torbutton_get_stringbundle();
-  var message = strings.GetStringFromName("torbutton.popup.prompted_language");
+  var message = torbutton_get_property_string("torbutton.popup.prompted_language");
 
   var response = prompts.confirmEx(null, "", message, flags, null, null, null,
       null, {value: false});
@@ -599,9 +595,8 @@ function torbutton_confirm_plugins() {
   // Display two buttons, both with string titles.
   var flags = prompts.STD_YES_NO_BUTTONS + prompts.BUTTON_DELAY_ENABLE;
       
-  var strings = torbutton_get_stringbundle();
-  var message = strings.GetStringFromName("torbutton.popup.confirm_plugins");
-  var askAgainText = strings.GetStringFromName("torbutton.popup.never_ask_again");
+  var message = torbutton_get_property_string("torbutton.popup.confirm_plugins");
+  var askAgainText = torbutton_get_property_string("torbutton.popup.never_ask_again");
   var askAgain = {value: false};
 
   var no_plugins = (prompts.confirmEx(null, "", message, flags, null, null, null,
@@ -644,9 +639,8 @@ function torbutton_inform_about_tbb() {
   var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"]
       .getService(Components.interfaces.nsIPromptService);
 
-  var strings = torbutton_get_stringbundle();
-  var message = strings.GetStringFromName("torbutton.popup.prompt_torbrowser");
-  var title = strings.GetStringFromName("torbutton.title.prompt_torbrowser");
+  var message = torbutton_get_property_string("torbutton.popup.prompt_torbrowser");
+  var title = torbutton_get_property_string("torbutton.title.prompt_torbrowser");
   var checkbox = {value: false};
 
   var sb = Components.classes["@mozilla.org/intl/stringbundle;1"]
@@ -1170,8 +1164,7 @@ function torbutton_enable_tor(force)
   torbutton_log(3, 'called enable_tor()');
 
   if(!force && m_tb_prefs.getBoolPref("extensions.torbutton.test_failed")) {
-      var strings = torbutton_get_stringbundle();
-      var warning = strings.GetStringFromName("torbutton.popup.test.confirm_toggle");
+      var warning = torbutton_get_property_string("torbutton.popup.test.confirm_toggle");
       var wm = Cc["@mozilla.org/appshell/window-mediator;1"]
                    .getService(Components.interfaces.nsIWindowMediator);
       var chrome = wm.getMostRecentWindow("navigator:browser");
@@ -1189,15 +1182,14 @@ function torbutton_update_toolbutton(mode)
 {
   var o_toolbutton = torbutton_get_toolbutton();
   if (!o_toolbutton) return;
-  var o_stringbundle = torbutton_get_stringbundle();
   var tooltip = "";
 
   if (mode && torbutton_tor_check_ok()) {
-      tooltip = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
+      tooltip = torbutton_get_property_string("torbutton.panel.label.enabled");
       o_toolbutton.setAttribute('tbstatus', 'on');
       o_toolbutton.setAttribute('tooltiptext', tooltip);
   } else {
-      tooltip = o_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
+      tooltip = torbutton_get_property_string("torbutton.panel.label.disabled");
       o_toolbutton.setAttribute('tbstatus', 'off');
       o_toolbutton.setAttribute('tooltiptext', tooltip);
   }
@@ -1208,20 +1200,19 @@ function torbutton_update_statusbar(mode)
 {
     var o_statuspanel = torbutton_get_statuspanel();
     if (!window.statusbar.visible) return;
-    var o_stringbundle = torbutton_get_stringbundle();
     var label = "";
     var tooltip = "";
 
     if (mode && torbutton_tor_check_ok()) {
-        label   = o_stringbundle.GetStringFromName("torbutton.panel.label.enabled");
-        tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.enabled");
+        label   = torbutton_get_property_string("torbutton.panel.label.enabled");
+        tooltip = torbutton_get_property_string("torbutton.panel.tooltip.enabled");
         o_statuspanel.style.color = "#390";
         o_statuspanel.setAttribute('label', label);
         o_statuspanel.setAttribute('tooltiptext', tooltip);
         o_statuspanel.setAttribute('tbstatus', 'on');
     } else {
-        label   = o_stringbundle.GetStringFromName("torbutton.panel.label.disabled");
-        tooltip = o_stringbundle.GetStringFromName("torbutton.panel.tooltip.disabled");
+        label   = torbutton_get_property_string("torbutton.panel.label.disabled");
+        tooltip = torbutton_get_property_string("torbutton.panel.tooltip.disabled");
         o_statuspanel.style.color = "#F00";
         o_statuspanel.setAttribute('label', label);
         o_statuspanel.setAttribute('tooltiptext', tooltip);
@@ -1600,14 +1591,12 @@ function torbutton_do_new_identity() {
 
   // We only support TBB for newnym.
   if (!m_tb_control_pass || !m_tb_control_port) {
-    var o_stringbundle = torbutton_get_stringbundle();
-    var warning = o_stringbundle.GetStringFromName("torbutton.popup.no_newnym");
+    var warning = torbutton_get_property_string("torbutton.popup.no_newnym");
     torbutton_log(5, "Torbutton cannot safely newnym. It does not have access to the Tor Control Port.");
     window.alert(warning);
   } else {
     if (!torbutton_send_ctrl_cmd("SIGNAL NEWNYM\r\n")) {
-      var o_stringbundle = torbutton_get_stringbundle();
-      var warning = o_stringbundle.GetStringFromName("torbutton.popup.no_newnym");
+      var warning = torbutton_get_property_string("torbutton.popup.no_newnym");
       torbutton_log(5, "Torbutton was unable to request a new circuit from Tor");
       window.alert(warning);
     }
@@ -2078,7 +2067,7 @@ function torbutton_jar_cookies(mode) {
     /*
     if(m_tb_ff3) {
         var o_stringbundle = torbutton_get_stringbundle();
-        var warning = o_stringbundle.GetStringFromName("torbutton.popup.ff3.cookie_warning");
+        var warning = torbutton_get_property_string("torbutton.popup.ff3.cookie_warning");
         window.alert(warning);
         return;
     }*/
@@ -2333,9 +2322,8 @@ function torbutton_do_startup()
 
         // Still need this in case people shove this thing back into FF
         if (!m_tb_tbb && m_tb_prefs.getBoolPref("extensions.torbutton.prompt_torbrowser")) {
-          var o_stringbundle = torbutton_get_stringbundle();
-          var warning = o_stringbundle.GetStringFromName("torbutton.popup.short_torbrowser");
-          var title = o_stringbundle.GetStringFromName("torbutton.title.prompt_torbrowser");
+          var warning = torbutton_get_property_string("torbutton.popup.short_torbrowser");
+          var title = torbutton_get_property_string("torbutton.title.prompt_torbrowser");
           var prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
           prompts.alert(null, title, warning);
         }

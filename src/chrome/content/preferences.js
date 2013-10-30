@@ -236,8 +236,7 @@ function torbutton_prefs_save(doc) {
         var chrome = wm.getMostRecentWindow("navigator:browser");
         var ret = chrome.torbutton_test_settings();
         if (ret != 4) {
-            var strings = torbutton_get_stringbundle();
-            var warning = strings.GetStringFromName("torbutton.popup.test.failure");
+            var warning = chrome.torbutton_get_property_string("torbutton.popup.test.failure");
             window.alert(warning);
         } else {
             o_torprefs.setBoolPref('tor_enabled', true);
@@ -289,11 +288,10 @@ function torbutton_prefs_test_settings() {
         .getService(Components.interfaces.nsIWindowMediator);
     var chrome = wm.getMostRecentWindow("navigator:browser");
 
-    var strings = torbutton_get_stringbundle();
     if(chrome.m_tb_ff3) {
         // FIXME: This is kind of ghetto.. can we make a progress 
         // bar or a window that updates itself?
-        var warning = strings.GetStringFromName("torbutton.popup.test.ff3_notice");
+        var warning = chrome.torbutton_get_property_string("torbutton.popup.test.ff3_notice");
         window.alert(warning);
     }
     var ret = chrome.torbutton_test_settings();
@@ -319,11 +317,11 @@ function torbutton_prefs_test_settings() {
             window.alert("Tor proxy test: No TorCheckResult id found (response not valid XHTML)");
             break;
         case 4:
-            var warning = strings.GetStringFromName("torbutton.popup.test.success");
+            var warning = chrome.torbutton_get_property_string("torbutton.popup.test.success");
             window.alert(warning);
             break;
         case 5:
-            var warning = strings.GetStringFromName("torbutton.popup.test.failure");
+            var warning = chrome.torbutton_get_property_string("torbutton.popup.test.failure");
             window.alert(warning);
             break;
         case 6:
@@ -333,7 +331,7 @@ function torbutton_prefs_test_settings() {
             window.alert("Tor proxy test: check.torproject.org returned bad result");
             break;
         case 8:
-            var warning = strings.GetStringFromName("torbutton.popup.test.no_http_proxy");
+            var warning = chrome.torbutton_get_property_string("torbutton.popup.test.no_http_proxy");
             window.alert(warning);
             break;
     }

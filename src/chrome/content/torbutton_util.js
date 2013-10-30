@@ -14,6 +14,8 @@ var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1
 var m_tb_ff5 = false;
 var m_tb_ff4 = false;
 
+var m_tb_string_bundle = torbutton_get_stringbundle();
+
 if(versionChecker.compare(appInfo.version, "4.0a1") >= 0) {
     m_tb_ff4 = true;
 } else {
@@ -246,6 +248,21 @@ function torbutton_get_stringbundle()
     }
 
     return o_stringbundle;
+}
+
+function torbutton_get_property_string(propertyname)
+{
+    try { 
+        if (!m_tb_string_bundle) {
+            m_tb_string_bundle = torbutton_get_stringbundle();
+        }
+
+        return m_tb_string_bundle.GetStringFromName(propertyname);
+    } catch(e) {
+        torbutton_log(4, "Unlocalized string "+propertyname);
+    }
+
+    return propertyname;
 }
 
 function torbutton_about_init() {
