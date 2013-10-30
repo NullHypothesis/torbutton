@@ -95,7 +95,7 @@
 <!ENTITY torbutton.prefs.block_links "Блокировать щелчки по ссылкам и перезагрузку страниц из разных режимов Tor (необяз.)">
 <!ENTITY torbutton.prefs.jar_certs "Хранить SSL сертификаты в раздельных jar-файлах для Tor/не-Tor (желательно)">
 <!ENTITY torbutton.prefs.jar_ca_certs "Хранить CA сертификаты в раздельных jar-файлах для Tor/не-Tor (желательно)">
-<!ENTITY torbutton.prefs.locked_mode 'Отключить "Кнопку" и "Горячие клавиши" для предотвращеня случайного переключения режима'>
+<!ENTITY torbutton.prefs.locked_mode "Отключить &quot;Кнопку&quot; и &quot;Горячие клавиши&quot; для предотвращеня случайного переключения режима">
 <!ENTITY torbutton.prefs.startup_state "При обычном запуске (без восстановления сессии), устанавливать состояние Tor в:">
 <!ENTITY torbutton.prefs.shutdown_state "Выключеное состояние">
 <!ENTITY torbutton.prefs.startup "Запуск">
@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "Внимание: Не вносите никаких имен доменов в поле выше">
 <!ENTITY torbutton.prefs.spoofreresh "Стереть правила подстановок">
 <!ENTITY torbutton.prefs.refereroptions "Опции подстановок рефереров">
-<!ENTITY torbutton.prefs.nospoof "Оставить исходный реферер, как есть">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "Подмена содержащих папки страницы">
 <!ENTITY torbutton.prefs.spoofdomain "Подменить домен в качестве реферера">
-<!ENTITY torbutton.prefs.spoofblank "Сделать реферер пустым">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "Управление защитой Cookie">
 <!ENTITY torbutton.cookiedialog.lockCol "Защищено">
 <!ENTITY torbutton.cookiedialog.domainCol "Имя компьютера">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "Удалить все кроме защищённых">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Защищать новые Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Не защищать новые Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Отключить обновление Livemarks во время работы в Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(рекомендуется)">
 <!ENTITY torbutton.prefs.dtd_optional "(по желанию)">
 <!ENTITY torbutton.prefs.dtd_crucial "(критично)">

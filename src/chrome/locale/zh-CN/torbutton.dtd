@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "警告：请不要使用上述任何主机名。">
 <!ENTITY torbutton.prefs.spoofreresh "伪造刷新">
 <!ENTITY torbutton.prefs.refereroptions "Referer 欺骗选项">
-<!ENTITY torbutton.prefs.nospoof "正常 Referer">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "伪造包含文件夹的页面">
 <!ENTITY torbutton.prefs.spoofdomain "伪造域名作为 Referer">
-<!ENTITY torbutton.prefs.spoofblank "制作空白 Referer">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "管理受保护的 Cookie">
 <!ENTITY torbutton.cookiedialog.lockCol "受保护">
 <!ENTITY torbutton.cookiedialog.domainCol "服务器">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "全部移除仅保留受保护的 Cookie">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "保护新的 Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "不保护新的 Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "使用 Tor 时禁用 Livemark 更新（RSS 书签）">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "（推荐）">
 <!ENTITY torbutton.prefs.dtd_optional "（可选）">
 <!ENTITY torbutton.prefs.dtd_crucial "（重要）">

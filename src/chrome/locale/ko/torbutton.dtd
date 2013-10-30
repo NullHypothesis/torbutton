@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "주의 : 어떤 호스트네임을 아래에서 사용하는 것을 피하십시오.">
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
 <!ENTITY torbutton.prefs.refereroptions "Referer Spoofing 옵션">
-<!ENTITY torbutton.prefs.nospoof "리퍼러를 spoof 하지 마십시오">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "페이지 폴더를 포함하는 spoof">
 <!ENTITY torbutton.prefs.spoofdomain "도에민을 리퍼러로 spoof 하십시오">
-<!ENTITY torbutton.prefs.spoofblank "referer를 공란으로 만들기">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "쿠키 보호 관리">
 <!ENTITY torbutton.cookiedialog.lockCol "보호됨">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "보호된 것 빼고 모두 지우기">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "새로운 쿠키 보호">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "새로운 쿠키를 보호하지 않음">
-<!ENTITY torbutton.prefs.disable_livemarks "Tor toggle 동안 Livemark 업데이트 비활성화">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(추천)">
 <!ENTITY torbutton.prefs.dtd_optional "(선택)">
 <!ENTITY torbutton.prefs.dtd_crucial "(중요)">

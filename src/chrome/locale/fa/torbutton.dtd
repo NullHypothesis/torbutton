@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "هشدار: از به کار بردن هر گونه نام ميزبان (hostname) در بالا بپرهيزيد">
 <!ENTITY torbutton.prefs.spoofreresh "تازه کردن هويت جعلی">
 <!ENTITY torbutton.prefs.refereroptions "تنظيمات جعل هويت ارجاع دهنده">
-<!ENTITY torbutton.prefs.nospoof "عدم جعل هويت ارجاع دهنده">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "جعل هويت پوشه حاوی صفحه">
 <!ENTITY torbutton.prefs.spoofdomain "جعل هويت دامنه به عنوان ارجاع دهنده">
-<!ENTITY torbutton.prefs.spoofblank "بی‌نام سازی ارجاع دهنده">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "مديريت حفاظت کلوچک‌ها">
 <!ENTITY torbutton.cookiedialog.lockCol "حفاظت شده">
 <!ENTITY torbutton.cookiedialog.domainCol "ميزبان">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "حذف تمام کلوچک‌های حفاظت نشده">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "حفاظت از کلوچک‌های جديد">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "عدم حفاظت از کلوچک‌های جديد">
-<!ENTITY torbutton.prefs.disable_livemarks "غيرفعال کردن به‌روزرسانی بوک مارک‌ها (livemarks) حين استفاده از تُر">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(توصيه می شود)">
 <!ENTITY torbutton.prefs.dtd_optional "(اختياری)">
 <!ENTITY torbutton.prefs.dtd_crucial "(بسيار مهم)">

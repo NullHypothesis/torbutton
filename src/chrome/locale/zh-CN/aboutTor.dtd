@@ -4,61 +4,70 @@
    - vim: set sw=2 sts=2 ts=8 et syntax=xml:
   -->
 
-<!ENTITY aboutTor.title "About Tor">
+<!ENTITY aboutTor.title "关于 Tor">
 
-<!ENTITY aboutTor.outOfDateTorOn.label "HOWEVER, this browser is out of date.">
-<!ENTITY aboutTor.outOfDateTorOff.label "ALSO, this browser is out of date.">
-<!ENTITY aboutTor.outOfDate2.label "Click on the onion and then choose Download Tor Browser Bundle Update.">
+<!ENTITY aboutTor.outOfDateTorOn.label "但是该浏览器并非最新版本。">
+<!ENTITY aboutTor.outOfDateTorOff.label "另外，该浏览器并非最新版本。">
+<!ENTITY aboutTor.outOfDate2.label "请单击洋葱图标，然后选择“下载 Tor Browser Bundle”更新。">
 
-<!ENTITY aboutTor.check.label "Test Tor Network Settings">
+<!ENTITY aboutTor.check.label "测试 Tor 网络设置">
 
-<!ENTITY aboutTor.success.label "Congratulations!">
-<!ENTITY aboutTor.success2.label "This browser is configured to use Tor.">
-<!ENTITY aboutTor.success3.label "You are now free to browse the Internet anonymously.">
-<!ENTITY aboutTor.failure.label "Something Went Wrong!">
-<!ENTITY aboutTor.failure2.label "Tor is not working in this browser.">
-<!ENTITY aboutTor.failure3prefix.label "For assistance, please contact ">
+<!ENTITY aboutTor.success.label "成功！">
+<!ENTITY aboutTor.success2.label "该浏览器已配置为使用 Tor 网络。">
+<!ENTITY aboutTor.success3.label "现在即可自由地匿名访问互联网。">
+<!ENTITY aboutTor.failure.label "出错了！">
+<!ENTITY aboutTor.failure2.label "Tor 无法在该浏览器下运行。">
+<!ENTITY aboutTor.failure3prefix.label "如需帮助，请联系：">
 <!ENTITY aboutTor.failure3Link "help@rt.torproject.org">
-<!ENTITY aboutTor.failure3suffix.label ".">
+<!ENTITY aboutTor.failure3suffix.label "。">
 
-<!ENTITY aboutTor.search.label "Search">
-<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/do/search">
+<!ENTITY aboutTor.search.label "搜索">
+
+<!-- Note to translators: the following 18 entities are used to construct a
+   - sentence (either the SP or DDG entities are used, but not both at the
+   - same time).   In English, the sentence reads:
+   -    Search securely with Startpage.
+   - or:
+   -    Search securely with DuckDuckGo.
+   - The sentence contains two embedded links for "securely" and
+   - the search engine ("Startpage" or "DuckDuckGo").
+  -->
+<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/rth/search">
 <!ENTITY aboutTor.searchDDGPost.link "https://duckduckgo.com/html/">
-<!ENTITY aboutTor.searchSP.privacy.beforeLink.label "Search ">
-<!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "Search ">
-<!ENTITY aboutTor.searchSP.privacy.label "securely">
-<!ENTITY aboutTor.searchDDG.privacy.label "securely">
-<!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html?">
+<!ENTITY aboutTor.searchSP.privacy.beforeLink.label "搜索">
+<!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "搜索">
+<!ENTITY aboutTor.searchSP.privacy.label "安全">
+<!ENTITY aboutTor.searchDDG.privacy.label "安全">
+<!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html">
 <!ENTITY aboutTor.searchDDG.privacy.link "https://duckduckgo.com/privacy.html">
-<!ENTITY aboutTor.searchSP.privacy.afterLink.label "">
-<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "">
-
-<!ENTITY aboutTor.searchSP.search.beforeLink.label " with ">
-<!ENTITY aboutTor.searchDDG.search.beforeLink.label " with ">
+<!ENTITY aboutTor.searchSP.privacy.afterLink.label "&amp;nbsp;">
+<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "&amp;nbsp;">
+<!ENTITY aboutTor.searchSP.search.beforeLink.label "引擎">
+<!ENTITY aboutTor.searchDDG.search.beforeLink.label "引擎">
 <!ENTITY aboutTor.searchSP.search.label "Startpage">
 <!ENTITY aboutTor.searchDDG.search.label "DuckDuckGo">
 <!ENTITY aboutTor.searchSP.search.link "https://startpage.com/">
 <!ENTITY aboutTor.searchDDG.search.link "https://duckduckgo.com/">
-<!ENTITY aboutTor.searchSP.search.afterLink.label ".">
-<!ENTITY aboutTor.searchDDG.search.afterLink.label ".">
+<!ENTITY aboutTor.searchSP.search.afterLink.label "。">
+<!ENTITY aboutTor.searchDDG.search.afterLink.label "。">
 
-<!ENTITY aboutTor.torInfo1.label "Additional Info:">
-<!ENTITY aboutTor.torInfo2.label "Country &amp; IP Address:">
-<!ENTITY aboutTor.torInfo3.label "Exit Node:">
-<!ENTITY aboutTor.torInfo4.label "This server does not log any information about visitors.">
-<!ENTITY aboutTor.whatnextQuestion.label "What Next?">
-<!ENTITY aboutTor.whatnextAnswer.label "Tor is NOT all you need to browse anonymously! You may need to change some of your browsing habits to ensure your identity stays safe.">
-<!ENTITY aboutTor.whatnext.label "Tips On Staying Anonymous »">
+<!ENTITY aboutTor.torInfo1.label "更多信息：">
+<!ENTITY aboutTor.torInfo2.label "国家与 IP 地址：">
+<!ENTITY aboutTor.torInfo3.label "出口节点：">
+<!ENTITY aboutTor.torInfo4.label "本服务器不记录有关访问者的任何信息。">
+<!ENTITY aboutTor.whatnextQuestion.label "下一步？">
+<!ENTITY aboutTor.whatnextAnswer.label "仅仅使用 Tor 无法实现匿名浏览。为了确保身份安全，你可能需要改变某些浏览习惯。">
+<!ENTITY aboutTor.whatnext.label "保持匿名小技巧 »">
 <!ENTITY aboutTor.whatnext.link "https://www.torproject.org/download/download.html.en#warning">
-<!ENTITY aboutTor.helpInfo1.label "You Can Help!">
-<!ENTITY aboutTor.helpInfo2.label "There are many ways you can help make the Tor Network faster and stronger:">
-<!ENTITY aboutTor.helpInfo3.label "Run a Tor Relay Node »">
+<!ENTITY aboutTor.helpInfo1.label "你也可以帮忙！">
+<!ENTITY aboutTor.helpInfo2.label "可通过很多方式提供帮助，让 Tor 网络变得更快更强大：">
+<!ENTITY aboutTor.helpInfo3.label "运行 Tor 中继节点 »">
 <!ENTITY aboutTor.helpInfo3.link "https://www.torproject.org/docs/tor-doc-relay.html.en">
-<!ENTITY aboutTor.helpInfo4.label "Volunteer Your Services »">
+<!ENTITY aboutTor.helpInfo4.label "提供志愿服务 »">
 <!ENTITY aboutTor.helpInfo4.link "https://www.torproject.org/getinvolved/volunteer.html.en">
-<!ENTITY aboutTor.helpInfo5.label "Make a Donation »">
+<!ENTITY aboutTor.helpInfo5.label "捐助 »">
 <!ENTITY aboutTor.helpInfo5.link "https://www.torproject.org/donate/donate.html.en">
 
-<!ENTITY aboutTor.footer.label "The Tor Project is a US 501(c)(3) non-profit dedicated to the research, development, and education of online anonymity and privacy.">
-<!ENTITY aboutTor.learnMore.label "Learn more about The Tor Project »">
+<!ENTITY aboutTor.footer.label "The Tor Project 是一家美国 501(c)(3) 非营利组织，致力于在线匿名与隐私的研究、开发与教育。">
+<!ENTITY aboutTor.learnMore.label "了解更多有关 The Tor Project 的信息 »">
 <!ENTITY aboutTor.learnMore.link "https://www.torproject.org/about/overview.html.en">

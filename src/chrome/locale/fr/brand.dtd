@@ -2,7 +2,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!ENTITY  brandShortName        "TorBrowser">
-<!ENTITY  brandFullName         "Tor Browser">
-<!ENTITY  vendorShortName       "Tor Project">
-<!ENTITY  trademarkInfo.part1   "Firefox and the Firefox logos are trademarks of the Mozilla Foundation.">
+<!ENTITY  brandShortName        "Navigateur Tor">
+<!ENTITY  brandFullName         "Navigateur Tor">
+<!ENTITY  vendorShortName       "Projet Tor">
+<!ENTITY  trademarkInfo.part1   "Firefox et les logos de Firefox sont des marques déposées de la Fondation Mozilla.">

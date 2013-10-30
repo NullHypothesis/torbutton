@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "Cảnh báo: Tránh sử dụng bất kỳ tên máy chủ ở trên">
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Refresh">
 <!ENTITY torbutton.prefs.refereroptions "Referer Spoofing Options">
-<!ENTITY torbutton.prefs.nospoof "Do not spoof referer">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "Spoof the containing folder of the page">
 <!ENTITY torbutton.prefs.spoofdomain "Spoof the domain as referer">
-<!ENTITY torbutton.prefs.spoofblank "Make referer blank">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "Manage Cookie Protections">
 <!ENTITY torbutton.cookiedialog.lockCol "Protected">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "Remove All But Protected">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Protect New Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Do Not Protect New Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Vô hiệu hóa việc cập nhật đánh-dấu-động trong quá trình dùng Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(khuyến cáo)">
 <!ENTITY torbutton.prefs.dtd_optional "(phụ)">
 <!ENTITY torbutton.prefs.dtd_crucial "(cấp thiết)">

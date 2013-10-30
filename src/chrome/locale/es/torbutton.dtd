@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "Advertencia: Evite usar los nombres de servidor (host) citados arriba">
 <!ENTITY torbutton.prefs.spoofreresh "Simular refresco de página">
 <!ENTITY torbutton.prefs.refereroptions "Opciones de simulación del referer (remitente, dirección desde la que accede a la actual)">
-<!ENTITY torbutton.prefs.nospoof "No simular referer">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "Simular la dirección de la carpeta que contiene la página">
 <!ENTITY torbutton.prefs.spoofdomain "Simular que el dominio de la página es el referer">
-<!ENTITY torbutton.prefs.spoofblank "Poner en blanco el referer">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "Administrar protecciones de cookie">
 <!ENTITY torbutton.cookiedialog.lockCol "Protegidas">
 <!ENTITY torbutton.cookiedialog.domainCol "Servidor (host)">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "Eliminar todas excepto las protegidas">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Proteger las nuevas cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "No proteger las nuevas cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Deshabilitar actualizaciones de marcadores dinámicos (livemarks) al usar Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(recomendado)">
 <!ENTITY torbutton.prefs.dtd_optional "(opcional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

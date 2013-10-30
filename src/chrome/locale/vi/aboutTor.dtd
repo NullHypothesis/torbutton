@@ -4,61 +4,70 @@
    - vim: set sw=2 sts=2 ts=8 et syntax=xml:
   -->
 
-<!ENTITY aboutTor.title "About Tor">
+<!ENTITY aboutTor.title "">
 
-<!ENTITY aboutTor.outOfDateTorOn.label "HOWEVER, this browser is out of date.">
-<!ENTITY aboutTor.outOfDateTorOff.label "ALSO, this browser is out of date.">
-<!ENTITY aboutTor.outOfDate2.label "Click on the onion and then choose Download Tor Browser Bundle Update.">
+<!ENTITY aboutTor.outOfDateTorOn.label "">
+<!ENTITY aboutTor.outOfDateTorOff.label "">
+<!ENTITY aboutTor.outOfDate2.label "">
 
-<!ENTITY aboutTor.check.label "Test Tor Network Settings">
+<!ENTITY aboutTor.check.label "">
 
-<!ENTITY aboutTor.success.label "Congratulations!">
-<!ENTITY aboutTor.success2.label "This browser is configured to use Tor.">
-<!ENTITY aboutTor.success3.label "You are now free to browse the Internet anonymously.">
-<!ENTITY aboutTor.failure.label "Something Went Wrong!">
-<!ENTITY aboutTor.failure2.label "Tor is not working in this browser.">
-<!ENTITY aboutTor.failure3prefix.label "For assistance, please contact ">
-<!ENTITY aboutTor.failure3Link "help@rt.torproject.org">
-<!ENTITY aboutTor.failure3suffix.label ".">
+<!ENTITY aboutTor.success.label "">
+<!ENTITY aboutTor.success2.label "">
+<!ENTITY aboutTor.success3.label "">
+<!ENTITY aboutTor.failure.label "">
+<!ENTITY aboutTor.failure2.label "">
+<!ENTITY aboutTor.failure3prefix.label "">
+<!ENTITY aboutTor.failure3Link "">
+<!ENTITY aboutTor.failure3suffix.label "">
 
-<!ENTITY aboutTor.search.label "Search">
-<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/do/search">
-<!ENTITY aboutTor.searchDDGPost.link "https://duckduckgo.com/html/">
-<!ENTITY aboutTor.searchSP.privacy.beforeLink.label "Search ">
-<!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "Search ">
-<!ENTITY aboutTor.searchSP.privacy.label "securely">
-<!ENTITY aboutTor.searchDDG.privacy.label "securely">
-<!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html?">
-<!ENTITY aboutTor.searchDDG.privacy.link "https://duckduckgo.com/privacy.html">
+<!ENTITY aboutTor.search.label "Tìm kiếm">
+
+<!-- Note to translators: the following 18 entities are used to construct a
+   - sentence (either the SP or DDG entities are used, but not both at the
+   - same time).   In English, the sentence reads:
+   -    Search securely with Startpage.
+   - or:
+   -    Search securely with DuckDuckGo.
+   - The sentence contains two embedded links for "securely" and
+   - the search engine ("Startpage" or "DuckDuckGo").
+  -->
+<!ENTITY aboutTor.searchSPPost.link "">
+<!ENTITY aboutTor.searchDDGPost.link "">
+<!ENTITY aboutTor.searchSP.privacy.beforeLink.label "">
+<!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "">
+<!ENTITY aboutTor.searchSP.privacy.label "">
+<!ENTITY aboutTor.searchDDG.privacy.label "">
+<!ENTITY aboutTor.searchSP.privacy.link "">
+<!ENTITY aboutTor.searchDDG.privacy.link "">
 <!ENTITY aboutTor.searchSP.privacy.afterLink.label "">
 <!ENTITY aboutTor.searchDDG.privacy.afterLink.label "">
+<!ENTITY aboutTor.searchSP.search.beforeLink.label "">
+<!ENTITY aboutTor.searchDDG.search.beforeLink.label "">
+<!ENTITY aboutTor.searchSP.search.label "">
+<!ENTITY aboutTor.searchDDG.search.label "">
+<!ENTITY aboutTor.searchSP.search.link "">
+<!ENTITY aboutTor.searchDDG.search.link "">
+<!ENTITY aboutTor.searchSP.search.afterLink.label "">
+<!ENTITY aboutTor.searchDDG.search.afterLink.label "">
 
-<!ENTITY aboutTor.searchSP.search.beforeLink.label " with ">
-<!ENTITY aboutTor.searchDDG.search.beforeLink.label " with ">
-<!ENTITY aboutTor.searchSP.search.label "Startpage">
-<!ENTITY aboutTor.searchDDG.search.label "DuckDuckGo">
-<!ENTITY aboutTor.searchSP.search.link "https://startpage.com/">
-<!ENTITY aboutTor.searchDDG.search.link "https://duckduckgo.com/">
-<!ENTITY aboutTor.searchSP.search.afterLink.label ".">
-<!ENTITY aboutTor.searchDDG.search.afterLink.label ".">
+<!ENTITY aboutTor.torInfo1.label "">
+<!ENTITY aboutTor.torInfo2.label "">
+<!ENTITY aboutTor.torInfo3.label "">
+<!ENTITY aboutTor.torInfo4.label "">
+<!ENTITY aboutTor.whatnextQuestion.label "">
+<!ENTITY aboutTor.whatnextAnswer.label "">
+<!ENTITY aboutTor.whatnext.label "">
+<!ENTITY aboutTor.whatnext.link "">
+<!ENTITY aboutTor.helpInfo1.label "">
+<!ENTITY aboutTor.helpInfo2.label "">
+<!ENTITY aboutTor.helpInfo3.label "">
+<!ENTITY aboutTor.helpInfo3.link "">
+<!ENTITY aboutTor.helpInfo4.label "">
+<!ENTITY aboutTor.helpInfo4.link "">
+<!ENTITY aboutTor.helpInfo5.label "">
+<!ENTITY aboutTor.helpInfo5.link "">
 
-<!ENTITY aboutTor.torInfo1.label "Additional Info:">
-<!ENTITY aboutTor.torInfo2.label "Country &amp; IP Address:">
-<!ENTITY aboutTor.torInfo3.label "Exit Node:">
-<!ENTITY aboutTor.torInfo4.label "This server does not log any information about visitors.">
-<!ENTITY aboutTor.whatnextQuestion.label "What Next?">
-<!ENTITY aboutTor.whatnextAnswer.label "Tor is NOT all you need to browse anonymously! You may need to change some of your browsing habits to ensure your identity stays safe.">
-<!ENTITY aboutTor.whatnext.label "Tips On Staying Anonymous »">
-<!ENTITY aboutTor.whatnext.link "https://www.torproject.org/download/download.html.en#warning">
-<!ENTITY aboutTor.helpInfo1.label "You Can Help!">
-<!ENTITY aboutTor.helpInfo2.label "There are many ways you can help make the Tor Network faster and stronger:">
-<!ENTITY aboutTor.helpInfo3.label "Run a Tor Relay Node »">
-<!ENTITY aboutTor.helpInfo3.link "https://www.torproject.org/docs/tor-doc-relay.html.en">
-<!ENTITY aboutTor.helpInfo4.label "Volunteer Your Services »">
-<!ENTITY aboutTor.helpInfo4.link "https://www.torproject.org/getinvolved/volunteer.html.en">
-<!ENTITY aboutTor.helpInfo5.label "Make a Donation »">
-<!ENTITY aboutTor.helpInfo5.link "https://www.torproject.org/donate/donate.html.en">
-
-<!ENTITY aboutTor.footer.label "The Tor Project is a US 501(c)(3) non-profit dedicated to the research, development, and education of online anonymity and privacy.">
-<!ENTITY aboutTor.learnMore.label "Learn more about The Tor Project »">
-<!ENTITY aboutTor.learnMore.link "https://www.torproject.org/about/overview.html.en">
+<!ENTITY aboutTor.footer.label "">
+<!ENTITY aboutTor.learnMore.label "">
+<!ENTITY aboutTor.learnMore.link "">

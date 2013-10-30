@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "Evite utilizar o nome da máquina no campo a cima">
 <!ENTITY torbutton.prefs.spoofreresh "Refrescamento da falsificação">
 <!ENTITY torbutton.prefs.refereroptions "Opções de falsificação do referente">
-<!ENTITY torbutton.prefs.nospoof "Não falsificar referente">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "Falsificar a pasta que contém a página">
 <!ENTITY torbutton.prefs.spoofdomain "Falsificar o domínio com o referente">
-<!ENTITY torbutton.prefs.spoofblank "Limpar referente">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "Gerir as Proteções dos Cookies">
 <!ENTITY torbutton.cookiedialog.lockCol "Protegido">
 <!ENTITY torbutton.cookiedialog.domainCol "Anfitrião">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "Remover todos excepto os Protegidos">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Proteger os novos Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Não proteger os novos Cookies">
-<!ENTITY torbutton.prefs.disable_livemarks "Desactivar actualizações durante a utilização do Tor">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(recomendado)">
 <!ENTITY torbutton.prefs.dtd_optional "(opcional)">
 <!ENTITY torbutton.prefs.dtd_crucial "(crucial)">

@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "Opgelet: gebruik van bovenstaande hostnamen vermijden">
 <!ENTITY torbutton.prefs.spoofreresh "Spoof Vernieuwen">
 <!ENTITY torbutton.prefs.refereroptions "Verwijzer Spoof instellingen">
-<!ENTITY torbutton.prefs.nospoof "Spoof verwijzer niet">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "Spoof de bovenliggende folder van de pagina">
 <!ENTITY torbutton.prefs.spoofdomain "Spoof het domein als verwijzer">
-<!ENTITY torbutton.prefs.spoofblank "Maak verwijzer leeg">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "Beheer Cookie Beveiligingen">
 <!ENTITY torbutton.cookiedialog.lockCol "Beveiligd">
 <!ENTITY torbutton.cookiedialog.domainCol "Host">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "Verwijder alle behalve beveiligde">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "Beveilig nieuwe Cookies">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "Beveilig nieuwe Cookies niet">
-<!ENTITY torbutton.prefs.disable_livemarks "Livemark-updates tijdens Tor verhinderen">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(aanbevolen)">
 <!ENTITY torbutton.prefs.dtd_optional "(optioneel)">
 <!ENTITY torbutton.prefs.dtd_crucial "(cruciaal)">
