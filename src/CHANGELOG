@@ -1,3 +1,7 @@
+1.6.4:
+ 29 Oct 2013
+ * Bug 9144: Workaround for missing translation properties
+
 1.6.3:
  11 Oct 2013:
  * Bug 9224: Support multiple Tor socks ports for about:tor status check
