@@ -2,7 +2,7 @@
 
 # This var comes from the TBB locale list.
 # XXX: Find some way to keep this, tor-launcher, and Tor Browser in sync
-BUNDLE_LOCALES="de es fa fr it ko nl pl pt ru vi zh-CN"
+BUNDLE_LOCALES="de es fa fr it ja ko nl pl pt ru vi zh-CN"
 
 if [ -d translation ];
 then

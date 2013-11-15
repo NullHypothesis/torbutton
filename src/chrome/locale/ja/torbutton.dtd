@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "警告: 以上のどんなホストネームの使用も避けてください">
 <!ENTITY torbutton.prefs.spoofreresh "偽装更新">
 <!ENTITY torbutton.prefs.refereroptions "リファラ偽装オプション">
-<!ENTITY torbutton.prefs.nospoof "リファラ偽装しない">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "ページの含んでいるフォルダーを偽装する">
 <!ENTITY torbutton.prefs.spoofdomain "ドメインをリファラとして偽装する">
-<!ENTITY torbutton.prefs.spoofblank "リファラを空白にする">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "Cookie保護を管理">
 <!ENTITY torbutton.cookiedialog.lockCol "保護済み">
 <!ENTITY torbutton.cookiedialog.domainCol "ホスト">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "保護されているもの以外削除">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "新しいCookieを保護">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "新しいCOokieを保護しない">
-<!ENTITY torbutton.prefs.disable_livemarks "Torの使用中ライブブックマークの更新を無効化">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(推奨)">
 <!ENTITY torbutton.prefs.dtd_optional "(オプション)">
 <!ENTITY torbutton.prefs.dtd_crucial "(重要)">

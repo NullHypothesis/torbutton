@@ -4,17 +4,17 @@
    - vim: set sw=2 sts=2 ts=8 et syntax=xml:
   -->
 
-<!ENTITY aboutTor.title "Informacje">
+<!ENTITY aboutTor.title "Informacje na temat Tor'a">
 
-<!ENTITY aboutTor.outOfDateTorOn.label "jednak ta przeglądarka jest nieaktualna.">
-<!ENTITY aboutTor.outOfDateTorOff.label "Ponadto ta przeglądarka jest nieaktualna.">
+<!ENTITY aboutTor.outOfDateTorOn.label "JEDNAK, ta przeglądarka jest nieaktualna.">
+<!ENTITY aboutTor.outOfDateTorOff.label "PONADTO, ta przeglądarka jest nieaktualna.">
 <!ENTITY aboutTor.outOfDate2.label "Kliknij na cebulę, a następnie wybierz Pobierz aktualizację Tor Browser Bundle.">
 
 <!ENTITY aboutTor.check.label "Przetestuj Ustawienia Sieci Tor">
 
 <!ENTITY aboutTor.success.label "Gratulacje!">
-<!ENTITY aboutTor.success2.label "Ta przeglądarka jest skonfigurowana do korzystania z Tor.">
-<!ENTITY aboutTor.success3.label "Jesteś teraz swobodnie przeglądać internet anonimowo.">
+<!ENTITY aboutTor.success2.label "Ta przeglądarka jest skonfigurowana do korzystania z Tor'a.">
+<!ENTITY aboutTor.success3.label "Możesz teraz swobodnie przeglądać Internet anonimowo.">
 <!ENTITY aboutTor.failure.label "Coś poszło nie tak!">
 <!ENTITY aboutTor.failure2.label "Tor nie działa w tej przeglądarce.">
 <!ENTITY aboutTor.failure3prefix.label "Aby uzyskać pomoc, prosimy o kontakt">
@@ -32,18 +32,18 @@
    - The sentence contains two embedded links for "securely" and
    - the search engine ("Startpage" or "DuckDuckGo").
   -->
-<!ENTITY aboutTor.searchSPPost.link "">
+<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/rth/search">
 <!ENTITY aboutTor.searchDDGPost.link "https://duckduckgo.com/html/">
 <!ENTITY aboutTor.searchSP.privacy.beforeLink.label "Szukaj">
 <!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "Szukaj">
 <!ENTITY aboutTor.searchSP.privacy.label "bezpiecznie">
 <!ENTITY aboutTor.searchDDG.privacy.label "bezpiecznie">
-<!ENTITY aboutTor.searchSP.privacy.link "">
+<!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html">
 <!ENTITY aboutTor.searchDDG.privacy.link "https://duckduckgo.com/privacy.html">
-<!ENTITY aboutTor.searchSP.privacy.afterLink.label "">
-<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "">
-<!ENTITY aboutTor.searchSP.search.beforeLink.label "">
-<!ENTITY aboutTor.searchDDG.search.beforeLink.label "">
+<!ENTITY aboutTor.searchSP.privacy.afterLink.label "&amp;nbsp;">
+<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "&amp;nbsp;">
+<!ENTITY aboutTor.searchSP.search.beforeLink.label "z">
+<!ENTITY aboutTor.searchDDG.search.beforeLink.label "z">
 <!ENTITY aboutTor.searchSP.search.label "Strona startowa">
 <!ENTITY aboutTor.searchDDG.search.label "DuckDuckGo">
 <!ENTITY aboutTor.searchSP.search.link "https://startpage.com/">
@@ -51,17 +51,17 @@
 <!ENTITY aboutTor.searchSP.search.afterLink.label ".">
 <!ENTITY aboutTor.searchDDG.search.afterLink.label ".">
 
-<!ENTITY aboutTor.torInfo1.label "Informatii suplimentare:">
+<!ENTITY aboutTor.torInfo1.label "Dodatkowe informacje:">
 <!ENTITY aboutTor.torInfo2.label "Kraj i adres IP:">
-<!ENTITY aboutTor.torInfo3.label "Węzła Wyjściowe:">
+<!ENTITY aboutTor.torInfo3.label "Węzeł Wyjściowy:">
 <!ENTITY aboutTor.torInfo4.label "Ten serwer nie rejestruje żadnych informacji o odwiedzających.">
 <!ENTITY aboutTor.whatnextQuestion.label "Co dalej?">
-<!ENTITY aboutTor.whatnextAnswer.label "Tor NIE jest wszystko, czego potrzebujesz, aby przeglądać anonimowo! Może trzeba będzie zmienić niektóre ustawienia, aby zapewnić tożsamość pozostaje bezpieczny.">
-<!ENTITY aboutTor.whatnext.label "Porady Na Temat Pobytu Anonimowy »">
+<!ENTITY aboutTor.whatnextAnswer.label "Tor, to NIE jest wszystko czego potrzebujesz, aby przeglądać sieć anonimowo! Być może potrzeba będzie zmienić niektóre Twoje nawyki internetowe, aby zapewnić Twojej tożsamości bezpieczeństwo.">
+<!ENTITY aboutTor.whatnext.label "Porady: Jak pozostać anonimowym w internecie »">
 <!ENTITY aboutTor.whatnext.link "https://www.torproject.org/download/download.html.en#warning">
-<!ENTITY aboutTor.helpInfo1.label "Ty możesz pomóc!">
-<!ENTITY aboutTor.helpInfo2.label "Istnieje wiele sposobów, możesz pomóc uczynić sieć Tora Będzie szybsza i silniejsza:">
-<!ENTITY aboutTor.helpInfo3.label "Uruchom Węzeł Tora Przekaźnik »">
+<!ENTITY aboutTor.helpInfo1.label "Możesz pomóc!">
+<!ENTITY aboutTor.helpInfo2.label "Istnieje wiele sposobów, abyś mógł uczynić sieć Tor'a szybszą i silniejszą:">
+<!ENTITY aboutTor.helpInfo3.label "Uruchom Przekaźnikowy Węzeł Tora »">
 <!ENTITY aboutTor.helpInfo3.link "https://www.torproject.org/docs/tor-doc-relay.html.en">
 <!ENTITY aboutTor.helpInfo4.label "Wolontariat Swoje Usługi »">
 <!ENTITY aboutTor.helpInfo4.link "https://www.torproject.org/getinvolved/volunteer.html.en">
