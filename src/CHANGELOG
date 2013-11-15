@@ -1,3 +1,7 @@
+1.6.4.1:
+ 15 Nov 2013
+ * Bug 10002: Make the TBB3.0 blog tag our update download url for now.
+
 1.6.4:
  29 Oct 2013
  * Bug 9144: Workaround for missing translation properties

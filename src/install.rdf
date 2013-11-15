@@ -6,7 +6,7 @@
         <em:name>Torbutton</em:name>
         <em:creator>Mike Perry</em:creator>
         <em:id>torbutton@torproject.org</em:id>
-        <em:version>1.6.4</em:version>
+        <em:version>1.6.4.1</em:version>
         <em:homepageURL>https://www.torproject.org/projects/torbrowser.html.en</em:homepageURL>
         <em:optionsURL>chrome://torbutton/content/preferences.xul</em:optionsURL>
         <em:iconURL>chrome://torbutton/skin/tor.png</em:iconURL>
