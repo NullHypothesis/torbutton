@@ -1764,8 +1764,15 @@ function torbutton_toggle_plugins(disable_plugins) {
     var PH=Cc["@mozilla.org/plugin/host;1"].getService(Ci.nsIPluginHost);
     var P=PH.getPluginTags({});
     for(var i=0; i<P.length; i++) {
-        if (P[i].disabled != disable_plugins)
+        if ("enabledState" in P[i]) {
+          var isDisabled = (P[i].enabledState == Ci.nsIPluginTag.STATE_DISABLED);
+          if (!isDisabled && disable_plugins)
+            P[i].enabledState = Ci.nsIPluginTag.STATE_DISABLED;
+          else if (isDisabled && !disable_plugins)
+            P[i].enabledState = Ci.nsIPluginTag.STATE_CLICKTOPLAY;
+        } else if (P[i].disabled != disable_plugins) {
           P[i].disabled=disable_plugins;
+        }
     }
   }
 }
