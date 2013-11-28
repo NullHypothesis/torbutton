@@ -1465,22 +1465,12 @@ function torbutton_do_new_identity() {
 
   torbutton_log(3, "New Identity: Clearing Crypto Tokens");
 
-  try {
-    // This clears the SSL identifier cache.
-    // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747. But bug 683262
-    // removes nsIDOMCrypto.logout(). We need to resort to our previous fallback
-    // method: switching a proper preference that triggers clearing the SSL
-    // identifier cache.
-    // See: https://mxr.mozilla.org/comm-esr24/source/mozilla/security/manager/ssl/src/nsNSSComponent.cpp#1625 for the ones being available.
-    // secruity.enable_md5_signatures seems to be a good choice as it is still
-    // available on trunk.
-    m_tb_prefs.setBoolPref("security.enable_md5_signatures", !m_tb_prefs.
-                           getBoolPref("security.enable_md5_signatures"));
-    m_tb_prefs.setBoolPref("security.enable_md5_signatures", !m_tb_prefs.
-                           getBoolPref("security.enable_md5_signatures"));
-  } catch(e) {
-    torbutton_log(4, "Failed to clear SSL session ids: "+e);
-  }
+  // Clear all crypto auth tokens. This includes calls to PK11_LogoutAll(),
+  // nsNSSComponent::LogoutAuthenticatedPK11() and clearing the SSL session
+  // cache.
+  let sdr = Components.classes["@mozilla.org/security/sdr;1"].
+                       getService(Components.interfaces.nsISecretDecoderRing);
+  sdr.logoutAndTeardown();
 
   // This clears the OCSP cache.
   //
