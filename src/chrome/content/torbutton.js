@@ -1437,7 +1437,7 @@ function torbutton_do_new_identity() {
   } catch(e) {
       torbutton_log(3, "Exception on wifi token clear: "+e);
   }
-  
+
   torbutton_log(3, "New Identity: Closing tabs and clearing searchbox");
 
   torbutton_close_on_toggle(true, true);
@@ -1454,7 +1454,7 @@ function torbutton_do_new_identity() {
 
   torbutton_log(3, "New Identity: Emitting Private Browsing Session clear event");
   obsSvc.notifyObservers(null, "browser:purge-session-history", "");
-   
+
   torbutton_log(3, "New Identity: Clearing HTTP Auth");
 
   if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
@@ -1462,32 +1462,33 @@ function torbutton_do_new_identity() {
           getService(Components.interfaces.nsIHttpAuthManager);
       auth.clearAll();
   }
-  
+
   torbutton_log(3, "New Identity: Clearing Crypto Tokens");
 
   try {
-      var secMgr = Cc["@mozilla.org/security/crypto;1"].
-          getService(Ci.nsIDOMCrypto);
-      secMgr.logout();
-      torbutton_log(3, "nsIDOMCrypto logout succeeded");
+    // This clears the SSL identifier cache.
+    // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747. But bug 683262
+    // removes nsIDOMCrypto.logout(). We need to resort to our previous fallback
+    // method: switching a proper preference that triggers clearing the SSL
+    // identifier cache.
+    // See: https://mxr.mozilla.org/comm-esr24/source/mozilla/security/manager/ssl/src/nsNSSComponent.cpp#1625 for the ones being available.
+    // secruity.enable_md5_signatures seems to be a good choice as it is still
+    // available on trunk.
+    m_tb_prefs.setBoolPref("security.enable_md5_signatures", !m_tb_prefs.
+                           getBoolPref("security.enable_md5_signatures"));
+    m_tb_prefs.setBoolPref("security.enable_md5_signatures", !m_tb_prefs.
+                           getBoolPref("security.enable_md5_signatures"));
   } catch(e) {
-      torbutton_log(4, "Failed to use nsIDOMCrypto to clear SSL Session ids. Falling back to old method. Error: "+e);
-
-      // This clears the SSL Identifier Cache.
-      // See https://bugzilla.mozilla.org/show_bug.cgi?id=448747 and
-      // http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp#2134
-      m_tb_prefs.setBoolPref("security.enable_ssl2", 
-              !m_tb_prefs.getBoolPref("security.enable_ssl2"));
-      m_tb_prefs.setBoolPref("security.enable_ssl2", 
-              !m_tb_prefs.getBoolPref("security.enable_ssl2"));
+    torbutton_log(4, "Failed to clear SSL session ids: "+e);
   }
 
   // This clears the OCSP cache.
   //
   // nsNSSComponent::Observe() watches security.OCSP.enabled, which calls
-  // setOCSPOptions(), which if set to 0, calls CERT_DisableOCSPChecking(),
+  // setValidationOptions(), which in turn calls setNonPkixOcspEnabled() which,
+  // if security.OCSP.enabled is set to 0, calls CERT_DisableOCSPChecking(),
   // which calls CERT_ClearOCSPCache().
-  // See: http://mxr.mozilla.org/security/source/security/manager/ssl/src/nsNSSComponent.cpp
+  // See: https://mxr.mozilla.org/comm-esr24/source/mozilla/security/manager/ssl/src/nsNSSComponent.cpp
   var ocsp = m_tb_prefs.getIntPref("security.OCSP.enabled");
   m_tb_prefs.setIntPref("security.OCSP.enabled", 0);
   m_tb_prefs.setIntPref("security.OCSP.enabled", ocsp);
@@ -1507,7 +1508,7 @@ function torbutton_do_new_identity() {
   var tabs = m_tb_prefs.getIntPref("browser.sessionstore.max_tabs_undo");
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", 0);
   m_tb_prefs.setIntPref("browser.sessionstore.max_tabs_undo", tabs);
-  
+
   torbutton_log(3, "New Identity: Clearing Image Cache");
   torbutton_clear_image_caches();
 
@@ -1541,7 +1542,7 @@ function torbutton_do_new_identity() {
       torbutton_log(5, "Exception on cache clearing: "+e);
       window.alert("Torbutton: Unexpected error during cache clearing: "+e);
   }
-  
+
   torbutton_log(3, "New Identity: Clearing Cookies and DOM Storage");
 
   if (m_tb_prefs.getBoolPref('extensions.torbutton.cookie_protections')) {
@@ -1554,12 +1555,12 @@ function torbutton_do_new_identity() {
   } else {
     torbutton_clear_cookies();
   }
-  
+
   torbutton_log(3, "New Identity: Closing open connections");
 
   // Clear keep-alive
   obsSvc.notifyObservers(this, "net:prune-all-connections", null);
- 
+
   torbutton_log(3, "New Identity: Clearing Content Preferences");
 
   // XXX: This may not clear zoom site-specific
@@ -1598,7 +1599,7 @@ function torbutton_do_new_identity() {
       window.alert(warning);
     }
   }
-  
+
   torbutton_log(3, "New Identity: Opening a new browser window");
 
   // Open a new window with the TBB check homepage
