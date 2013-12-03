@@ -1373,7 +1373,10 @@ function torbutton_send_ctrl_cmd(command) {
       return null;
     }
 
-    socket.close(1);
+    // Closing these streams prevents a shutdown hang on Mac OS. See bug 10201.
+    inputStream.close();
+    outputStream.close();
+    socket.close(Components.results.NS_OK);
     return bytes.substr(4);
   } catch(e) {
     torbutton_log(4, "Exception on control port "+e);
