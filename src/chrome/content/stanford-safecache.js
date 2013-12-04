@@ -61,10 +61,7 @@ function SSC_dump(msg) {
 
 function SSC_RequestListener(controller) {
   this.controller = controller;
-  this.thirdPartyUtil = Cc["@mozilla.org/thirdpartyutil;1"].
-                            getService(Ci.mozIThirdPartyUtil);
-  this.cookie_permissions = Cc["@mozilla.org/cookie/permission;1"].
-                                getService(Ci.nsICookiePermission);
+  this.cookie_permissions = Cc["@mozilla.org/cookie/permission;1"].getService(Ci.nsICookiePermission);
 }
 
 SSC_RequestListener.prototype =
@@ -80,13 +77,11 @@ SSC_RequestListener.prototype =
         subject.QueryInterface(Components.interfaces.nsIHttpChannel);
         subject.QueryInterface(Components.interfaces.nsIHttpChannelInternal);
         subject.QueryInterface(Components.interfaces.nsICachingChannel);
-        subject.QueryInterface(Components.interfaces.nsIChannel);
         this.onModifyRequest(subject);
       } else if (topic == 'http-on-examine-response') {
         subject.QueryInterface(Components.interfaces.nsIHttpChannel);
         subject.QueryInterface(Components.interfaces.nsIHttpChannelInternal);
         subject.QueryInterface(Components.interfaces.nsICachingChannel);
-        subject.QueryInterface(Components.interfaces.nsIChannel);
         this.onExamineResponse(subject);
       }
     } catch(e) {try {torbutton_log(4, "SSC: "+e);} catch(ex) {}} 
@@ -140,19 +135,11 @@ SSC_RequestListener.prototype =
     } else if(!parent_host) {
       // Questionable first party interaction..
       try {
-        var anuri = null;
-        try {
-          anuri = this.thirdPartyUtil.getFirstPartyURI(channel, null);
-        } catch (e) {
-          torbutton_safelog(4, "FirstParty API failed to get parent: "+e, channel.URI.spec);
-          // We are not using the TBB based on ESR 24. Falling back to the old
-          // method.
-          anuri = this.cookie_permissions.getOriginatingURI(channel);
-        }
+        var anuri = this.cookie_permissions.getOriginatingURI(channel);
         parent_host = anuri.host;
         parent_spec = anuri.spec;
       } catch(e) {
-        torbutton_safelog(4, "Cookie API failed to get parent: "+e,channel.URI.spec);
+        torbutton_safelog(2, "Cookie API failed to get parent: "+e,channel.URI.spec);
         if (!channel.referrer) {
           torbutton_safelog(3, "SSC: No parent for ", channel.URI.spec);
         } else {
