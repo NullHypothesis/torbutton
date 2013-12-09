@@ -1,3 +1,10 @@
+1.6.5:
+ 9 Dec 2013
+ * Bug 8167: Update cache isolation to use getFirstPartyURIFromChannel() for FF24
+ * Bug 10201: FF ESR 24 hangs during exit on Mac OS.
+ * Bug 10078: Properly clear crypto tokens during New Identity on FF24
+ * Bug 9454: Support changes to Private Browsing Mode and plugin APIs in FF24
+
 1.6.4.1:
  15 Nov 2013
  * Bug 10002: Make the TBB3.0 blog tag our update download url for now.
