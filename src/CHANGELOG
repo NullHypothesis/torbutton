@@ -1,3 +1,7 @@
+1.6.5.1:
+ 10 Dec 2013
+ * Bug 10352: Clear FF24 Private Browsing Mode data during New Identity
+
 1.6.5:
  9 Dec 2013
  * Bug 8167: Update cache isolation to use getFirstPartyURIFromChannel() for FF24
