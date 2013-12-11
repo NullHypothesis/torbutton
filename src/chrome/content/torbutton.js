@@ -1593,6 +1593,9 @@ function torbutton_do_new_identity() {
     }
   }
 
+  torbutton_log(3, "Ending any remaining private browsing sessions.");
+  obsSvc.notifyObservers(null, "last-pb-context-exited", "");
+
   torbutton_log(3, "New Identity: Opening a new browser window");
 
   // Open a new window with the TBB check homepage
