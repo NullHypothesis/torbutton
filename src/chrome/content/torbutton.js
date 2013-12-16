@@ -795,8 +795,7 @@ function torbutton_notify_if_update_needed() {
 }
 
 function torbutton_download_update() {
-    // XXX: We lack a download page for the alphas right now..
-    var downloadURI = "https://blog.torproject.org/category/tags/tbb-30";
+    var downloadURI = "https://www.torproject.org/download/download-easy.html";
     var rtSvc = Components.classes["@mozilla.org/xre/app-info;1"]
                           .getService(Components.interfaces.nsIXULRuntime);
     downloadURI += "?os=" + rtSvc.OS + "&arch=" + rtSvc.XPCOMABI;
