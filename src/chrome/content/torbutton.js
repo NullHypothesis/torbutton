@@ -1457,6 +1457,15 @@ function torbutton_do_new_identity() {
   torbutton_log(3, "New Identity: Emitting Private Browsing Session clear event");
   obsSvc.notifyObservers(null, "browser:purge-session-history", "");
 
+  torbutton_log(3, "New Identity: Clearing NoScript Temporary Permissions");
+
+  try {
+    if(m_tb_prefs.prefHasUserValue("noscript.temp"))
+      m_tb_prefs.clearUserPref("noscript.temp");
+  } catch(e) {
+    torbutton_log(4, "New Identity: Error clearing NoScript Temporary Permissions: "+e);
+  }
+
   torbutton_log(3, "New Identity: Clearing HTTP Auth");
 
   if(m_tb_prefs.getBoolPref('extensions.torbutton.clear_http_auth')) {
