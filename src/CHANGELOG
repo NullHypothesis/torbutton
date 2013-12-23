@@ -1,3 +1,7 @@
+1.6.5.3:
+ 23 Dec 2013
+ * Bug 9486: Clear NoScript Temporary Permissions on New Identity 
+
 1.6.5.2:
  17 Dec 2013
  * Misc: Change the default update download link back to download-easy
