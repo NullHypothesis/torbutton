@@ -116,10 +116,10 @@
 <!ENTITY torbutton.prefs.no_proxy_warning "تحذير: تجنب استخدام أي من أسماء المضيف المذكورة أعلاه">
 <!ENTITY torbutton.prefs.spoofreresh "تحديث المحاكاة الساخرة">
 <!ENTITY torbutton.prefs.refereroptions "خيارات المرجعية الساخرة">
-<!ENTITY torbutton.prefs.nospoof "لا تستخدم محاكاة مرجعية ساخرة">
+<!ENTITY torbutton.prefs.nospoof "No referer spoof during Tor usage (sends referers as normal)">
 <!ENTITY torbutton.prefs.spoofroot "محاكاة ساخرة المجلد الذي يحتوي على الصفحة">
 <!ENTITY torbutton.prefs.spoofdomain "محاكاة ساخرة المجال مثل المرجعية">
-<!ENTITY torbutton.prefs.spoofblank "إجعل المرجعية فارغة">
+<!ENTITY torbutton.prefs.spoofblank "Spoof blank referer during Tor usage (may break some sites)">
 <!ENTITY torbutton.cookiedialog.title "إدارة كعكات الحماية">
 <!ENTITY torbutton.cookiedialog.lockCol "محمية">
 <!ENTITY torbutton.cookiedialog.domainCol "استضافة">
@@ -131,7 +131,7 @@
 <!ENTITY torbutton.cookiedialog.removeAllBut "إزالة الكل لكن استمر في الحماية">
 <!ENTITY torbutton.cookiedialog.saveAllCookies "كعكة حماية جديدة">
 <!ENTITY torbutton.cookiedialog.doNotSaveAllCookies "لا تحمي الكعكات الجديدة">
-<!ENTITY torbutton.prefs.disable_livemarks "تعطيل العلامات الحية خلال إستعمال التور">
+<!ENTITY torbutton.prefs.disable_livemarks "Disable livemarks updates during Tor usage">
 <!ENTITY torbutton.prefs.dtd_recommended "(محبّذ)">
 <!ENTITY torbutton.prefs.dtd_optional "(اختياري)">
 <!ENTITY torbutton.prefs.dtd_crucial "(حَرِج)">

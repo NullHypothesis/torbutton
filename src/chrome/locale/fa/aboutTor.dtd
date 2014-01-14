@@ -6,9 +6,9 @@
 
 <!ENTITY aboutTor.title "درباره‌ی تور">
 
-<!ENTITY aboutTor.outOfDateTorOn.label "">
-<!ENTITY aboutTor.outOfDateTorOff.label "">
-<!ENTITY aboutTor.outOfDate2.label "">
+<!ENTITY aboutTor.outOfDateTorOn.label "HOWEVER, this browser is out of date.">
+<!ENTITY aboutTor.outOfDateTorOff.label "ALSO, this browser is out of date.">
+<!ENTITY aboutTor.outOfDate2.label "Click on the onion and then choose Download Tor Browser Bundle Update.">
 
 <!ENTITY aboutTor.check.label "تنظیمات شبکه‌ی تور را بررسی کنید">
 
@@ -32,18 +32,18 @@
    - The sentence contains two embedded links for "securely" and
    - the search engine ("Startpage" or "DuckDuckGo").
   -->
-<!ENTITY aboutTor.searchSPPost.link "">
+<!ENTITY aboutTor.searchSPPost.link "https://startpage.com/rth/search">
 <!ENTITY aboutTor.searchDDGPost.link "https://duckduckgo.com/html/">
 <!ENTITY aboutTor.searchSP.privacy.beforeLink.label "جستجو">
 <!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "جستجو">
 <!ENTITY aboutTor.searchSP.privacy.label "بصورت امن">
 <!ENTITY aboutTor.searchDDG.privacy.label "بصورت امن">
-<!ENTITY aboutTor.searchSP.privacy.link "">
+<!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html">
 <!ENTITY aboutTor.searchDDG.privacy.link "https://duckduckgo.com/privacy.html">
-<!ENTITY aboutTor.searchSP.privacy.afterLink.label "">
-<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "">
-<!ENTITY aboutTor.searchSP.search.beforeLink.label "">
-<!ENTITY aboutTor.searchDDG.search.beforeLink.label "">
+<!ENTITY aboutTor.searchSP.privacy.afterLink.label "&amp;nbsp;">
+<!ENTITY aboutTor.searchDDG.privacy.afterLink.label "&amp;nbsp;">
+<!ENTITY aboutTor.searchSP.search.beforeLink.label "with ">
+<!ENTITY aboutTor.searchDDG.search.beforeLink.label "with ">
 <!ENTITY aboutTor.searchSP.search.label "Startpage">
 <!ENTITY aboutTor.searchDDG.search.label "DuckDuckGo">
 <!ENTITY aboutTor.searchSP.search.link "https://startpage.com/">
@@ -54,13 +54,13 @@
 <!ENTITY aboutTor.torInfo1.label "اطلاعات بيشتر">
 <!ENTITY aboutTor.torInfo2.label "كشور و آدرس آى پی:">
 <!ENTITY aboutTor.torInfo3.label "مسيرياب مخرج">
-<!ENTITY aboutTor.torInfo4.label "">
-<!ENTITY aboutTor.whatnextQuestion.label "">
+<!ENTITY aboutTor.torInfo4.label "This server does not log any information about visitors.">
+<!ENTITY aboutTor.whatnextQuestion.label "What Next?">
 <!ENTITY aboutTor.whatnextAnswer.label "تور همه‌ی نیاز شما برای ناشناس ماندن در وب را برآورده نمی‌کند! برای اطمینان از ایمنی هویتتان، نیاز دارید برخی عادات وبگردیتان را تغییر دهید.">
 <!ENTITY aboutTor.whatnext.label "راهنمایی برای ناشناس ماندن.">
 <!ENTITY aboutTor.whatnext.link "https://www.torproject.org/download/download.html.en#warning">
 <!ENTITY aboutTor.helpInfo1.label "می‌توانید کمک کنید!">
-<!ENTITY aboutTor.helpInfo2.label "">
+<!ENTITY aboutTor.helpInfo2.label "There are many ways you can help make the Tor Network faster and stronger:">
 <!ENTITY aboutTor.helpInfo3.label "مسيرياب تورى اداره كنيد »">
 <!ENTITY aboutTor.helpInfo3.link "https://www.torproject.org/docs/tor-doc-relay.html.en">
 <!ENTITY aboutTor.helpInfo4.label "داوطلب شويد »">

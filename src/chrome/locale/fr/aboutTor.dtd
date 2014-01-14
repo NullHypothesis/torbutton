@@ -34,16 +34,16 @@
   -->
 <!ENTITY aboutTor.searchSPPost.link "https://startpage.com/rth/search">
 <!ENTITY aboutTor.searchDDGPost.link "https://duckduckgo.com/html/">
-<!ENTITY aboutTor.searchSP.privacy.beforeLink.label "Rechercher">
-<!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "Rechercher">
+<!ENTITY aboutTor.searchSP.privacy.beforeLink.label "Rechercher ">
+<!ENTITY aboutTor.searchDDG.privacy.beforeLink.label "Rechercher ">
 <!ENTITY aboutTor.searchSP.privacy.label "en toute sécurité">
 <!ENTITY aboutTor.searchDDG.privacy.label "en toute sécurité">
 <!ENTITY aboutTor.searchSP.privacy.link "https://startpage.com/eng/protect-privacy.html">
 <!ENTITY aboutTor.searchDDG.privacy.link "https://duckduckgo.com/privacy.html">
 <!ENTITY aboutTor.searchSP.privacy.afterLink.label "&amp;nbsp;">
 <!ENTITY aboutTor.searchDDG.privacy.afterLink.label "&amp;nbsp;">
-<!ENTITY aboutTor.searchSP.search.beforeLink.label "avec">
-<!ENTITY aboutTor.searchDDG.search.beforeLink.label "avec">
+<!ENTITY aboutTor.searchSP.search.beforeLink.label "avec ">
+<!ENTITY aboutTor.searchDDG.search.beforeLink.label "avec ">
 <!ENTITY aboutTor.searchSP.search.label "Startpage">
 <!ENTITY aboutTor.searchDDG.search.label "DuckDuckGo">
 <!ENTITY aboutTor.searchSP.search.link "https://startpage.com/">

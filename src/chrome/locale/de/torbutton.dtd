@@ -26,13 +26,13 @@
 <!ENTITY torbutton.context_menu.new_identity_key "I">
 <!ENTITY torbutton.context_menu.toggle "Tor-Modus umschalten">
 <!ENTITY torbutton.context_menu.toggle.key "T">
-<!ENTITY torbutton.context_menu.preferences "Einstellungen...">
+<!ENTITY torbutton.context_menu.preferences "Einstellungen …">
 <!ENTITY torbutton.context_menu.preferences.key "P">
-<!ENTITY torbutton.context_menu.about "Über Torbutton...">
+<!ENTITY torbutton.context_menu.about "Über Torbutton …">
 <!ENTITY torbutton.context_menu.about.key "A">
-<!ENTITY torbutton.context_menu.networksettings "Öffne Netzwerkeinstellungen...">
+<!ENTITY torbutton.context_menu.networksettings "Öffne Netzwerkeinstellungen …">
 <!ENTITY torbutton.context_menu.networksettings.key "S">
-<!ENTITY torbutton.context_menu.downloadUpdate "Tor-Browser aktualisierung herunterladen">
+<!ENTITY torbutton.context_menu.downloadUpdate "Aktualisierung des Tor-Browser-Paket herunterladen …">
 <!ENTITY torbutton.context_menu.downloadUpdate.key "U">
 <!ENTITY torbutton.context_menu.cookieProtections "Cookie Schutzvorkehrungen">
 <!ENTITY torbutton.context_menu.cookieProtections.key "C">
