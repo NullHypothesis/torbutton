@@ -1,3 +1,7 @@
+1.6.5.4:
+ 14 Jan 2014
+ * Bug 10537: Include Arabic locale in Torbutton.
+
 1.6.5.3:
  23 Dec 2013
  * Bug 9486: Clear NoScript Temporary Permissions on New Identity 
