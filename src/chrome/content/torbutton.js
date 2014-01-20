@@ -1298,6 +1298,21 @@ function torbutton_get_general_useragent_locale() {
     }
 }
 
+function torbutton_socket_read(input, full_output) {
+
+    var status_code = "";
+    var multi_line = "";
+
+    status_code += input.readBytes(3);
+    multi_line = input.readBytes(1);
+
+    if ((multi_line === '+') && full_output) {
+        return status_code + multi_line + torbutton_socket_read_all(input);
+    } else {
+        return status_code + multi_line + torbutton_socket_readline(input);
+    }
+}
+
 // Bug 1506 P4: Control port interaction. Needed for New Identity.
 function torbutton_socket_readline(input) {
   var str = "";
@@ -1306,6 +1321,22 @@ function torbutton_socket_readline(input) {
     if (bytes != '\r')
       str += bytes;
   }
+  return str;
+}
+
+function torbutton_socket_read_all(input) {
+  var str = "";
+  var bytes;
+
+  // Read the output until the final "\n.\n".
+  while ((str.lastIndexOf("\n.\n") === -1) ||
+         (str.lastIndexOf("\n.\n") !== (str.length - 3))) {
+    c = input.readBytes(1);
+    if (c != '\r') {
+      str += c;
+    }
+  }
+
   return str;
 }
 
@@ -1337,8 +1368,11 @@ function torbutton_array_to_hexdigits(array) {
 //
 // Executes a command on the control port.
 // Return a string response upon success and null upon error.
-function torbutton_send_ctrl_cmd(command) {
+function torbutton_send_ctrl_cmd(command, full_output) {
   try {
+
+    if (full_output === undefined) full_output = false;
+
     var socketTransportService = Components.classes["@mozilla.org/network/socket-transport-service;1"]
         .getService(Components.interfaces.nsISocketTransportService);
     var socket = socketTransportService.createTransport(null, 0, m_tb_control_host, m_tb_control_port, null);
@@ -1358,15 +1392,22 @@ function torbutton_send_ctrl_cmd(command) {
     var auth_cmd = "AUTHENTICATE "+m_tb_control_pass+"\r\n";
     outputStream.writeBytes(auth_cmd, auth_cmd.length);
 
-    var bytes = torbutton_socket_readline(inputStream);
+    var bytes = torbutton_socket_read(inputStream, full_output);
 
+    // Check if authentication resulted in a "250 OK" from Tor.
     if (bytes.indexOf("250") != 0) {
       torbutton_safelog(4, "Unexpected auth response on control port "+m_tb_control_port+":", bytes);
       return null;
     }
 
     outputStream.writeBytes(command, command.length);
-    bytes = torbutton_socket_readline(inputStream);
+
+    if (full_output) {
+      bytes = torbutton_socket_read_all(inputStream);
+    } else {
+      bytes = torbutton_socket_read(inputStream, full_output);
+    }
+
     if(bytes.indexOf("250") != 0) {
       torbutton_safelog(4, "Unexpected command response on control port "+m_tb_control_port+":", bytes);
       return null;
@@ -2455,6 +2496,127 @@ function torbutton_is_windowed(wind) {
     return true;
 }
 
+function get_recent_cert(hostname) {
+
+  var srv = null;
+
+  torbutton_log(2, "Obtaining certificate for: " + hostname);
+
+  if (typeof Components.classes["@mozilla.org/security/recentbadcerts;1"]
+      !== "undefined") {
+    // Up to Firefox 19.
+    srv = Components.classes["@mozilla.org/security/recentbadcerts;1"]
+            .getService(Components.interfaces.nsIRecentBadCertsService);
+  } else {
+    // Firefox 20 and newer.
+    Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+    var pbs = PrivateBrowsingUtils.isWindowPrivate(window);
+    srv = Components.classes["@mozilla.org/security/x509certdb;1"]
+            .getService(Components.interfaces.nsIX509CertDB)
+            .getRecentBadCerts(pbs);
+  }
+
+  var gSSLStatus = srv.getRecentBadCert(hostname + ":443");
+  if (!gSSLStatus) {
+    torbutton_log(3, "gSSLStatus is 'null'.");
+    return null;
+  }
+
+  return gSSLStatus.QueryInterface(Components.interfaces.nsISSLStatus)
+           .serverCert;
+}
+
+function on_page_load(event) {
+
+  // The URI of the Firefox page showing certificate errors.
+  var certErrorPage = "about:certerror";
+  var uri = event.target.baseURI;
+  var hostname = null;
+
+  torbutton_log(2, "Triggered 'on_page_load()'.");
+
+  // When stumbling upon a self-signed certificate, Firefox'
+  // "about:certerror" page is displayed.  Therefore, we check if the URL
+  // contains that string.
+  if (uri.lastIndexOf(certErrorPage, 0) === 0) {
+      torbutton_log(2, "Certificate error for: " + uri);
+      hostname = event.originalTarget.location.hostname;
+  } else {
+      return;
+  }
+
+  var origCert = get_recent_cert(hostname);
+  if (!origCert) {
+      torbutton_log(4, "Could not get bad certificate for: " + hostname);
+      return;
+  }
+
+  torbutton_log(2, "Certificate SHA-1 fingerprint: " +
+                   origCert.sha1Fingerprint);
+
+  var stream_status = null;
+  var circuit_status = null;
+
+  // Check if we have access to Tor's control port.
+  if (!m_tb_control_pass || !m_tb_control_port) {
+      var o_stringbundle = torbutton_get_stringbundle();
+      var warning = o_stringbundle.GetStringFromName("torbutton.popup.no_newnym");
+      torbutton_log(5, "TorButton does not have access to Tor's control port.");
+      window.alert(warning);
+      return;
+  }
+
+  // First, obtain the current stream status which should contain the current
+  // connection which fetched the bad certificate.
+  var ret = torbutton_send_ctrl_cmd("GETINFO stream-status\r\n", true);
+  if (!ret) {
+      torbutton_log(2, "'GETINFO stream-status' failed: " + ret);
+  }
+  torbutton_log(2, "Current stream status: " + ret);
+
+  // Now get the circuit status and determine which exit relay was used by the
+  // "bad certificate" stream.
+  ret = torbutton_send_ctrl_cmd("GETINFO circuit-status\r\n", true);
+  if (!ret) {
+      torbutton_log(2, "'GETINFO circuit-status' failed: " + ret);
+      return;
+  }
+  torbutton_log(2, "Current circuit status: " + ret);
+
+  // Get a new identity to (hopefully) refetch the certificate over a different
+  // exit relay.
+  torbutton_log(2, "Now sending NEWNYM.");
+  ret = torbutton_send_ctrl_cmd("SIGNAL NEWNYM\r\n");
+  if (!ret) {
+      torbutton_log(5, "'SIGNAL NEWNYM' failed: " + ret);
+      return;
+  }
+
+  // Now refetch the certificate over different exit relay.
+  var oReq = new XMLHttpRequest();
+
+  // Hook into 'onerror' as page will give a certificate error. 'onerror' fires
+  // on errors below the HTTP layer.
+  oReq.onerror = function(e) {
+      var cert = get_recent_cert(hostname);
+      torbutton_log(3, "Certificate fingerprint: " + cert.sha1Fingerprint);
+
+      // Now we have two certificate fingerprints.  See if they match.
+      if (cert.sha1Fingerprint === origCert.sha1Fingerprint) {
+          torbutton_log(3, "The certificates match. The site is probably fine.");
+      } else {
+          torbutton_log(5, "Certificate mismatch!  Reporting certificate.");
+          // TODO: Here, we would interact with the user and submit the
+          // certificate.
+      }
+  };
+
+  torbutton_log(3, "Refetching certificate over new circuit.");
+  oReq.open("GET", "https://" + hostname, true);
+  oReq.send();
+}
+
+
 // Bug 1506 P3: This is needed pretty much only for the version check
 // and the window resizing. See comments for individual functions for
 // details
@@ -2476,6 +2638,8 @@ function torbutton_new_window(event)
     }
     // Add tab open listener..
     browser.tabContainer.addEventListener("TabOpen", torbutton_new_tab, false);
+
+    window.addEventListener("DOMContentLoaded", on_page_load, false);
 
     torbutton_do_startup();
 
